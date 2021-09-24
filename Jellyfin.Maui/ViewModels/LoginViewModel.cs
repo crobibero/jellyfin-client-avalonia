@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Services;
+using Jellyfin.Maui.Views;
 
 namespace Jellyfin.Maui.ViewModels
 {
@@ -11,6 +12,7 @@ namespace Jellyfin.Maui.ViewModels
     public class LoginViewModel : BaseViewModel
     {
         private readonly IAuthenticationService _authenticationService;
+        private readonly INavigationService _navigationService;
 
         private string? serverUrl;
         private string? username;
@@ -21,10 +23,13 @@ namespace Jellyfin.Maui.ViewModels
         /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
         /// </summary>
         /// <param name="authenticationService">Instance of the <see cref="IAuthenticationService"/> interface.</param>
-        public LoginViewModel(IAuthenticationService authenticationService)
+        /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
+        public LoginViewModel(
+            IAuthenticationService authenticationService,
+            INavigationService navigationService)
         {
             _authenticationService = authenticationService;
-
+            _navigationService = navigationService;
             LoginCommand = new AsyncRelayCommand(LoginAsync);
         }
 
@@ -92,6 +97,8 @@ namespace Jellyfin.Maui.ViewModels
             {
                 ErrorMessage = "An unknown error occurred.";
             }
+
+            _navigationService.NavigateRoot<Page2>();
         }
     }
 }

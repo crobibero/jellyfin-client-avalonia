@@ -1,9 +1,9 @@
-﻿using Android.App;
+﻿using System;
+using Android.App;
 using Android.Runtime;
 using Jellyfin.Sdk;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;
-using System;
 
 namespace Jellyfin.Maui
 {

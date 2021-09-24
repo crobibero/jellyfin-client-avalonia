@@ -1,8 +1,8 @@
-﻿using Jellyfin.Sdk;
+﻿using System;
+using Jellyfin.Sdk;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;
 using Microsoft.UI.Xaml;
-using System;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.

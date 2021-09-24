@@ -1,6 +1,6 @@
-﻿using Jellyfin.Maui.Models;
+﻿using System;
+using Jellyfin.Maui.Models;
 using Jellyfin.Sdk;
-using System;
 
 namespace Jellyfin.Maui.Services
 {

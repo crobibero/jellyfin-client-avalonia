@@ -2,9 +2,9 @@
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels;
+using Jellyfin.Maui.Views;
 using Jellyfin.Sdk;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;
@@ -44,11 +44,13 @@ namespace Jellyfin.Maui
             // View Models
             builder.Services.AddTransient<LoginViewModel>();
 
-            // Pages
-            builder.Services.AddTransient<LoginPage>();
+            // Views
+            builder.Services.AddTransient<LoginView>();
+            builder.Services.AddTransient<Page2>();
 
             // Services
             builder.Services.AddSingleton<IStateService, StateService>();
+            builder.Services.AddSingleton<INavigationService, NavigationService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<ILibraryService, LibraryService>();
 

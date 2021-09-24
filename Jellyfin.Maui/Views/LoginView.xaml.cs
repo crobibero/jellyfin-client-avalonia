@@ -3,18 +3,18 @@
 using Jellyfin.Maui.ViewModels;
 using Microsoft.Maui.Controls;
 
-namespace Jellyfin.Maui.Pages
+namespace Jellyfin.Maui.Views
 {
     /// <summary>
     /// The login page.
     /// </summary>
-    public partial class LoginPage : ContentPage
+    public partial class LoginView : ContentView
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoginPage"/> class.
+        /// Initializes a new instance of the <see cref="LoginView"/> class.
         /// </summary>
         /// <param name="viewModel">Instance of the <see cref="LoginViewModel"/>.</param>
-        public LoginPage(LoginViewModel viewModel)
+        public LoginView(LoginViewModel viewModel)
         {
             BindingContext = ViewModel = viewModel;
             InitializeComponent();

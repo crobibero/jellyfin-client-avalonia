@@ -1,6 +1,6 @@
-﻿using Jellyfin.Sdk;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Jellyfin.Sdk;
 using SystemException = Jellyfin.Sdk.SystemException;
 
 namespace Jellyfin.Maui.Services

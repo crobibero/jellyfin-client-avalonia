@@ -1,8 +1,8 @@
-﻿using Jellyfin.Sdk;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Services
 {
