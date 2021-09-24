@@ -55,7 +55,6 @@
 		<PackageReference Include="Microsoft.WindowsAppSDK.WinUI" Version="1.0.0-experimental1" />
 		<PackageReference Include="Microsoft.WindowsAppSDK.InteractiveExperiences" Version="1.0.0-experimental1" NoWarn="NU1701" />
 	</ItemGroup>
-
 	<ItemGroup>
 	  <PackageReference Include="CommunityToolkit.Mvvm" Version="7.0.3" />
 	  <PackageReference Include="Jellyfin.Sdk" Version="10.7.7" />
@@ -73,18 +72,6 @@
 	  <PackageReference Include="CommunityToolkit.Maui.Markup">
 	    <Version>1.0.0-pre1.1</Version>
 	  </PackageReference>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Update="Views\Page2.xaml.cs">
-	    <DependentUpon>Page2.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiXaml Update="Views\Page2.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	</ItemGroup>
 
 	<PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">

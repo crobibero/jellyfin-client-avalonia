@@ -1,5 +1,5 @@
-﻿using Jellyfin.Maui.Services;
-using Jellyfin.Maui.Views;
+﻿using Jellyfin.Maui.Pages;
+using Jellyfin.Maui.Services;
 using Microsoft.Maui.Controls;
 using Application = Microsoft.Maui.Controls.Application;
 
@@ -26,14 +26,10 @@ namespace Jellyfin.Maui
         protected override Window CreateWindow(Microsoft.Maui.IActivationState activationState)
         {
             var navigationService = ServiceProvider.GetService<INavigationService>();
-            var loginPage = ServiceProvider.GetService<LoginView>();
-            var rootPage = new ContentPage
-            {
-                Content = loginPage
-            };
-
-            navigationService.Initialize(rootPage);
-            return new Window(rootPage);
+            var mainPage = ServiceProvider.GetService<MainPage>();
+            var navigationPage = new NavigationPage(mainPage);
+            navigationService.Initialize(navigationPage);
+            return new Window(navigationPage);
         }
     }
 }

@@ -1,0 +1,12 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels"
+             x:Class="Jellyfin.Maui.Pages.LibraryPage"
+             x:DataType="vm:LibraryViewModel">
+
+    <StackLayout Padding="16">
+        <Label Text="Library View"/>
+        <Label Text="{Binding Id}"/>
+    </StackLayout>
+
+</ContentPage>
