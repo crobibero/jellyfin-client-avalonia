@@ -50,7 +50,7 @@
 
 	<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
 		<!-- Required - WinUI does not yet have buildTransitive for everything -->
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0-preview2" />
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0-preview3" />
 		<PackageReference Include="Microsoft.WindowsAppSDK.Foundation" Version="1.0.0-experimental1" />
 		<PackageReference Include="Microsoft.WindowsAppSDK.WinUI" Version="1.0.0-experimental1" />
 		<PackageReference Include="Microsoft.WindowsAppSDK.InteractiveExperiences" Version="1.0.0-experimental1" NoWarn="NU1701" />
@@ -59,7 +59,7 @@
 	  <PackageReference Include="CommunityToolkit.Mvvm" Version="7.0.3" />
 	  <PackageReference Include="Jellyfin.Sdk" Version="10.7.7" />
 	  <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0-rc.2*" />
-	  <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0-preview2" />
+	  <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0-preview3" />
 	  <PackageReference Include="SerilogAnalyzer" Version="0.15.0" PrivateAssets="All" />
 	  <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All" />
 	  <PackageReference Include="SmartAnalyzers.MultithreadingAnalyzer" Version="1.1.31" PrivateAssets="All" />
