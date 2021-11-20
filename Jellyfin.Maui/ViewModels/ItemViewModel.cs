@@ -1,7 +1,8 @@
-﻿using System;
-
-namespace Jellyfin.Maui.ViewModels
+﻿namespace Jellyfin.Maui.ViewModels
 {
+    /// <summary>
+    /// ViewModel for Item page.
+    /// </summary>
     public class ItemViewModel : BaseIdViewModel
     {
     }

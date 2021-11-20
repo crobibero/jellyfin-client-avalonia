@@ -18,6 +18,10 @@ namespace Jellyfin.Maui.ViewModels
             set => SetProperty(ref _id, value);
         }
 
+        /// <summary>
+        /// Initialize the view model's id.
+        /// </summary>
+        /// <param name="id">The id.</param>
         public void Initialize(Guid id) => Id = id;
     }
 }

@@ -2,6 +2,9 @@
 
 namespace Jellyfin.Maui.Pages
 {
+    /// <summary>
+    /// Interface for initializing a view with an id.
+    /// </summary>
     public interface IInitializeId
     {
         /// <summary>

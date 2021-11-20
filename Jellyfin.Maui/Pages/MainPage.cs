@@ -1,7 +1,4 @@
-﻿#nullable disable
-
-using System.Threading.Tasks;
-using Jellyfin.Maui.Services;
+﻿using Jellyfin.Maui.Services;
 using Microsoft.Maui.Controls;
 
 namespace Jellyfin.Maui.Pages
@@ -25,31 +22,30 @@ namespace Jellyfin.Maui.Pages
         {
             _navigationService = navigationService;
             _stateService = stateService;
-            InitializeComponent();
         }
 
-        protected override async void OnAppearing()
+        /// <inheridoc />
+        protected override void OnAppearing()
         {
-            await RedirectAsync().ConfigureAwait(false);
+            Redirect();
         }
 
-        protected override async void OnNavigatedTo(NavigatedToEventArgs args)
+        /// <inheridoc />
+        protected override void OnNavigatedTo(NavigatedToEventArgs args)
         {
-            await RedirectAsync().ConfigureAwait(false);
+            Redirect();
         }
 
-        private async Task RedirectAsync()
+        private void Redirect()
         {
             var state = _stateService.GetState();
             if (string.IsNullOrEmpty(state.Token))
             {
-                await _navigationService.NavigateAsync<LoginPage>()
-                    .ConfigureAwait(false);
+                _navigationService.Navigate<LoginPage>();
             }
             else
             {
-                await _navigationService.NavigateAsync<HomePage>()
-                    .ConfigureAwait(false);
+                _navigationService.Navigate<HomePage>();
             }
         }
     }

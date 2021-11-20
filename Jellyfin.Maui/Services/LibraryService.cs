@@ -128,15 +128,15 @@ namespace Jellyfin.Maui.Services
                 .ConfigureAwait(false);
         }
 
-        private string GetViewType(string collectionType)
+        private BaseItemKind GetViewType(string collectionType)
         {
             return collectionType switch
             {
-                "tvshows" => "series",
-                "movies" => "movie",
-                "books" => "book",
-                "music" => "audio",
-                _ => "folder"
+                "tvshows" => BaseItemKind.Series,
+                "movies" => BaseItemKind.Movie,
+                "books" => BaseItemKind.Book,
+                "music" => BaseItemKind.Audio,
+                _ => BaseItemKind.Folder
             };
         }
     }

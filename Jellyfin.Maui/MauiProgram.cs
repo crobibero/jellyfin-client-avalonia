@@ -1,37 +1,76 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using Jellyfin.Maui.Pages;
-using Jellyfin.Maui.Services;
-using Jellyfin.Maui.ViewModels;
+﻿using Microsoft.Maui.Hosting;
+using Microsoft.Maui.Controls.Hosting;
 using Jellyfin.Sdk;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls.Hosting;
-using Microsoft.Maui.Hosting;
+using System.Net.Http;
+using System;
+using System.Net;
+using System.Text;
+using Jellyfin.Maui.ViewModels;
+using Jellyfin.Maui.Pages;
+using Jellyfin.Maui.Services;
 
 namespace Jellyfin.Maui
 {
     /// <summary>
-    /// The main entrypoint.
+    /// The main maui program.
     /// </summary>
     public static class MauiProgram
-    {
+	{
         /// <summary>
-        /// Creates the maui application.
+        /// Create the maui app.
         /// </summary>
-        /// <returns>The created application.</returns>
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                });
+        /// <returns>The created maui app.</returns>
+		public static MauiApp CreateMauiApp()
+		{
+			var builder = MauiApp.CreateBuilder();
+			builder
+				.UseMauiApp<App>()
+				.ConfigureFonts(fonts =>
+				{
+					fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+				});
 
+            builder.Services.AddPages();
+            builder.Services.AddSdkClients();
+            builder.Services.AddServices();           
+
+            return builder.Build();
+		}
+
+        private static void AddPages(this IServiceCollection services)
+        {
+            var exportedTypes = typeof(MauiProgram).Assembly.GetTypes();
+            var baseViewModelType = typeof(BaseViewModel);
+            var basePageType = typeof(BaseContentPage<>);
+            var contentPageType = typeof(Microsoft.Maui.Controls.ContentPage);
+
+            foreach (var type in exportedTypes)
+            {
+                if (type != baseViewModelType && baseViewModelType.IsAssignableFrom(type))
+                {
+                    // Add View Models
+                    services.AddTransient(type);
+                }
+
+                if (type != basePageType && contentPageType.IsAssignableFrom(type))
+                {
+                    // Add Pages
+                    services.AddTransient(type);
+                }
+            }
+        }
+
+        private static void AddServices(this IServiceCollection services)
+        {
+            services.AddSingleton<IStateService, StateService>();
+            services.AddSingleton<INavigationService, NavigationService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<ILibraryService, LibraryService>();
+        }
+
+        private static void AddSdkClients(this IServiceCollection services)
+        {
             static HttpMessageHandler DefaultHttpClientHandlerDelegate(IServiceProvider serviceProvider)
             {
                 return new SocketsHttpHandler
@@ -41,148 +80,128 @@ namespace Jellyfin.Maui
                 };
             }
 
-            // View Models
-            builder.Services.AddTransient<HomeViewModel>();
-            builder.Services.AddTransient<ItemViewModel>();
-            builder.Services.AddTransient<LibraryViewModel>();
-            builder.Services.AddTransient<LoginViewModel>();
-
-            // Pages
-            builder.Services.AddTransient<HomePage>();
-            builder.Services.AddTransient<LibraryPage>();
-            builder.Services.AddTransient<LoginPage>();
-            builder.Services.AddTransient<MainPage>();
-
-            // Services
-            builder.Services.AddSingleton<IStateService, StateService>();
-            builder.Services.AddSingleton<INavigationService, NavigationService>();
-            builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
-            builder.Services.AddTransient<ILibraryService, LibraryService>();
-
             // Register sdk services
-            builder.Services.AddSingleton<SdkClientSettings>();
-            builder.Services.AddHttpClient<IActivityLogClient, ActivityLogClient>()
+            services.AddSingleton<SdkClientSettings>();
+            services.AddHttpClient<IActivityLogClient, ActivityLogClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IApiKeyClient, ApiKeyClient>()
+            services.AddHttpClient<IApiKeyClient, ApiKeyClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IArtistsClient, ArtistsClient>()
+            services.AddHttpClient<IArtistsClient, ArtistsClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IAudioClient, AudioClient>()
+            services.AddHttpClient<IAudioClient, AudioClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IBrandingClient, BrandingClient>()
+            services.AddHttpClient<IBrandingClient, BrandingClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IChannelsClient, ChannelsClient>()
+            services.AddHttpClient<IChannelsClient, ChannelsClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<ICollectionClient, CollectionClient>()
+            services.AddHttpClient<ICollectionClient, CollectionClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IConfigurationClient, ConfigurationClient>()
+            services.AddHttpClient<IConfigurationClient, ConfigurationClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IDashboardClient, DashboardClient>()
+            services.AddHttpClient<IDashboardClient, DashboardClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IDevicesClient, DevicesClient>()
+            services.AddHttpClient<IDevicesClient, DevicesClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IDisplayPreferencesClient, DisplayPreferencesClient>()
+            services.AddHttpClient<IDisplayPreferencesClient, DisplayPreferencesClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IDlnaClient, DlnaClient>()
+            services.AddHttpClient<IDlnaClient, DlnaClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IDlnaServerClient, DlnaServerClient>()
+            services.AddHttpClient<IDlnaServerClient, DlnaServerClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IDynamicHlsClient, DynamicHlsClient>()
+            services.AddHttpClient<IDynamicHlsClient, DynamicHlsClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IEnvironmentClient, EnvironmentClient>()
+            services.AddHttpClient<IEnvironmentClient, EnvironmentClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IFilterClient, FilterClient>()
+            services.AddHttpClient<IFilterClient, FilterClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IGenresClient, GenresClient>()
+            services.AddHttpClient<IGenresClient, GenresClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IHlsSegmentClient, HlsSegmentClient>()
+            services.AddHttpClient<IHlsSegmentClient, HlsSegmentClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IImageClient, ImageClient>()
+            services.AddHttpClient<IImageClient, ImageClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IImageByNameClient, ImageByNameClient>()
+            services.AddHttpClient<IImageByNameClient, ImageByNameClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IInstantMixClient, InstantMixClient>()
+            services.AddHttpClient<IInstantMixClient, InstantMixClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IItemLookupClient, ItemLookupClient>()
+            services.AddHttpClient<IItemLookupClient, ItemLookupClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IItemRefreshClient, ItemRefreshClient>()
+            services.AddHttpClient<IItemRefreshClient, ItemRefreshClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IItemsClient, ItemsClient>()
+            services.AddHttpClient<IItemsClient, ItemsClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<ILibraryClient, LibraryClient>()
+            services.AddHttpClient<ILibraryClient, LibraryClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IItemUpdateClient, ItemUpdateClient>()
+            services.AddHttpClient<IItemUpdateClient, ItemUpdateClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<ILibraryStructureClient, LibraryStructureClient>()
+            services.AddHttpClient<ILibraryStructureClient, LibraryStructureClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<ILiveTvClient, LiveTvClient>()
+            services.AddHttpClient<ILiveTvClient, LiveTvClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<ILocalizationClient, LocalizationClient>()
+            services.AddHttpClient<ILocalizationClient, LocalizationClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IMediaInfoClient, MediaInfoClient>()
+            services.AddHttpClient<IMediaInfoClient, MediaInfoClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IMoviesClient, MoviesClient>()
+            services.AddHttpClient<IMoviesClient, MoviesClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IMusicGenresClient, MusicGenresClient>()
+            services.AddHttpClient<IMusicGenresClient, MusicGenresClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<INotificationsClient, NotificationsClient>()
+            services.AddHttpClient<INotificationsClient, NotificationsClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IPackageClient, PackageClient>()
+            services.AddHttpClient<IPackageClient, PackageClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IPersonsClient, PersonsClient>()
+            services.AddHttpClient<IPersonsClient, PersonsClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IPlaylistsClient, PlaylistsClient>()
+            services.AddHttpClient<IPlaylistsClient, PlaylistsClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IPlaystateClient, PlaystateClient>()
+            services.AddHttpClient<IPlaystateClient, PlaystateClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IPluginsClient, PluginsClient>()
+            services.AddHttpClient<IPluginsClient, PluginsClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IQuickConnectClient, QuickConnectClient>()
+            services.AddHttpClient<IQuickConnectClient, QuickConnectClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IRemoteImageClient, RemoteImageClient>()
+            services.AddHttpClient<IRemoteImageClient, RemoteImageClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IScheduledTasksClient, ScheduledTasksClient>()
+            services.AddHttpClient<IScheduledTasksClient, ScheduledTasksClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<ISearchClient, SearchClient>()
+            services.AddHttpClient<ISearchClient, SearchClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<ISessionClient, SessionClient>()
+            services.AddHttpClient<ISessionClient, SessionClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IStartupClient, StartupClient>()
+            services.AddHttpClient<IStartupClient, StartupClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IStudiosClient, StudiosClient>()
+            services.AddHttpClient<IStudiosClient, StudiosClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<ISubtitleClient, SubtitleClient>()
+            services.AddHttpClient<ISubtitleClient, SubtitleClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<ISuggestionsClient, SuggestionsClient>()
+            services.AddHttpClient<ISuggestionsClient, SuggestionsClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<ISyncPlayClient, SyncPlayClient>()
+            services.AddHttpClient<ISyncPlayClient, SyncPlayClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<ISystemClient, SystemClient>()
+            services.AddHttpClient<ISystemClient, SystemClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<ITimeSyncClient, TimeSyncClient>()
+            services.AddHttpClient<ITimeSyncClient, TimeSyncClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<ITrailersClient, TrailersClient>()
+            services.AddHttpClient<ITrailersClient, TrailersClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<ITvShowsClient, TvShowsClient>()
+            services.AddHttpClient<ITvShowsClient, TvShowsClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IUniversalAudioClient, UniversalAudioClient>()
+            services.AddHttpClient<IUniversalAudioClient, UniversalAudioClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IUserClient, UserClient>()
+            services.AddHttpClient<IUserClient, UserClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IUserLibraryClient, UserLibraryClient>()
+            services.AddHttpClient<IUserLibraryClient, UserLibraryClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IUserViewsClient, UserViewsClient>()
+            services.AddHttpClient<IUserViewsClient, UserViewsClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IVideoAttachmentsClient, VideoAttachmentsClient>()
+            services.AddHttpClient<IVideoAttachmentsClient, VideoAttachmentsClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IVideoHlsClient, VideoHlsClient>()
+            services.AddHttpClient<IVideoHlsClient, VideoHlsClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IVideosClient, VideosClient>()
+            services.AddHttpClient<IVideosClient, VideosClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-            builder.Services.AddHttpClient<IYearsClient, YearsClient>()
+            services.AddHttpClient<IYearsClient, YearsClient>()
                 .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
-
-            return builder.Build();
         }
-    }
+	}
 }

@@ -1,31 +1,36 @@
 ﻿using System;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Services;
 
 namespace Jellyfin.Maui.ViewModels
 {
+    /// <summary>
+    /// ViewModel for the Home page.
+    /// </summary>
     public class HomeViewModel : BaseViewModel
     {
         private readonly INavigationService _navigationService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HomeViewModel"/>.
+        /// </summary>
+        /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
         public HomeViewModel(INavigationService navigationService)
         {
             _navigationService = navigationService;
 
-            NavigateCommand = new AsyncRelayCommand(NavigateAsync);
+            NavigateCommand = new RelayCommand(NavigateAsync);
         }
 
         /// <summary>
         /// Gets the login command.
         /// </summary>
-        public IAsyncRelayCommand NavigateCommand { get; }
+        public IRelayCommand NavigateCommand { get; }
 
-        private async Task NavigateAsync()
+        private void NavigateAsync()
         {
-            await _navigationService.NavigateAsync<LibraryPage>(Guid.NewGuid())
-                .ConfigureAwait(false);
+            _navigationService.Navigate<LibraryPage>(Guid.NewGuid());
         }
     }
 }

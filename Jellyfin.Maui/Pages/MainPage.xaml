@@ -1,8 +1,0 @@
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Jellyfin.Maui.Pages.MainPage"
-             xmlns:local="clr-namespace:Jellyfin.Maui.ViewModels">
-
-   <!-- TODO show loader if init is delayed -->
-
-</ContentPage>

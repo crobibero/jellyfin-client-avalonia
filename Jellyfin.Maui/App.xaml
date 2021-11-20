@@ -3,7 +3,11 @@
              xmlns:windows="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;assembly=Microsoft.Maui.Controls"
              xmlns:local="clr-namespace:Jellyfin.Maui"
              x:Class="Jellyfin.Maui.App"
-             windows:Application.ImageDirectory="Assets">
+             windows:Application.ImageDirectory="Assets"
+             xmlns:behaviors="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
+             xmlns:converters="clr-namespace:CommunityToolkit.Maui.Converters;assembly=CommunityToolkit.Maui"
+             xmlns:effects="clr-namespace:CommunityToolkit.Maui.Effects;assembly=CommunityToolkit.Maui"
+             xmlns:views="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui">
     <Application.Resources>
         <ResourceDictionary>
 

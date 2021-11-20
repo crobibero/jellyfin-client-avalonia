@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
-using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Services;
 
 namespace Jellyfin.Maui.ViewModels
@@ -13,7 +12,6 @@ namespace Jellyfin.Maui.ViewModels
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly INavigationService _navigationService;
-        private readonly IStateService _stateService;
 
         private string? serverUrl;
         private string? username;
@@ -25,15 +23,12 @@ namespace Jellyfin.Maui.ViewModels
         /// </summary>
         /// <param name="authenticationService">Instance of the <see cref="IAuthenticationService"/> interface.</param>
         /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
-        /// <param name="stateService">Instance of the <see cref="IStateService"/> interface.</param>
         public LoginViewModel(
             IAuthenticationService authenticationService,
-            INavigationService navigationService,
-            IStateService stateService)
+            INavigationService navigationService)
         {
             _authenticationService = authenticationService;
             _navigationService = navigationService;
-            _stateService = stateService;
 
             LoginCommand = new AsyncRelayCommand(LoginAsync);
         }
@@ -83,6 +78,18 @@ namespace Jellyfin.Maui.ViewModels
         {
             try
             {
+                if (string.IsNullOrEmpty(ServerUrl))
+                {
+                    ErrorMessage = "Server URL is required";
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(Username))
+                {
+                    ErrorMessage = "Username is required";
+                    return;
+                }
+
                 var (status, errorMessage) = await _authenticationService.AuthenticateAsync(
                     ServerUrl,
                     Username,
@@ -90,8 +97,7 @@ namespace Jellyfin.Maui.ViewModels
                     .ConfigureAwait(false);
                 if (status)
                 {
-                    // TODO navigate
-                    ErrorMessage = "success";
+                    _navigationService.NavigateToMain();
                 }
                 else
                 {
@@ -100,19 +106,8 @@ namespace Jellyfin.Maui.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = "An unknown error occurred.";
+                ErrorMessage = "An unknown error occurred.\n" + ex.Message;
             }
-
-            _stateService.SetAuthenticationResponse(
-                "https://demo.jellyfin.org/stable",
-                new Sdk.AuthenticationResult
-                {
-                    AccessToken = Guid.NewGuid().ToString("N"),
-                    User = new Sdk.UserDto()
-                });
-
-            await _navigationService.NavigateToMainAsync()
-                .ConfigureAwait(false);
         }
     }
 }
