@@ -1,9 +1,8 @@
-﻿namespace Jellyfin.Maui.ViewModels
+﻿namespace Jellyfin.Maui.ViewModels;
+
+/// <summary>
+/// Library view model.
+/// </summary>
+public class LibraryViewModel : BaseIdViewModel
 {
-    /// <summary>
-    /// ViewModel for the Library page.
-    /// </summary>
-    public class LibraryViewModel : BaseIdViewModel
-    {
-    }
 }

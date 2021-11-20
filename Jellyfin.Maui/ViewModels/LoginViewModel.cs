@@ -1,113 +1,110 @@
-﻿using System;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Services;
 
-namespace Jellyfin.Maui.ViewModels
+namespace Jellyfin.Maui.ViewModels;
+
+/// <summary>
+/// Login view model.
+/// </summary>
+public class LoginViewModel : BaseViewModel
 {
+    private readonly IAuthenticationService _authenticationService;
+    private readonly INavigationService _navigationService;
+
+    private string? _serverUrl;
+    private string? _username;
+    private string? _password;
+    private string? _errorMessage;
+
     /// <summary>
-    /// The login view model.
+    /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
     /// </summary>
-    public class LoginViewModel : BaseViewModel
+    /// <param name="authenticationService">Instance of the <see cref="IAuthenticationService"/> interface.</param>
+    /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
+    public LoginViewModel(
+        IAuthenticationService authenticationService,
+        INavigationService navigationService)
     {
-        private readonly IAuthenticationService _authenticationService;
-        private readonly INavigationService _navigationService;
+        _authenticationService = authenticationService;
+        _navigationService = navigationService;
 
-        private string? serverUrl;
-        private string? username;
-        private string? password;
-        private string? errorMessage;
+        LoginCommand = new AsyncRelayCommand(LoginAsync);
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
-        /// </summary>
-        /// <param name="authenticationService">Instance of the <see cref="IAuthenticationService"/> interface.</param>
-        /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
-        public LoginViewModel(
-            IAuthenticationService authenticationService,
-            INavigationService navigationService)
+    /// <summary>
+    /// Gets or sets the server url.
+    /// </summary>
+    public string? ServerUrl
+    {
+        get => _serverUrl;
+        set => SetProperty(ref _serverUrl, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the username.
+    /// </summary>
+    public string? Username
+    {
+        get => _username;
+        set => SetProperty(ref _username, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the password.
+    /// </summary>
+    public string? Password
+    {
+        get => _password;
+        set => SetProperty(ref _password, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the error message.
+    /// </summary>
+    public string? ErrorMessage
+    {
+        get => _errorMessage;
+        set => SetProperty(ref _errorMessage, value);
+    }
+
+    /// <summary>
+    /// Gets the login command.
+    /// </summary>
+    public IAsyncRelayCommand LoginCommand { get; }
+
+    private async Task LoginAsync()
+    {
+        try
         {
-            _authenticationService = authenticationService;
-            _navigationService = navigationService;
-
-            LoginCommand = new AsyncRelayCommand(LoginAsync);
-        }
-
-        /// <summary>
-        /// Gets or sets the server url.
-        /// </summary>
-        public string? ServerUrl
-        {
-            get => serverUrl;
-            set => SetProperty(ref serverUrl, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the username.
-        /// </summary>
-        public string? Username
-        {
-            get => username;
-            set => SetProperty(ref username, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the password.
-        /// </summary>
-        public string? Password
-        {
-            get => password;
-            set => SetProperty(ref password, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the error message.
-        /// </summary>
-        public string? ErrorMessage
-        {
-            get => errorMessage;
-            set => SetProperty(ref errorMessage, value);
-        }
-
-        /// <summary>
-        /// Gets the login command.
-        /// </summary>
-        public IAsyncRelayCommand LoginCommand { get; }
-
-        private async Task LoginAsync()
-        {
-            try
+            if (string.IsNullOrEmpty(ServerUrl))
             {
-                if (string.IsNullOrEmpty(ServerUrl))
-                {
-                    ErrorMessage = "Server URL is required";
-                    return;
-                }
+                ErrorMessage = "Server URL is required";
+                return;
+            }
 
-                if (string.IsNullOrEmpty(Username))
-                {
-                    ErrorMessage = "Username is required";
-                    return;
-                }
+            if (string.IsNullOrEmpty(Username))
+            {
+                ErrorMessage = "Username is required";
+                return;
+            }
 
-                var (status, errorMessage) = await _authenticationService.AuthenticateAsync(
+            var (status, errorMessage) = await _authenticationService.AuthenticateAsync(
                     ServerUrl,
                     Username,
                     Password)
-                    .ConfigureAwait(false);
-                if (status)
-                {
-                    _navigationService.NavigateToMain();
-                }
-                else
-                {
-                    ErrorMessage = errorMessage;
-                }
-            }
-            catch (Exception ex)
+                .ConfigureAwait(false);
+            if (status)
             {
-                ErrorMessage = "An unknown error occurred.\n" + ex.Message;
+                _navigationService.NavigateToMain();
             }
+            else
+            {
+                ErrorMessage = errorMessage;
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "An unknown error occurred.\n" + ex.Message;
         }
     }
 }

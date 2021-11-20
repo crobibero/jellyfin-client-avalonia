@@ -1,27 +1,33 @@
-﻿using Jellyfin.Maui.ViewModels;
-using Microsoft.Maui.Controls;
 using CommunityToolkit.Maui.Markup;
+using Jellyfin.Maui.ViewModels;
 
-namespace Jellyfin.Maui.Pages
+namespace Jellyfin.Maui.Pages;
+
+/// <summary>
+/// Home page.
+/// </summary>
+public class HomePage : BaseContentPage<HomeViewModel>
 {
-    internal class HomePage : BaseContentPage<HomeViewModel>
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HomePage"/>.
+    /// </summary>
+    /// <param name="viewModel">Instance of the <see cref="HomeViewModel"/>.</param>
+    public HomePage(HomeViewModel viewModel)
+        : base(viewModel, "Home")
     {
-        public HomePage(HomeViewModel viewModel) 
-            : base(viewModel, "Home")
-        {
-        }
+    }
 
-        protected override void InitializeLayout()
+    /// <inheritdoc />
+    protected override void InitializeLayout()
+    {
+        Content = new StackLayout
         {
-            Content = new StackLayout
+            Padding = 16,
+            Children =
             {
-                Padding = 16,
-                Children =
-                {
-                    new Button {Text = "Navigate", HorizontalOptions = LayoutOptions.Center}
-                        .Bind(Button.CommandProperty, nameof(ViewModel.NavigateCommand))
-                }
-            };
-        }
+                new Button {Text = "Navigate", HorizontalOptions = LayoutOptions.Center}
+                    .Bind(Button.CommandProperty, nameof(ViewModel.NavigateCommand))
+            }
+        };
     }
 }

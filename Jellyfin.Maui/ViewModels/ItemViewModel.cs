@@ -1,9 +1,8 @@
-﻿namespace Jellyfin.Maui.ViewModels
+﻿namespace Jellyfin.Maui.ViewModels;
+
+/// <summary>
+/// Item view model.
+/// </summary>
+public class ItemViewModel : BaseIdViewModel
 {
-    /// <summary>
-    /// ViewModel for Item page.
-    /// </summary>
-    public class ItemViewModel : BaseIdViewModel
-    {
-    }
 }

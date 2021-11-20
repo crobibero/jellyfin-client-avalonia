@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
@@ -8,6 +8,7 @@
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
+		<LangVersion>latest</LangVersion>
 
 		<!-- Display name -->
 		<ApplicationTitle>Jellyfin</ApplicationTitle>
@@ -17,6 +18,7 @@
 
 		<!-- Versions -->
 		<ApplicationVersion>1</ApplicationVersion>
+        <Version>1.0.0</Version>
 
 		<!-- Required for C# Hot Reload -->
 		<UseInterpreter Condition="'$(Configuration)' == 'Debug'">True</UseInterpreter>
@@ -60,13 +62,17 @@
 		<PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre2" />
 		<PackageReference Include="CommunityToolkit.Maui.Markup" Version="1.0.0-pre2" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="7.1.2" />
-		<PackageReference Include="Jellyfin.Sdk" Version="2021.*-unstable.*" />
+		<PackageReference Include="Jellyfin.Sdk" Version="2021.11.20-unstable.202111201723" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Resources\Images\" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">
 		<OutputType>WinExe</OutputType>
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	</PropertyGroup>
-	
+
 </Project>

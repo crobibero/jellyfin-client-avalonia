@@ -1,16 +1,13 @@
-﻿using System;
+﻿namespace Jellyfin.Maui.Pages;
 
-namespace Jellyfin.Maui.Pages
+/// <summary>
+/// Interface for initializing a view with an id.
+/// </summary>
+public interface IInitializeId
 {
     /// <summary>
-    /// Interface for initializing a view with an id.
+    /// Initialize the id for the view.
     /// </summary>
-    public interface IInitializeId
-    {
-        /// <summary>
-        /// Initialize the id for the view.
-        /// </summary>
-        /// <param name="id">The current id.</param>
-        void Initialize(Guid id);
-    }
+    /// <param name="id">The current id.</param>
+    void Initialize(Guid id);
 }

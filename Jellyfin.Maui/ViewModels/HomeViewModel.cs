@@ -1,36 +1,34 @@
-﻿using System;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Services;
 
-namespace Jellyfin.Maui.ViewModels
+namespace Jellyfin.Maui.ViewModels;
+
+/// <summary>
+/// Home view model.
+/// </summary>
+public class HomeViewModel : BaseViewModel
 {
+    private readonly INavigationService _navigationService;
+
     /// <summary>
-    /// ViewModel for the Home page.
+    /// Initializes a new instance of the <see cref="HomeViewModel"/>.
     /// </summary>
-    public class HomeViewModel : BaseViewModel
+    /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
+    public HomeViewModel(INavigationService navigationService)
     {
-        private readonly INavigationService _navigationService;
+        _navigationService = navigationService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HomeViewModel"/>.
-        /// </summary>
-        /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
-        public HomeViewModel(INavigationService navigationService)
-        {
-            _navigationService = navigationService;
+        NavigateCommand = new RelayCommand(NavigateAsync);
+    }
 
-            NavigateCommand = new RelayCommand(NavigateAsync);
-        }
+    /// <summary>
+    /// Gets the login command.
+    /// </summary>
+    public IRelayCommand NavigateCommand { get; }
 
-        /// <summary>
-        /// Gets the login command.
-        /// </summary>
-        public IRelayCommand NavigateCommand { get; }
-
-        private void NavigateAsync()
-        {
-            _navigationService.Navigate<LibraryPage>(Guid.NewGuid());
-        }
+    private void NavigateAsync()
+    {
+        _navigationService.Navigate<LibraryPage>(Guid.NewGuid());
     }
 }

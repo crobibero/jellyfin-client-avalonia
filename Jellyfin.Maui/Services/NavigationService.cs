@@ -1,48 +1,50 @@
-﻿using System;
-using Jellyfin.Maui.Pages;
-using Microsoft.Maui.Controls;
+﻿using Jellyfin.Maui.Pages;
 
-namespace Jellyfin.Maui.Services
+namespace Jellyfin.Maui.Services;
+
+/// <inheritdoc />
+public class NavigationService : INavigationService
 {
-    internal class NavigationService : INavigationService
+    // Navigation page is initialized on startup.
+    private NavigationPage _navigationPage = null!;
+
+    /// <inheritdoc />
+    public void Initialize(NavigationPage navigationPage)
     {
-        // Navigation page is initialized on startup.
-        private NavigationPage _navigationPage = null!;
+        _navigationPage = navigationPage;
+    }
 
-        public void Initialize(NavigationPage navigationPage)
+    /// <inheritdoc />
+    public void Navigate<T>(Guid id)
+        where T : Page, IInitializeId
+    {
+        var resolvedView = ServiceProvider.GetService<T>();
+        resolvedView.Initialize(id);
+
+        Application.Current!.Dispatcher.BeginInvokeOnMainThread(async () =>
         {
-            _navigationPage = navigationPage;
-        }
+            await _navigationPage.PushAsync(resolvedView, true).ConfigureAwait(true);
+        });
+    }
 
-        public void Navigate<T>(Guid id)
-            where T : Page, IInitializeId
+    /// <inheritdoc />
+    public void Navigate<T>()
+        where T : Page
+    {
+        var resolvedView = ServiceProvider.GetService<T>();
+
+        Application.Current!.Dispatcher.BeginInvokeOnMainThread(async () =>
         {
-            var resolvedView = ServiceProvider.GetService<T>();
-            resolvedView.Initialize(id);
+            await _navigationPage.PushAsync(resolvedView, true).ConfigureAwait(true);
+        });
+    }
 
-            Application.Current!.Dispatcher.BeginInvokeOnMainThread(async () =>
-            {
-                await _navigationPage.PushAsync(resolvedView).ConfigureAwait(true);
-            });
-        }
-
-        public void Navigate<T>()
-            where T : Page
+    /// <inheritdoc />
+    public void NavigateToMain()
+    {
+        Application.Current!.Dispatcher.BeginInvokeOnMainThread(async () =>
         {
-            var resolvedView = ServiceProvider.GetService<T>();
-
-            Application.Current!.Dispatcher.BeginInvokeOnMainThread(async () =>
-            {
-                await _navigationPage.PushAsync(resolvedView).ConfigureAwait(true);
-            });
-        }
-
-        public void NavigateToMain()
-        {
-            Application.Current!.Dispatcher.BeginInvokeOnMainThread(async () =>
-            {
-                await _navigationPage.PopToRootAsync().ConfigureAwait(true);
-            });
-        }
+            await _navigationPage.PopToRootAsync(true).ConfigureAwait(true);
+        });
     }
 }

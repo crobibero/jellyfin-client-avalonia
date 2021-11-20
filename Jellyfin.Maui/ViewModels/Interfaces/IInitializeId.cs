@@ -1,16 +1,13 @@
-﻿using System;
+﻿namespace Jellyfin.Maui.ViewModels.Interfaces;
 
-namespace Jellyfin.Maui.ViewModels
+/// <summary>
+/// View model can be initialized with an id.
+/// </summary>
+public interface IInitializeId
 {
     /// <summary>
-    /// Provides initialization interface for id.
+    /// Initialize the id for the view model.
     /// </summary>
-    public interface IInitializeId
-    {
-        /// <summary>
-        /// Initialize the id for the view model.
-        /// </summary>
-        /// <param name="id">The current id.</param>
-        void Initialize(Guid id);
-    }
+    /// <param name="id">The current id.</param>
+    void Initialize(Guid id);
 }

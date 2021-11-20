@@ -1,12 +1,17 @@
-﻿using Foundation;
+#pragma warning disable CA1711
+
+using Foundation;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace Jellyfin.Maui
+namespace Jellyfin.Maui;
+
+/// <summary>
+/// Maui application delegate.
+/// </summary>
+[Register("AppDelegate")]
+public class AppDelegate : MauiUIApplicationDelegate
 {
-	[Register("AppDelegate")]
-	public class AppDelegate : MauiUIApplicationDelegate
-	{
-		protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
-	}
+    /// <inheridoc />
+	protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 }
