@@ -34,7 +34,7 @@
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<Nullable>enable</Nullable>
 		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
-		<CodeAnalysisRuleSet>../jellyfin.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRuleSet>../../jellyfin.ruleset</CodeAnalysisRuleSet>
 		<NoWarn>CA5392</NoWarn>
 	</PropertyGroup>
 
