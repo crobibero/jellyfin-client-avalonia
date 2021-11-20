@@ -33,7 +33,7 @@
 		<Nullable>enable</Nullable>
 		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
 		<CodeAnalysisRuleSet>../jellyfin.ruleset</CodeAnalysisRuleSet>
-		<NoWarn>NU1703;CA5392</NoWarn>
+		<NoWarn>CA5392</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -60,7 +60,7 @@
 		<PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre2" />
 		<PackageReference Include="CommunityToolkit.Maui.Markup" Version="1.0.0-pre2" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="7.1.2" />
-		<PackageReference Include="Jellyfin.Sdk" Version="10.8.0-unstable.202111201442" />
+		<PackageReference Include="Jellyfin.Sdk" Version="2021.*-unstable.*" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
 	</ItemGroup>
 
