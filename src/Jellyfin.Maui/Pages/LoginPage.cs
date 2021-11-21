@@ -1,5 +1,6 @@
 ﻿using Jellyfin.Maui.ViewModels;
 using CommunityToolkit.Maui.Markup;
+using Jellyfin.Maui.Resources.Strings;
 using Microsoft.Maui;
 
 namespace Jellyfin.Maui.Pages;
@@ -42,28 +43,28 @@ public class LoginPage : BaseContentPage<LoginViewModel>
                 {
                     new VerticalStackLayout
                     {
-                        new Label { Text = "Server URL" },
+                        new Label { Text = Strings.Login_ServerUrl },
                         new Entry()
                             .FillExpandHorizontal()
                             .Bind(Entry.TextProperty, nameof(ViewModel.ServerUrl)),
                     }.Row(Row.Server),
                     new VerticalStackLayout
                     {
-                        new Label { Text = "Username" },
+                        new Label { Text = Strings.Login_Username },
                         new Entry()
                             .FillExpandHorizontal()
                             .Bind(Entry.TextProperty, nameof(ViewModel.Username)),
                     }.Row(Row.Username),
                     new VerticalStackLayout
                     {
-                        new Label { Text = "Password" },
+                        new Label { Text = Strings.Login_Password },
                         new Entry()
                             .FillExpandHorizontal()
                             .Bind(Entry.TextProperty, nameof(ViewModel.Password)),
                     }.Row(Row.Password),
                     new VerticalStackLayout
                     {
-                        new Button { Text = "Login" }
+                        new Button { Text = Strings.Login_LoginButton }
                             .CenterHorizontal()
                             .Bind(Button.CommandProperty, nameof(ViewModel.LoginCommand)),
                     }.Row(Row.LoginButton),
