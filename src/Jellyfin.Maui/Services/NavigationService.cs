@@ -1,3 +1,4 @@
+using AsyncAwaitBestPractices;
 using Jellyfin.Maui.Pages;
 using Microsoft.Maui.Essentials;
 
@@ -22,21 +23,7 @@ public class NavigationService : INavigationService
     {
         var resolvedView = ServiceProvider.GetService<T>();
         resolvedView.Initialize(id);
-
-        if (MainThread.IsMainThread)
-        {
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                await _navigationPage.PushAsync(resolvedView, true).ConfigureAwait(true);
-            });
-        }
-        else
-        {
-            App.Current?.Dispatcher.BeginInvokeOnMainThread(async () =>
-            {
-                await _navigationPage.PushAsync(resolvedView, true).ConfigureAwait(true);
-            });
-        }
+        Device.BeginInvokeOnMainThread(() => _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget());
     }
 
     /// <inheritdoc />
@@ -44,38 +31,12 @@ public class NavigationService : INavigationService
         where T : Page
     {
         var resolvedView = ServiceProvider.GetService<T>();
-        if (MainThread.IsMainThread)
-        {
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                await _navigationPage.PushAsync(resolvedView, true).ConfigureAwait(true);
-            });
-        }
-        else
-        {
-            App.Current?.Dispatcher.BeginInvokeOnMainThread(async () =>
-            {
-                await _navigationPage.PushAsync(resolvedView, true).ConfigureAwait(true);
-            });
-        }
+        Device.BeginInvokeOnMainThread(() => _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget());
     }
 
     /// <inheritdoc />
     public void NavigateToMain()
     {
-        if (MainThread.IsMainThread)
-        {
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                await _navigationPage.PopToRootAsync(true).ConfigureAwait(true);
-            });
-        }
-        else
-        {
-            App.Current?.Dispatcher.BeginInvokeOnMainThread(async () =>
-            {
-                await _navigationPage.PopToRootAsync(true).ConfigureAwait(true);
-            });
-        }
+        Device.BeginInvokeOnMainThread(() => _navigationPage.PopToRootAsync(true).SafeFireAndForget());
     }
 }

@@ -29,6 +29,6 @@ public partial class App : Application
 		var mainPage = ServiceProvider.GetService<MainPage>();
 		var navigationPage = new NavigationPage(mainPage);
 		navigationService.Initialize(navigationPage);
-		return new Window(navigationPage);
-	}
+        return new Window(navigationPage);
+    }
 }

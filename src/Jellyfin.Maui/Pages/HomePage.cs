@@ -1,7 +1,6 @@
 using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.ViewModels;
-using Microsoft.Maui;
 
 namespace Jellyfin.Maui.Pages;
 
@@ -22,16 +21,20 @@ public class HomePage : BaseContentPage<HomeViewModel>
     /// <inheritdoc />
     protected override void InitializeLayout()
     {
-        Content = new StackLayout
+        Content = new ScrollView
         {
-            Padding = 16,
-            Children =
+            Content = new StackLayout
             {
-                new ListView
+                Padding = 16,
+                Children =
                 {
-                    ItemTemplate = new DataTemplate(typeof(BaseItemTemplate))
+                    new CollectionView { ItemTemplate = new BaseItemDtoTemplate(), ItemsLayout = LinearItemsLayout.Horizontal }
+                        .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.LibrariesCollection)),
+                    new CollectionView { ItemTemplate = new BaseItemDtoTemplate(), ItemsLayout = LinearItemsLayout.Horizontal }
+                        .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.ContinueWatchingCollection)),
+                    new CollectionView { ItemTemplate = new RecentlyAddedTemplate(), ItemsLayout = LinearItemsLayout.Vertical }
+                        .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.RecentlyAddedCollection))
                 }
-                .Bind(ListView.ItemsSourceProperty, nameof(ViewModel.ContinueWatching))
             }
         };
     }

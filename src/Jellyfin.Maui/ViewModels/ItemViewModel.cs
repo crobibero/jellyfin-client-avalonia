@@ -6,8 +6,7 @@
 public class ItemViewModel : BaseIdViewModel
 {
     /// <inheritdoc />
-    public override ValueTask InitializeAsync()
+    public override void Initialize()
     {
-        return ValueTask.CompletedTask;
     }
 }

@@ -11,8 +11,8 @@ public class LoginViewModel : BaseViewModel
     private readonly IAuthenticationService _authenticationService;
     private readonly INavigationService _navigationService;
 
-    private string? _serverUrl;
-    private string? _username;
+    private string? _serverUrl = "https://demo.jellyfin.org/stable";
+    private string? _username = "demo";
     private string? _password;
     private string? _errorMessage;
 
@@ -73,9 +73,8 @@ public class LoginViewModel : BaseViewModel
     public IAsyncRelayCommand LoginCommand { get; }
 
     /// <inheritdoc />
-    public override ValueTask InitializeAsync()
+    public override void Initialize()
     {
-        return ValueTask.CompletedTask;
     }
 
     private async Task LoginAsync()
