@@ -1,6 +1,7 @@
-﻿using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Services;
+using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.ViewModels;
 
@@ -9,26 +10,38 @@ namespace Jellyfin.Maui.ViewModels;
 /// </summary>
 public class HomeViewModel : BaseViewModel
 {
-    private readonly INavigationService _navigationService;
+    private readonly ILibraryService _libraryService;
+
+    private IReadOnlyList<BaseItemDto>? _continueWatching;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="HomeViewModel"/>.
     /// </summary>
-    /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
-    public HomeViewModel(INavigationService navigationService)
+    public HomeViewModel(ILibraryService libraryService)
     {
-        _navigationService = navigationService;
-
-        NavigateCommand = new RelayCommand(NavigateAsync);
+        _libraryService = libraryService;
     }
 
     /// <summary>
-    /// Gets the login command.
+    /// Gets or sets the list of items to continue watching.
     /// </summary>
-    public IRelayCommand NavigateCommand { get; }
-
-    private void NavigateAsync()
+    public IReadOnlyList<BaseItemDto>? ContinueWatching
     {
-        _navigationService.Navigate<LibraryPage>(Guid.NewGuid());
+        get => _continueWatching;
+        set => SetProperty(ref _continueWatching, value);
+    }
+
+    /// <inheridoc />
+    public override async ValueTask InitializeAsync()
+    {
+        await _libraryService.GetContinueWatching()
+            .ContinueWith(completed =>
+            {
+                if (completed.IsCompletedSuccessfully)
+                {
+                    ContinueWatching = completed.Result;
+                }
+            }, TaskScheduler.Default)
+            .ConfigureAwait(false);
     }
 }

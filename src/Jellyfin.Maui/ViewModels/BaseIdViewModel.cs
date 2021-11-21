@@ -1,11 +1,11 @@
-﻿using Jellyfin.Maui.ViewModels.Interfaces;
+using Jellyfin.Maui.ViewModels.Interfaces;
 
 namespace Jellyfin.Maui.ViewModels;
 
 /// <summary>
 /// ViewModel that has an ID parameter.
 /// </summary>
-public class BaseIdViewModel : BaseViewModel, IInitializeId
+public abstract class BaseIdViewModel : BaseViewModel, IInitializeId
 {
     private Guid _id;
 

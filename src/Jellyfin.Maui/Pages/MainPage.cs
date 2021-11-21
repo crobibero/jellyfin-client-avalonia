@@ -1,4 +1,3 @@
-﻿using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Services;
 
 namespace Jellyfin.Maui.Pages;
@@ -22,26 +21,24 @@ public class MainPage : ContentPage
     {
         _navigationService = navigationService;
         _stateService = stateService;
-
-        GoCommand = new RelayCommand(() => Redirect());
-        Content = new StackLayout
-        {
-            new Button {
-                Text = "Go",
-                Command = GoCommand
-            }
-        };
     }
 
-    /*/// <inheridoc />
+    /// <inheridoc />
     protected override void OnAppearing()
     {
         Redirect();
-    }*/
+    }
 
-    private IRelayCommand GoCommand { get; }
+    /// <inheridoc />
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        Redirect();
+    }
 
-    private void Redirect()
+    /// <summary>
+    /// Redirect to proper page.
+    /// </summary>
+    public void Redirect()
     {
         var state = _stateService.GetState();
         if (string.IsNullOrEmpty(state.Token))

@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Jellyfin.Maui.ViewModels;
 
@@ -7,4 +7,9 @@ namespace Jellyfin.Maui.ViewModels;
 /// </summary>
 public abstract class BaseViewModel : ObservableObject
 {
+    /// <summary>
+    /// Initialize the view model.
+    /// </summary>
+    /// <returns>A Task.</returns>
+    public abstract ValueTask InitializeAsync();
 }

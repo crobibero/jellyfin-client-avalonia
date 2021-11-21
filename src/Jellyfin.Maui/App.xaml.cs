@@ -1,7 +1,6 @@
-﻿using Jellyfin.Maui.Pages;
+using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Services;
 using Microsoft.Maui;
-using Microsoft.Maui.Controls;
 using Application = Microsoft.Maui.Controls.Application;
 
 namespace Jellyfin.Maui;

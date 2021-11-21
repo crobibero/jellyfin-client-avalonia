@@ -1,4 +1,5 @@
-﻿using Jellyfin.Maui.ViewModels;
+using AsyncAwaitBestPractices;
+using Jellyfin.Maui.ViewModels;
 
 namespace Jellyfin.Maui.Pages;
 
@@ -31,6 +32,13 @@ public abstract class BaseContentPage<TViewModel>
 #pragma warning disable CA2214 // Do not call overridable methods in constructors
         InitializeLayout();
 #pragma warning restore CA2214 // Do not call overridable methods in constructors
+    }
+
+    /// <inheridoc />
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        ViewModel.InitializeAsync().SafeFireAndForget();
     }
 
     /// <summary>

@@ -1,5 +1,7 @@
 using CommunityToolkit.Maui.Markup;
+using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.ViewModels;
+using Microsoft.Maui;
 
 namespace Jellyfin.Maui.Pages;
 
@@ -25,8 +27,11 @@ public class HomePage : BaseContentPage<HomeViewModel>
             Padding = 16,
             Children =
             {
-                new Button {Text = "Navigate", HorizontalOptions = LayoutOptions.Center}
-                    .Bind(Button.CommandProperty, nameof(ViewModel.NavigateCommand))
+                new ListView
+                {
+                    ItemTemplate = new DataTemplate(typeof(BaseItemTemplate))
+                }
+                .Bind(ListView.ItemsSourceProperty, nameof(ViewModel.ContinueWatching))
             }
         };
     }

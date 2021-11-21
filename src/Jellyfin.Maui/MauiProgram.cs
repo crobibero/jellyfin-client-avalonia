@@ -8,6 +8,8 @@ using Jellyfin.Maui.ViewModels;
 using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Services;
 using System.Net.Http;
+using Polly;
+using Polly.Extensions.Http;
 
 namespace Jellyfin.Maui;
 
@@ -41,12 +43,16 @@ public static class MauiProgram
     {
         var exportedTypes = typeof(MauiProgram).Assembly.GetTypes();
         var baseViewModelType = typeof(BaseViewModel);
+        var baseIdViewModelType = typeof(BaseIdViewModel);
         var basePageType = typeof(BaseContentPage<>);
-        var contentPageType = typeof(Microsoft.Maui.Controls.ContentPage);
+
+        var contentPageType = typeof(ContentPage);
 
         foreach (var type in exportedTypes)
         {
-            if (type != baseViewModelType && baseViewModelType.IsAssignableFrom(type))
+            if (type != baseViewModelType
+                && type != baseIdViewModelType
+                && baseViewModelType.IsAssignableFrom(type))
             {
                 // Add View Models
                 services.AddTransient(type);
@@ -79,127 +85,247 @@ public static class MauiProgram
             };
         }
 
+        var retryPolicy = HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+
         // Register sdk services
         services.AddSingleton<SdkClientSettings>();
-        services.AddHttpClient<IActivityLogClient, ActivityLogClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+
         services.AddHttpClient<IApiKeyClient, ApiKeyClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IArtistsClient, ArtistsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IAudioClient, AudioClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IBrandingClient, BrandingClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IChannelsClient, ChannelsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<ICollectionClient, CollectionClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IConfigurationClient, ConfigurationClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IDashboardClient, DashboardClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IDevicesClient, DevicesClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IDisplayPreferencesClient, DisplayPreferencesClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IDlnaClient, DlnaClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IDlnaServerClient, DlnaServerClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IDynamicHlsClient, DynamicHlsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IEnvironmentClient, EnvironmentClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IFilterClient, FilterClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IGenresClient, GenresClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IHlsSegmentClient, HlsSegmentClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IImageClient, ImageClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IImageByNameClient, ImageByNameClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IInstantMixClient, InstantMixClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IItemLookupClient, ItemLookupClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IItemRefreshClient, ItemRefreshClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IItemsClient, ItemsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<ILibraryClient, LibraryClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IItemUpdateClient, ItemUpdateClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<ILibraryStructureClient, LibraryStructureClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<ILiveTvClient, LiveTvClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<ILocalizationClient, LocalizationClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IMediaInfoClient, MediaInfoClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IMoviesClient, MoviesClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IMusicGenresClient, MusicGenresClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<INotificationsClient, NotificationsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IPackageClient, PackageClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IPersonsClient, PersonsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IPlaylistsClient, PlaylistsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IPlaystateClient, PlaystateClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IPluginsClient, PluginsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IQuickConnectClient, QuickConnectClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IRemoteImageClient, RemoteImageClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IScheduledTasksClient, ScheduledTasksClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<ISearchClient, SearchClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<ISessionClient, SessionClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IStartupClient, StartupClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IStudiosClient, StudiosClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<ISubtitleClient, SubtitleClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<ISuggestionsClient, SuggestionsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<ISyncPlayClient, SyncPlayClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<ISystemClient, SystemClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<ITimeSyncClient, TimeSyncClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<ITrailersClient, TrailersClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<ITvShowsClient, TvShowsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IUniversalAudioClient, UniversalAudioClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IUserClient, UserClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IUserLibraryClient, UserLibraryClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IUserViewsClient, UserViewsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IVideoAttachmentsClient, VideoAttachmentsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IVideoHlsClient, VideoHlsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IVideosClient, VideosClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
+
         services.AddHttpClient<IYearsClient, YearsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate);
+            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
+            .AddPolicyHandler(retryPolicy);
     }
 }

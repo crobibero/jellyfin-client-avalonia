@@ -1,4 +1,5 @@
-﻿using Jellyfin.Maui.Pages;
+using Jellyfin.Maui.Pages;
+using Microsoft.Maui.Essentials;
 
 namespace Jellyfin.Maui.Services;
 
@@ -11,6 +12,7 @@ public class NavigationService : INavigationService
     /// <inheritdoc />
     public void Initialize(NavigationPage navigationPage)
     {
+        // TODO switch to proper dispatcher in preview-11
         _navigationPage = navigationPage;
     }
 
@@ -21,10 +23,20 @@ public class NavigationService : INavigationService
         var resolvedView = ServiceProvider.GetService<T>();
         resolvedView.Initialize(id);
 
-        Application.Current!.Dispatcher.BeginInvokeOnMainThread(async () =>
+        if (MainThread.IsMainThread)
         {
-            await _navigationPage.PushAsync(resolvedView, true).ConfigureAwait(true);
-        });
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await _navigationPage.PushAsync(resolvedView, true).ConfigureAwait(true);
+            });
+        }
+        else
+        {
+            App.Current?.Dispatcher.BeginInvokeOnMainThread(async () =>
+            {
+                await _navigationPage.PushAsync(resolvedView, true).ConfigureAwait(true);
+            });
+        }
     }
 
     /// <inheritdoc />
@@ -32,19 +44,38 @@ public class NavigationService : INavigationService
         where T : Page
     {
         var resolvedView = ServiceProvider.GetService<T>();
-
-        Application.Current!.Dispatcher.BeginInvokeOnMainThread(async () =>
+        if (MainThread.IsMainThread)
         {
-            await _navigationPage.PushAsync(resolvedView, true).ConfigureAwait(true);
-        });
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await _navigationPage.PushAsync(resolvedView, true).ConfigureAwait(true);
+            });
+        }
+        else
+        {
+            App.Current?.Dispatcher.BeginInvokeOnMainThread(async () =>
+            {
+                await _navigationPage.PushAsync(resolvedView, true).ConfigureAwait(true);
+            });
+        }
     }
 
     /// <inheritdoc />
     public void NavigateToMain()
     {
-        Application.Current!.Dispatcher.BeginInvokeOnMainThread(async () =>
+        if (MainThread.IsMainThread)
         {
-            await _navigationPage.PopToRootAsync(true).ConfigureAwait(true);
-        });
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await _navigationPage.PopToRootAsync(true).ConfigureAwait(true);
+            });
+        }
+        else
+        {
+            App.Current?.Dispatcher.BeginInvokeOnMainThread(async () =>
+            {
+                await _navigationPage.PopToRootAsync(true).ConfigureAwait(true);
+            });
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Services;
 
 namespace Jellyfin.Maui.ViewModels;
@@ -71,6 +71,12 @@ public class LoginViewModel : BaseViewModel
     /// Gets the login command.
     /// </summary>
     public IAsyncRelayCommand LoginCommand { get; }
+
+    /// <inheritdoc />
+    public override ValueTask InitializeAsync()
+    {
+        return ValueTask.CompletedTask;
+    }
 
     private async Task LoginAsync()
     {
