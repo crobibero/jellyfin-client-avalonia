@@ -53,6 +53,15 @@ public class LibraryService : ILibraryService
     }
 
     /// <inheritdoc />
+    public async Task<BaseItemDto?> GetItem(Guid id)
+    {
+        return await _userLibraryClient.GetItemAsync(
+                _userId,
+                id)
+            .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
     public async Task<BaseItemDtoQueryResult> GetLibraryItems(
         BaseItemDto library,
         int limit,

@@ -1,19 +1,19 @@
-using Jellyfin.Maui.ViewModels;
+﻿using Jellyfin.Maui.ViewModels;
 using CommunityToolkit.Maui.Markup;
 
 namespace Jellyfin.Maui.Pages;
 
 /// <summary>
-/// Library page.
+/// Item page.
 /// </summary>
-public class LibraryPage : BaseContentPage<LibraryViewModel>, IInitializeId
+public class ItemPage : BaseContentPage<ItemViewModel>, IInitializeId
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="LibraryPage"/>.
+    /// Initializes a new instance of the <see cref="ItemPage"/>.
     /// </summary>
-    /// <param name="viewModel">Instance of the <see cref="LibraryViewModel"/>.</param>
-    public LibraryPage(LibraryViewModel viewModel)
-        : base(viewModel, "Library")
+    /// <param name="viewModel">Instance of the <see cref="ItemViewModel"/>.</param>
+    public ItemPage(ItemViewModel viewModel)
+        : base(viewModel, "Item")
     {
     }
 
@@ -32,7 +32,7 @@ public class LibraryPage : BaseContentPage<LibraryViewModel>, IInitializeId
             Children =
             {
                 new Label()
-                    .Bind(Label.TextProperty, nameof(ViewModel.Library.Name), BindingMode.OneWay)
+                    .Bind(Label.TextProperty, nameof(ViewModel.Item.Name), BindingMode.OneWay)
             }
         };
     }

@@ -28,12 +28,35 @@ public class HomePage : BaseContentPage<HomeViewModel>
                 Padding = 16,
                 Children =
                 {
-                    new CollectionView { ItemTemplate = new BaseItemDtoTemplate(), ItemsLayout = LinearItemsLayout.Horizontal }
-                        .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.LibrariesCollection)),
-                    new CollectionView { ItemTemplate = new BaseItemDtoTemplate(), ItemsLayout = LinearItemsLayout.Horizontal }
-                        .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.ContinueWatchingCollection)),
-                    new CollectionView { ItemTemplate = new RecentlyAddedTemplate(), ItemsLayout = LinearItemsLayout.Vertical }
+                    new Label{Text = "Libraries"},
+                    new CollectionView
+                        {
+                            ItemTemplate = new BaseItemDtoTemplate(),
+                            ItemsLayout = LinearItemsLayout.Horizontal,
+                            SelectionMode = SelectionMode.Single,
+                        }
+                        .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.LibrariesCollection))
+                        .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
+                        .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateCommand)),
+
+                    new Label{Text = "Continue Watching"},
+                    new CollectionView
+                        {
+                            ItemTemplate = new BaseItemDtoTemplate(),
+                            ItemsLayout = LinearItemsLayout.Horizontal,
+                            SelectionMode = SelectionMode.Single
+                        }
+                        .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.ContinueWatchingCollection))
+                        .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
+                        .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateCommand)),
+                    new CollectionView
+                        {
+                            ItemTemplate = new RecentlyAddedTemplate(ViewModel.NavigateCommand, ViewModel.SelectedItem),
+                            ItemsLayout = LinearItemsLayout.Vertical
+                        }
                         .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.RecentlyAddedCollection))
+                        .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
+                        .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateCommand))
                 }
             }
         };

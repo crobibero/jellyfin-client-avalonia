@@ -21,6 +21,13 @@ public interface ILibraryService
     Task<BaseItemDto?> GetLibrary(Guid id);
 
     /// <summary>
+    /// Gets the item by id.
+    /// </summary>
+    /// <param name="id">The item id.</param>
+    /// <returns>The item.</returns>
+    Task<BaseItemDto?> GetItem(Guid id);
+
+    /// <summary>
     /// Gets the library items.
     /// </summary>
     /// <param name="library">The library dto.</param>
