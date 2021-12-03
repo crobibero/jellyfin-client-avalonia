@@ -32,10 +32,11 @@ public class AuthenticationService : IAuthenticationService
     }
 
     /// <inheritdoc />
-    public async Task<(bool Status, string? ErrorMessage)> AuthenticateAsync(
+    public async ValueTask<(bool Status, string? ErrorMessage)> AuthenticateAsync(
         string host,
         string username,
-        string? password)
+        string? password,
+        CancellationToken cancellationToken = default)
     {
         // Set baseurl.
         _sdkClientSettings.BaseUrl = host;
@@ -45,7 +46,7 @@ public class AuthenticationService : IAuthenticationService
 
         try
         {
-            _ = await _systemClient.GetPublicSystemInfoAsync()
+            _ = await _systemClient.GetPublicSystemInfoAsync(cancellationToken)
                 .ConfigureAwait(false);
         }
         catch (SystemException)
@@ -59,7 +60,7 @@ public class AuthenticationService : IAuthenticationService
                 {
                     Username = username,
                     Pw = password
-                })
+                }, cancellationToken)
                 .ConfigureAwait(false);
 
             _stateService.SetAuthenticationResponse(host, authResult);
@@ -80,11 +81,11 @@ public class AuthenticationService : IAuthenticationService
     }
 
     /// <inheritdoc />
-    public async Task<bool> IsAuthenticatedAsync()
+    public async ValueTask<bool> IsAuthenticatedAsync(CancellationToken cancellationToken = default)
     {
         try
         {
-            var user = await _userClient.GetCurrentUserAsync()
+            var user = await _userClient.GetCurrentUserAsync(cancellationToken)
                 .ConfigureAwait(false);
             _stateService.SetUser(user);
             return true;

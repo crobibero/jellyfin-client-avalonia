@@ -38,7 +38,7 @@ public class MainPage : ContentPage
     /// <summary>
     /// Redirect to proper page.
     /// </summary>
-    public void Redirect()
+    private void Redirect()
     {
         var state = _stateService.GetState();
         if (string.IsNullOrEmpty(state.Token))

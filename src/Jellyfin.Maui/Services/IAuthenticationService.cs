@@ -1,4 +1,4 @@
-﻿namespace Jellyfin.Maui.Services;
+namespace Jellyfin.Maui.Services;
 
 /// <summary>
 /// Authentication service interface.
@@ -11,8 +11,13 @@ public interface IAuthenticationService
     /// <param name="host">The server host.</param>
     /// <param name="username">The username.</param>
     /// <param name="password">The password.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The authentication response.</returns>
-    Task<(bool Status, string? ErrorMessage)> AuthenticateAsync(string host, string username, string? password);
+    ValueTask<(bool Status, string? ErrorMessage)> AuthenticateAsync(
+        string host,
+        string username,
+        string? password,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Log out of current session.
@@ -22,6 +27,7 @@ public interface IAuthenticationService
     /// <summary>
     /// Test whether client is currently authenticated.
     /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>Authentication status.</returns>
-    Task<bool> IsAuthenticatedAsync();
+    ValueTask<bool> IsAuthenticatedAsync(CancellationToken cancellationToken = default);
 }

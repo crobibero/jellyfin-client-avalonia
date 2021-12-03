@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Services;
+using Jellyfin.Maui.ViewModels.Facades;
 
 namespace Jellyfin.Maui.ViewModels;
 
@@ -96,7 +97,8 @@ public class LoginViewModel : BaseViewModel
             var (status, errorMessage) = await _authenticationService.AuthenticateAsync(
                     ServerUrl,
                     Username,
-                    Password)
+                    Password,
+                    ViewModelCancellationToken)
                 .ConfigureAwait(false);
             if (status)
             {

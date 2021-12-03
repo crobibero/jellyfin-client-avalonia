@@ -4,10 +4,10 @@ using Jellyfin.Sdk;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Text;
-using Jellyfin.Maui.ViewModels;
-using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Services;
 using System.Net.Http;
+using Jellyfin.Maui.Pages.Facades;
+using Jellyfin.Maui.ViewModels.Facades;
 using Polly;
 using Polly.Extensions.Http;
 
@@ -39,7 +39,7 @@ public static class MauiProgram
 
         builder.Services.AddPages();
         builder.Services.AddSdkClients();
-        builder.Services.AddServices();           
+        builder.Services.AddServices();
 
         return builder.Build();
     }
@@ -47,23 +47,22 @@ public static class MauiProgram
     private static void AddPages(this IServiceCollection services)
     {
         var exportedTypes = typeof(MauiProgram).Assembly.GetTypes();
+        var viewModelIgnoreList = new[] { typeof(BaseViewModel), typeof(BaseIdViewModel) };
+        var pageIgnoreList = new[] { typeof(BaseContentPage<>), typeof(BaseContentIdPage<>) };
         var baseViewModelType = typeof(BaseViewModel);
-        var baseIdViewModelType = typeof(BaseIdViewModel);
-        var basePageType = typeof(BaseContentPage<>);
-
-        var contentPageType = typeof(ContentPage);
+        var baseContentPageType = typeof(ContentPage);
 
         foreach (var type in exportedTypes)
         {
-            if (type != baseViewModelType
-                && type != baseIdViewModelType
+            if (Array.IndexOf(viewModelIgnoreList, type) == -1
                 && baseViewModelType.IsAssignableFrom(type))
             {
                 // Add View Models
                 services.AddTransient(type);
             }
 
-            if (type != basePageType && contentPageType.IsAssignableFrom(type))
+            if (Array.IndexOf(pageIgnoreList, type) == -1
+                && baseContentPageType.IsAssignableFrom(type))
             {
                 // Add Pages
                 services.AddTransient(type);
@@ -91,8 +90,8 @@ public static class MauiProgram
         }
 
         var retryPolicy = HttpPolicyExtensions
-                .HandleTransientHttpError()
-                .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+            .HandleTransientHttpError()
+            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(retryAttempt));
 
         // Register sdk services
         services.AddSingleton<SdkClientSettings>();

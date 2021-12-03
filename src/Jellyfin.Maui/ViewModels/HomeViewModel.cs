@@ -1,10 +1,9 @@
 using System.Collections.ObjectModel;
 using AsyncAwaitBestPractices;
-using AsyncAwaitBestPractices.MVVM;
 using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Models;
-using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Services;
+using Jellyfin.Maui.ViewModels.Facades;
 using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.ViewModels;
@@ -60,37 +59,29 @@ public class HomeViewModel : BaseViewModel
     /// <inheridoc />
     public override void Initialize()
     {
-        _libraryService.GetContinueWatching()
-            .ContinueWith(task =>
-            {
-                if (task.IsCompletedSuccessfully)
-                {
-                    ContinueWatchingCollection.Clear();
-                    foreach (var item in task.Result)
-                    {
-                        ContinueWatchingCollection.Add(item);
-                    }
-                }
-            }, TaskScheduler.Default)
-            .SafeFireAndForget();
-
-        _libraryService.GetLibraries()
-            .ContinueWith(async task =>
-            {
-                if (task.IsCompletedSuccessfully)
-                {
-                    await InitializeLibraries(await task.ConfigureAwait(false)).ConfigureAwait(false);
-                }
-            }, TaskScheduler.Default)
-            .SafeFireAndForget();
+        InitializeContinueWatchingAsync().SafeFireAndForget();
+        InitializeLibrariesAsync().SafeFireAndForget();
     }
 
-    private async Task InitializeLibraries(IReadOnlyList<BaseItemDto> libraries)
+    private async ValueTask InitializeContinueWatchingAsync()
     {
+        var continueWatching = await _libraryService.GetContinueWatchingAsync(ViewModelCancellationToken)
+            .ConfigureAwait(false);
+        ContinueWatchingCollection.Clear();
+        foreach (var item in continueWatching)
+        {
+            ContinueWatchingCollection.Add(item);
+        }
+    }
+
+    private async ValueTask InitializeLibrariesAsync()
+    {
+        var libraries = await _libraryService.GetLibrariesAsync(ViewModelCancellationToken)
+            .ConfigureAwait(false);
         foreach (var library in libraries)
         {
             LibrariesCollection.Add(library);
-            var recentlyAdded = await _libraryService.GetRecentlyAdded(library.Id)
+            var recentlyAdded = await _libraryService.GetRecentlyAddedAsync(library.Id, ViewModelCancellationToken)
                 .ConfigureAwait(false);
             RecentlyAddedCollection.Add(new RecentlyAddedModel(library.Id, library.Name, recentlyAdded));
         }
@@ -103,13 +94,6 @@ public class HomeViewModel : BaseViewModel
             return;
         }
 
-        if (SelectedItem.Type == BaseItemKind.CollectionFolder)
-        {
-            _navigationService.Navigate<LibraryPage>(SelectedItem.Id);
-        }
-        else
-        {
-            _navigationService.Navigate<ItemPage>(SelectedItem.Id);
-        }
+        _navigationService.NavigateToItemPage(SelectedItem.Type, SelectedItem.Id);
     }
 }

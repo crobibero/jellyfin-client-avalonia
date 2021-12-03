@@ -1,5 +1,6 @@
 ﻿using Jellyfin.Maui.ViewModels;
 using CommunityToolkit.Maui.Markup;
+using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Resources.Strings;
 using Microsoft.Maui;
 

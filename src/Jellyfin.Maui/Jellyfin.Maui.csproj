@@ -9,7 +9,7 @@
 		<SingleProject>true</SingleProject>
 		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
 		<LangVersion>latest</LangVersion>
-        <NeutralLanguage>en</NeutralLanguage>
+    <NeutralLanguage>en</NeutralLanguage>
 
 		<!-- Display name -->
 		<ApplicationTitle>Jellyfin</ApplicationTitle>
@@ -19,7 +19,7 @@
 
 		<!-- Versions -->
 		<ApplicationVersion>1</ApplicationVersion>
-        <Version>1.0.0</Version>
+    <Version>1.0.0</Version>
 
 		<!-- Required for C# Hot Reload -->
 		<UseInterpreter Condition="'$(Configuration)' == 'Debug'">True</UseInterpreter>
@@ -35,7 +35,7 @@
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<Nullable>enable</Nullable>
 		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
-		<CodeAnalysisRuleSet>../../jellyfin.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRuleSet>../jellyfin.ruleset</CodeAnalysisRuleSet>
 		<NoWarn>CA5392</NoWarn>
 	</PropertyGroup>
 

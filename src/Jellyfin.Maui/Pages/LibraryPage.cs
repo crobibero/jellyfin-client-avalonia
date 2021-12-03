@@ -1,12 +1,13 @@
 using Jellyfin.Maui.ViewModels;
 using CommunityToolkit.Maui.Markup;
+using Jellyfin.Maui.Pages.Facades;
 
 namespace Jellyfin.Maui.Pages;
 
 /// <summary>
 /// Library page.
 /// </summary>
-public class LibraryPage : BaseContentPage<LibraryViewModel>, IInitializeId
+public class LibraryPage : BaseContentIdPage<LibraryViewModel>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="LibraryPage"/>.
@@ -17,11 +18,7 @@ public class LibraryPage : BaseContentPage<LibraryViewModel>, IInitializeId
     {
     }
 
-    /// <inheritdoc />
-    public void Initialize(Guid id)
-    {
-        ViewModel.Initialize(id);
-    }
+
 
     /// <inheritdoc />
     protected override void InitializeLayout()
@@ -32,7 +29,7 @@ public class LibraryPage : BaseContentPage<LibraryViewModel>, IInitializeId
             Children =
             {
                 new Label()
-                    .Bind(Label.TextProperty, nameof(ViewModel.Library.Name), BindingMode.OneWay)
+                    .Bind(Label.TextProperty, nameof(ViewModel.Item.Name), BindingMode.OneWay)
             }
         };
     }

@@ -1,6 +1,7 @@
-using Jellyfin.Maui.ViewModels;
+using AsyncAwaitBestPractices;
+using Jellyfin.Maui.ViewModels.Facades;
 
-namespace Jellyfin.Maui.Pages;
+namespace Jellyfin.Maui.Pages.Facades;
 
 /// <summary>
 /// The base content page.
@@ -14,7 +15,7 @@ public abstract class BaseContentPage<TViewModel>
     /// </summary>
     /// <param name="viewModel">Instance of the view model.</param>
     protected BaseContentPage(TViewModel viewModel)
-        :this(viewModel, string.Empty)
+        : this(viewModel, string.Empty)
     {
     }
 

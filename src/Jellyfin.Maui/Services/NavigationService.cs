@@ -1,6 +1,9 @@
 using AsyncAwaitBestPractices;
 using Jellyfin.Maui.Pages;
-using Microsoft.Maui.Essentials;
+using Jellyfin.Maui.Pages.Facades;
+using Jellyfin.Maui.ViewModels;
+using Jellyfin.Maui.ViewModels.Facades;
+using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Services;
 
@@ -18,12 +21,39 @@ public class NavigationService : INavigationService
     }
 
     /// <inheritdoc />
-    public void Navigate<T>(Guid id)
-        where T : Page, IInitializeId
+    public void Navigate<TPage, TViewModel>(Guid id)
+        where TViewModel : BaseIdViewModel
+        where TPage : BaseContentIdPage<TViewModel>
     {
-        var resolvedView = ServiceProvider.GetService<T>();
+        var resolvedView = ServiceProvider.GetService<TPage>();
         resolvedView.Initialize(id);
         Device.BeginInvokeOnMainThread(() => _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget());
+    }
+
+    /// <inheridoc />
+    public void NavigateToItemPage(BaseItemKind itemKind, Guid itemId)
+    {
+        switch (itemKind)
+        {
+            case BaseItemKind.Movie:
+                Navigate<MoviePage, MovieViewModel>(itemId);
+                break;
+            case BaseItemKind.Episode:
+                Navigate<EpisodePage, EpisodeViewModel>(itemId);
+                break;
+            case BaseItemKind.Season:
+                Navigate<SeasonPage, SeasonViewModel>(itemId);
+                break;
+            case BaseItemKind.Series:
+                Navigate<SeriesPage, SeriesViewModel>(itemId);
+                break;
+            case BaseItemKind.CollectionFolder:
+                Navigate<LibraryPage, LibraryViewModel>(itemId);
+                break;
+            default:
+                Navigate<ItemPage, ItemViewModel>(itemId);
+                break;
+        }
     }
 
     /// <inheritdoc />

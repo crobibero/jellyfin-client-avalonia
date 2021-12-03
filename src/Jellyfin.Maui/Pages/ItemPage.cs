@@ -1,12 +1,13 @@
 ﻿using Jellyfin.Maui.ViewModels;
 using CommunityToolkit.Maui.Markup;
+using Jellyfin.Maui.Pages.Facades;
 
 namespace Jellyfin.Maui.Pages;
 
 /// <summary>
 /// Item page.
 /// </summary>
-public class ItemPage : BaseContentPage<ItemViewModel>, IInitializeId
+public class ItemPage : BaseContentIdPage<ItemViewModel>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ItemPage"/>.
@@ -15,12 +16,6 @@ public class ItemPage : BaseContentPage<ItemViewModel>, IInitializeId
     public ItemPage(ItemViewModel viewModel)
         : base(viewModel, "Item")
     {
-    }
-
-    /// <inheritdoc />
-    public void Initialize(Guid id)
-    {
-        ViewModel.Initialize(id);
     }
 
     /// <inheritdoc />

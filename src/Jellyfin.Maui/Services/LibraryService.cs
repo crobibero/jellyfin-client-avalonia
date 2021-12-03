@@ -35,37 +35,40 @@ public class LibraryService : ILibraryService
     }
 
     /// <inheritdoc />
-    public async Task<IReadOnlyList<BaseItemDto>> GetLibraries()
+    public async ValueTask<IReadOnlyList<BaseItemDto>> GetLibrariesAsync(CancellationToken cancellationToken = default)
     {
-        var views = await _userViewsClient.GetUserViewsAsync(_userId)
+        var views = await _userViewsClient.GetUserViewsAsync(_userId, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
         return views is null ? Array.Empty<BaseItemDto>() : views.Items;
     }
 
     /// <inheritdoc />
-    public async Task<BaseItemDto?> GetLibrary(Guid id)
+    public async ValueTask<BaseItemDto?> GetLibraryAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var result = await _itemsClient.GetItemsAsync(
                 userId: _userId,
-                ids: new[] { id })
+                ids: new[] { id },
+                cancellationToken: cancellationToken)
             .ConfigureAwait(false);
         return result.Items.Count == 0 ? null : result.Items[0];
     }
 
     /// <inheritdoc />
-    public async Task<BaseItemDto?> GetItem(Guid id)
+    public async ValueTask<BaseItemDto?> GetItemAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _userLibraryClient.GetItemAsync(
                 _userId,
-                id)
+                id,
+                cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
     /// <inheritdoc />
-    public async Task<BaseItemDtoQueryResult> GetLibraryItems(
+    public async ValueTask<BaseItemDtoQueryResult> GetLibraryItemsAsync(
         BaseItemDto library,
         int limit,
-        int startIndex)
+        int startIndex,
+        CancellationToken cancellationToken = default)
     {
         return await _itemsClient.GetItemsAsync(
                 userId: _userId,
@@ -77,12 +80,13 @@ public class LibraryService : ILibraryService
                 imageTypeLimit: 1,
                 enableImageTypes: new[] { ImageType.Primary, ImageType.Banner, ImageType.Thumb },
                 limit: limit,
-                startIndex: startIndex)
+                startIndex: startIndex,
+                cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
     /// <inheritdoc />
-    public async Task<IReadOnlyList<BaseItemDto>> GetNextUp(IEnumerable<Guid> libraryIds)
+    public async ValueTask<IReadOnlyList<BaseItemDto>> GetNextUpAsync(IEnumerable<Guid> libraryIds, CancellationToken cancellationToken = default)
     {
         var items = new List<BaseItemDto>();
         foreach (var library in libraryIds)
@@ -93,7 +97,8 @@ public class LibraryService : ILibraryService
                     fields: new[] { ItemFields.PrimaryImageAspectRatio },
                     imageTypeLimit: 1,
                     enableImageTypes: new[] { ImageType.Primary, ImageType.Backdrop, ImageType.Thumb },
-                    parentId: library)
+                    parentId: library,
+                    cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
             items.AddRange(result.Items);
         }
@@ -102,7 +107,7 @@ public class LibraryService : ILibraryService
     }
 
     /// <inheritdoc />
-    public async Task<IReadOnlyList<BaseItemDto>> GetContinueWatching()
+    public async ValueTask<IReadOnlyList<BaseItemDto>> GetContinueWatchingAsync(CancellationToken cancellationToken = default)
     {
         var result = await _itemsClient.GetResumeItemsAsync(
                 userId: _userId,
@@ -111,14 +116,15 @@ public class LibraryService : ILibraryService
                 imageTypeLimit: 1,
                 enableImageTypes: new[] { ImageType.Primary, ImageType.Backdrop, ImageType.Thumb },
                 enableTotalRecordCount: false,
-                mediaTypes: new[] { "Video" })
+                mediaTypes: new[] { "Video" },
+                cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
         return result.Items;
     }
 
     /// <inheritdoc />
-    public async Task<IReadOnlyList<BaseItemDto>> GetRecentlyAdded(Guid libraryId, CancellationToken cancellationToken = default)
+    public async ValueTask<IReadOnlyList<BaseItemDto>> GetRecentlyAddedAsync(Guid libraryId, CancellationToken cancellationToken = default)
     {
         return await _userLibraryClient.GetLatestMediaAsync(
                 userId: _userId,
@@ -127,6 +133,32 @@ public class LibraryService : ILibraryService
                 imageTypeLimit: 1,
                 enableImageTypes: new[] { ImageType.Primary, ImageType.Backdrop, ImageType.Thumb },
                 parentId: libraryId,
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public async ValueTask<BaseItemDtoQueryResult> GetSeasonsAsync(Guid seriesId, CancellationToken cancellationToken = default)
+    {
+        return await _tvShowsClient.GetSeasonsAsync(
+                seriesId,
+                _userId,
+                new[] { ItemFields.PrimaryImageAspectRatio },
+                imageTypeLimit: 1,
+                enableImageTypes: new[] { ImageType.Primary, ImageType.Backdrop, ImageType.Thumb },
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public async ValueTask<BaseItemDtoQueryResult> GetNextUpAsync(Guid seriesId, CancellationToken cancellationToken = default)
+    {
+        return await _tvShowsClient.GetNextUpAsync(
+                _userId,
+                parentId: seriesId,
+                fields: new[] { ItemFields.PrimaryImageAspectRatio },
+                imageTypeLimit: 1,
+                enableImageTypes: new[] { ImageType.Primary, ImageType.Backdrop, ImageType.Thumb },
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }

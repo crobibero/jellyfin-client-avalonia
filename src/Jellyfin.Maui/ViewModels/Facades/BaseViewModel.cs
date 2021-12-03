@@ -2,13 +2,28 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Jellyfin.Maui.ViewModels;
+namespace Jellyfin.Maui.ViewModels.Facades;
 
 /// <summary>
 /// Base view model.
 /// </summary>
-public abstract class BaseViewModel : ObservableObject
+public abstract class BaseViewModel : ObservableObject, IDisposable
 {
+    private readonly CancellationTokenSource _cancellationTokenSource;
+
+    /// <summary>
+    /// Gets the cancellation token which denotes the view model has been disposed.
+    /// </summary>
+    protected CancellationToken ViewModelCancellationToken => _cancellationTokenSource.Token;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseViewModel"/>.
+    /// </summary>
+    protected BaseViewModel()
+    {
+        _cancellationTokenSource = new CancellationTokenSource();
+    }
+
     /// <summary>
     /// Initialize the view model.
     /// </summary>
@@ -50,6 +65,28 @@ public abstract class BaseViewModel : ObservableObject
             }
 
             collection.Insert(index, modelToInsert);
+        }
+    }
+
+    /// <summary>
+    /// Dispose.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Dispose all resources.
+    /// </summary>
+    /// <param name="disposing">Whether to dispose.</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Dispose();
         }
     }
 }

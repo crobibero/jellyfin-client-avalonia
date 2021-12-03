@@ -1,6 +1,5 @@
 using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.Converters;
-using Jellyfin.Sdk;
 using Microsoft.Maui;
 
 namespace Jellyfin.Maui.DataTemplates

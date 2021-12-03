@@ -1,4 +1,6 @@
-﻿using Jellyfin.Maui.Pages;
+﻿using Jellyfin.Maui.Pages.Facades;
+using Jellyfin.Maui.ViewModels.Facades;
+using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Services;
 
@@ -19,17 +21,26 @@ public interface INavigationService
     void NavigateToMain();
 
     /// <summary>
+    /// Navigate to the item's page.
+    /// </summary>
+    /// <param name="itemKind">The item kind.</param>
+    /// <param name="itemId">The item id.</param>
+    void NavigateToItemPage(BaseItemKind itemKind, Guid itemId);
+
+    /// <summary>
     /// Navigate to the view.
     /// </summary>
-    /// <typeparam name="T">The view type.</typeparam>
-    void Navigate<T>()
-        where T : Page;
+    /// <typeparam name="TPage">The view type.</typeparam>
+    void Navigate<TPage>()
+        where TPage : Page;
 
     /// <summary>
     /// Navigate to the view, passing an id.
     /// </summary>
-    /// <typeparam name="T">The view type.</typeparam>
+    /// <typeparam name="TPage">The view type.</typeparam>
+    /// <typeparam name="TViewModel">The view model type.</typeparam>
     /// <param name="id">The id.</param>
-    void Navigate<T>(Guid id)
-        where T : Page, IInitializeId;
+    void Navigate<TPage, TViewModel>(Guid id)
+        where TViewModel : BaseIdViewModel
+        where TPage : BaseContentIdPage<TViewModel>;
 }

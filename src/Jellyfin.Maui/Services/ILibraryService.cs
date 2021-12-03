@@ -1,4 +1,4 @@
-﻿using Jellyfin.Sdk;
+using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Services;
 
@@ -11,21 +11,23 @@ public interface ILibraryService
     /// Gets the list of visible libraries.
     /// </summary>
     /// <returns>The list of libraries.</returns>
-    Task<IReadOnlyList<BaseItemDto>> GetLibraries();
+    ValueTask<IReadOnlyList<BaseItemDto>> GetLibrariesAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets the library by id.
     /// </summary>
     /// <param name="id">The library id.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The library.</returns>
-    Task<BaseItemDto?> GetLibrary(Guid id);
+    ValueTask<BaseItemDto?> GetLibraryAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets the item by id.
     /// </summary>
     /// <param name="id">The item id.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The item.</returns>
-    Task<BaseItemDto?> GetItem(Guid id);
+    ValueTask<BaseItemDto?> GetItemAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets the library items.
@@ -33,21 +35,24 @@ public interface ILibraryService
     /// <param name="library">The library dto.</param>
     /// <param name="limit">The count of items to return.</param>
     /// <param name="startIndex">The first item index.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The library items.</returns>
-    Task<BaseItemDtoQueryResult> GetLibraryItems(BaseItemDto library, int limit, int startIndex);
+    ValueTask<BaseItemDtoQueryResult> GetLibraryItemsAsync(BaseItemDto library, int limit, int startIndex, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets the next up items.
     /// </summary>
     /// <param name="libraryIds">The list of library ids.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The next up items.</returns>
-    Task<IReadOnlyList<BaseItemDto>> GetNextUp(IEnumerable<Guid> libraryIds);
+    ValueTask<IReadOnlyList<BaseItemDto>> GetNextUpAsync(IEnumerable<Guid> libraryIds, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets the continue watching items.
     /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The continue watching items.</returns>
-    Task<IReadOnlyList<BaseItemDto>> GetContinueWatching();
+    ValueTask<IReadOnlyList<BaseItemDto>> GetContinueWatchingAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets the recently added items.
@@ -55,5 +60,21 @@ public interface ILibraryService
     /// <param name="libraryId">The library id.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The recently added library items.</returns>
-    Task<IReadOnlyList<BaseItemDto>> GetRecentlyAdded(Guid libraryId, CancellationToken cancellationToken = default);
+    ValueTask<IReadOnlyList<BaseItemDto>> GetRecentlyAddedAsync(Guid libraryId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets the seasons in a series.
+    /// </summary>
+    /// <param name="seriesId">The series id.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The list of seasons.</returns>
+    ValueTask<BaseItemDtoQueryResult> GetSeasonsAsync(Guid seriesId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets the next up item in a series.
+    /// </summary>
+    /// <param name="seriesId">The series id.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The next episode.</returns>
+    ValueTask<BaseItemDtoQueryResult> GetNextUpAsync(Guid seriesId, CancellationToken cancellationToken = default);
 }
