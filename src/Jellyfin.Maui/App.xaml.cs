@@ -18,7 +18,7 @@ public partial class App : Application
 		InitializeComponent();
 	}
 
-	/// <summary>
+    /// <summary>
 	/// Create a new window.
 	/// </summary>
 	/// <param name="activationState">The activation state.</param>
@@ -27,8 +27,9 @@ public partial class App : Application
 	{
 		var navigationService = ServiceProvider.GetService<INavigationService>();
 		var mainPage = ServiceProvider.GetService<MainPage>();
-		var navigationPage = new NavigationPage(mainPage);
-		navigationService.Initialize(navigationPage);
-        return new Window(navigationPage);
+        var window = new Window();
+        navigationService.Initialize(window);
+        window.Page = mainPage;
+        return window;
     }
 }

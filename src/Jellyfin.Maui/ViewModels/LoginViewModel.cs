@@ -102,7 +102,7 @@ public class LoginViewModel : BaseViewModel
                 .ConfigureAwait(false);
             if (status)
             {
-                _navigationService.NavigateToMain();
+                _navigationService.NavigateHome();
             }
             else
             {

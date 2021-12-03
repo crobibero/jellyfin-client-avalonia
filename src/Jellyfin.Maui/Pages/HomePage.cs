@@ -19,6 +19,14 @@ public class HomePage : BaseContentPage<HomeViewModel>
     {
     }
 
+    /// <summary>
+    /// Manually initialize the view model.
+    /// </summary>
+    public void Initialize()
+    {
+        ViewModel.Initialize();
+    }
+
     /// <inheritdoc />
     protected override void InitializeLayout()
     {

@@ -12,13 +12,18 @@ public interface INavigationService
     /// <summary>
     /// Initialize the root navigation page.
     /// </summary>
-    /// <param name="navigationPage">The root navigation page.</param>
-    void Initialize(NavigationPage navigationPage);
+    /// <param name="window">The main window.</param>
+    void Initialize(Window window);
 
     /// <summary>
     /// Navigate to the main view.
     /// </summary>
-    void NavigateToMain();
+    void NavigateHome();
+
+    /// <summary>
+    /// Navigate to the login page.
+    /// </summary>
+    void NavigateToLoginPage();
 
     /// <summary>
     /// Navigate to the item's page.

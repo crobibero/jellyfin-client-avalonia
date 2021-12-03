@@ -1,4 +1,3 @@
-using AsyncAwaitBestPractices;
 using Jellyfin.Maui.ViewModels.Facades;
 
 namespace Jellyfin.Maui.Pages.Facades;
@@ -39,6 +38,17 @@ public abstract class BaseContentPage<TViewModel>
     {
         ViewModel.Initialize();
         base.OnNavigatedTo(args);
+    }
+
+    /// <inheridoc />
+    protected override void OnDisappearing()
+    {
+        if (ViewModel is IDisposable disposableViewModel)
+        {
+            disposableViewModel.Dispose();
+        }
+
+        base.OnDisappearing();
     }
 
     /// <summary>

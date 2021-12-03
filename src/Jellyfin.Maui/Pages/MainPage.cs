@@ -1,3 +1,4 @@
+using AsyncAwaitBestPractices;
 using Jellyfin.Maui.Services;
 
 namespace Jellyfin.Maui.Pages;
@@ -8,46 +9,47 @@ namespace Jellyfin.Maui.Pages;
 public class MainPage : ContentPage
 {
     private readonly INavigationService _navigationService;
-    private readonly IStateService _stateService;
+    private readonly IAuthenticationService _authenticationService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainPage"/> class.
     /// </summary>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
-    /// <param name="stateService">Instance of the <see cref="IStateService"/> interface.</param>
+    /// <param name="authenticationService">Instance of the <see cref="IAuthenticationService"/> interface.</param>
     public MainPage(
         INavigationService navigationService,
-        IStateService stateService)
+        IAuthenticationService authenticationService)
     {
         _navigationService = navigationService;
-        _stateService = stateService;
+        _authenticationService = authenticationService;
     }
 
     /// <inheridoc />
     protected override void OnAppearing()
     {
-        Redirect();
+        Redirect().SafeFireAndForget();
     }
 
     /// <inheridoc />
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
-        Redirect();
+        Redirect().SafeFireAndForget();
     }
 
     /// <summary>
     /// Redirect to proper page.
     /// </summary>
-    private void Redirect()
+    private async ValueTask Redirect()
     {
-        var state = _stateService.GetState();
-        if (string.IsNullOrEmpty(state.Token))
+        var isAuthenticated = await _authenticationService.IsAuthenticatedAsync()
+            .ConfigureAwait(false);
+        if (isAuthenticated)
         {
-            _navigationService.Navigate<LoginPage>();
+            _navigationService.NavigateHome();
         }
         else
         {
-            _navigationService.Navigate<HomePage>();
+            _navigationService.NavigateToLoginPage();
         }
     }
 }

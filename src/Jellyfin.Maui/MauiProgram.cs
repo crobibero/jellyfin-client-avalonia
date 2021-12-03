@@ -10,6 +10,9 @@ using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.ViewModels.Facades;
 using Polly;
 using Polly.Extensions.Http;
+#if __ANDROID__
+using Xamarin.Android.Net;
+#endif
 
 namespace Jellyfin.Maui;
 
@@ -82,11 +85,18 @@ public static class MauiProgram
     {
         static HttpMessageHandler DefaultHttpClientHandlerDelegate(IServiceProvider serviceProvider)
         {
+#if __ANDROID__
+            return new AndroidMessageHandler
+            {
+                AutomaticDecompression = DecompressionMethods.All,
+            };
+#else
             return new SocketsHttpHandler
             {
                 AutomaticDecompression = DecompressionMethods.All,
                 RequestHeaderEncodingSelector = (_, _) => Encoding.UTF8
             };
+#endif
         }
 
         var retryPolicy = HttpPolicyExtensions

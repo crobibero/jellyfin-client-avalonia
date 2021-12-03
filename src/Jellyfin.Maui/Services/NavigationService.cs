@@ -10,14 +10,15 @@ namespace Jellyfin.Maui.Services;
 /// <inheritdoc />
 public class NavigationService : INavigationService
 {
-    // Navigation page is initialized on startup.
-    private NavigationPage _navigationPage = null!;
+    // Window is initialized on startup.
+    private Window _window = null!;
+    private NavigationPage? _navigationPage;
 
     /// <inheritdoc />
-    public void Initialize(NavigationPage navigationPage)
+    public void Initialize(Window window)
     {
         // TODO switch to proper dispatcher in preview-11
-        _navigationPage = navigationPage;
+        _window = window;
     }
 
     /// <inheritdoc />
@@ -25,9 +26,29 @@ public class NavigationService : INavigationService
         where TViewModel : BaseIdViewModel
         where TPage : BaseContentIdPage<TViewModel>
     {
-        var resolvedView = ServiceProvider.GetService<TPage>();
-        resolvedView.Initialize(id);
-        Device.BeginInvokeOnMainThread(() => _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget());
+        if (_navigationPage is null)
+        {
+            NavigateHome();
+            return;
+        }
+
+        Device.BeginInvokeOnMainThread(() =>
+        {
+            var resolvedView = ServiceProvider.GetService<TPage>();
+            resolvedView.Initialize(id);
+            _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget();
+        });
+    }
+
+    /// <inheridoc />
+    public void NavigateToLoginPage()
+    {
+        Device.BeginInvokeOnMainThread(() =>
+        {
+            var loginPage = ServiceProvider.GetService<LoginPage>();
+            _navigationPage = null;
+            _window.Page = loginPage;
+        });
     }
 
     /// <inheridoc />
@@ -60,13 +81,34 @@ public class NavigationService : INavigationService
     public void Navigate<T>()
         where T : Page
     {
-        var resolvedView = ServiceProvider.GetService<T>();
-        Device.BeginInvokeOnMainThread(() => _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget());
+        if (_navigationPage is null)
+        {
+            NavigateHome();
+            return;
+        }
+
+        Device.BeginInvokeOnMainThread(() =>
+        {
+            var resolvedView = ServiceProvider.GetService<T>();
+            _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget();
+        });
     }
 
     /// <inheritdoc />
-    public void NavigateToMain()
+    public void NavigateHome()
     {
-        Device.BeginInvokeOnMainThread(() => _navigationPage.PopToRootAsync(true).SafeFireAndForget());
+        if (_navigationPage is null)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                var homePage = ServiceProvider.GetService<HomePage>();
+                homePage.Initialize();
+                _window.Page = _navigationPage = new NavigationPage(homePage);
+            });
+        }
+        else
+        {
+            Device.BeginInvokeOnMainThread(() => _navigationPage.PopToRootAsync(true).SafeFireAndForget());
+        }
     }
 }
