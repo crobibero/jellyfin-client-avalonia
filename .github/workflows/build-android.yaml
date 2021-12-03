@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
 
@@ -18,13 +18,12 @@ jobs:
           dotnet-version: 6.0.x
       
       - name: Install Maui Workload
-        run: dotnet workload install maui-android
+        run: dotnet workload install maui
         
       - name: Build
         working-directory: ./src
-        run: dotnet build -c Release -f net6.0-android
+        run: dotnet build -c Release -f net6.0-windows10.0.19041
 
       - name: Test
         working-directory: ./src
-        run: dotnet test -c Release -f net6.0-android
-
+        run: dotnet test -c Release -f net6.0-windows10.0.19041
