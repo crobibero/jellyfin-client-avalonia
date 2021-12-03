@@ -1,4 +1,4 @@
-name: Build Apple
+name: Build iOS
 
 on:
   push:
@@ -8,13 +8,13 @@ on:
 
 jobs:
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        framework: [ net6.0-ios, net6.0-maccatalyst ]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '13.1'
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
@@ -26,8 +26,8 @@ jobs:
         
       - name: Build
         working-directory: ./src
-        run: dotnet build -c Release -f ${{ matrix.framework }}
+        run: dotnet build -c Release -f net6.0-ios
 
       - name: Test
         working-directory: ./src
-        run: dotnet test -c Release -f ${{ matrix.framework }}
+        run: dotnet test -c Release -f net6.0-ios
