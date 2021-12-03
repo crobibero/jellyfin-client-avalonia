@@ -1,0 +1,8 @@
+## Super Experimental Maui Jellyfin Client
+
+[![Build Android](https://github.com/crobibero/jellyfin-client-maui/actions/workflows/build-android.yaml/badge.svg)](https://github.com/crobibero/jellyfin-client-maui/actions/workflows/build-android.yaml)
+[![Build Apple](https://github.com/crobibero/jellyfin-client-maui/actions/workflows/build-apple.yaml/badge.svg)](https://github.com/crobibero/jellyfin-client-maui/actions/workflows/build-apple.yaml)
+[![Build Windows](https://github.com/crobibero/jellyfin-client-maui/actions/workflows/build-windows.yaml/badge.svg)](https://github.com/crobibero/jellyfin-client-maui/actions/workflows/build-windows.yaml)
+
+![GitHub](https://img.shields.io/github/license/crobibero/jellyfin-client-maui)
+![GitHub release (release name instead of tag name)](https://img.shields.io/github/v/release/crobibero/jellyfin-client-maui?include_prereleases)
