@@ -9,8 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./src
     steps:
       - uses: actions/checkout@v2
 
@@ -19,4 +17,11 @@ jobs:
         with:
           dotnet-version: 6.0.x
         
-      - run: dotnet build -c Release -f net6.0-android
+      - name: Build
+        working-directory: ./src
+        run: dotnet build -c Release -f net6.0-android
+
+      - name: Test
+        working-directory: ./src
+        run: dotnet test -c Release -f net6.0-android
+
