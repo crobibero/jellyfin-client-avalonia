@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: macos-11
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DOTNET_NOLOGO: true
     steps:
       - uses: actions/checkout@v2
 
