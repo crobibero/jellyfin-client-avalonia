@@ -1,18 +1,16 @@
-name: Build Plugin
+name: Build Android
 
 on:
   push:
     branches: [ master ]
-    paths-ignore:
-      - '**/*.md'
   pull_request:
     branches: [ master ]
-    paths-ignore:
-      - '**/*.md'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./src
     steps:
       - uses: actions/checkout@v2
 
@@ -20,3 +18,5 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.x
+        
+      - run: dotnet build -c Release -f net6.0-android
