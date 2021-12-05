@@ -5,22 +5,28 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace Jellyfin.Maui;
+namespace Jellyfin.Maui.Platforms.Android;
 
 [Application]
 public class MainApplication : MauiApplication
 {
-	public MainApplication(IntPtr handle, JniHandleOwnership ownership)
-		: base(handle, ownership)
-	{
-		var version = typeof(MauiProgram).Assembly.GetName().Version?.ToString() ?? "0.0.0.1";
-		this.Services.GetRequiredService<SdkClientSettings>()
-			.InitializeClientSettings(
-				"Jellyfin Maui Android",
-				version,
-				"Android",
-				Guid.NewGuid().ToString("N"));
-	}
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MainApplication"/> class.
+    /// </summary>
+    /// <param name="handle">The handle.</param>
+    /// <param name="ownership">The handle owner.</param>
+    public MainApplication(IntPtr handle, JniHandleOwnership ownership)
+        : base(handle, ownership)
+    {
+        var version = typeof(MauiProgram).Assembly.GetName().Version?.ToString() ?? "0.0.0.1";
+        this.Services.GetRequiredService<SdkClientSettings>()
+            .InitializeClientSettings(
+                "Jellyfin Maui Android",
+                version,
+                "Android",
+                Guid.NewGuid().ToString("N"));
+    }
 
-	protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+    /// <inheritdoc />
+    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 }

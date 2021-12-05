@@ -10,6 +10,7 @@ public interface ILibraryService
     /// <summary>
     /// Gets the list of visible libraries.
     /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The list of libraries.</returns>
     ValueTask<IReadOnlyList<BaseItemDto>> GetLibrariesAsync(CancellationToken cancellationToken = default);
 

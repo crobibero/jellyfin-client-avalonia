@@ -1,6 +1,6 @@
-﻿using Jellyfin.Maui.ViewModels;
-using CommunityToolkit.Maui.Markup;
+﻿using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.Pages.Facades;
+using Jellyfin.Maui.ViewModels;
 
 namespace Jellyfin.Maui.Pages;
 
@@ -10,7 +10,7 @@ namespace Jellyfin.Maui.Pages;
 public class ItemPage : BaseContentIdPage<ItemViewModel>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="ItemPage"/>.
+    /// Initializes a new instance of the <see cref="ItemPage"/> class.
     /// </summary>
     /// <param name="viewModel">Instance of the <see cref="ItemViewModel"/>.</param>
     public ItemPage(ItemViewModel viewModel)
@@ -27,7 +27,7 @@ public class ItemPage : BaseContentIdPage<ItemViewModel>
             Children =
             {
                 new Label()
-                    .Bind(Label.TextProperty, nameof(ViewModel.Item.Name), BindingMode.OneWay)
+                    .Bind(Label.TextProperty, nameof(ViewModel.Item.Name), source: ViewModel.Item, mode: BindingMode.OneWay)
             }
         };
     }

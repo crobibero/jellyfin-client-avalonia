@@ -56,11 +56,9 @@ public class AuthenticationService : IAuthenticationService
 
         try
         {
-            var authResult = await _userClient.AuthenticateUserByNameAsync(new AuthenticateUserByName
-                {
-                    Username = username,
-                    Pw = password
-                }, cancellationToken)
+            var authResult = await _userClient.AuthenticateUserByNameAsync(
+                    new AuthenticateUserByName { Username = username, Pw = password },
+                    cancellationToken)
                 .ConfigureAwait(false);
 
             _stateService.SetAuthenticationResponse(host, authResult);

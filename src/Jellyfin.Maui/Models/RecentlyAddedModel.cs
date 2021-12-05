@@ -8,27 +8,27 @@ namespace Jellyfin.Maui.Models;
 public class RecentlyAddedModel
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="RecentlyAddedModel"/>.
+    /// Initializes a new instance of the <see cref="RecentlyAddedModel"/> class.
     /// </summary>
-    /// <param name="id"></param>
-    /// <param name="name"></param>
-    /// <param name="items"></param>
-    public RecentlyAddedModel(Guid id, string name, IReadOnlyList<BaseItemDto> items)
+    /// <param name="libraryId">The library id.</param>
+    /// <param name="libraryName">The library name.</param>
+    /// <param name="items">The list of items.</param>
+    public RecentlyAddedModel(Guid libraryId, string libraryName, IReadOnlyList<BaseItemDto> items)
     {
-        Id = id;
-        Name = name;
+        LibraryId = libraryId;
+        LibraryName = libraryName;
         Items = items;
     }
 
     /// <summary>
     /// Gets the library id.
     /// </summary>
-    public Guid Id { get; }
+    public Guid LibraryId { get; }
 
     /// <summary>
     /// Gets the library name.
     /// </summary>
-    public string Name { get; }
+    public string LibraryName { get; }
 
     /// <summary>
     /// Gets the list of recently added items.

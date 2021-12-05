@@ -1,7 +1,7 @@
-﻿using Jellyfin.Maui.ViewModels;
-using CommunityToolkit.Maui.Markup;
+﻿using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Resources.Strings;
+using Jellyfin.Maui.ViewModels;
 using Microsoft.Maui;
 
 namespace Jellyfin.Maui.Pages;
@@ -12,12 +12,21 @@ namespace Jellyfin.Maui.Pages;
 public class LoginPage : BaseContentPage<LoginViewModel>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="LoginPage"/>.
+    /// Initializes a new instance of the <see cref="LoginPage"/> class.
     /// </summary>
     /// <param name="viewModel">Instance of the <see cref="LoginViewModel"/>.</param>
     public LoginPage(LoginViewModel viewModel)
         : base(viewModel)
     {
+    }
+
+    private enum Row
+    {
+        Server,
+        Username,
+        Password,
+        LoginButton,
+        ErrorMessage
     }
 
     /// <inheritdoc />
@@ -38,8 +47,7 @@ public class LoginPage : BaseContentPage<LoginViewModel>
                     (Row.Username, GridRowsColumns.Auto),
                     (Row.Password, GridRowsColumns.Auto),
                     (Row.LoginButton, GridRowsColumns.Auto),
-                    (Row.ErrorMessage, GridRowsColumns.Auto)
-                ),
+                    (Row.ErrorMessage, GridRowsColumns.Auto)),
                 Children =
                 {
                     new VerticalStackLayout
@@ -78,14 +86,5 @@ public class LoginPage : BaseContentPage<LoginViewModel>
                 }
             }
         };
-    }
-
-    private enum Row
-    {
-        Server,
-        Username,
-        Password,
-        LoginButton,
-        ErrorMessage
     }
 }

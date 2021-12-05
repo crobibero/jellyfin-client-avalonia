@@ -6,11 +6,11 @@ namespace Jellyfin.Maui.Pages.Facades;
 /// The base content page.
 /// </summary>
 /// <typeparam name="TViewModel">The type of view model.</typeparam>
-public abstract class BaseContentPage<TViewModel>
-    : ContentPage where TViewModel : BaseViewModel
+public abstract class BaseContentPage<TViewModel> : ContentPage
+    where TViewModel : BaseViewModel
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="BaseContentPage{TViewModel}"/>.
+    /// Initializes a new instance of the <see cref="BaseContentPage{TViewModel}"/> class.
     /// </summary>
     /// <param name="viewModel">Instance of the view model.</param>
     protected BaseContentPage(TViewModel viewModel)
@@ -19,7 +19,7 @@ public abstract class BaseContentPage<TViewModel>
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="BaseContentPage{TViewModel}"/>
+    /// Initializes a new instance of the <see cref="BaseContentPage{TViewModel}"/> class.
     /// </summary>
     /// <param name="viewModel">Instance of the view model.</param>
     /// <param name="pageTitle">The page title.</param>
@@ -33,14 +33,19 @@ public abstract class BaseContentPage<TViewModel>
 #pragma warning restore CA2214 // Do not call overridable methods in constructors
     }
 
-    /// <inheridoc />
+    /// <summary>
+    /// Gets the view model.
+    /// </summary>
+    protected TViewModel ViewModel { get; }
+
+    /// <inheritdoc />
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         ViewModel.Initialize();
         base.OnNavigatedTo(args);
     }
 
-    /// <inheridoc />
+    /// <inheritdoc />
     protected override void OnDisappearing()
     {
         if (ViewModel is IDisposable disposableViewModel)
@@ -50,11 +55,6 @@ public abstract class BaseContentPage<TViewModel>
 
         base.OnDisappearing();
     }
-
-    /// <summary>
-    /// Gets the view model.
-    /// </summary>
-    protected TViewModel ViewModel { get; }
 
     /// <summary>
     /// Called during construction to initialize the layout.

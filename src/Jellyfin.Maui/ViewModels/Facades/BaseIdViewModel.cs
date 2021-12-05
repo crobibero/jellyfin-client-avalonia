@@ -15,7 +15,7 @@ public abstract class BaseIdViewModel : BaseViewModel
     private BaseItemDto? _item;
 
     /// <summary>
-    /// Initializes an instance of the <see cref="BaseIdViewModel"/>.
+    /// Initializes a new instance of the <see cref="BaseIdViewModel"/> class.
     /// </summary>
     /// <param name="libraryService">Instance of the <see cref="ILibraryService"/> interface.</param>
     protected BaseIdViewModel(ILibraryService libraryService)

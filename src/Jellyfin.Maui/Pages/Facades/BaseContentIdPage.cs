@@ -5,16 +5,24 @@ namespace Jellyfin.Maui.Pages.Facades;
 /// <summary>
 /// Interface for initializing a view with an id.
 /// </summary>
+/// <typeparam name="TViewModel">The type of view model.</typeparam>
 public abstract class BaseContentIdPage<TViewModel> : BaseContentPage<TViewModel>
     where TViewModel : BaseIdViewModel
 {
-    /// <inheridoc />
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseContentIdPage{TViewModel}"/> class.
+    /// </summary>
+    /// <param name="viewModel">The view model.</param>
     protected BaseContentIdPage(TViewModel viewModel)
         : base(viewModel)
     {
     }
 
-    /// <inheridoc />
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseContentIdPage{TViewModel}"/> class.
+    /// </summary>
+    /// <param name="viewModel">The view model.</param>
+    /// <param name="pageTitle">The page title.</param>
     protected BaseContentIdPage(TViewModel viewModel, string pageTitle)
         : base(viewModel, pageTitle)
     {

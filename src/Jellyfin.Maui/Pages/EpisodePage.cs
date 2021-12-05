@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.ViewModels;
 
@@ -9,7 +10,7 @@ namespace Jellyfin.Maui.Pages;
 public class EpisodePage : BaseContentIdPage<EpisodeViewModel>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="EpisodePage"/>.
+    /// Initializes a new instance of the <see cref="EpisodePage"/> class.
     /// </summary>
     /// <param name="viewModel">Instance of the <see cref="EpisodeViewModel"/>.</param>
     public EpisodePage(EpisodeViewModel viewModel)
@@ -17,8 +18,17 @@ public class EpisodePage : BaseContentIdPage<EpisodeViewModel>
     {
     }
 
-    /// <inheridoc />
+    /// <inheritdoc />
     protected override void InitializeLayout()
     {
+        Content = new StackLayout
+        {
+            Padding = 16,
+            Children =
+            {
+                new Label()
+                    .Bind(Label.TextProperty, nameof(ViewModel.Item.Name), source: ViewModel.Item, mode: BindingMode.OneWay)
+            }
+        };
     }
 }

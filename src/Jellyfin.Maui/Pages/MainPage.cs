@@ -24,13 +24,13 @@ public class MainPage : ContentPage
         _authenticationService = authenticationService;
     }
 
-    /// <inheridoc />
+    /// <inheritdoc />
     protected override void OnAppearing()
     {
         Redirect().SafeFireAndForget();
     }
 
-    /// <inheridoc />
+    /// <inheritdoc />
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         Redirect().SafeFireAndForget();

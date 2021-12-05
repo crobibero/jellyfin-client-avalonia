@@ -10,49 +10,29 @@ namespace Jellyfin.Maui.Services;
 /// <inheritdoc />
 public class NavigationService : INavigationService
 {
-    // Window is initialized on startup.
-    private Window _window = null!;
+    // Application is initialized on startup.
+    private Application _application = null!;
     private NavigationPage? _navigationPage;
 
     /// <inheritdoc />
-    public void Initialize(Window window)
+    public void Initialize(Application application)
     {
-        // TODO switch to proper dispatcher in preview-11
-        _window = window;
+        _application = application;
     }
 
     /// <inheritdoc />
-    public void Navigate<TPage, TViewModel>(Guid id)
-        where TViewModel : BaseIdViewModel
-        where TPage : BaseContentIdPage<TViewModel>
-    {
-        if (_navigationPage is null)
-        {
-            NavigateHome();
-            return;
-        }
-
-        Device.BeginInvokeOnMainThread(() =>
-        {
-            var resolvedView = ServiceProvider.GetService<TPage>();
-            resolvedView.Initialize(id);
-            _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget();
-        });
-    }
-
-    /// <inheridoc />
     public void NavigateToLoginPage()
     {
         Device.BeginInvokeOnMainThread(() =>
         {
             var loginPage = ServiceProvider.GetService<LoginPage>();
             _navigationPage = null;
-            _window.Page = loginPage;
+            _application.MainPage = loginPage;
         });
     }
 
-    /// <inheridoc />
-    public void NavigateToItemPage(BaseItemKind itemKind, Guid itemId)
+    /// <inheritdoc />
+    public void NavigateToItemView(BaseItemKind itemKind, Guid itemId)
     {
         switch (itemKind)
         {
@@ -78,8 +58,26 @@ public class NavigationService : INavigationService
     }
 
     /// <inheritdoc />
-    public void Navigate<T>()
-        where T : Page
+    public void NavigateHome()
+    {
+        if (_navigationPage is null)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                var homePage = ServiceProvider.GetService<HomePage>();
+                homePage.Initialize();
+                _application.MainPage = _navigationPage = new NavigationPage(homePage);
+            });
+        }
+        else
+        {
+            Device.BeginInvokeOnMainThread(() => _navigationPage.PopToRootAsync(true).SafeFireAndForget());
+        }
+    }
+
+    private void Navigate<TPage, TViewModel>(Guid id)
+        where TViewModel : BaseIdViewModel
+        where TPage : BaseContentIdPage<TViewModel>
     {
         if (_navigationPage is null)
         {
@@ -89,26 +87,9 @@ public class NavigationService : INavigationService
 
         Device.BeginInvokeOnMainThread(() =>
         {
-            var resolvedView = ServiceProvider.GetService<T>();
+            var resolvedView = ServiceProvider.GetService<TPage>();
+            resolvedView.Initialize(id);
             _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget();
         });
-    }
-
-    /// <inheritdoc />
-    public void NavigateHome()
-    {
-        if (_navigationPage is null)
-        {
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                var homePage = ServiceProvider.GetService<HomePage>();
-                homePage.Initialize();
-                _window.Page = _navigationPage = new NavigationPage(homePage);
-            });
-        }
-        else
-        {
-            Device.BeginInvokeOnMainThread(() => _navigationPage.PopToRootAsync(true).SafeFireAndForget());
-        }
     }
 }

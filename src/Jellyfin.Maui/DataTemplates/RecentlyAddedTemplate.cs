@@ -10,27 +10,31 @@ namespace Jellyfin.Maui.DataTemplates
     public class RecentlyAddedTemplate : DataTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RecentlyAddedTemplate"/>.
+        /// Initializes a new instance of the <see cref="RecentlyAddedTemplate"/> class.
         /// </summary>
         public RecentlyAddedTemplate()
             : base(Initialize)
         {
         }
 
+        private enum Row
+        {
+            Title,
+            Items
+        }
+
         private static Grid Initialize() =>
             new()
             {
                 RowSpacing = 1,
-                RowDefinitions = GridRowsColumns.Rows.Define
-                (
+                RowDefinitions = GridRowsColumns.Rows.Define(
                     (Row.Title, new GridLength(1, GridUnitType.Star)),
-                    (Row.Items, new GridLength(9, GridUnitType.Star))
-                ),
+                    (Row.Items, new GridLength(9, GridUnitType.Star))),
                 Children =
                 {
                     new Label()
                         .Row(Row.Title)
-                        .Bind(Label.TextProperty, nameof(RecentlyAddedModel.Name)),
+                        .Bind(Label.TextProperty, nameof(RecentlyAddedModel.LibraryName)),
                     new CollectionView
                         {
                             ItemTemplate = new BaseItemDtoTemplate(),
@@ -41,11 +45,5 @@ namespace Jellyfin.Maui.DataTemplates
                         .Bind(ItemsView.ItemsSourceProperty, nameof(RecentlyAddedModel.Items))
                 }
             };
-
-        private enum Row
-        {
-            Title,
-            Items
-        }
     }
 }

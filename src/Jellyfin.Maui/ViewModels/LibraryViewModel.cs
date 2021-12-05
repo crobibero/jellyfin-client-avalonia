@@ -9,7 +9,7 @@ namespace Jellyfin.Maui.ViewModels;
 public class LibraryViewModel : BaseIdViewModel
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="LibraryViewModel"/>.
+    /// Initializes a new instance of the <see cref="LibraryViewModel"/> class.
     /// </summary>
     /// <param name="libraryService">Instance of the <see cref="ILibraryService"/>.</param>
     public LibraryViewModel(ILibraryService libraryService)

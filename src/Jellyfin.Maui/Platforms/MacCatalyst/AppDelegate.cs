@@ -4,13 +4,12 @@ using Foundation;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace Jellyfin.Maui;
+namespace Jellyfin.Maui.Platforms.MacCatalyst;
 
 /// <summary>
 /// The macOS app delegate.
 /// </summary>
 [Register("AppDelegate")]
-
 public class AppDelegate : MauiUIApplicationDelegate
 {
     /// <inheritdoc />

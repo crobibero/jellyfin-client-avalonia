@@ -4,7 +4,7 @@ using Foundation;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace Jellyfin.Maui;
+namespace Jellyfin.Maui.Platforms.iOS;
 
 /// <summary>
 /// Maui application delegate.
@@ -12,6 +12,6 @@ namespace Jellyfin.Maui;
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate
 {
-    /// <inheridoc />
+    /// <inheritdoc />
 	protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 }
