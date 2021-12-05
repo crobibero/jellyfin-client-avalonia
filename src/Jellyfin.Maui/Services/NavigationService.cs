@@ -1,3 +1,5 @@
+#pragma warning disable
+
 using AsyncAwaitBestPractices;
 using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Pages.Facades;
@@ -8,7 +10,7 @@ using Jellyfin.Sdk;
 namespace Jellyfin.Maui.Services;
 
 /// <inheritdoc />
-public class NavigationService : INavigationService
+public class NavigationService  : INavigationService
 {
     // Application is initialized on startup.
     private Application _application = null!;
