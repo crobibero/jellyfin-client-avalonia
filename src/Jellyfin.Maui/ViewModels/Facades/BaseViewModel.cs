@@ -1,6 +1,8 @@
 using System.Collections;
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Jellyfin.Maui.Services;
+using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.ViewModels.Facades;
 
@@ -10,13 +12,18 @@ namespace Jellyfin.Maui.ViewModels.Facades;
 public abstract class BaseViewModel : ObservableObject, IDisposable
 {
     private readonly CancellationTokenSource _cancellationTokenSource;
+    private readonly INavigationService _navigationService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseViewModel"/> class.
     /// </summary>
-    protected BaseViewModel()
+    /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
+    protected BaseViewModel(INavigationService navigationService)
     {
         _cancellationTokenSource = new CancellationTokenSource();
+        _navigationService = navigationService;
+
+        NavigateToItemCommand = new RelayCommand(DoNavigateToItemCommand);
     }
 
     /// <summary>
@@ -25,9 +32,20 @@ public abstract class BaseViewModel : ObservableObject, IDisposable
     protected CancellationToken ViewModelCancellationToken => _cancellationTokenSource.Token;
 
     /// <summary>
+    /// Gets or sets the selected BaseItemDto.
+    /// </summary>
+    public BaseItemDto? SelectedItem { get; set; }
+
+    /// <summary>
+    /// Gets or sets the navigate to library command.
+    /// </summary>
+    public IRelayCommand? NavigateToItemCommand { get; protected set; }
+
+    /// <summary>
     /// Initialize the view model.
     /// </summary>
-    public abstract void Initialize();
+    /// <returns>The task.</returns>
+    public abstract ValueTask InitializeAsync();
 
     /// <summary>
     /// Ensure Observable Collection is thread-safe.
@@ -42,37 +60,6 @@ public abstract class BaseViewModel : ObservableObject, IDisposable
     protected static void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess)
     {
         Device.BeginInvokeOnMainThread(accessMethod);
-    }
-
-    /// <summary>
-    /// Insert the model into the collection.
-    /// </summary>
-    /// <param name="collection">The collection.</param>
-    /// <param name="comparison">The comparison.</param>
-    /// <param name="modelToInsert">The model to insert.</param>
-    /// <typeparam name="T">The type of model.</typeparam>
-    protected void InsertIntoSortedCollection<T>(ObservableCollection<T> collection, Comparison<T> comparison, T modelToInsert)
-    {
-        if (collection.Count is 0)
-        {
-            collection.Add(modelToInsert);
-        }
-        else
-        {
-            int index = 0;
-            foreach (var model in collection)
-            {
-                if (comparison(model, modelToInsert) >= 0)
-                {
-                    collection.Insert(index, modelToInsert);
-                    return;
-                }
-
-                index++;
-            }
-
-            collection.Insert(index, modelToInsert);
-        }
     }
 
     /// <summary>
@@ -95,5 +82,15 @@ public abstract class BaseViewModel : ObservableObject, IDisposable
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource.Dispose();
         }
+    }
+
+    private void DoNavigateToItemCommand()
+    {
+        if (SelectedItem is null)
+        {
+            return;
+        }
+
+        _navigationService.NavigateToItemView(SelectedItem.Type, SelectedItem.Id);
     }
 }

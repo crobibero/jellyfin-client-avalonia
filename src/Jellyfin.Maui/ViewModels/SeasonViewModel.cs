@@ -1,5 +1,8 @@
-﻿using Jellyfin.Maui.Services;
+using System.Collections.ObjectModel;
+using AsyncAwaitBestPractices;
+using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
+using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.ViewModels;
 
@@ -8,12 +11,48 @@ namespace Jellyfin.Maui.ViewModels;
 /// </summary>
 public class SeasonViewModel : BaseIdViewModel
 {
+    private readonly ILibraryService _libraryService;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="SeasonViewModel"/> class.
     /// </summary>
     /// <param name="libraryService">Instance of the <see cref="ILibraryService"/> interface.</param>
-    public SeasonViewModel(ILibraryService libraryService)
-        : base(libraryService)
+    /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
+    public SeasonViewModel(ILibraryService libraryService, INavigationService navigationService)
+        : base(navigationService)
     {
+        _libraryService = libraryService;
+
+        BindingBase.EnableCollectionSynchronization(EpisodeCollection, null, ObservableCollectionCallback);
+    }
+
+    /// <summary>
+    /// Gets the list of episodes.
+    /// </summary>
+    public ObservableCollection<BaseItemDto> EpisodeCollection { get; } = new();
+
+    /// <inheritdoc/>
+    public override async ValueTask InitializeAsync()
+    {
+        Item = await _libraryService.GetItemAsync(Id, ViewModelCancellationToken)
+            .ConfigureAwait(false);
+        GetEpisodesAsync().SafeFireAndForget();
+    }
+
+    private async ValueTask GetEpisodesAsync()
+    {
+        if (Item?.SeriesId is null)
+        {
+            return;
+        }
+
+        var episodeResult = await _libraryService.GetEpisodesAsync(Item.SeriesId.Value, Item.Id, ViewModelCancellationToken)
+            .ConfigureAwait(false);
+
+        EpisodeCollection.Clear();
+        foreach (var episode in episodeResult.Items)
+        {
+            EpisodeCollection.Add(episode);
+        }
     }
 }

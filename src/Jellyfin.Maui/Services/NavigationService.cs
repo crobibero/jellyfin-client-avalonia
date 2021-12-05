@@ -1,5 +1,3 @@
-#pragma warning disable
-
 using AsyncAwaitBestPractices;
 using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Pages.Facades;
@@ -9,8 +7,10 @@ using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Services;
 
+// FIXME: NavigationPage doesn't currently work.
+
 /// <inheritdoc />
-public class NavigationService  : INavigationService
+public class NavigationService : INavigationService
 {
     // Application is initialized on startup.
     private Application _application = null!;
@@ -68,7 +68,8 @@ public class NavigationService  : INavigationService
             {
                 var homePage = ServiceProvider.GetService<HomePage>();
                 homePage.Initialize();
-                _application.MainPage = _navigationPage = new NavigationPage(homePage);
+                _application.MainPage = homePage;
+                // _application.MainPage = _navigationPage = new NavigationPage(homePage);
             });
         }
         else
@@ -81,17 +82,20 @@ public class NavigationService  : INavigationService
         where TViewModel : BaseIdViewModel
         where TPage : BaseContentIdPage<TViewModel>
     {
+        /*
         if (_navigationPage is null)
         {
             NavigateHome();
             return;
         }
+        */
 
         Device.BeginInvokeOnMainThread(() =>
         {
             var resolvedView = ServiceProvider.GetService<TPage>();
             resolvedView.Initialize(id);
-            _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget();
+            _application.MainPage = resolvedView;
+            // _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget();
         });
     }
 }

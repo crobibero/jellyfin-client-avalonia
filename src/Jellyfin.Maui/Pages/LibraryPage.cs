@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Markup;
+using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.ViewModels;
 
@@ -26,8 +27,23 @@ public class LibraryPage : BaseContentIdPage<LibraryViewModel>
             Padding = 16,
             Children =
             {
+                /*
+                 * TODO how to make this work?
                 new Label()
-                    .Bind(Label.TextProperty, nameof(ViewModel.Item.Name), source: ViewModel.Item, mode: BindingMode.OneWay)
+                    .Bind(Label.TextProperty, nameof(ViewModel.Item.Name), source: ViewModel.Item, mode: BindingMode.OneWay),
+                */
+                new Label()
+                    .Bind(Label.TextProperty, "Item.Name", mode: BindingMode.OneWay),
+                new CollectionView
+                {
+                    ItemTemplate = new BaseItemCardTemplate(),
+                    ItemsLayout = LinearItemsLayout.Horizontal,
+                    SelectionMode = SelectionMode.Single,
+                    ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView
+                }
+                .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.LibraryItemsCollection))
+                .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
+                .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateToItemCommand))
             }
         };
     }

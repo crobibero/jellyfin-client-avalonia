@@ -7,12 +7,12 @@ namespace Jellyfin.Maui.DataTemplates
     /// <summary>
     /// DataTemplate for BaseItem.
     /// </summary>
-    public class BaseItemDtoTemplate : DataTemplate
+    public class BaseItemCardTemplate : DataTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseItemDtoTemplate"/> class.
+        /// Initializes a new instance of the <see cref="BaseItemCardTemplate"/> class.
         /// </summary>
-        public BaseItemDtoTemplate()
+        public BaseItemCardTemplate()
             : base(Initialize)
         {
         }

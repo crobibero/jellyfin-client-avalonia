@@ -25,6 +25,7 @@ public class LoginViewModel : BaseViewModel
     public LoginViewModel(
         IAuthenticationService authenticationService,
         INavigationService navigationService)
+        : base(navigationService)
     {
         _authenticationService = authenticationService;
         _navigationService = navigationService;
@@ -74,8 +75,9 @@ public class LoginViewModel : BaseViewModel
     public IAsyncRelayCommand LoginCommand { get; }
 
     /// <inheritdoc />
-    public override void Initialize()
+    public override ValueTask InitializeAsync()
     {
+        return ValueTask.CompletedTask;
     }
 
     private async Task LoginAsync()

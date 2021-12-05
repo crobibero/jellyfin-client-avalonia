@@ -37,7 +37,7 @@ namespace Jellyfin.Maui.DataTemplates
                         .Bind(Label.TextProperty, nameof(RecentlyAddedModel.LibraryName)),
                     new CollectionView
                         {
-                            ItemTemplate = new BaseItemDtoTemplate(),
+                            ItemTemplate = new BaseItemCardTemplate(),
                             ItemsLayout = LinearItemsLayout.Horizontal,
                             SelectionMode = SelectionMode.Single
                         }

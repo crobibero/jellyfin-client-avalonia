@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using AsyncAwaitBestPractices;
-using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
@@ -14,7 +13,6 @@ namespace Jellyfin.Maui.ViewModels;
 public class HomeViewModel : BaseViewModel
 {
     private readonly ILibraryService _libraryService;
-    private readonly INavigationService _navigationService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="HomeViewModel"/> class.
@@ -22,15 +20,13 @@ public class HomeViewModel : BaseViewModel
     /// <param name="libraryService">Instance of the <see cref="ILibraryService"/> interface.</param>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
     public HomeViewModel(ILibraryService libraryService, INavigationService navigationService)
+        : base(navigationService)
     {
         _libraryService = libraryService;
-        _navigationService = navigationService;
 
         BindingBase.EnableCollectionSynchronization(ContinueWatchingCollection, null, ObservableCollectionCallback);
         BindingBase.EnableCollectionSynchronization(LibrariesCollection, null, ObservableCollectionCallback);
         BindingBase.EnableCollectionSynchronization(RecentlyAddedCollection, null, ObservableCollectionCallback);
-
-        NavigateCommand = new RelayCommand(DoNavigateCommand);
     }
 
     /// <summary>
@@ -48,23 +44,12 @@ public class HomeViewModel : BaseViewModel
     /// </summary>
     public ObservableCollection<RecentlyAddedModel> RecentlyAddedCollection { get; } = new();
 
-    /// <summary>
-    /// Gets or sets the selected BaseItemDto.
-    /// </summary>
-    public BaseItemDto? SelectedItem { get; set; }
-
-    /// <summary>
-    /// Gets the navigate to library command.
-    /// </summary>
-    public IRelayCommand NavigateCommand { get; }
-
-    /// <summary>
-    /// Initialize the view model.
-    /// </summary>
-    public override void Initialize()
+    /// <inheritdoc />
+    public override ValueTask InitializeAsync()
     {
         InitializeContinueWatchingAsync().SafeFireAndForget();
         InitializeLibrariesAsync().SafeFireAndForget();
+        return ValueTask.CompletedTask;
     }
 
     private async ValueTask InitializeContinueWatchingAsync()
@@ -89,15 +74,5 @@ public class HomeViewModel : BaseViewModel
                 .ConfigureAwait(false);
             RecentlyAddedCollection.Add(new RecentlyAddedModel(library.Id, library.Name, recentlyAdded));
         }
-    }
-
-    private void DoNavigateCommand()
-    {
-        if (SelectedItem is null)
-        {
-            return;
-        }
-
-        _navigationService.NavigateToItemView(SelectedItem.Type, SelectedItem.Id);
     }
 }

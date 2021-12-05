@@ -1,4 +1,4 @@
-﻿using Jellyfin.Maui.ViewModels.Facades;
+using Jellyfin.Maui.ViewModels.Facades;
 
 namespace Jellyfin.Maui.Pages.Facades;
 

@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui.Markup;
+using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.ViewModels;
 
@@ -27,7 +27,7 @@ public class ItemPage : BaseContentIdPage<ItemViewModel>
             Children =
             {
                 new Label()
-                    .Bind(Label.TextProperty, nameof(ViewModel.Item.Name), source: ViewModel.Item, mode: BindingMode.OneWay)
+                    .Bind(Label.TextProperty, "Item.Name", mode: BindingMode.OneWay),
             }
         };
     }

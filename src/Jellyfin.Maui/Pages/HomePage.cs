@@ -1,3 +1,4 @@
+using AsyncAwaitBestPractices;
 using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.Pages.Facades;
@@ -24,7 +25,7 @@ public class HomePage : BaseContentPage<HomeViewModel>
     /// </summary>
     public void Initialize()
     {
-        ViewModel.Initialize();
+        ViewModel.InitializeAsync().SafeFireAndForget();
     }
 
     /// <inheritdoc />
@@ -40,25 +41,25 @@ public class HomePage : BaseContentPage<HomeViewModel>
                     new Label { Text = "Libraries" },
                     new CollectionView
                         {
-                            ItemTemplate = new BaseItemDtoTemplate(),
+                            ItemTemplate = new BaseItemCardTemplate(),
                             ItemsLayout = LinearItemsLayout.Horizontal,
                             SelectionMode = SelectionMode.Single,
                             ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView
                         }
                         .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.LibrariesCollection))
                         .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
-                        .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateCommand)),
+                        .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateToItemCommand)),
                     new Label { Text = "Continue Watching" },
                     new CollectionView
                         {
-                            ItemTemplate = new BaseItemDtoTemplate(),
+                            ItemTemplate = new BaseItemCardTemplate(),
                             ItemsLayout = LinearItemsLayout.Horizontal,
                             SelectionMode = SelectionMode.Single,
                             ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView
                         }
                         .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.ContinueWatchingCollection))
                         .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
-                        .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateCommand)),
+                        .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateToItemCommand)),
                     new CollectionView
                         {
                             ItemTemplate = new RecentlyAddedTemplate(),
@@ -68,7 +69,7 @@ public class HomePage : BaseContentPage<HomeViewModel>
                         }
                         .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.RecentlyAddedCollection))
                         .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
-                        .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateCommand))
+                        .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateToItemCommand))
                 }
             }
         };

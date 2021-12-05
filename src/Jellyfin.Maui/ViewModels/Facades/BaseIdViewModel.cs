@@ -9,27 +9,25 @@ namespace Jellyfin.Maui.ViewModels.Facades;
 /// </summary>
 public abstract class BaseIdViewModel : BaseViewModel
 {
-    private readonly ILibraryService _libraryService;
-
     private Guid _id;
     private BaseItemDto? _item;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseIdViewModel"/> class.
     /// </summary>
-    /// <param name="libraryService">Instance of the <see cref="ILibraryService"/> interface.</param>
-    protected BaseIdViewModel(ILibraryService libraryService)
+    /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
+    protected BaseIdViewModel(INavigationService navigationService)
+        : base(navigationService)
     {
-        _libraryService = libraryService;
     }
 
     /// <summary>
-    /// Gets the item.
+    /// Gets or sets the item.
     /// </summary>
     public BaseItemDto? Item
     {
         get => _item;
-        private set => SetProperty(ref _item, value);
+        protected set => SetProperty(ref _item, value);
     }
 
     /// <summary>
@@ -45,20 +43,20 @@ public abstract class BaseIdViewModel : BaseViewModel
     /// Initialize the view model's id.
     /// </summary>
     /// <param name="id">The id.</param>
-    public void Initialize(Guid id) => Id = id;
-
-    /// <inheritdoc />
-    public override void Initialize()
+    public void Initialize(Guid id)
     {
-        InitializeItemAsync().SafeFireAndForget();
+        Id = id;
+        InitializeAsync().SafeFireAndForget();
     }
 
     /// <summary>
-    /// Initialize the item.
+    /// Initialize the view model's item.
     /// </summary>
-    private async ValueTask InitializeItemAsync()
+    /// <param name="item">The item.</param>
+    public void Initialize(BaseItemDto item)
     {
-        Item = await _libraryService.GetItemAsync(Id, ViewModelCancellationToken)
-            .ConfigureAwait(false);
+        Id = item.Id;
+        Item = item;
+        InitializeAsync().SafeFireAndForget();
     }
 }

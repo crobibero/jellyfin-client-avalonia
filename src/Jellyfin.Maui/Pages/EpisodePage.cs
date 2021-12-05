@@ -27,7 +27,7 @@ public class EpisodePage : BaseContentIdPage<EpisodeViewModel>
             Children =
             {
                 new Label()
-                    .Bind(Label.TextProperty, nameof(ViewModel.Item.Name), source: ViewModel.Item, mode: BindingMode.OneWay)
+                    .Bind(Label.TextProperty, "Item.Name", mode: BindingMode.OneWay),
             }
         };
     }

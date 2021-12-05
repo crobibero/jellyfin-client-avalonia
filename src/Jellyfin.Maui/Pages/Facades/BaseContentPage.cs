@@ -1,3 +1,4 @@
+using AsyncAwaitBestPractices;
 using Jellyfin.Maui.ViewModels.Facades;
 
 namespace Jellyfin.Maui.Pages.Facades;
@@ -41,7 +42,7 @@ public abstract class BaseContentPage<TViewModel> : ContentPage
     /// <inheritdoc />
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
-        ViewModel.Initialize();
+        ViewModel.InitializeAsync().SafeFireAndForget();
         base.OnNavigatedTo(args);
     }
 

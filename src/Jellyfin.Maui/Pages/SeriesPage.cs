@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Markup;
+using CommunityToolkit.Maui.Markup;
+using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.ViewModels;
 
@@ -27,7 +28,18 @@ public class SeriesPage : BaseContentIdPage<SeriesViewModel>
             Children =
             {
                 new Label()
-                    .Bind(Label.TextProperty, nameof(ViewModel.Item.Name), source: ViewModel.Item, mode: BindingMode.OneWay)
+                    .Bind(Label.TextProperty, "Item.Name", mode: BindingMode.OneWay),
+                new Label { Text = "Seasons" },
+                new CollectionView
+                {
+                    ItemTemplate = new BaseItemCardTemplate(),
+                    ItemsLayout = LinearItemsLayout.Horizontal,
+                    SelectionMode = SelectionMode.Single,
+                    ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView
+                }
+                .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.SeasonsCollection))
+                .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
+                .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateToItemCommand))
             }
         };
     }
