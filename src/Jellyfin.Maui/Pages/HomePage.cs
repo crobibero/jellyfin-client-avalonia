@@ -11,7 +11,7 @@ namespace Jellyfin.Maui.Pages;
 public class HomePage : BaseContentPage<HomeViewModel>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="HomePage"/>.
+    /// Initializes a new instance of the <see cref="HomePage"/> class.
     /// </summary>
     /// <param name="viewModel">Instance of the <see cref="HomeViewModel"/>.</param>
     public HomePage(HomeViewModel viewModel)

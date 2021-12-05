@@ -20,7 +20,7 @@ public class BaseItemDtoCardPosterConverter : IValueConverter
         var host = ServiceProvider.GetService<IStateService>().GetHost();
 
         var itemId = baseItemDto.Id;
-        if(baseItemDto.Type == BaseItemKind.Episode)
+        if (baseItemDto.Type == BaseItemKind.Episode)
         {
             itemId = baseItemDto.SeriesId ?? baseItemDto.Id;
         }

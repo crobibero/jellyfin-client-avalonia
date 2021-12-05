@@ -17,8 +17,10 @@ public class HomeViewModel : BaseViewModel
     private readonly INavigationService _navigationService;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="HomeViewModel"/>.
+    /// Initializes a new instance of the <see cref="HomeViewModel"/> class.
     /// </summary>
+    /// <param name="libraryService">Instance of the <see cref="ILibraryService"/> interface.</param>
+    /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
     public HomeViewModel(ILibraryService libraryService, INavigationService navigationService)
     {
         _libraryService = libraryService;
@@ -56,7 +58,9 @@ public class HomeViewModel : BaseViewModel
     /// </summary>
     public IRelayCommand NavigateCommand { get; }
 
-    /// <inheridoc />
+    /// <summary>
+    /// Initialize the view model.
+    /// </summary>
     public override void Initialize()
     {
         InitializeContinueWatchingAsync().SafeFireAndForget();
@@ -94,6 +98,6 @@ public class HomeViewModel : BaseViewModel
             return;
         }
 
-        _navigationService.NavigateToItemPage(SelectedItem.Type, SelectedItem.Id);
+        _navigationService.NavigateToItemView(SelectedItem.Type, SelectedItem.Id);
     }
 }

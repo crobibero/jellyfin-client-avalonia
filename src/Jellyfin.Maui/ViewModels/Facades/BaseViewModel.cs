@@ -12,12 +12,7 @@ public abstract class BaseViewModel : ObservableObject, IDisposable
     private readonly CancellationTokenSource _cancellationTokenSource;
 
     /// <summary>
-    /// Gets the cancellation token which denotes the view model has been disposed.
-    /// </summary>
-    protected CancellationToken ViewModelCancellationToken => _cancellationTokenSource.Token;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="BaseViewModel"/>.
+    /// Initializes a new instance of the <see cref="BaseViewModel"/> class.
     /// </summary>
     protected BaseViewModel()
     {
@@ -25,13 +20,25 @@ public abstract class BaseViewModel : ObservableObject, IDisposable
     }
 
     /// <summary>
+    /// Gets the cancellation token which denotes the view model has been disposed.
+    /// </summary>
+    protected CancellationToken ViewModelCancellationToken => _cancellationTokenSource.Token;
+
+    /// <summary>
     /// Initialize the view model.
     /// </summary>
     public abstract void Initialize();
 
     /// <summary>
-    /// Ensure Observable Collection is thread-safe https://codetraveler.io/2019/09/11/using-observablecollection-in-a-multi-threaded-xamarin-forms-application/.
+    /// Ensure Observable Collection is thread-safe.
     /// </summary>
+    /// <remarks>
+    ///  https://codetraveler.io/2019/09/11/using-observablecollection-in-a-multi-threaded-xamarin-forms-application/.
+    /// </remarks>
+    /// <param name="collection">The collection.</param>
+    /// <param name="context">The context.</param>
+    /// <param name="accessMethod">The access method.</param>
+    /// <param name="writeAccess">Whether to enable write access.</param>
     protected static void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess)
     {
         Device.BeginInvokeOnMainThread(accessMethod);

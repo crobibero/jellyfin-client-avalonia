@@ -9,7 +9,7 @@ namespace Jellyfin.Maui.ViewModels;
 public class SeasonViewModel : BaseIdViewModel
 {
     /// <summary>
-    /// Initializes an instance of the <see cref="SeasonViewModel"/>.
+    /// Initializes a new instance of the <see cref="SeasonViewModel"/> class.
     /// </summary>
     /// <param name="libraryService">Instance of the <see cref="ILibraryService"/> interface.</param>
     public SeasonViewModel(ILibraryService libraryService)

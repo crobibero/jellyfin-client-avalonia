@@ -10,23 +10,28 @@ namespace Jellyfin.Maui.DataTemplates
     public class BaseItemDtoTemplate : DataTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseItemDtoTemplate"/>.
+        /// Initializes a new instance of the <see cref="BaseItemDtoTemplate"/> class.
         /// </summary>
         public BaseItemDtoTemplate()
             : base(Initialize)
         {
         }
 
+        private enum Row
+        {
+            Poster = 0,
+            Title = 1,
+            Description = 2
+        }
+
         private static Grid Initialize() =>
             new()
             {
                 RowSpacing = 1,
-                RowDefinitions = GridRowsColumns.Rows.Define
-                (
+                RowDefinitions = GridRowsColumns.Rows.Define(
                     (Row.Poster, new GridLength(8, GridUnitType.Star)),
                     (Row.Title, new GridLength(1, GridUnitType.Star)),
-                    (Row.Description, new GridLength(1, GridUnitType.Star))
-                ),
+                    (Row.Description, new GridLength(1, GridUnitType.Star))),
                 Children =
                 {
                     new Image()
@@ -40,12 +45,5 @@ namespace Jellyfin.Maui.DataTemplates
                         .Bind(Label.TextProperty, mode: BindingMode.OneTime, converter: new BaseItemDtoCardDescriptionConverter()),
                 }
             };
-
-        private enum Row
-        {
-            Poster,
-            Title,
-            Description
-        }
     }
 }
