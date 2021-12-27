@@ -3,8 +3,16 @@ name: Build iOS
 on:
   push:
     branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
   pull_request:
     branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
 
 jobs:
   build:
@@ -24,6 +32,17 @@ jobs:
         with:
           dotnet-version: 6.0.x
       
+      - name: Generate version number using date and run number
+        id: version-creator
+        shell: bash
+        run: |
+          buildDay=`date +%Y.%m%d`
+          echo $buildDay
+          runNum=${{ env.GITHUB_RUN_NUMBER }}
+          ver="${buildDay}.${runNum}.0"
+          echo $ver
+          echo "APP_VERSION=$ver" >> $GITHUB_ENV
+
       - name: Install Maui Workload
         run: dotnet workload install maui
         
@@ -34,3 +53,9 @@ jobs:
       - name: Test
         working-directory: ./src
         run: dotnet test -c Release -f net6.0-ios
+
+      - name: Upload iOS build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ios-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
+          path: '*iOS/**/*.app/**'
