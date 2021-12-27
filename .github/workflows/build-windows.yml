@@ -1,0 +1,62 @@
+name: Build Windows
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+  workflow_dispatch:
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+
+jobs:
+  maui-windows:
+    runs-on: windows-2022    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+      
+      # Needed for Windows build
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          vs-prerelease: true
+
+      - name: Generate version number using date and run number
+        shell: pwsh
+        id: version-creator
+        run: |
+          $buildDay = Get-Date -Format "yyyy.Mdd"
+          $ver = $buildDay + "." + $env:GITHUB_RUN_NUMBER + ".0"
+          echo "::set-output name=APP_VERSION::$ver"
+
+      - name: Install Maui Workload
+        run: dotnet workload install maui
+        
+      - name: Build
+        working-directory: ./src
+        # run: dotnet build -c Release -f net6.0-windows
+        run: msbuild -r -p:Configuration=Release -p:TargetFramework=net6.0-windows10.0.19041
+
+      - name: Test
+        working-directory: ./src
+        run: dotnet test -c Release -f net6.0-windows10
+
+      #- name: Upload build artifacts
+      #  uses: actions/upload-artifact@v2
+      #  with:
+      #    name: windows-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
+      #    path: '*Windows\**\*.msix'
