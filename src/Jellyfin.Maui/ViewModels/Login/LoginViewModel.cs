@@ -2,7 +2,7 @@ using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
 
-namespace Jellyfin.Maui.ViewModels;
+namespace Jellyfin.Maui.ViewModels.Login;
 
 /// <summary>
 /// Login view model.

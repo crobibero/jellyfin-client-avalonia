@@ -31,7 +31,7 @@ public class LibraryService : ILibraryService
         _tvShowsClient = tvShowsClient;
         _userLibraryClient = userLibraryClient;
         _userViewsClient = userViewsClient;
-        _userId = stateService.GetUser().Id;
+        _userId = stateService.GetCurrentUser().Id;
     }
 
     /// <inheritdoc />

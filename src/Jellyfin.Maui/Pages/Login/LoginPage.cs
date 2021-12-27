@@ -2,8 +2,9 @@
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Resources.Strings;
 using Jellyfin.Maui.ViewModels;
+using Jellyfin.Maui.ViewModels.Login;
 
-namespace Jellyfin.Maui.Pages;
+namespace Jellyfin.Maui.Pages.Login;
 
 /// <summary>
 /// Login page.

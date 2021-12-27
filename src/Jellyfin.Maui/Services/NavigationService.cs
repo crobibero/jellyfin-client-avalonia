@@ -1,6 +1,7 @@
 using AsyncAwaitBestPractices;
 using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Pages.Facades;
+using Jellyfin.Maui.Pages.Login;
 using Jellyfin.Maui.ViewModels;
 using Jellyfin.Maui.ViewModels.Facades;
 using Jellyfin.Sdk;
@@ -13,6 +14,7 @@ public class NavigationService : INavigationService
     // Application is initialized on startup.
     private Application _application = null!;
     private NavigationPage? _navigationPage;
+    private NavigationPage? _loginNavigationPage;
 
     /// <inheritdoc />
     public void Initialize(Application application)
@@ -23,11 +25,50 @@ public class NavigationService : INavigationService
     /// <inheritdoc />
     public void NavigateToLoginPage()
     {
+        if (_loginNavigationPage is null)
+        {
+            NavigateToServerSelectPage();
+            return;
+        }
+
         Application.Current?.Dispatcher.Dispatch(() =>
         {
             var loginPage = InternalServiceProvider.GetService<LoginPage>();
-            _navigationPage = null;
-            _application.MainPage = loginPage;
+            _loginNavigationPage.PushAsync(loginPage).SafeFireAndForget();
+        });
+    }
+
+    /// <inheritdoc />
+    public void NavigateToServerSelectPage()
+    {
+        if (_loginNavigationPage is null)
+        {
+            Application.Current?.Dispatcher.Dispatch(() =>
+            {
+                var serverSelectPage = InternalServiceProvider.GetService<ServerSelectPage>();
+                _loginNavigationPage = new NavigationPage(serverSelectPage);
+                _application.MainPage = _loginNavigationPage;
+            });
+        }
+        else
+        {
+            Application.Current?.Dispatcher.Dispatch(() => _loginNavigationPage.PopToRootAsync(true).SafeFireAndForget());
+        }
+    }
+
+    /// <inheritdoc />
+    public void NavigateToAddServerPage()
+    {
+        if (_loginNavigationPage is null)
+        {
+            NavigateToServerSelectPage();
+            return;
+        }
+
+        Application.Current?.Dispatcher.Dispatch(() =>
+        {
+            var addServerPage = InternalServiceProvider.GetService<AddServerPage>();
+            _loginNavigationPage.PushAsync(addServerPage).SafeFireAndForget();
         });
     }
 
@@ -60,6 +101,7 @@ public class NavigationService : INavigationService
     /// <inheritdoc />
     public void NavigateHome()
     {
+        _loginNavigationPage = null;
         if (_navigationPage is null)
         {
             Application.Current?.Dispatcher.Dispatch(() =>

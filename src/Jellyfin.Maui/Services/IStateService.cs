@@ -1,5 +1,4 @@
-﻿using Jellyfin.Maui.Models;
-using Jellyfin.Sdk;
+﻿using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Services;
 
@@ -25,25 +24,13 @@ public interface IStateService
     /// Gets the current user.
     /// </summary>
     /// <returns>The <see cref="UserDto"/>.</returns>
-    UserDto GetUser();
-
-    /// <summary>
-    /// Gets the current userId.
-    /// </summary>
-    /// <returns>The current user id.</returns>
-    Guid GetUserId();
+    UserDto GetCurrentUser();
 
     /// <summary>
     /// Gets the current host.
     /// </summary>
     /// <returns>The current host.</returns>
     string GetHost();
-
-    /// <summary>
-    /// Gets the current state.
-    /// </summary>
-    /// <returns>The <see cref="StateModel"/>.</returns>
-    StateModel GetState();
 
     /// <summary>
     /// Clears the current state.

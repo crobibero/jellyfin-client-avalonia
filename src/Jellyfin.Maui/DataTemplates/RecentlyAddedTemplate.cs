@@ -1,8 +1,8 @@
 using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.Models;
 
-namespace Jellyfin.Maui.DataTemplates
-{
+namespace Jellyfin.Maui.DataTemplates;
+
     /// <summary>
     /// DataTemplate for BaseItem.
     /// </summary>
@@ -45,4 +45,3 @@ namespace Jellyfin.Maui.DataTemplates
                 }
             };
     }
-}

@@ -5,7 +5,7 @@ namespace Jellyfin.Maui.Models;
 /// <summary>
 /// The state model.
 /// </summary>
-public class StateModel
+public class CurrentStateModel
 {
     /// <summary>
     /// Gets or sets the current token.

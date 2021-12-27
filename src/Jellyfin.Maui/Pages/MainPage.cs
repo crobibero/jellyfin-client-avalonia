@@ -49,7 +49,7 @@ public class MainPage : ContentPage
         }
         else
         {
-            _navigationService.NavigateToLoginPage();
+            _navigationService.NavigateToServerSelectPage();
         }
     }
 }

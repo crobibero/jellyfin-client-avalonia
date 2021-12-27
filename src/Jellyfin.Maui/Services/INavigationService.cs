@@ -24,6 +24,16 @@ public interface INavigationService
     void NavigateToLoginPage();
 
     /// <summary>
+    /// Navigate to the server selection page.
+    /// </summary>
+    void NavigateToServerSelectPage();
+
+    /// <summary>
+    /// Navigate to the add server page.
+    /// </summary>
+    void NavigateToAddServerPage();
+
+    /// <summary>
     /// Navigate to the item's view.
     /// </summary>
     /// <param name="itemKind">The item kind.</param>

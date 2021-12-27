@@ -74,6 +74,7 @@ public static class MauiProgram
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddTransient<IAuthenticationService, AuthenticationService>();
         services.AddTransient<ILibraryService, LibraryService>();
+        services.AddScoped<IStateStorageService, StateStorageService>();
     }
 
     private static void AddSdkClients(this IServiceCollection services)

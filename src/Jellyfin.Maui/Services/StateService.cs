@@ -6,19 +6,18 @@ namespace Jellyfin.Maui.Services;
 /// <inheritdoc />
 public class StateService : IStateService
 {
-    private readonly StateModel _state;
+    private readonly CurrentStateModel _state;
     private readonly SdkClientSettings _sdkClientSettings;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StateService"/> class.
     /// </summary>
     /// <param name="sdkClientSettings">Instance of the <see cref="SdkClientSettings"/>.</param>
-    public StateService(
-        SdkClientSettings sdkClientSettings)
+    public StateService(SdkClientSettings sdkClientSettings)
     {
         _sdkClientSettings = sdkClientSettings;
         // TODO load from disk
-        _state = new StateModel();
+        _state = new CurrentStateModel();
         _sdkClientSettings.BaseUrl = _state.Host;
         _sdkClientSettings.AccessToken = _state.Token;
     }
@@ -42,27 +41,15 @@ public class StateService : IStateService
     }
 
     /// <inheritdoc />
-    public UserDto GetUser()
+    public UserDto GetCurrentUser()
     {
         return _state.UserDto ?? throw new UnauthorizedAccessException();
-    }
-
-    /// <inheritdoc />
-    public Guid GetUserId()
-    {
-        return _state.UserDto?.Id ?? throw new UnauthorizedAccessException();
     }
 
     /// <inheritdoc />
     public string GetHost()
     {
         return _state.Host ?? throw new UnauthorizedAccessException();
-    }
-
-    /// <inheritdoc />
-    public StateModel GetState()
-    {
-        return _state;
     }
 
     /// <inheritdoc />
