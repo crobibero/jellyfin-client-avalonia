@@ -2,7 +2,6 @@
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Resources.Strings;
 using Jellyfin.Maui.ViewModels;
-using Microsoft.Maui;
 
 namespace Jellyfin.Maui.Pages;
 

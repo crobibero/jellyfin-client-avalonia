@@ -14,7 +14,7 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
-        MainPage = ServiceProvider.GetService<MainPage>();
-        ServiceProvider.GetService<INavigationService>().Initialize(this);
+        MainPage = InternalServiceProvider.GetService<MainPage>();
+        InternalServiceProvider.GetService<INavigationService>().Initialize(this);
     }
 }

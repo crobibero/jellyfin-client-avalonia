@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using AsyncAwaitBestPractices;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
 using Jellyfin.Sdk;
@@ -57,7 +56,7 @@ public class LibraryViewModel : BaseIdViewModel
     {
         Item = await _libraryService.GetLibraryAsync(Id, ViewModelCancellationToken)
             .ConfigureAwait(false);
-        InitializeItemsAsync().SafeFireAndForget();
+        await InitializeItemsAsync().ConfigureAwait(false);
     }
 
     private async ValueTask InitializeItemsAsync()

@@ -7,8 +7,6 @@ using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Services;
 
-// FIXME: NavigationPage doesn't currently work.
-
 /// <inheritdoc />
 public class NavigationService : INavigationService
 {
@@ -25,9 +23,9 @@ public class NavigationService : INavigationService
     /// <inheritdoc />
     public void NavigateToLoginPage()
     {
-        Device.BeginInvokeOnMainThread(() =>
+        Application.Current?.Dispatcher.Dispatch(() =>
         {
-            var loginPage = ServiceProvider.GetService<LoginPage>();
+            var loginPage = InternalServiceProvider.GetService<LoginPage>();
             _navigationPage = null;
             _application.MainPage = loginPage;
         });
@@ -64,17 +62,16 @@ public class NavigationService : INavigationService
     {
         if (_navigationPage is null)
         {
-            Device.BeginInvokeOnMainThread(() =>
+            Application.Current?.Dispatcher.Dispatch(() =>
             {
-                var homePage = ServiceProvider.GetService<HomePage>();
+                var homePage = InternalServiceProvider.GetService<HomePage>();
                 homePage.Initialize();
-                _application.MainPage = homePage;
-                // _application.MainPage = _navigationPage = new NavigationPage(homePage);
+                _application.MainPage = _navigationPage = new NavigationPage(homePage);
             });
         }
         else
         {
-            Device.BeginInvokeOnMainThread(() => _navigationPage.PopToRootAsync(true).SafeFireAndForget());
+            Application.Current?.Dispatcher.Dispatch(() => _navigationPage.PopToRootAsync(true).SafeFireAndForget());
         }
     }
 
@@ -82,20 +79,17 @@ public class NavigationService : INavigationService
         where TViewModel : BaseIdViewModel
         where TPage : BaseContentIdPage<TViewModel>
     {
-        /*
         if (_navigationPage is null)
         {
             NavigateHome();
             return;
         }
-        */
 
-        Device.BeginInvokeOnMainThread(() =>
+        Application.Current?.Dispatcher.Dispatch(() =>
         {
-            var resolvedView = ServiceProvider.GetService<TPage>();
+            var resolvedView = InternalServiceProvider.GetService<TPage>();
             resolvedView.Initialize(id);
-            _application.MainPage = resolvedView;
-            // _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget();
+            _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget();
         });
     }
 }

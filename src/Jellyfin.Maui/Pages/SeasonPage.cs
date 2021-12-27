@@ -32,7 +32,7 @@ public class SeasonPage : BaseContentIdPage<SeasonViewModel>
                 new Label { Text = "Episodes" },
                 new CollectionView
                 {
-                    ItemTemplate = new BaseItemCardTemplate(),
+                    ItemTemplate = new PosterCardTemplate(),
                     ItemsLayout = LinearItemsLayout.Horizontal,
                     SelectionMode = SelectionMode.Single,
                     ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView

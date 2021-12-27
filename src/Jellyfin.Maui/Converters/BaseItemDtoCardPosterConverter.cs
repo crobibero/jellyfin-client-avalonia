@@ -9,6 +9,17 @@ namespace Jellyfin.Maui.Converters;
 /// </summary>
 public class BaseItemDtoCardPosterConverter : IValueConverter
 {
+    private readonly ImageType _imageType;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseItemDtoCardPosterConverter"/> class.
+    /// </summary>
+    /// <param name="imageType">The image type to fetch.</param>
+    public BaseItemDtoCardPosterConverter(ImageType imageType)
+    {
+        _imageType = imageType;
+    }
+
     /// <inheritdoc />
     public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
@@ -17,7 +28,7 @@ public class BaseItemDtoCardPosterConverter : IValueConverter
             return null;
         }
 
-        var host = ServiceProvider.GetService<IStateService>().GetHost();
+        var host = InternalServiceProvider.GetService<IStateService>().GetHost();
 
         var itemId = baseItemDto.Id;
         if (baseItemDto.Type == BaseItemKind.Episode)
@@ -25,7 +36,7 @@ public class BaseItemDtoCardPosterConverter : IValueConverter
             itemId = baseItemDto.SeriesId ?? baseItemDto.Id;
         }
 
-        return ImageSource.FromUri(new Uri($"{host}/Items/{itemId}/Images/{ImageType.Primary}"));
+        return ImageSource.FromUri(new Uri($"{host}/Items/{itemId}/Images/{_imageType}"));
     }
 
     /// <inheritdoc />

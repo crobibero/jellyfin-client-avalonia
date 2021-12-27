@@ -1,12 +1,9 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui;
-
 namespace Jellyfin.Maui.Services;
 
 /// <summary>
 /// Service provider.
 /// </summary>
-public static class ServiceProvider
+public static class InternalServiceProvider
 {
     private static IServiceProvider Current =>
 #if WINDOWS10_0_17763_0_OR_GREATER

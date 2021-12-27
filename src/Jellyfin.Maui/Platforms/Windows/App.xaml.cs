@@ -1,7 +1,4 @@
 using Jellyfin.Sdk;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui;
-using Microsoft.Maui.Hosting;
 using Microsoft.UI.Xaml;
 
 namespace Jellyfin.Maui.WinUI

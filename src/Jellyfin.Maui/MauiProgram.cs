@@ -1,13 +1,9 @@
 using System.Net;
-using System.Net.Http;
 using System.Text;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
 using Jellyfin.Sdk;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui.Controls.Hosting;
-using Microsoft.Maui.Hosting;
 using Polly;
 using Polly.Extensions.Http;
 #if __ANDROID__
@@ -43,7 +39,6 @@ public static class MauiProgram
         builder.Services.AddPages();
         builder.Services.AddSdkClients();
         builder.Services.AddServices();
-
         return builder.Build();
     }
 

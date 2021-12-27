@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Markup;
+using Jellyfin.Maui.ContentViews;
 using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.ViewModels;
@@ -29,10 +30,13 @@ public class SeriesPage : BaseContentIdPage<SeriesViewModel>
             {
                 new Label()
                     .Bind(Label.TextProperty, "Item.Name", mode: BindingMode.OneWay),
+                new Label { Text = "Next Up" },
+                new PosterCardView()
+                    .Bind(BindingContextProperty, nameof(ViewModel.NextUpItem), mode: BindingMode.OneTime),
                 new Label { Text = "Seasons" },
                 new CollectionView
                 {
-                    ItemTemplate = new BaseItemCardTemplate(),
+                    ItemTemplate = new PosterCardTemplate(),
                     ItemsLayout = LinearItemsLayout.Horizontal,
                     SelectionMode = SelectionMode.Single,
                     ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView

@@ -41,7 +41,7 @@ public class HomePage : BaseContentPage<HomeViewModel>
                     new Label { Text = "Libraries" },
                     new CollectionView
                         {
-                            ItemTemplate = new BaseItemCardTemplate(),
+                            ItemTemplate = new PosterCardTemplate(),
                             ItemsLayout = LinearItemsLayout.Horizontal,
                             SelectionMode = SelectionMode.Single,
                             ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView
@@ -52,7 +52,7 @@ public class HomePage : BaseContentPage<HomeViewModel>
                     new Label { Text = "Continue Watching" },
                     new CollectionView
                         {
-                            ItemTemplate = new BaseItemCardTemplate(),
+                            ItemTemplate = new PosterCardTemplate(),
                             ItemsLayout = LinearItemsLayout.Horizontal,
                             SelectionMode = SelectionMode.Single,
                             ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView

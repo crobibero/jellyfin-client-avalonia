@@ -1,6 +1,5 @@
 using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.Models;
-using Microsoft.Maui;
 
 namespace Jellyfin.Maui.DataTemplates
 {
@@ -37,7 +36,7 @@ namespace Jellyfin.Maui.DataTemplates
                         .Bind(Label.TextProperty, nameof(RecentlyAddedModel.LibraryName)),
                     new CollectionView
                         {
-                            ItemTemplate = new BaseItemCardTemplate(),
+                            ItemTemplate = new PosterCardTemplate(),
                             ItemsLayout = LinearItemsLayout.Horizontal,
                             SelectionMode = SelectionMode.Single
                         }
