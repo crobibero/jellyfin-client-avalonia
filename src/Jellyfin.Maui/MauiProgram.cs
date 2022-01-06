@@ -326,10 +326,6 @@ public static class MauiProgram
             .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
             .AddPolicyHandler(retryPolicy);
 
-        services.AddHttpClient<IVideoHlsClient, VideoHlsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
         services.AddHttpClient<IVideosClient, VideosClient>()
             .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
             .AddPolicyHandler(retryPolicy);
