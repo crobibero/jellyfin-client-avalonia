@@ -14,6 +14,8 @@ public abstract class BaseViewModel : ObservableObject, IDisposable
     private readonly CancellationTokenSource _cancellationTokenSource;
     private readonly INavigationService _navigationService;
 
+    private bool _disposed;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseViewModel"/> class.
     /// </summary>
@@ -77,10 +79,11 @@ public abstract class BaseViewModel : ObservableObject, IDisposable
     /// <param name="disposing">Whether to dispose.</param>
     protected virtual void Dispose(bool disposing)
     {
-        if (disposing)
+        if (disposing && !_disposed)
         {
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource.Dispose();
+            _disposed = true;
         }
     }
 
