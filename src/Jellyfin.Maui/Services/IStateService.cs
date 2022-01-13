@@ -1,4 +1,4 @@
-﻿using Jellyfin.Maui.Models;
+using Jellyfin.Maui.Models;
 using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Services;
@@ -31,19 +31,43 @@ public interface IStateService
     /// Sets the current server.
     /// </summary>
     /// <param name="serverStateModel">The server state model.</param>
-    void SetServer(ServerStateModel serverStateModel);
+    void SetServerState(ServerStateModel serverStateModel);
 
     /// <summary>
     /// Gets the current server.
     /// </summary>
     /// <returns>The server state model.</returns>
-    ServerStateModel GetServer();
+    ServerStateModel? GetServerState();
+
+    /// <summary>
+    /// Gets the current user.
+    /// </summary>
+    /// <returns>The user state model.</returns>
+    UserStateModel? GetUserState();
+
+    /// <summary>
+    /// Sets the current user state.
+    /// </summary>
+    /// <param name="userStateModel">The user state model.</param>
+    void SetUserState(UserStateModel userStateModel);
 
     /// <summary>
     /// Gets the current host.
     /// </summary>
     /// <returns>The current host.</returns>
     string GetHost();
+
+    /// <summary>
+    /// Sets the current host.
+    /// </summary>
+    /// <param name="host">The host.</param>
+    void SetHost(string host);
+
+    /// <summary>
+    /// Gets the current token.
+    /// </summary>
+    /// <returns>The current token.</returns>
+    string GetToken();
 
     /// <summary>
     /// Clears the current state.

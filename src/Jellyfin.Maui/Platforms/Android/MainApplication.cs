@@ -19,6 +19,7 @@ public class MainApplication : MauiApplication
         : base(handle, ownership)
     {
         var version = typeof(MauiProgram).Assembly.GetName().Version?.ToString() ?? "0.0.0.1";
+        // TODO only 1 token per DeviceId is allowed...
         this.Services.GetRequiredService<SdkClientSettings>()
             .InitializeClientSettings(
                 "Jellyfin Maui Android",

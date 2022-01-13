@@ -30,6 +30,7 @@ public partial class App : MauiWinUIApplication
         Microsoft.Maui.Essentials.Platform.OnLaunched(args);
 
         var version = typeof(MauiProgram).Assembly.GetName().Version?.ToString() ?? "0.0.0.1";
+        // TODO only 1 token per DeviceId is allowed...
         Services.GetRequiredService<SdkClientSettings>()
             .InitializeClientSettings(
                 "Jellyfin Maui Windows",

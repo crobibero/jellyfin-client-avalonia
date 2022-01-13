@@ -1,4 +1,4 @@
-﻿using Jellyfin.Sdk;
+using Jellyfin.Sdk;
 using SystemException = Jellyfin.Sdk.SystemException;
 
 namespace Jellyfin.Maui.Services;
@@ -76,6 +76,15 @@ public class AuthenticationService : IAuthenticationService
         _sdkClientSettings.BaseUrl = null;
         _sdkClientSettings.AccessToken = null;
         _stateService.ClearState();
+    }
+
+    /// <inheritdoc />
+    public ValueTask<bool> IsAuthenticatedAsync(string host, string accessToken, CancellationToken cancellationToken = default)
+    {
+        _stateService.SetHost(host);
+        _sdkClientSettings.BaseUrl = host;
+        _sdkClientSettings.AccessToken = accessToken;
+        return IsAuthenticatedAsync(cancellationToken);
     }
 
     /// <inheritdoc />

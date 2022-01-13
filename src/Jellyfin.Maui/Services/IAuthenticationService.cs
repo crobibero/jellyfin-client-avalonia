@@ -25,6 +25,18 @@ public interface IAuthenticationService
     void Logout();
 
     /// <summary>
+    /// Test whether the client is currently authenticated.
+    /// </summary>
+    /// <param name="host">The server host.</param>
+    /// <param name="accessToken">The access token.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>Authentication status.</returns>
+    ValueTask<bool> IsAuthenticatedAsync(
+        string host,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Test whether client is currently authenticated.
     /// </summary>
     /// <param name="cancellationToken">The cancellation token.</param>

@@ -24,6 +24,7 @@ public class LoginPage : BaseContentPage<LoginViewModel>
         Server,
         Username,
         Password,
+        RememberMe,
         LoginButton,
         ErrorMessage
     }
@@ -45,6 +46,7 @@ public class LoginPage : BaseContentPage<LoginViewModel>
                     (Row.Server, GridRowsColumns.Auto),
                     (Row.Username, GridRowsColumns.Auto),
                     (Row.Password, GridRowsColumns.Auto),
+                    (Row.RememberMe, GridRowsColumns.Auto),
                     (Row.LoginButton, GridRowsColumns.Auto),
                     (Row.ErrorMessage, GridRowsColumns.Auto)),
                 Children =
@@ -67,6 +69,12 @@ public class LoginPage : BaseContentPage<LoginViewModel>
                             .FillExpandHorizontal()
                             .Bind(Entry.TextProperty, nameof(ViewModel.Password)),
                     }.Row(Row.Password),
+                    new HorizontalStackLayout
+                    {
+                        new CheckBox()
+                            .Bind(CheckBox.IsCheckedProperty, nameof(ViewModel.RememberMe)),
+                        new Label { Text = "Remember Me" }
+                    }.Row(Row.RememberMe),
                     new VerticalStackLayout
                     {
                         new Button { Text = Strings.Login_LoginButton }

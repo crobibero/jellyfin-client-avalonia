@@ -23,6 +23,22 @@ public class NavigationService : INavigationService
     }
 
     /// <inheritdoc />
+    public void NavigateToUserSelectPage()
+    {
+        if (_loginNavigationPage is null)
+        {
+            NavigateToServerSelectPage();
+            return;
+        }
+
+        Application.Current?.Dispatcher.Dispatch(() =>
+        {
+            var userSelectPage = InternalServiceProvider.GetService<SelectUserPage>();
+            _loginNavigationPage.PushAsync(userSelectPage).SafeFireAndForget();
+        });
+    }
+
+    /// <inheritdoc />
     public void NavigateToLoginPage()
     {
         if (_loginNavigationPage is null)

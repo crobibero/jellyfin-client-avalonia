@@ -1,4 +1,3 @@
-using Jellyfin.Maui.Models;
 using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Services;
@@ -15,11 +14,6 @@ public interface INavigationService
     void Initialize(Application application);
 
     /// <summary>
-    /// Navigate to the login page.
-    /// </summary>
-    void NavigateToLoginPage();
-
-    /// <summary>
     /// Navigate to the server selection page.
     /// </summary>
     void NavigateToServerSelectPage();
@@ -28,6 +22,16 @@ public interface INavigationService
     /// Navigate to the add server page.
     /// </summary>
     void NavigateToAddServerPage();
+
+    /// <summary>
+    /// Navigate to the user select page.
+    /// </summary>
+    void NavigateToUserSelectPage();
+
+    /// <summary>
+    /// Navigate to the login page.
+    /// </summary>
+    void NavigateToLoginPage();
 
     /// <summary>
     /// Navigate to the main view.

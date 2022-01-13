@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Services;
@@ -7,21 +7,21 @@ using Jellyfin.Maui.ViewModels.Facades;
 namespace Jellyfin.Maui.ViewModels.Login;
 
 /// <summary>
-/// Server select view model.
+/// The select user view model.
 /// </summary>
-public class ServerSelectViewModel : BaseViewModel
+public class SelectUserViewModel : BaseViewModel
 {
     private readonly INavigationService _navigationService;
     private readonly IStateStorageService _stateStorageService;
     private readonly IStateService _stateService;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ServerSelectViewModel"/> class.
+    /// Initializes a new instance of the <see cref="SelectUserViewModel"/> class.
     /// </summary>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
     /// <param name="stateStorageService">Instance of the <see cref="IStateStorageService"/> interface.</param>
     /// <param name="stateService">Instance of the <see cref="IStateService"/> interface.</param>
-    public ServerSelectViewModel(
+    public SelectUserViewModel(
         INavigationService navigationService,
         IStateStorageService stateStorageService,
         IStateService stateService)
@@ -31,53 +31,63 @@ public class ServerSelectViewModel : BaseViewModel
         _stateStorageService = stateStorageService;
         _stateService = stateService;
 
-        AddServerCommand = new RelayCommand(AddServer);
-        SelectServerCommand = new RelayCommand(SelectServer);
+        AddUserCommand = new RelayCommand(AddUser);
+        SelectUserCommand = new RelayCommand(SelectUser);
     }
 
     /// <summary>
-    /// Gets the add server command.
+    /// Gets the add user command.
     /// </summary>
-    public IRelayCommand AddServerCommand { get; }
+    public IRelayCommand AddUserCommand { get; }
 
     /// <summary>
-    /// Gets the select server command.
+    /// Gets the select user command.
     /// </summary>
-    public IRelayCommand SelectServerCommand { get; }
+    public IRelayCommand SelectUserCommand { get; }
 
     /// <summary>
-    /// Gets the list of servers.
+    /// Gets the list of users.
     /// </summary>
-    public ObservableCollection<ServerStateModel> Servers { get; } = new();
+    public ObservableCollection<UserStateModel> Users { get; } = new();
 
     /// <summary>
-    /// Gets or sets the selected server.
+    /// Gets or sets the selected user.
     /// </summary>
-    public ServerStateModel? SelectedServer { get; set; }
+    public UserStateModel? SelectedUser { get; set; }
 
     /// <inheritdoc />
     public override async ValueTask InitializeAsync()
     {
         var state = await _stateStorageService.GetStoredStateAsync().ConfigureAwait(false);
-        Servers.Clear();
-        SelectedServer = null;
-        foreach (var storedServer in state.Servers)
+        var serverState = _stateService.GetServerState();
+        if (serverState is null)
         {
-            Servers.Add(storedServer);
+            _navigationService.NavigateToServerSelectPage();
+            return;
+        }
+
+        Users.Clear();
+        SelectedUser = null;
+        foreach (var user in state.Users)
+        {
+            if (user.ServerId == serverState.Id)
+            {
+                Users.Add(user);
+            }
         }
     }
 
-    private void AddServer()
+    private void AddUser()
     {
-        _navigationService.NavigateToAddServerPage();
+        _navigationService.NavigateToLoginPage();
     }
 
-    private void SelectServer()
+    private void SelectUser()
     {
-        if (SelectedServer is not null)
+        if (SelectedUser is not null)
         {
-            _stateService.SetServerState(SelectedServer);
-            _navigationService.NavigateToUserSelectPage();
+            _stateService.SetUserState(SelectedUser);
+            _navigationService.NavigateToLoginPage();
         }
     }
 }

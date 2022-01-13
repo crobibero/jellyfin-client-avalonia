@@ -25,5 +25,10 @@ public class CurrentStateModel
     /// <summary>
     /// Gets or sets the server state.
     /// </summary>
-    public ServerStateModel? Server { get; set; }
+    public ServerStateModel? ServerState { get; set; }
+
+    /// <summary>
+    /// Gets or sets the user state.
+    /// </summary>
+    public UserStateModel? UserState { get; set; }
 }

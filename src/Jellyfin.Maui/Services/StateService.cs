@@ -1,4 +1,4 @@
-﻿using Jellyfin.Maui.Models;
+using Jellyfin.Maui.Models;
 using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Services;
@@ -47,15 +47,27 @@ public class StateService : IStateService
     }
 
     /// <inheritdoc />
-    public void SetServer(ServerStateModel serverStateModel)
+    public void SetServerState(ServerStateModel serverStateModel)
     {
-        _state.Server = serverStateModel;
+        _state.ServerState = serverStateModel;
     }
 
     /// <inheritdoc />
-    public ServerStateModel GetServer()
+    public ServerStateModel? GetServerState()
     {
-        return _state.Server ?? throw new InvalidOperationException();
+        return _state.ServerState;
+    }
+
+    /// <inheritdoc />
+    public UserStateModel? GetUserState()
+    {
+        return _state.UserState;
+    }
+
+    /// <inheritdoc />
+    public void SetUserState(UserStateModel userStateModel)
+    {
+        _state.UserState = userStateModel;
     }
 
     /// <inheritdoc />
@@ -65,10 +77,22 @@ public class StateService : IStateService
     }
 
     /// <inheritdoc />
+    public string GetToken()
+    {
+        return _sdkClientSettings.AccessToken;
+    }
+
+    /// <inheritdoc />
     public void ClearState()
     {
         _state.UserDto = null;
         _state.Host = null;
         _state.Token = null;
+    }
+
+    /// <inheritdoc/>
+    public void SetHost(string host)
+    {
+        _state.Host = host;
     }
 }
