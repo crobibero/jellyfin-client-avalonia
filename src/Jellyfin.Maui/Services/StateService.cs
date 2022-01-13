@@ -47,9 +47,21 @@ public class StateService : IStateService
     }
 
     /// <inheritdoc />
+    public void SetServer(ServerStateModel serverStateModel)
+    {
+        _state.Server = serverStateModel;
+    }
+
+    /// <inheritdoc />
+    public ServerStateModel GetServer()
+    {
+        return _state.Server ?? throw new InvalidOperationException();
+    }
+
+    /// <inheritdoc />
     public string GetHost()
     {
-        return _state.Host ?? throw new UnauthorizedAccessException();
+        return _state.Host ?? throw new InvalidOperationException();
     }
 
     /// <inheritdoc />

@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui.Markup;
+using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.Models;
 
 namespace Jellyfin.Maui.ContentViews;

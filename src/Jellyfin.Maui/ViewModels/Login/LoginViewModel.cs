@@ -11,9 +11,12 @@ public class LoginViewModel : BaseViewModel
 {
     private readonly IAuthenticationService _authenticationService;
     private readonly INavigationService _navigationService;
+    private readonly IStateService _stateService;
 
-    private string? _serverUrl = "https://demo.jellyfin.org/stable";
-    private string? _username = "demo";
+    // _serverUrl is set on initialization.
+    private string _serverUrl = null!;
+    private string? _serverName;
+    private string? _username;
     private string? _password;
     private string? _errorMessage;
 
@@ -22,24 +25,27 @@ public class LoginViewModel : BaseViewModel
     /// </summary>
     /// <param name="authenticationService">Instance of the <see cref="IAuthenticationService"/> interface.</param>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
+    /// <param name="stateService">Instance of the <see cref="IStateService"/> interface.</param>
     public LoginViewModel(
         IAuthenticationService authenticationService,
-        INavigationService navigationService)
+        INavigationService navigationService,
+        IStateService stateService)
         : base(navigationService)
     {
         _authenticationService = authenticationService;
         _navigationService = navigationService;
+        _stateService = stateService;
 
         LoginCommand = new AsyncRelayCommand(LoginAsync);
     }
 
     /// <summary>
-    /// Gets or sets the server url.
+    /// Gets or sets the server name.
     /// </summary>
-    public string? ServerUrl
+    public string? ServerName
     {
-        get => _serverUrl;
-        set => SetProperty(ref _serverUrl, value);
+        get => _serverName;
+        set => SetProperty(ref _serverName, value);
     }
 
     /// <summary>
@@ -77,6 +83,17 @@ public class LoginViewModel : BaseViewModel
     /// <inheritdoc />
     public override ValueTask InitializeAsync()
     {
+        try
+        {
+            var server = _stateService.GetServer();
+            _serverUrl = server.Url;
+            ServerName = server.Name;
+        }
+        catch (InvalidOperationException)
+        {
+            _navigationService.NavigateToServerSelectPage();
+        }
+
         return ValueTask.CompletedTask;
     }
 
@@ -84,12 +101,6 @@ public class LoginViewModel : BaseViewModel
     {
         try
         {
-            if (string.IsNullOrEmpty(ServerUrl))
-            {
-                ErrorMessage = "Server URL is required";
-                return;
-            }
-
             if (string.IsNullOrEmpty(Username))
             {
                 ErrorMessage = "Username is required";
@@ -97,7 +108,7 @@ public class LoginViewModel : BaseViewModel
             }
 
             var (status, errorMessage) = await _authenticationService.AuthenticateAsync(
-                    ServerUrl,
+                    _serverUrl,
                     Username,
                     Password,
                     ViewModelCancellationToken)

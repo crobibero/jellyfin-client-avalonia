@@ -1,4 +1,4 @@
-﻿using Jellyfin.Sdk;
+using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Models;
 
@@ -21,4 +21,9 @@ public class CurrentStateModel
     /// Gets or sets the current user.
     /// </summary>
     public UserDto? UserDto { get; set; }
+
+    /// <summary>
+    /// Gets or sets the server state.
+    /// </summary>
+    public ServerStateModel? Server { get; set; }
 }

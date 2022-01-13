@@ -1,9 +1,7 @@
-﻿using CommunityToolkit.Maui.Markup;
+using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.Pages.Facades;
-using Jellyfin.Maui.ViewModels;
 using Jellyfin.Maui.ViewModels.Login;
-using Microsoft.Maui.Layouts;
 
 namespace Jellyfin.Maui.Pages.Login;
 
@@ -24,22 +22,23 @@ public class ServerSelectPage : BaseContentPage<ServerSelectViewModel>
     /// <inheritdoc />
     protected override void InitializeLayout()
     {
-        Content = new StackLayout
+        Content = new VerticalStackLayout
         {
-            new Label { Text = "Stored Servers" },
-            new Button { Text = "Add Server" }
-                .Bind(Button.CommandProperty, nameof(ViewModel.AddServerCommand)),
-            new ScrollView
+            Children =
             {
-                Padding = 16,
-                Content = new FlexLayout
+                new Button { Text = "Add Server" }
+                    .Bind(Button.CommandProperty, nameof(ViewModel.AddServerCommand)),
+                new Label { Text = "Stored Servers" },
+                new CollectionView
                     {
-                        Wrap = FlexWrap.Wrap,
-                        Direction = FlexDirection.Row
+                        ItemTemplate = new ServerSelectTemplate(),
+                        ItemsLayout = LinearItemsLayout.Vertical,
+                        SelectionMode = SelectionMode.Single
                     }
-                    .ItemTemplate(new ServerSelectTemplate())
-                    .Bind(BindableLayout.ItemsSourceProperty, nameof(ViewModel.Servers))
-            },
+                    .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.Servers))
+                    .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedServer))
+                    .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.SelectServerCommand))
+            }
         };
     }
 }

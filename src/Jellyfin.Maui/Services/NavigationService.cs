@@ -73,6 +73,25 @@ public class NavigationService : INavigationService
     }
 
     /// <inheritdoc />
+    public void NavigateHome()
+    {
+        _loginNavigationPage = null;
+        if (_navigationPage is null)
+        {
+            Application.Current?.Dispatcher.Dispatch(() =>
+            {
+                var homePage = InternalServiceProvider.GetService<HomePage>();
+                homePage.Initialize();
+                _application.MainPage = _navigationPage = new NavigationPage(homePage);
+            });
+        }
+        else
+        {
+            Application.Current?.Dispatcher.Dispatch(() => _navigationPage.PopToRootAsync(true).SafeFireAndForget());
+        }
+    }
+
+    /// <inheritdoc />
     public void NavigateToItemView(BaseItemKind itemKind, Guid itemId)
     {
         switch (itemKind)
@@ -95,25 +114,6 @@ public class NavigationService : INavigationService
             default:
                 Navigate<ItemPage, ItemViewModel>(itemId);
                 break;
-        }
-    }
-
-    /// <inheritdoc />
-    public void NavigateHome()
-    {
-        _loginNavigationPage = null;
-        if (_navigationPage is null)
-        {
-            Application.Current?.Dispatcher.Dispatch(() =>
-            {
-                var homePage = InternalServiceProvider.GetService<HomePage>();
-                homePage.Initialize();
-                _application.MainPage = _navigationPage = new NavigationPage(homePage);
-            });
-        }
-        else
-        {
-            Application.Current?.Dispatcher.Dispatch(() => _navigationPage.PopToRootAsync(true).SafeFireAndForget());
         }
     }
 

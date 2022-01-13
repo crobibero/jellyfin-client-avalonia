@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Resources.Strings;
-using Jellyfin.Maui.ViewModels;
 using Jellyfin.Maui.ViewModels.Login;
 
 namespace Jellyfin.Maui.Pages.Login;
@@ -50,13 +49,10 @@ public class LoginPage : BaseContentPage<LoginViewModel>
                     (Row.ErrorMessage, GridRowsColumns.Auto)),
                 Children =
                 {
-                    new VerticalStackLayout
-                    {
-                        new Label { Text = Strings.Login_ServerUrl },
-                        new Entry()
-                            .FillExpandHorizontal()
-                            .Bind(Entry.TextProperty, nameof(ViewModel.ServerUrl)),
-                    }.Row(Row.Server),
+                    new Label()
+                        .FillExpandHorizontal()
+                        .Bind(Label.TextProperty, nameof(ViewModel.ServerName))
+                        .Row(Row.Server),
                     new VerticalStackLayout
                     {
                         new Label { Text = Strings.Login_Username },

@@ -1,4 +1,5 @@
-﻿using Jellyfin.Sdk;
+﻿using Jellyfin.Maui.Models;
+using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Services;
 
@@ -25,6 +26,18 @@ public interface IStateService
     /// </summary>
     /// <returns>The <see cref="UserDto"/>.</returns>
     UserDto GetCurrentUser();
+
+    /// <summary>
+    /// Sets the current server.
+    /// </summary>
+    /// <param name="serverStateModel">The server state model.</param>
+    void SetServer(ServerStateModel serverStateModel);
+
+    /// <summary>
+    /// Gets the current server.
+    /// </summary>
+    /// <returns>The server state model.</returns>
+    ServerStateModel GetServer();
 
     /// <summary>
     /// Gets the current host.
