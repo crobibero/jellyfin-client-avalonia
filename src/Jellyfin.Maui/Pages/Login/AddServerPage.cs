@@ -25,11 +25,11 @@ public class AddServerPage : BaseContentPage<AddServerViewModel>
         {
             Children =
             {
-                new Label { Text = "Server Url " },
+                new Label { Text = Strings.Login_ServerUrl },
                 new Entry()
                     .FillExpandHorizontal()
                     .Bind(Entry.TextProperty, nameof(ViewModel.ServerUrl)),
-                new Button { Text = "Add" }
+                new Button { Text = Strings.Add }
                     .FillExpandHorizontal()
                     .Bind(Button.CommandProperty, nameof(ViewModel.AddServerCommand))
             }

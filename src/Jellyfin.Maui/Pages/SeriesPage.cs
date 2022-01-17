@@ -30,10 +30,10 @@ public class SeriesPage : BaseContentIdPage<SeriesViewModel>
             {
                 new Label()
                     .Bind(Label.TextProperty, "Item.Name", mode: BindingMode.OneWay),
-                new Label { Text = "Next Up" },
+                new Label { Text = Strings.NextUp },
                 new PosterCardView()
                     .Bind(BindingContextProperty, nameof(ViewModel.NextUpItem), mode: BindingMode.OneTime),
-                new Label { Text = "Seasons" },
+                new Label { Text = Strings.Seasons },
                 new CollectionView
                 {
                     ItemTemplate = new PosterCardTemplate(),

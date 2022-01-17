@@ -31,4 +31,9 @@ public class CurrentStateModel
     /// Gets or sets the user state.
     /// </summary>
     public UserStateModel? UserState { get; set; }
+
+    /// <summary>
+    /// Gets or sets static host.
+    /// </summary>
+    public static string? StaticHost { get; set; }
 }

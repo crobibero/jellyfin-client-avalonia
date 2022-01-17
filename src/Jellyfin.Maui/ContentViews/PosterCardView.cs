@@ -14,10 +14,10 @@ public class PosterCardView : ContentView
     /// </summary>
     public PosterCardView()
     {
-        Content = new Grid()
+        Content = new Grid
         {
             WidthRequest = 50,
-            HeightRequest = 50,
+            HeightRequest = 100,
             RowSpacing = 1,
             RowDefinitions = GridRowsColumns.Rows.Define(
                     (Row.Poster, new GridLength(8, GridUnitType.Star)),

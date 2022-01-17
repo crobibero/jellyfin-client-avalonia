@@ -29,7 +29,7 @@ public class SeasonPage : BaseContentIdPage<SeasonViewModel>
             {
                 new Label()
                     .Bind(Label.TextProperty, "Item.Name", mode: BindingMode.OneWay),
-                new Label { Text = "Episodes" },
+                new Label { Text = Strings.Episodes },
                 new CollectionView
                 {
                     ItemTemplate = new PosterCardTemplate(),

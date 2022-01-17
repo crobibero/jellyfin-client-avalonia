@@ -15,7 +15,7 @@ public class LibraryPage : BaseContentIdPage<LibraryViewModel>
     /// </summary>
     /// <param name="viewModel">Instance of the <see cref="LibraryViewModel"/>.</param>
     public LibraryPage(LibraryViewModel viewModel)
-        : base(viewModel, "Library")
+        : base(viewModel, Strings.Library)
     {
     }
 
@@ -48,35 +48,3 @@ public class LibraryPage : BaseContentIdPage<LibraryViewModel>
         };
     }
 }
-
-
-/*
- Content = new ScrollView
-        {
-            Padding = 16,
-            Content = new FlexLayout
-            {
-                Wrap = Microsoft.Maui.Layouts.FlexWrap.Wrap,
-                Direction = Microsoft.Maui.Layouts.FlexDirection.Row
-            }
-            .Bind(BindableLayout.ItemsSourceProperty, nameof(ViewModel.LibraryItemsCollection))
-            Children =
-            {
-                *//*
-                 * TODO how to make this work?
-                new Label()
-                    .Bind(Label.TextProperty, nameof(ViewModel.Item.Name), source: ViewModel.Item, mode: BindingMode.OneWay),
-                *//*
-                new Label()
-                    .Bind(Label.TextProperty, "Item.Name", mode: BindingMode.OneWay),
-                new CollectionView
-                {
-                    ItemTemplate = new PosterCardTemplate(),
-                    ItemsLayout = LinearItemsLayout.Horizontal,
-                    SelectionMode = SelectionMode.Single,
-                    ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView
-                }
-                .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.LibraryItemsCollection))
-                .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
-                .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateToItemCommand))
-            }*/

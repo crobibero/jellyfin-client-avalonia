@@ -1,4 +1,3 @@
-using AsyncAwaitBestPractices;
 using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.Pages.Facades;
@@ -16,16 +15,8 @@ public class HomePage : BaseContentPage<HomeViewModel>
     /// </summary>
     /// <param name="viewModel">Instance of the <see cref="HomeViewModel"/>.</param>
     public HomePage(HomeViewModel viewModel)
-        : base(viewModel, "Home")
+        : base(viewModel, Strings.Home)
     {
-    }
-
-    /// <summary>
-    /// Manually initialize the view model.
-    /// </summary>
-    public void Initialize()
-    {
-        ViewModel.InitializeAsync().SafeFireAndForget();
     }
 
     /// <inheritdoc />
@@ -38,38 +29,13 @@ public class HomePage : BaseContentPage<HomeViewModel>
                 Padding = 16,
                 Children =
                 {
-                    new Label { Text = "Libraries" },
                     new CollectionView
                         {
-                            ItemTemplate = new PosterCardTemplate(),
-                            ItemsLayout = LinearItemsLayout.Horizontal,
-                            SelectionMode = SelectionMode.Single,
-                            ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView
+                            ItemTemplate = new HomeRowTemplateSelector(),
+                            ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView,
+                            ItemsLayout = LinearItemsLayout.Vertical
                         }
-                        .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.LibrariesCollection))
-                        .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
-                        .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateToItemCommand)),
-                    new Label { Text = "Continue Watching" },
-                    new CollectionView
-                        {
-                            ItemTemplate = new PosterCardTemplate(),
-                            ItemsLayout = LinearItemsLayout.Horizontal,
-                            SelectionMode = SelectionMode.Single,
-                            ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView
-                        }
-                        .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.ContinueWatchingCollection))
-                        .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
-                        .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateToItemCommand)),
-                    new CollectionView
-                        {
-                            ItemTemplate = new RecentlyAddedTemplate(),
-                            ItemsLayout = LinearItemsLayout.Vertical,
-                            SelectionMode = SelectionMode.Single,
-                            ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView
-                        }
-                        .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.RecentlyAddedCollection))
-                        .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
-                        .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateToItemCommand))
+                        .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.HomeRowCollection))
                 }
             }
         };

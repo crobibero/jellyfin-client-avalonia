@@ -30,4 +30,43 @@
     <data name="Login_LoginButton" xml:space="preserve">
         <value>Login</value>
     </data>
+    <data name="Add" xml:space="preserve">
+        <value>Add</value>
+    </data>
+    <data name="Library" xml:space="preserve">
+        <value>Library</value>
+    </data>
+    <data name="Episodes" xml:space="preserve">
+        <value>Episodes</value>
+    </data>
+    <data name="Login_RememberMe" xml:space="preserve">
+        <value>Remember Me</value>
+    </data>
+    <data name="Login_QuickConnectButton" xml:space="preserve">
+        <value>Login with QuickConnect</value>
+    </data>
+    <data name="Login_QuickConnectCode" xml:space="preserve">
+        <value>QuickConnect Code:</value>
+    </data>
+    <data name="Login_AddUser" xml:space="preserve">
+        <value>Add User</value>
+    </data>
+    <data name="Login_ExistingUsers" xml:space="preserve">
+        <value>ExistingUsers</value>
+    </data>
+    <data name="Login_AddServer" xml:space="preserve">
+        <value>Add Server</value>
+    </data>
+    <data name="Login_ExistingServers" xml:space="preserve">
+        <value>Existing Servers</value>
+    </data>
+    <data name="Home" xml:space="preserve">
+        <value>Home</value>
+    </data>
+    <data name="NextUp" xml:space="preserve">
+        <value>Next Up</value>
+    </data>
+    <data name="Seasons" xml:space="preserve">
+        <value>Seasons</value>
+    </data>
 </root>

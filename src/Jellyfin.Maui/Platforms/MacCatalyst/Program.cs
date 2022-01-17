@@ -3,7 +3,7 @@
 namespace Jellyfin.Maui.Platforms.MacCatalyst;
 
 /// <summary>
-/// iOS entry point.
+/// MacCatalyst entry point.
 /// </summary>
 public static class Program
 {

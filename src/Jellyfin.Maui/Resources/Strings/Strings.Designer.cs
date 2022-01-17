@@ -61,6 +61,78 @@ namespace Jellyfin.Maui.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        internal static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episodes.
+        /// </summary>
+        internal static string Episodes {
+            get {
+                return ResourceManager.GetString("Episodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        internal static string Home {
+            get {
+                return ResourceManager.GetString("Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Library.
+        /// </summary>
+        internal static string Library {
+            get {
+                return ResourceManager.GetString("Library", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Server.
+        /// </summary>
+        internal static string Login_AddServer {
+            get {
+                return ResourceManager.GetString("Login_AddServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add User.
+        /// </summary>
+        internal static string Login_AddUser {
+            get {
+                return ResourceManager.GetString("Login_AddUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existing Servers.
+        /// </summary>
+        internal static string Login_ExistingServers {
+            get {
+                return ResourceManager.GetString("Login_ExistingServers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ExistingUsers.
+        /// </summary>
+        internal static string Login_ExistingUsers {
+            get {
+                return ResourceManager.GetString("Login_ExistingUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         internal static string Login_LoginButton {
@@ -79,6 +151,33 @@ namespace Jellyfin.Maui.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login with QuickConnect.
+        /// </summary>
+        internal static string Login_QuickConnectButton {
+            get {
+                return ResourceManager.GetString("Login_QuickConnectButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QuickConnect Code:.
+        /// </summary>
+        internal static string Login_QuickConnectCode {
+            get {
+                return ResourceManager.GetString("Login_QuickConnectCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remember Me.
+        /// </summary>
+        internal static string Login_RememberMe {
+            get {
+                return ResourceManager.GetString("Login_RememberMe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Server URL.
         /// </summary>
         internal static string Login_ServerUrl {
@@ -93,6 +192,24 @@ namespace Jellyfin.Maui.Resources.Strings {
         internal static string Login_Username {
             get {
                 return ResourceManager.GetString("Login_Username", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next Up.
+        /// </summary>
+        internal static string NextUp {
+            get {
+                return ResourceManager.GetString("NextUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seasons.
+        /// </summary>
+        internal static string Seasons {
+            get {
+                return ResourceManager.GetString("Seasons", resourceCulture);
             }
         }
     }

@@ -26,9 +26,9 @@ public class ServerSelectPage : BaseContentPage<ServerSelectViewModel>
         {
             Children =
             {
-                new Button { Text = "Add Server" }
+                new Button { Text = Strings.Login_AddServer }
                     .Bind(Button.CommandProperty, nameof(ViewModel.AddServerCommand)),
-                new Label { Text = "Stored Servers" },
+                new Label { Text = Strings.Login_ExistingServers },
                 new CollectionView
                     {
                         ItemTemplate = new ServerSelectTemplate(),

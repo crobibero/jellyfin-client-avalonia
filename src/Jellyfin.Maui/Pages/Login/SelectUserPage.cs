@@ -26,9 +26,9 @@ public class SelectUserPage : BaseContentPage<SelectUserViewModel>
         {
             Children =
             {
-                new Button { Text = "Add User" }
+                new Button { Text = Strings.Login_AddUser }
                     .Bind(Button.CommandProperty, nameof(ViewModel.AddUserCommand)),
-                new Label { Text = "Stored Users" },
+                new Label { Text = Strings.Login_ExistingUsers },
                 new CollectionView
                     {
                         ItemTemplate = new UserSelectTemplate(),

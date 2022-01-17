@@ -21,6 +21,14 @@
                 <Setter Property="Padding" Value="14,10" />
             </Style>
 
+            <Style TargetType="Label">
+                <Setter Property="LineBreakMode" Value="NoWrap" />
+            </Style>
+
+            <Style TargetType="Image">
+                <Setter Property="IsOpaque" Value="True" />
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

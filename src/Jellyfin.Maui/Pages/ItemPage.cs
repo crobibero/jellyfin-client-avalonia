@@ -14,7 +14,7 @@ public class ItemPage : BaseContentIdPage<ItemViewModel>
     /// </summary>
     /// <param name="viewModel">Instance of the <see cref="ItemViewModel"/>.</param>
     public ItemPage(ItemViewModel viewModel)
-        : base(viewModel, "Item")
+        : base(viewModel)
     {
     }
 

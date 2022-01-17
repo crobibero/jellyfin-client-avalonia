@@ -32,6 +32,7 @@ public class StateService : IStateService
         _state.Host = host.TrimEnd('/');
         _state.UserDto = authenticationResult.User;
         _state.Token = authenticationResult.AccessToken;
+        CurrentStateModel.StaticHost = _state.Host;
     }
 
     /// <inheritdoc />
@@ -52,6 +53,7 @@ public class StateService : IStateService
         _state.ServerState = serverStateModel;
         _state.Host = serverStateModel.Url;
         _sdkClientSettings.BaseUrl = serverStateModel.Url;
+        CurrentStateModel.StaticHost = serverStateModel.Url;
     }
 
     /// <inheritdoc />
@@ -90,11 +92,13 @@ public class StateService : IStateService
         _state.UserDto = null;
         _state.Host = null;
         _state.Token = null;
+        CurrentStateModel.StaticHost = null;
     }
 
     /// <inheritdoc/>
     public void SetHost(string host)
     {
         _state.Host = host;
+        CurrentStateModel.StaticHost = host;
     }
 }

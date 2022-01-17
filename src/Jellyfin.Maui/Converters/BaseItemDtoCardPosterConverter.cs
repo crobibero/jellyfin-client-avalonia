@@ -36,7 +36,7 @@ public class BaseItemDtoCardPosterConverter : IValueConverter
             itemId = baseItemDto.SeriesId ?? baseItemDto.Id;
         }
 
-        return ImageSource.FromUri(new Uri($"{host}/Items/{itemId}/Images/{_imageType}"));
+        return ImageSource.FromUri(new Uri($"{host}/Items/{itemId}/Images/{_imageType}?maxHeight=480"));
     }
 
     /// <inheritdoc />

@@ -1,6 +1,5 @@
 using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.Pages.Facades;
-using Jellyfin.Maui.Resources.Strings;
 using Jellyfin.Maui.ViewModels.Login;
 
 namespace Jellyfin.Maui.Pages.Login;
@@ -73,7 +72,7 @@ public class LoginPage : BaseContentPage<LoginViewModel>
                         {
                             new CheckBox()
                                 .Bind(CheckBox.IsCheckedProperty, nameof(ViewModel.RememberMe)),
-                            new Label { Text = "Remember Me" }
+                            new Label { Text = Strings.Login_RememberMe }
                         }
                         .Row(Row.RememberMe),
                     new VerticalStackLayout
@@ -85,14 +84,14 @@ public class LoginPage : BaseContentPage<LoginViewModel>
                         .Row(Row.LoginButton),
                     new VerticalStackLayout
                         {
-                            new Button { Text = "Login with QuickConnect" }
+                            new Button { Text = Strings.Login_QuickConnectButton }
                                 .CenterHorizontal()
                                 .Bind(Button.CommandProperty, nameof(ViewModel.LoginQuickConnectCommand)),
                             new HorizontalStackLayout
                                 {
                                     new Label
                                     {
-                                        Text = "QuickConnect Code:",
+                                        Text = Strings.Login_QuickConnectCode,
                                         Padding = new Thickness(0, 0, 5, 0)
                                     },
                                     new Label()

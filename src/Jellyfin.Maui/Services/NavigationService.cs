@@ -97,7 +97,6 @@ public class NavigationService : INavigationService
             Application.Current?.Dispatcher.Dispatch(() =>
             {
                 var homePage = InternalServiceProvider.GetService<HomePage>();
-                homePage.Initialize();
                 _application.MainPage = _navigationPage = new NavigationPage(homePage);
             });
         }

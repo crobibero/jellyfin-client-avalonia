@@ -6,9 +6,6 @@ using Jellyfin.Maui.ViewModels.Facades;
 using Jellyfin.Sdk;
 using Polly;
 using Polly.Extensions.Http;
-#if __ANDROID__
-using Xamarin.Android.Net;
-#endif
 
 namespace Jellyfin.Maui;
 
@@ -52,18 +49,18 @@ public static class MauiProgram
 
         foreach (var type in exportedTypes)
         {
-            if (Array.IndexOf(viewModelIgnoreList, type) == -1
-                && baseViewModelType.IsAssignableFrom(type))
+            if (Array.IndexOf(viewModelIgnoreList, type) == -1 && baseViewModelType.IsAssignableFrom(type))
             {
                 // Add View Models
                 services.AddTransient(type);
+                continue;
             }
 
-            if (Array.IndexOf(pageIgnoreList, type) == -1
-                && baseContentPageType.IsAssignableFrom(type))
+            if (Array.IndexOf(pageIgnoreList, type) == -1 && baseContentPageType.IsAssignableFrom(type))
             {
                 // Add Pages
                 services.AddTransient(type);
+                continue;
             }
         }
     }
@@ -81,18 +78,11 @@ public static class MauiProgram
     {
         static HttpMessageHandler DefaultHttpClientHandlerDelegate(IServiceProvider serviceProvider)
         {
-#if __ANDROID__
-            return new AndroidMessageHandler
-            {
-                AutomaticDecompression = DecompressionMethods.All,
-            };
-#else
             return new SocketsHttpHandler
             {
                 AutomaticDecompression = DecompressionMethods.All,
                 RequestHeaderEncodingSelector = (_, _) => Encoding.UTF8
             };
-#endif
         }
 
         var retryPolicy = HttpPolicyExtensions
