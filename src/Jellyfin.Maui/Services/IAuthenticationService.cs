@@ -20,6 +20,34 @@ public interface IAuthenticationService
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Initialize the QuickConnect process.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The code.</returns>
+    ValueTask<string?> InitializeQuickConnectAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Test the pending QuickConnect authentication request.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>QuickConnect status.</returns>
+    ValueTask<bool?> TestQuickConnectAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Authenticate using QuickConnect.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The authentication status.</returns>
+    ValueTask<(bool Status, string? ErrorMessage)> AuthenticateWithQuickConnectAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Determines whether QuickConnect is enabled.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>Whether QuickConnect is enabled.</returns>
+    ValueTask<bool> IsQuickConnectEnabledAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Log out of current session.
     /// </summary>
     void Logout();

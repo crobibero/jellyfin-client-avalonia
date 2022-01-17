@@ -50,6 +50,8 @@ public class StateService : IStateService
     public void SetServerState(ServerStateModel serverStateModel)
     {
         _state.ServerState = serverStateModel;
+        _state.Host = serverStateModel.Url;
+        _sdkClientSettings.BaseUrl = serverStateModel.Url;
     }
 
     /// <inheritdoc />

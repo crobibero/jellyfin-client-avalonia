@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
+using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.ViewModels.Login;
 
@@ -23,6 +24,8 @@ public class LoginViewModel : BaseViewModel
     private string? _password;
     private bool _rememberMe = true;
     private string? _errorMessage;
+    private bool _quickConnectAvailable;
+    private string? _quickConnectCode;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
@@ -44,6 +47,7 @@ public class LoginViewModel : BaseViewModel
         _stateStorageService = stateStorageService;
 
         LoginCommand = new AsyncRelayCommand(LoginAsync);
+        LoginQuickConnectCommand = new AsyncRelayCommand(LoginWithQuickConnectAsync);
     }
 
     /// <summary>
@@ -92,9 +96,32 @@ public class LoginViewModel : BaseViewModel
     }
 
     /// <summary>
+    /// Gets or sets a value indicating whether QuickConnect is available.
+    /// </summary>
+    public bool QuickConnectAvailable
+    {
+        get => _quickConnectAvailable;
+        set => SetProperty(ref _quickConnectAvailable, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the QuickConnect code.
+    /// </summary>
+    public string? QuickConnectCode
+    {
+        get => _quickConnectCode;
+        set => SetProperty(ref _quickConnectCode, value);
+    }
+
+    /// <summary>
     /// Gets the login command.
     /// </summary>
     public IAsyncRelayCommand LoginCommand { get; }
+
+    /// <summary>
+    /// Gets the login with QuickConnect command.
+    /// </summary>
+    public IAsyncRelayCommand LoginQuickConnectCommand { get; }
 
     /// <inheritdoc />
     public override async ValueTask InitializeAsync()
@@ -121,6 +148,8 @@ public class LoginViewModel : BaseViewModel
                 _navigationService.NavigateHome();
             }
         }
+
+        QuickConnectAvailable = await _authenticationService.IsQuickConnectEnabledAsync(ViewModelCancellationToken).ConfigureAwait(false);
     }
 
     private async Task LoginAsync()
@@ -153,6 +182,63 @@ public class LoginViewModel : BaseViewModel
             else
             {
                 ErrorMessage = errorMessage;
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "An unknown error occurred.\n" + ex.Message;
+        }
+    }
+
+    private async Task LoginWithQuickConnectAsync()
+    {
+        var code = await _authenticationService.InitializeQuickConnectAsync(ViewModelCancellationToken).ConfigureAwait(false);
+        if (string.IsNullOrEmpty(code))
+        {
+            ErrorMessage = "Unable to initialize QuickConnect";
+        }
+        else
+        {
+            QuickConnectCode = code;
+        }
+
+        try
+        {
+            bool? authenticated;
+
+            do
+            {
+                await Task.Delay(3_000).ConfigureAwait(false);
+                authenticated = await _authenticationService.TestQuickConnectAsync(ViewModelCancellationToken)
+                    .ConfigureAwait(false);
+            }
+            while (authenticated == false);
+
+            QuickConnectCode = null;
+            if (authenticated == true)
+            {
+                var (status, errorMessage) = await _authenticationService.AuthenticateWithQuickConnectAsync(ViewModelCancellationToken)
+                    .ConfigureAwait(false);
+
+                if (status)
+                {
+                    if (_rememberMe)
+                    {
+                        var user = _stateService.GetCurrentUser();
+                        await _stateStorageService.AddUserAsync(new UserStateModel(user.Id, _serverId, user.Name, _stateService.GetToken()))
+                            .ConfigureAwait(false);
+                    }
+
+                    _navigationService.NavigateHome();
+                }
+                else
+                {
+                    ErrorMessage = errorMessage;
+                }
+            }
+            else
+            {
+                ErrorMessage = "Unable to connect with QuickConnect";
             }
         }
         catch (Exception ex)
