@@ -12,6 +12,7 @@
             <Style TargetType="Label">
                 <Setter Property="TextColor" Value="{DynamicResource PrimaryColor}" />
                 <Setter Property="FontFamily" Value="QuicksandRegular" />
+                <Setter Property="LineBreakMode" Value="NoWrap" />
             </Style>
 
             <Style TargetType="Button">
@@ -19,10 +20,6 @@
                 <Setter Property="FontFamily" Value="QuicksandRegular" />
                 <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}" />
                 <Setter Property="Padding" Value="14,10" />
-            </Style>
-
-            <Style TargetType="Label">
-                <Setter Property="LineBreakMode" Value="NoWrap" />
             </Style>
 
             <Style TargetType="Image">

@@ -49,14 +49,14 @@ public class LoginPage : BaseContentPage<LoginViewModel>
                 Children =
                 {
                     new Label()
-                        .FillExpandHorizontal()
+                        .FillHorizontal()
                         .Bind(Label.TextProperty, nameof(ViewModel.ServerName))
                         .Row(Row.Server),
                     new VerticalStackLayout
                         {
                             new Label { Text = Strings.Login_Username },
                             new Entry()
-                                .FillExpandHorizontal()
+                                .FillHorizontal()
                                 .Bind(Entry.TextProperty, nameof(ViewModel.Username)),
                         }
                         .Row(Row.Username),
@@ -64,7 +64,7 @@ public class LoginPage : BaseContentPage<LoginViewModel>
                         {
                             new Label { Text = Strings.Login_Password },
                             new Entry()
-                                .FillExpandHorizontal()
+                                .FillHorizontal()
                                 .Bind(Entry.TextProperty, nameof(ViewModel.Password)),
                         }
                         .Row(Row.Password),

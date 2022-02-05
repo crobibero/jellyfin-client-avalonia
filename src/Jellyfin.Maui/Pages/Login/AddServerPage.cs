@@ -27,10 +27,10 @@ public class AddServerPage : BaseContentPage<AddServerViewModel>
             {
                 new Label { Text = Strings.Login_ServerUrl },
                 new Entry()
-                    .FillExpandHorizontal()
+                    .FillHorizontal()
                     .Bind(Entry.TextProperty, nameof(ViewModel.ServerUrl)),
                 new Button { Text = Strings.Add }
-                    .FillExpandHorizontal()
+                    .FillHorizontal()
                     .Bind(Button.CommandProperty, nameof(ViewModel.AddServerCommand))
             }
         };
