@@ -31,7 +31,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 6.0.2
           include-prerelease: true
 
       - name: Generate version number using date and run number
