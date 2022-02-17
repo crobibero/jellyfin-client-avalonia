@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0-maccatalyst</TargetFramework>
@@ -50,8 +50,6 @@
 
     <!-- Custom Fonts -->
     <MauiFont Include="Resources\Fonts\*" />
-
-    <!--<MauiAsset Include="Resources\Strings\*" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />-->
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
@@ -62,7 +60,7 @@
 
   <ItemGroup>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.4" />
-    <PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre6" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre7" />
     <PackageReference Include="CommunityToolkit.Maui.Markup" Version="1.0.0-pre5" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview1" />
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.4" />
@@ -74,7 +72,6 @@
     <PackageReference Include="SmartAnalyzers.MultithreadingAnalyzer" Version="1.1.31" PrivateAssets="All" />
   </ItemGroup>
 
-  <!--
   <ItemGroup>
     <EmbeddedResource Update="Resources\Strings\Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -89,7 +86,6 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-  -->
 
   <PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">
     <OutputType>WinExe</OutputType>

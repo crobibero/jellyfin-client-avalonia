@@ -16,23 +16,12 @@ namespace Jellyfin.Maui.DataTemplates;
         {
         }
 
-        private enum Row
-        {
-            Title,
-            Items
-        }
-
-        private static Grid Initialize() =>
+        private static VerticalStackLayout Initialize() =>
             new()
             {
-                RowSpacing = 1,
-                RowDefinitions = GridRowsColumns.Rows.Define(
-                    (Row.Title, new GridLength(1, GridUnitType.Star)),
-                    (Row.Items, new GridLength(9, GridUnitType.Star))),
                 Children =
                 {
                     new Label()
-                        .Row(Row.Title)
                         .Bind(Label.TextProperty, nameof(RecentlyAddedModel.LibraryName)),
                     new CollectionView
                         {
@@ -40,7 +29,6 @@ namespace Jellyfin.Maui.DataTemplates;
                             ItemsLayout = LinearItemsLayout.Horizontal,
                             SelectionMode = SelectionMode.Single
                         }
-                        .Row(Row.Items)
                         .Bind(ItemsView.ItemsSourceProperty, nameof(RecentlyAddedModel.Items))
                 }
             };
