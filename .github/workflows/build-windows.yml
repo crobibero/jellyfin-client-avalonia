@@ -45,7 +45,7 @@ jobs:
           echo "::set-output name=APP_VERSION::$ver"
 
       - name: Install Maui Workload
-        run: dotnet workload install maui
+        run: dotnet workload install maui-windows
         
       - name: Build
         working-directory: ./src

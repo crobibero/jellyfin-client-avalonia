@@ -46,7 +46,7 @@ jobs:
           echo "APP_VERSION=$ver" >> $GITHUB_ENV
 
       - name: Install Maui Workload
-        run: dotnet workload install maui
+        run: dotnet workload install maui-maccatalyst
         
       - name: Build
         working-directory: ./src
