@@ -1,4 +1,3 @@
-using AsyncAwaitBestPractices;
 using Jellyfin.Maui.Services;
 
 namespace Jellyfin.Maui.Pages;

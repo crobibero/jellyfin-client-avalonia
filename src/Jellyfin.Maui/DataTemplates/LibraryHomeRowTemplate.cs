@@ -1,4 +1,4 @@
-﻿using Jellyfin.Maui.ContentViews;
+using Jellyfin.Maui.ContentViews;
 
 namespace Jellyfin.Maui.DataTemplates;
 

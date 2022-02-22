@@ -10,6 +10,7 @@ namespace Jellyfin.Maui.ViewModels;
 public class HomeViewModel : BaseViewModel
 {
     private readonly ILibraryService _libraryService;
+    private DateTime? _updateTimestamp;
 
     private IReadOnlyList<HomeRowModel> _homeRowModels = Array.Empty<HomeRowModel>();
 
@@ -39,21 +40,27 @@ public class HomeViewModel : BaseViewModel
     /// <inheritdoc />
     public override async ValueTask InitializeAsync()
     {
+        // TODO partial update
+        var now = DateTime.UtcNow;
+        if (_updateTimestamp > now.AddMinutes(-5))
+        {
+            // Home page was updated recently.
+            return;
+        }
+
+        _updateTimestamp = now;
         HomeRowCollection = Array.Empty<HomeRowModel>();
 
         var homeRows = new List<HomeRowModel>();
-        var libraries = await _libraryService.GetLibrariesAsync(ViewModelCancellationToken)
-            .ConfigureAwait(false);
+        var libraries = await _libraryService.GetLibrariesAsync().ConfigureAwait(false);
         homeRows.Add(new HomeRowModel("Libraries", 0, libraries));
 
-        var continueWatching = await _libraryService.GetContinueWatchingAsync(ViewModelCancellationToken)
-            .ConfigureAwait(false);
+        var continueWatching = await _libraryService.GetContinueWatchingAsync().ConfigureAwait(false);
         homeRows.Add(new HomeRowModel("Continue Watching", 0, continueWatching));
 
         foreach (var library in libraries)
         {
-            var recentlyAdded = await _libraryService.GetRecentlyAddedAsync(library.Id, ViewModelCancellationToken)
-                .ConfigureAwait(false);
+            var recentlyAdded = await _libraryService.GetRecentlyAddedAsync(library.Id).ConfigureAwait(false);
             homeRows.Add(new HomeRowModel(library.Name, 0, recentlyAdded));
         }
 

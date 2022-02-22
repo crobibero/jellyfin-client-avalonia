@@ -1,5 +1,3 @@
-﻿using Jellyfin.Sdk;
-
 namespace Jellyfin.Maui.Models;
 
 /// <summary>
@@ -31,7 +29,7 @@ public class HomeRowModel
     public int Order { get; }
 
     /// <summary>
-    /// Gets the list of items in the home row.
+    /// Gets or sets the list of items in the home row.
     /// </summary>
-    public IReadOnlyList<BaseItemDto> Items { get; }
+    public IReadOnlyList<BaseItemDto> Items { get; set; }
 }

@@ -1,4 +1,3 @@
-using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.ViewModels;
@@ -22,7 +21,7 @@ public class LibraryPage : BaseContentIdPage<LibraryViewModel>
     /// <inheritdoc />
     protected override void InitializeLayout()
     {
-        Content = new StackLayout
+        Content = new VerticalStackLayout
         {
             Children =
             {
@@ -33,17 +32,14 @@ public class LibraryPage : BaseContentIdPage<LibraryViewModel>
                 */
                 new Label()
                     .Bind(Label.TextProperty, "Item.Name", mode: BindingMode.OneWay),
-                new ScrollView
+                new CollectionView
                 {
-                    Padding = 16,
-                    Content = new FlexLayout
-                    {
-                        Wrap = Microsoft.Maui.Layouts.FlexWrap.Wrap,
-                        Direction = Microsoft.Maui.Layouts.FlexDirection.Row,
-                    }
-                    .ItemTemplate(new PosterCardTemplate())
-                    .Bind(BindableLayout.ItemsSourceProperty, nameof(ViewModel.LibraryItemsCollection))
+                    ItemTemplate = TemplateHelper.PosterCardTemplate,
+                    ItemsLayout = LinearItemsLayout.Horizontal,
+                    ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView,
+                    SelectionMode = SelectionMode.Single
                 }
+                    .Bind(ItemsView.ItemsSourceProperty, mode: BindingMode.OneWay, path: nameof(LibraryViewModel.LibraryItemsCollection))
             }
         };
     }

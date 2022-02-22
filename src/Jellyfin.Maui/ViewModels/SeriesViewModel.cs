@@ -1,8 +1,6 @@
 using System.Collections.ObjectModel;
-using AsyncAwaitBestPractices;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
-using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.ViewModels;
 
@@ -54,14 +52,12 @@ public class SeriesViewModel : BaseIdViewModel
 
     private async ValueTask GetSeriesAsync()
     {
-        Item = await _libraryService.GetItemAsync(Id, ViewModelCancellationToken)
-            .ConfigureAwait(false);
+        Item = await _libraryService.GetItemAsync(Id).ConfigureAwait(false);
     }
 
     private async ValueTask GetNextUpAsync()
     {
-        var nextUp = await _libraryService.GetNextUpAsync(Id, ViewModelCancellationToken)
-            .ConfigureAwait(false);
+        var nextUp = await _libraryService.GetNextUpAsync(Id).ConfigureAwait(false);
         if (nextUp.Items.Count > 0)
         {
             NextUpItem = nextUp.Items[0];
@@ -70,8 +66,7 @@ public class SeriesViewModel : BaseIdViewModel
 
     private async ValueTask GetSeasonsAsync()
     {
-        var seasonResult = await _libraryService.GetSeasonsAsync(Id, ViewModelCancellationToken)
-            .ConfigureAwait(false);
+        var seasonResult = await _libraryService.GetSeasonsAsync(Id).ConfigureAwait(false);
         SeasonsCollection.Clear();
         foreach (var season in seasonResult.Items)
         {

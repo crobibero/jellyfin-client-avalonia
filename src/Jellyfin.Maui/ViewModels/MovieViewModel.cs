@@ -24,7 +24,6 @@ public class MovieViewModel : BaseIdViewModel
     /// <inheritdoc/>
     public override async ValueTask InitializeAsync()
     {
-        Item = await _libraryService.GetItemAsync(Id, ViewModelCancellationToken)
-            .ConfigureAwait(false);
+        Item = await _libraryService.GetItemAsync(Id).ConfigureAwait(false);
     }
 }

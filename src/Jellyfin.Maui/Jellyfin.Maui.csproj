@@ -59,14 +59,73 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Images\appiconfgSplashScreen.scale-100.png" />
+    <None Remove="Resources\Images\appiconfgSplashScreen.scale-125.png" />
+    <None Remove="Resources\Images\appiconfgSplashScreen.scale-150.png" />
+    <None Remove="Resources\Images\appiconfgSplashScreen.scale-200.png" />
+    <None Remove="Resources\Images\appiconfgSplashScreen.scale-400.png" />
+    <None Remove="Resources\Images\appiconLargeTile.scale-100.png" />
+    <None Remove="Resources\Images\appiconLargeTile.scale-125.png" />
+    <None Remove="Resources\Images\appiconLargeTile.scale-150.png" />
+    <None Remove="Resources\Images\appiconLargeTile.scale-200.png" />
+    <None Remove="Resources\Images\appiconLargeTile.scale-400.png" />
+    <None Remove="Resources\Images\appiconLogo.altform-lightunplated_targetsize-16.png" />
+    <None Remove="Resources\Images\appiconLogo.altform-lightunplated_targetsize-24.png" />
+    <None Remove="Resources\Images\appiconLogo.altform-lightunplated_targetsize-256.png" />
+    <None Remove="Resources\Images\appiconLogo.altform-lightunplated_targetsize-32.png" />
+    <None Remove="Resources\Images\appiconLogo.altform-lightunplated_targetsize-48.png" />
+    <None Remove="Resources\Images\appiconLogo.altform-unplated_targetsize-16.png" />
+    <None Remove="Resources\Images\appiconLogo.altform-unplated_targetsize-24.png" />
+    <None Remove="Resources\Images\appiconLogo.altform-unplated_targetsize-256.png" />
+    <None Remove="Resources\Images\appiconLogo.altform-unplated_targetsize-32.png" />
+    <None Remove="Resources\Images\appiconLogo.altform-unplated_targetsize-48.png" />
+    <None Remove="Resources\Images\appiconLogo.scale-100.png" />
+    <None Remove="Resources\Images\appiconLogo.scale-125.png" />
+    <None Remove="Resources\Images\appiconLogo.scale-150.png" />
+    <None Remove="Resources\Images\appiconLogo.scale-200.png" />
+    <None Remove="Resources\Images\appiconLogo.scale-400.png" />
+    <None Remove="Resources\Images\appiconLogo.targetsize-16.png" />
+    <None Remove="Resources\Images\appiconLogo.targetsize-24.png" />
+    <None Remove="Resources\Images\appiconLogo.targetsize-256.png" />
+    <None Remove="Resources\Images\appiconLogo.targetsize-32.png" />
+    <None Remove="Resources\Images\appiconLogo.targetsize-48.png" />
+    <None Remove="Resources\Images\appiconMediumTile.scale-100.png" />
+    <None Remove="Resources\Images\appiconMediumTile.scale-125.png" />
+    <None Remove="Resources\Images\appiconMediumTile.scale-150.png" />
+    <None Remove="Resources\Images\appiconMediumTile.scale-200.png" />
+    <None Remove="Resources\Images\appiconMediumTile.scale-400.png" />
+    <None Remove="Resources\Images\appiconSmallTile.scale-100.png" />
+    <None Remove="Resources\Images\appiconSmallTile.scale-125.png" />
+    <None Remove="Resources\Images\appiconSmallTile.scale-150.png" />
+    <None Remove="Resources\Images\appiconSmallTile.scale-200.png" />
+    <None Remove="Resources\Images\appiconSmallTile.scale-400.png" />
+    <None Remove="Resources\Images\appiconStoreLogo.scale-100.png" />
+    <None Remove="Resources\Images\appiconStoreLogo.scale-125.png" />
+    <None Remove="Resources\Images\appiconStoreLogo.scale-150.png" />
+    <None Remove="Resources\Images\appiconStoreLogo.scale-200.png" />
+    <None Remove="Resources\Images\appiconStoreLogo.scale-400.png" />
+    <None Remove="Resources\Images\appiconWideTile.scale-100.png" />
+    <None Remove="Resources\Images\appiconWideTile.scale-125.png" />
+    <None Remove="Resources\Images\appiconWideTile.scale-150.png" />
+    <None Remove="Resources\Images\appiconWideTile.scale-200.png" />
+    <None Remove="Resources\Images\appiconWideTile.scale-400.png" />
+    <None Remove="Resources\Images\BadgeLogo.scale-100.png" />
+    <None Remove="Resources\Images\BadgeLogo.scale-125.png" />
+    <None Remove="Resources\Images\BadgeLogo.scale-150.png" />
+    <None Remove="Resources\Images\BadgeLogo.scale-200.png" />
+    <None Remove="Resources\Images\BadgeLogo.scale-400.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.4" />
     <PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre7" />
-    <PackageReference Include="CommunityToolkit.Maui.Markup" Version="1.0.0-pre5" />
+    <PackageReference Include="CommunityToolkit.Maui.Markup" Version="1.0.0-pre7" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview1" />
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.4" />
     <PackageReference Include="Jellyfin.Sdk" Version="2022.2.15-unstable.202202150148" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="6.0.2" />
+    <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
     <PackageReference Include="SerilogAnalyzer" Version="0.15.0" PrivateAssets="All" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.406" PrivateAssets="All" />
     <PackageReference Include="SmartAnalyzers.MultithreadingAnalyzer" Version="1.1.31" PrivateAssets="All" />

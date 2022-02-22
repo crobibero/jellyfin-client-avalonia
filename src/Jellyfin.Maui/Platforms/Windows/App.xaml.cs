@@ -1,4 +1,3 @@
-using Jellyfin.Sdk;
 using Microsoft.UI.Xaml;
 
 namespace Jellyfin.Maui.WinUI;

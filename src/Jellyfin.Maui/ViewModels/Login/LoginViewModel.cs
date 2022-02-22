@@ -148,7 +148,7 @@ public class LoginViewModel : BaseViewModel
             }
         }
 
-        QuickConnectAvailable = await _authenticationService.IsQuickConnectEnabledAsync(ViewModelCancellationToken).ConfigureAwait(false);
+        QuickConnectAvailable = await _authenticationService.IsQuickConnectEnabledAsync().ConfigureAwait(false);
     }
 
     private async Task LoginAsync()
@@ -164,8 +164,7 @@ public class LoginViewModel : BaseViewModel
             var (status, errorMessage) = await _authenticationService.AuthenticateAsync(
                     _serverUrl,
                     Username,
-                    Password,
-                    ViewModelCancellationToken)
+                    Password)
                 .ConfigureAwait(false);
             if (status)
             {
@@ -191,7 +190,7 @@ public class LoginViewModel : BaseViewModel
 
     private async Task LoginWithQuickConnectAsync()
     {
-        var code = await _authenticationService.InitializeQuickConnectAsync(ViewModelCancellationToken).ConfigureAwait(false);
+        var code = await _authenticationService.InitializeQuickConnectAsync().ConfigureAwait(false);
         if (string.IsNullOrEmpty(code))
         {
             ErrorMessage = "Unable to initialize QuickConnect";
@@ -208,15 +207,14 @@ public class LoginViewModel : BaseViewModel
             do
             {
                 await Task.Delay(3_000).ConfigureAwait(false);
-                authenticated = await _authenticationService.TestQuickConnectAsync(ViewModelCancellationToken)
-                    .ConfigureAwait(false);
+                authenticated = await _authenticationService.TestQuickConnectAsync().ConfigureAwait(false);
             }
             while (authenticated == false);
 
             QuickConnectCode = null;
             if (authenticated == true)
             {
-                var (status, errorMessage) = await _authenticationService.AuthenticateWithQuickConnectAsync(ViewModelCancellationToken)
+                var (status, errorMessage) = await _authenticationService.AuthenticateWithQuickConnectAsync()
                     .ConfigureAwait(false);
 
                 if (status)

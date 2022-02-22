@@ -1,6 +1,4 @@
-using AsyncAwaitBestPractices;
 using Jellyfin.Maui.Services;
-using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.ViewModels.Facades;
 

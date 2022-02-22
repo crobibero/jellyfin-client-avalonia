@@ -24,7 +24,7 @@ public class ItemViewModel : BaseIdViewModel
     /// <inheritdoc/>
     public override async ValueTask InitializeAsync()
     {
-        Item = await _libraryService.GetItemAsync(Id, ViewModelCancellationToken)
+        Item = await _libraryService.GetItemAsync(Id)
             .ConfigureAwait(false);
     }
 }

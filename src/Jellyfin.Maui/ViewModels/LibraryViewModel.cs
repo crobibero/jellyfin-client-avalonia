@@ -1,7 +1,6 @@
-using System.Collections.ObjectModel;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
-using Jellyfin.Sdk;
+using MvvmHelpers;
 
 namespace Jellyfin.Maui.ViewModels;
 
@@ -49,14 +48,13 @@ public class LibraryViewModel : BaseIdViewModel
     /// <summary>
     /// Gets the list of items.
     /// </summary>
-    public ObservableCollection<BaseItemDto> LibraryItemsCollection { get; } = new();
+    public ObservableRangeCollection<BaseItemDto> LibraryItemsCollection { get; } = new();
 
     /// <inheritdoc />
     public override async ValueTask InitializeAsync()
     {
-        Item = await _libraryService.GetLibraryAsync(Id, ViewModelCancellationToken)
-            .ConfigureAwait(false);
-        await InitializeItemsAsync().ConfigureAwait(false);
+        Item = await _libraryService.GetLibraryAsync(Id).ConfigureAwait(false);
+        InitializeItemsAsync().SafeFireAndForget();
     }
 
     private async ValueTask InitializeItemsAsync()
@@ -69,14 +67,12 @@ public class LibraryViewModel : BaseIdViewModel
         var queryResult = await _libraryService.GetLibraryItemsAsync(
                 Item,
                 PageSize,
-                PageSize * PageIndex,
-                ViewModelCancellationToken)
+                PageSize * PageIndex)
             .ConfigureAwait(false);
 
-        LibraryItemsCollection.Clear();
-        foreach (var item in queryResult.Items)
+        Application.Current?.Dispatcher.Dispatch(() =>
         {
-            LibraryItemsCollection.Add(item);
-        }
+            LibraryItemsCollection.ReplaceRange(queryResult.Items);
+        });
     }
 }

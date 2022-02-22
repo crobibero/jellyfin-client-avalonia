@@ -1,4 +1,3 @@
-using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.ContentViews;
 using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.Pages.Facades;
@@ -42,8 +41,8 @@ public class SeriesPage : BaseContentIdPage<SeriesViewModel>
                     ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView
                 }
                 .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.SeasonsCollection))
-                .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
-                .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateToItemCommand))
+                // .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
+                // .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateToItemCommand))
             }
         };
     }

@@ -1,4 +1,3 @@
-using Jellyfin.Sdk;
 using SystemException = Jellyfin.Sdk.SystemException;
 
 namespace Jellyfin.Maui.Services;

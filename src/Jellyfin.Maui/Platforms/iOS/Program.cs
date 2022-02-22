@@ -1,6 +1,4 @@
-﻿using UIKit;
-
-namespace Jellyfin.Maui.Platforms.iOS;
+﻿namespace Jellyfin.Maui.Platforms.iOS;
 
 /// <summary>
 /// iOS entry point.

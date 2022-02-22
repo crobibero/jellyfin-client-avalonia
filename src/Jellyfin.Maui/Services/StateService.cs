@@ -1,5 +1,4 @@
 using Jellyfin.Maui.Models;
-using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Services;
 

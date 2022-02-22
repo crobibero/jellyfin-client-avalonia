@@ -2,19 +2,15 @@ using System.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Services;
-using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.ViewModels.Facades;
 
 /// <summary>
 /// Base view model.
 /// </summary>
-public abstract class BaseViewModel : ObservableObject, IDisposable
+public abstract class BaseViewModel : ObservableObject
 {
-    private readonly CancellationTokenSource _cancellationTokenSource;
     private readonly INavigationService _navigationService;
-
-    private bool _disposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseViewModel"/> class.
@@ -22,16 +18,10 @@ public abstract class BaseViewModel : ObservableObject, IDisposable
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
     protected BaseViewModel(INavigationService navigationService)
     {
-        _cancellationTokenSource = new CancellationTokenSource();
         _navigationService = navigationService;
 
-        NavigateToItemCommand = new RelayCommand(DoNavigateToItemCommand);
+        NavigateToItemCommand = new RelayCommand<BaseItemDto>(DoNavigateToItemCommand);
     }
-
-    /// <summary>
-    /// Gets the cancellation token which denotes the view model has been disposed.
-    /// </summary>
-    protected CancellationToken ViewModelCancellationToken => _cancellationTokenSource.Token;
 
     /// <summary>
     /// Gets or sets the selected BaseItemDto.
@@ -41,7 +31,7 @@ public abstract class BaseViewModel : ObservableObject, IDisposable
     /// <summary>
     /// Gets or sets the navigate to library command.
     /// </summary>
-    public IRelayCommand? NavigateToItemCommand { get; protected set; }
+    public IRelayCommand<BaseItemDto>? NavigateToItemCommand { get; protected set; }
 
     /// <summary>
     /// Initialize the view model.
@@ -64,36 +54,13 @@ public abstract class BaseViewModel : ObservableObject, IDisposable
         Device.BeginInvokeOnMainThread(accessMethod);
     }
 
-    /// <summary>
-    /// Dispose.
-    /// </summary>
-    public void Dispose()
+    private void DoNavigateToItemCommand(BaseItemDto? item)
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    /// <summary>
-    /// Dispose all resources.
-    /// </summary>
-    /// <param name="disposing">Whether to dispose.</param>
-    protected virtual void Dispose(bool disposing)
-    {
-        if (disposing && !_disposed)
-        {
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource.Dispose();
-            _disposed = true;
-        }
-    }
-
-    private void DoNavigateToItemCommand()
-    {
-        if (SelectedItem is null)
+        if (item is null)
         {
             return;
         }
 
-        _navigationService.NavigateToItemView(SelectedItem.Type, SelectedItem.Id);
+        _navigationService.NavigateToItemView(item.Type, item.Id);
     }
 }

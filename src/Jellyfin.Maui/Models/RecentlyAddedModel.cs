@@ -1,6 +1,4 @@
-﻿using Jellyfin.Sdk;
-
-namespace Jellyfin.Maui.Models;
+﻿namespace Jellyfin.Maui.Models;
 
 /// <summary>
 /// Recently added model.

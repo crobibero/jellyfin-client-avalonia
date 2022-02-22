@@ -1,6 +1,5 @@
-using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.Converters;
-using Jellyfin.Sdk;
+using Jellyfin.Maui.ViewModels.Facades;
 
 namespace Jellyfin.Maui.ContentViews;
 
@@ -27,6 +26,28 @@ public class PosterCardView : ContentView
                     new Label()
                         .Bind(Label.TextProperty, mode: BindingMode.OneTime, converter: new BaseItemDtoCardDescriptionConverter()),
                 }
-        };
+        }
+        .BindClickGesture(
+            commandPath: nameof(BaseViewModel.NavigateToItemCommand),
+            commandSource: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestorBindingContext, typeof(BaseViewModel)),
+            parameterPath: ".",
+            parameterSource: Item)
+        .BindTapGesture(
+            commandPath: nameof(BaseViewModel.NavigateToItemCommand),
+            commandSource: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestorBindingContext, typeof(BaseViewModel)),
+            parameterPath: ".",
+            parameterSource: Item);
+    }
+
+    /// <summary>
+    /// Gets or sets the item.
+    /// </summary>
+    public BaseItemDto? Item { get; set; }
+
+    /// <inheritdoc/>
+    protected override void OnBindingContextChanged()
+    {
+        Item = (BaseItemDto?)BindingContext;
+        base.OnBindingContextChanged();
     }
 }

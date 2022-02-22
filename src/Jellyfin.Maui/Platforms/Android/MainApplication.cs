@@ -1,10 +1,3 @@
-using Android.App;
-using Android.Runtime;
-using Jellyfin.Sdk;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui;
-using Microsoft.Maui.Hosting;
-
 namespace Jellyfin.Maui.Platforms.Android;
 
 [Application]

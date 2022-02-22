@@ -1,8 +1,6 @@
 using System.Collections.ObjectModel;
-using AsyncAwaitBestPractices;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
-using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.ViewModels;
 
@@ -34,8 +32,7 @@ public class SeasonViewModel : BaseIdViewModel
     /// <inheritdoc/>
     public override async ValueTask InitializeAsync()
     {
-        Item = await _libraryService.GetItemAsync(Id, ViewModelCancellationToken)
-            .ConfigureAwait(false);
+        Item = await _libraryService.GetItemAsync(Id).ConfigureAwait(false);
         GetEpisodesAsync().SafeFireAndForget();
     }
 
@@ -46,7 +43,7 @@ public class SeasonViewModel : BaseIdViewModel
             return;
         }
 
-        var episodeResult = await _libraryService.GetEpisodesAsync(Item.SeriesId.Value, Item.Id, ViewModelCancellationToken)
+        var episodeResult = await _libraryService.GetEpisodesAsync(Item.SeriesId.Value, Item.Id)
             .ConfigureAwait(false);
 
         EpisodeCollection.Clear();

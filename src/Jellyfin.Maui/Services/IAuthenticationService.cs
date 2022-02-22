@@ -24,14 +24,14 @@ public interface IAuthenticationService
     /// </summary>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The code.</returns>
-    ValueTask<string?> InitializeQuickConnectAsync(CancellationToken cancellationToken);
+    ValueTask<string?> InitializeQuickConnectAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Test the pending QuickConnect authentication request.
     /// </summary>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>QuickConnect status.</returns>
-    ValueTask<bool?> TestQuickConnectAsync(CancellationToken cancellationToken);
+    ValueTask<bool?> TestQuickConnectAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Authenticate using QuickConnect.

@@ -1,6 +1,4 @@
-﻿using UIKit;
-
-namespace Jellyfin.Maui.Platforms.MacCatalyst;
+﻿namespace Jellyfin.Maui.Platforms.MacCatalyst;
 
 /// <summary>
 /// MacCatalyst entry point.

@@ -1,6 +1,5 @@
 using System.Globalization;
 using Jellyfin.Maui.Services;
-using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Converters;
 

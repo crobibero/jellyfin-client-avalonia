@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Maui.Markup;
-using Jellyfin.Maui.DataTemplates;
+﻿using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.ViewModels.Login;
 

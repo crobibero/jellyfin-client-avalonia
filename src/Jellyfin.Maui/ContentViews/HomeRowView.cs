@@ -1,4 +1,3 @@
-﻿using CommunityToolkit.Maui.Markup;
 using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.Models;
 
@@ -22,11 +21,12 @@ public class HomeRowView : ContentView
                     .Bind(Label.TextProperty, mode: BindingMode.OneTime, path: nameof(HomeRowModel.Name)),
                 new CollectionView
                     {
-                        ItemTemplate = new PosterCardTemplate(),
+                        ItemTemplate = TemplateHelper.PosterCardTemplate,
                         ItemsLayout = LinearItemsLayout.Horizontal,
-                        ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView
+                        ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView,
+                        SelectionMode = SelectionMode.Single
                     }
-                    .Bind(ItemsView.ItemsSourceProperty, mode: BindingMode.OneTime, path: nameof(HomeRowModel.Items))
+                    .Bind(ItemsView.ItemsSourceProperty, mode: BindingMode.OneWay, path: nameof(HomeRowModel.Items))
             }
         };
     }

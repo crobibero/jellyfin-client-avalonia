@@ -1,10 +1,8 @@
-using AsyncAwaitBestPractices;
 using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Pages.Login;
 using Jellyfin.Maui.ViewModels;
 using Jellyfin.Maui.ViewModels.Facades;
-using Jellyfin.Sdk;
 
 namespace Jellyfin.Maui.Services;
 

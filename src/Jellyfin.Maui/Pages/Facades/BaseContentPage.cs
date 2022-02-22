@@ -1,4 +1,3 @@
-using AsyncAwaitBestPractices;
 using Jellyfin.Maui.ViewModels.Facades;
 
 namespace Jellyfin.Maui.Pages.Facades;

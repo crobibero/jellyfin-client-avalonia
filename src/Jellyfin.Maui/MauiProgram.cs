@@ -3,7 +3,6 @@ using System.Text;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
-using Jellyfin.Sdk;
 using Polly;
 using Polly.Extensions.Http;
 
@@ -69,9 +68,9 @@ public static class MauiProgram
     {
         services.AddSingleton<IStateService, StateService>();
         services.AddSingleton<INavigationService, NavigationService>();
-        services.AddTransient<IAuthenticationService, AuthenticationService>();
-        services.AddTransient<ILibraryService, LibraryService>();
-        services.AddScoped<IStateStorageService, StateStorageService>();
+        services.AddSingleton<IAuthenticationService, AuthenticationService>();
+        services.AddSingleton<ILibraryService, LibraryService>();
+        services.AddSingleton<IStateStorageService, StateStorageService>();
     }
 
     private static void AddSdkClients(this IServiceCollection services)
