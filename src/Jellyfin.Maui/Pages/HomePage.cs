@@ -30,7 +30,7 @@ public class HomePage : BaseContentPage<HomeViewModel>
                 {
                     new CollectionView
                         {
-                            ItemTemplate = new HomeRowTemplateSelector(),
+                            ItemTemplate = TemplateHelper.HomeRowTemplateSelector,
                             ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView,
                             ItemsLayout = LinearItemsLayout.Vertical
                         }

@@ -30,7 +30,7 @@ public class ServerSelectPage : BaseContentPage<ServerSelectViewModel>
                 new Label { Text = Strings.Login_ExistingServers },
                 new CollectionView
                     {
-                        ItemTemplate = new ServerSelectTemplate(),
+                        ItemTemplate = TemplateHelper.ServerSelectTemplate,
                         ItemsLayout = LinearItemsLayout.Vertical,
                         SelectionMode = SelectionMode.Single
                     }

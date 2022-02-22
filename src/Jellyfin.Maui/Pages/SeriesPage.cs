@@ -35,7 +35,7 @@ public class SeriesPage : BaseContentIdPage<SeriesViewModel>
                 new Label { Text = Strings.Seasons },
                 new CollectionView
                 {
-                    ItemTemplate = new PosterCardTemplate(),
+                    ItemTemplate = TemplateHelper.PosterCardTemplate,
                     ItemsLayout = LinearItemsLayout.Horizontal,
                     SelectionMode = SelectionMode.Single,
                     ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView

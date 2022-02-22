@@ -1,4 +1,5 @@
-﻿using Jellyfin.Maui.DataTemplates;
+using Jellyfin.Maui.DataTemplates;
+using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.ViewModels.Login;
 
@@ -30,7 +31,7 @@ public class SelectUserPage : BaseContentPage<SelectUserViewModel>
                 new Label { Text = Strings.Login_ExistingUsers },
                 new CollectionView
                     {
-                        ItemTemplate = new UserSelectTemplate(),
+                        ItemTemplate = TemplateHelper.UserSelectTemplate,
                         ItemsLayout = LinearItemsLayout.Vertical,
                         SelectionMode = SelectionMode.Single
                     }
