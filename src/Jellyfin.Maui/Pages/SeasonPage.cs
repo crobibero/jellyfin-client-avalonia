@@ -37,8 +37,6 @@ public class SeasonPage : BaseContentIdPage<SeasonViewModel>
                     ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView
                 }
                 .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.EpisodeCollection))
-                // .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedItem))
-                // .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.NavigateToItemCommand))
             }
         };
     }
