@@ -51,9 +51,9 @@ jobs:
         # run: dotnet build -c Release -f net6.0-windows
         run: msbuild -r -p:Configuration=Release -p:TargetFramework=net6.0-windows10.0.19041
 
-      - name: Test
-        working-directory: ./src
-        run: dotnet test -c Release -f net6.0-windows10
+      #- name: Test
+      #  working-directory: ./src
+      #  run: dotnet test -c Release -f net6.0-windows10
 
       #- name: Upload build artifacts
       #  uses: actions/upload-artifact@v2

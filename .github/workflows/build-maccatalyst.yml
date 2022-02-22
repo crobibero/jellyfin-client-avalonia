@@ -51,9 +51,9 @@ jobs:
         working-directory: ./src
         run: dotnet build -c Release -f net6.0-maccatalyst
 
-      - name: Test
-        working-directory: ./src
-        run: dotnet test -c Release -f net6.0-maccatalyst
+      #- name: Test
+      #  working-directory: ./src
+      #  run: dotnet test -c Release -f net6.0-maccatalyst
 
       #- name: Upload MacCatalyst build artifacts
       #  uses: actions/upload-artifact@v2
