@@ -1,5 +1,6 @@
-﻿#pragma warning disable CA1711
+#pragma warning disable CA1711
 
+using Foundation;
 
 namespace Jellyfin.Maui.Platforms.MacCatalyst;
 
