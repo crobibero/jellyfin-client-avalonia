@@ -1,6 +1,6 @@
+using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
-using MvvmHelpers;
 
 namespace Jellyfin.Maui.ViewModels;
 

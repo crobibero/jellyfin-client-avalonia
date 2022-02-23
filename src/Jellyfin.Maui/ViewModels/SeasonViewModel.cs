@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
 
@@ -27,7 +27,7 @@ public class SeasonViewModel : BaseIdViewModel
     /// <summary>
     /// Gets the list of episodes.
     /// </summary>
-    public ObservableCollection<BaseItemDto> EpisodeCollection { get; } = new();
+    public ObservableRangeCollection<BaseItemDto> EpisodeCollection { get; } = new();
 
     /// <inheritdoc/>
     public override async ValueTask InitializeAsync()
@@ -46,10 +46,6 @@ public class SeasonViewModel : BaseIdViewModel
         var episodeResult = await _libraryService.GetEpisodesAsync(Item.SeriesId.Value, Item.Id)
             .ConfigureAwait(false);
 
-        EpisodeCollection.Clear();
-        foreach (var episode in episodeResult.Items)
-        {
-            EpisodeCollection.Add(episode);
-        }
+        EpisodeCollection.ReplaceRange(episodeResult.Items);
     }
 }

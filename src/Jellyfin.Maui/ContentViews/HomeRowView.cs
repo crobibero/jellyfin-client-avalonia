@@ -1,3 +1,4 @@
+using Jellyfin.Maui.ContentViews.Facades;
 using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.Models;
 
@@ -6,7 +7,7 @@ namespace Jellyfin.Maui.ContentViews;
 /// <summary>
 /// Home row view.
 /// </summary>
-public class HomeRowView : ContentView
+public class HomeRowView : BaseContentView<HomeRowModel>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="HomeRowView"/> class.

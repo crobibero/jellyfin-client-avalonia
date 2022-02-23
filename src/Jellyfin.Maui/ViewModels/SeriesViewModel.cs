@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
 
@@ -29,7 +29,7 @@ public class SeriesViewModel : BaseIdViewModel
     /// <summary>
     /// Gets the list of seasons.
     /// </summary>
-    public ObservableCollection<BaseItemDto> SeasonsCollection { get; } = new();
+    public ObservableRangeCollection<BaseItemDto> SeasonsCollection { get; } = new();
 
     /// <summary>
     /// Gets or sets the next up item.
@@ -67,10 +67,6 @@ public class SeriesViewModel : BaseIdViewModel
     private async ValueTask GetSeasonsAsync()
     {
         var seasonResult = await _libraryService.GetSeasonsAsync(Id).ConfigureAwait(false);
-        SeasonsCollection.Clear();
-        foreach (var season in seasonResult.Items)
-        {
-            SeasonsCollection.Add(season);
-        }
+        SeasonsCollection.ReplaceRange(seasonResult.Items);
     }
 }

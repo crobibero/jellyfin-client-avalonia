@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Services;
@@ -32,7 +31,7 @@ public class SelectUserViewModel : BaseViewModel
         _stateService = stateService;
 
         AddUserCommand = new RelayCommand(AddUser);
-        SelectUserCommand = new RelayCommand(SelectUser);
+        SelectUserCommand = new RelayCommand<UserStateModel>(SelectUser);
     }
 
     /// <summary>
@@ -43,17 +42,12 @@ public class SelectUserViewModel : BaseViewModel
     /// <summary>
     /// Gets the select user command.
     /// </summary>
-    public IRelayCommand SelectUserCommand { get; }
+    public IRelayCommand<UserStateModel> SelectUserCommand { get; }
 
     /// <summary>
     /// Gets the list of users.
     /// </summary>
-    public ObservableCollection<UserStateModel> Users { get; } = new();
-
-    /// <summary>
-    /// Gets or sets the selected user.
-    /// </summary>
-    public UserStateModel? SelectedUser { get; set; }
+    public ObservableRangeCollection<UserStateModel> Users { get; } = new();
 
     /// <inheritdoc />
     public override async ValueTask InitializeAsync()
@@ -66,15 +60,7 @@ public class SelectUserViewModel : BaseViewModel
             return;
         }
 
-        Users.Clear();
-        SelectedUser = null;
-        foreach (var user in state.Users)
-        {
-            if (user.ServerId == serverState.Id)
-            {
-                Users.Add(user);
-            }
-        }
+        Users.ReplaceRange(state.Users.Where(u => u.ServerId == serverState.Id));
     }
 
     private void AddUser()
@@ -82,11 +68,11 @@ public class SelectUserViewModel : BaseViewModel
         _navigationService.NavigateToLoginPage();
     }
 
-    private void SelectUser()
+    private void SelectUser(UserStateModel? user)
     {
-        if (SelectedUser is not null)
+        if (user is not null)
         {
-            _stateService.SetUserState(SelectedUser);
+            _stateService.SetUserState(user);
             _navigationService.NavigateToLoginPage();
         }
     }

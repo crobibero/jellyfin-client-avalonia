@@ -1,3 +1,4 @@
+using Jellyfin.Maui.ContentViews.Facades;
 using Jellyfin.Maui.Converters;
 using Jellyfin.Maui.ViewModels.Facades;
 
@@ -6,7 +7,7 @@ namespace Jellyfin.Maui.ContentViews;
 /// <summary>
 /// Poster card view.
 /// </summary>
-public class PosterCardView : ContentView
+public class PosterCardView : BaseContentView<BaseItemDto>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="PosterCardView"/> class.
@@ -31,23 +32,11 @@ public class PosterCardView : ContentView
             commandPath: nameof(BaseViewModel.NavigateToItemCommand),
             commandSource: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestorBindingContext, typeof(BaseViewModel)),
             parameterPath: ".",
-            parameterSource: Item)
+            parameterSource: Context)
         .BindTapGesture(
             commandPath: nameof(BaseViewModel.NavigateToItemCommand),
             commandSource: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestorBindingContext, typeof(BaseViewModel)),
             parameterPath: ".",
-            parameterSource: Item);
-    }
-
-    /// <summary>
-    /// Gets or sets the item.
-    /// </summary>
-    public BaseItemDto? Item { get; set; }
-
-    /// <inheritdoc/>
-    protected override void OnBindingContextChanged()
-    {
-        Item = (BaseItemDto?)BindingContext;
-        base.OnBindingContextChanged();
+            parameterSource: Context);
     }
 }

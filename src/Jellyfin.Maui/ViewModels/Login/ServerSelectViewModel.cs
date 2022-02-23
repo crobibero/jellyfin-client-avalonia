@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Services;
@@ -32,7 +31,7 @@ public class ServerSelectViewModel : BaseViewModel
         _stateService = stateService;
 
         AddServerCommand = new RelayCommand(AddServer);
-        SelectServerCommand = new RelayCommand(SelectServer);
+        SelectServerCommand = new RelayCommand<ServerStateModel>(SelectServer);
     }
 
     /// <summary>
@@ -43,28 +42,18 @@ public class ServerSelectViewModel : BaseViewModel
     /// <summary>
     /// Gets the select server command.
     /// </summary>
-    public IRelayCommand SelectServerCommand { get; }
+    public IRelayCommand<ServerStateModel> SelectServerCommand { get; }
 
     /// <summary>
     /// Gets the list of servers.
     /// </summary>
-    public ObservableCollection<ServerStateModel> Servers { get; } = new();
-
-    /// <summary>
-    /// Gets or sets the selected server.
-    /// </summary>
-    public ServerStateModel? SelectedServer { get; set; }
+    public ObservableRangeCollection<ServerStateModel> Servers { get; } = new();
 
     /// <inheritdoc />
     public override async ValueTask InitializeAsync()
     {
         var state = await _stateStorageService.GetStoredStateAsync().ConfigureAwait(false);
-        Servers.Clear();
-        SelectedServer = null;
-        foreach (var storedServer in state.Servers)
-        {
-            Servers.Add(storedServer);
-        }
+        Servers.ReplaceRange(state.Servers);
     }
 
     private void AddServer()
@@ -72,11 +61,11 @@ public class ServerSelectViewModel : BaseViewModel
         _navigationService.NavigateToAddServerPage();
     }
 
-    private void SelectServer()
+    private void SelectServer(ServerStateModel? server)
     {
-        if (SelectedServer is not null)
+        if (server is not null)
         {
-            _stateService.SetServerState(SelectedServer);
+            _stateService.SetServerState(server);
             _navigationService.NavigateToUserSelectPage();
         }
     }

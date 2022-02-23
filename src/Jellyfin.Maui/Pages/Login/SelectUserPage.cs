@@ -36,8 +36,6 @@ public class SelectUserPage : BaseContentPage<SelectUserViewModel>
                         SelectionMode = SelectionMode.Single
                     }
                     .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.Users))
-                    .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedUser))
-                    .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.SelectUserCommand))
             }
         };
     }

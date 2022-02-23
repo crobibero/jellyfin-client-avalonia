@@ -35,8 +35,6 @@ public class ServerSelectPage : BaseContentPage<ServerSelectViewModel>
                         SelectionMode = SelectionMode.Single
                     }
                     .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.Servers))
-                    .Bind(SelectableItemsView.SelectedItemProperty, nameof(ViewModel.SelectedServer))
-                    .Bind(SelectableItemsView.SelectionChangedCommandProperty, nameof(ViewModel.SelectServerCommand))
             }
         };
     }
