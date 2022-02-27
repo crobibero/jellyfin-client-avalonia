@@ -1,0 +1,39 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Colors -->
+    <Color x:Key="JellyfinPrimaryColor">#AA5CC3</Color>
+    <Color x:Key="JellyfinSecondaryColor">#00A4DC</Color>
+    <Color x:Key="JellyfinBlackColor">#101010</Color>
+    <Color x:Key="WhiteColor">White</Color>
+
+    <!-- Font Sizes -->
+    <x:Int16 x:Key="FontSmall">16</x:Int16>
+    <x:Int16 x:Key="FontMedium">32</x:Int16>
+
+    <!-- Implicit Styles -->
+    <Style TargetType="Label" ApplyToDerivedTypes="True">
+        <Setter Property="TextColor" Value="{StaticResource WhiteColor}" />
+        <Setter Property="FontFamily" Value="QuicksandRegular" />
+        <Setter Property="LineBreakMode" Value="NoWrap" />
+        <Setter Property="FontSize" Value="{StaticResource FontSmall}" />
+        <Setter Property="LineBreakMode" Value="TailTruncation" />
+    </Style>
+
+    <Style TargetType="Button" ApplyToDerivedTypes="True">
+        <Setter Property="TextColor" Value="{StaticResource WhiteColor}" />
+        <Setter Property="FontFamily" Value="QuicksandRegular" />
+        <Setter Property="BackgroundColor" Value="{StaticResource JellyfinSecondaryColor}" />
+        <Setter Property="Padding" Value="14,10" />
+    </Style>
+
+    <Style TargetType="Image" ApplyToDerivedTypes="True">
+        <Setter Property="IsOpaque" Value="True" />
+    </Style>
+
+    <!-- Explicit Styles -->
+    <Style TargetType="Label" x:Key="LabelHeader">
+        <Setter Property="FontSize" Value="{StaticResource FontMedium}" />
+    </Style>
+
+</ResourceDictionary>

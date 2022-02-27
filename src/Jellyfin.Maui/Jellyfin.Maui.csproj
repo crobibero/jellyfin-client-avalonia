@@ -50,6 +50,11 @@
 
     <!-- Custom Fonts -->
     <MauiFont Include="Resources\Fonts\*" />
+
+    <!-- Styles -->
+    <MauiXaml Update="Resources\Styles\*.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
