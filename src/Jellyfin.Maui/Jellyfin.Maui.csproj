@@ -59,19 +59,19 @@
 
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
     <!-- Required - WinUI does not yet have buildTransitive for everything -->
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.1" />
     <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.0.0.30" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.4" />
-    <PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre7" />
-    <PackageReference Include="CommunityToolkit.Maui.Markup" Version="1.0.0-pre7" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview1" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre8" />
+    <PackageReference Include="CommunityToolkit.Maui.Markup" Version="1.0.0-pre8" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview2" />
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.4" />
-    <PackageReference Include="Jellyfin.Sdk" Version="2022.2.15-unstable.202202150148" />
+    <PackageReference Include="Jellyfin.Sdk" Version="2022.3.26-unstable.202203260046" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="6.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="6.0.3" />
     <PackageReference Include="SerilogAnalyzer" Version="0.15.0" PrivateAssets="All" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.406" PrivateAssets="All" />
     <PackageReference Include="SmartAnalyzers.MultithreadingAnalyzer" Version="1.1.31" PrivateAssets="All" />
