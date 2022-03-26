@@ -14,8 +14,15 @@ public class ServerSelectView : BaseContentView<ServerStateModel>
     /// </summary>
     public ServerSelectView()
     {
-        Content = new Label()
-            .Bind(Label.TextProperty, mode: BindingMode.OneTime, path: nameof(Context.Name))
+        Content =
+            new Grid
+            {
+                Children =
+                {
+                    new Label()
+                        .Bind(Label.TextProperty, mode: BindingMode.OneTime, path: nameof(Context.Name))
+                }
+            }
             .BindClickGesture(
                 commandPath: nameof(ServerSelectViewModel.SelectServerCommand),
                 commandSource: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestorBindingContext, typeof(ServerSelectViewModel)),

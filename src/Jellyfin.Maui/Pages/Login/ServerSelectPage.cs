@@ -18,30 +18,54 @@ public class ServerSelectPage : BaseContentPage<ServerSelectViewModel>
     {
     }
 
+    private enum Column
+    {
+        ServerList = 0,
+        AddButton = 1
+    }
+
+    private enum Row
+    {
+        Header = 0,
+        Content = 1
+    }
+
     /// <inheritdoc />
     protected override void InitializeLayout()
     {
-        Content = new VerticalStackLayout
+        Content = new Grid
         {
+            ColumnDefinitions = GridRowsColumns.Columns.Define(
+                (Column.ServerList, new GridLength(10, GridUnitType.Star)),
+                (Column.AddButton, new GridLength(2, GridUnitType.Star))),
+            RowDefinitions = GridRowsColumns.Rows.Define(
+                (Row.Header, new GridLength(2, GridUnitType.Star)),
+                (Row.Content, new GridLength(10, GridUnitType.Star))),
             Children =
             {
-                new Button
-                    {
-                        Text = Strings.Login_AddServer
-                    }
-                    .Bind(Button.CommandProperty, nameof(ViewModel.AddServerCommand)),
                 new Label
                     {
                         Text = Strings.Login_ExistingServers,
                         Style = BaseStyles.LabelHeader
-                    },
+                    }
+                    .Column(Column.ServerList)
+                    .Row(Row.Header),
                 new CollectionView
                     {
                         ItemTemplate = TemplateHelper.ServerSelectTemplate,
                         ItemsLayout = LinearItemsLayout.Vertical,
                         SelectionMode = SelectionMode.Single
                     }
-                    .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.Servers))
+                    .Column(Column.ServerList)
+                    .Row(Row.Content)
+                    .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.Servers)),
+                new Button
+                    {
+                        Text = Strings.Login_AddServer
+                    }
+                    .Column(Column.AddButton)
+                    .Row(Row.Header)
+                    .Bind(Button.CommandProperty, nameof(ViewModel.AddServerCommand)),
             }
         };
     }
