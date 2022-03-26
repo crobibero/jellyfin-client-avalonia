@@ -6,7 +6,7 @@ namespace Jellyfin.Maui.ViewModels;
 /// <summary>
 /// Episode view model.
 /// </summary>
-public class EpisodeViewModel : BaseIdViewModel
+public partial class EpisodeViewModel : BaseIdViewModel
 {
     private readonly ILibraryService _libraryService;
 

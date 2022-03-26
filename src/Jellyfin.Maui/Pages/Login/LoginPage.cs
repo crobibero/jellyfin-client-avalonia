@@ -60,7 +60,7 @@ public class LoginPage : BaseContentPage<LoginViewModel>
                         {
                             new Button { Text = Strings.Login_QuickConnectButton }
                                 .CenterHorizontal()
-                                .Bind(Button.CommandProperty, nameof(ViewModel.LoginQuickConnectCommand)),
+                                .Bind(Button.CommandProperty, nameof(ViewModel.LoginWithQuickConnectCommand)),
                             new HorizontalStackLayout
                                 {
                                     new Label

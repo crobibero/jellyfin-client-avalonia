@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Services;
@@ -8,7 +9,7 @@ namespace Jellyfin.Maui.ViewModels.Login;
 /// <summary>
 /// Login view model.
 /// </summary>
-public class LoginViewModel : BaseViewModel
+public partial class LoginViewModel : BaseViewModel
 {
     private readonly IAuthenticationService _authenticationService;
     private readonly INavigationService _navigationService;
@@ -16,14 +17,31 @@ public class LoginViewModel : BaseViewModel
     private readonly IStateStorageService _stateStorageService;
 
     // _serverUrl is set on initialization.
+    [ObservableProperty]
     private string _serverUrl = null!;
+
+    [ObservableProperty]
     private Guid _serverId;
+
+    [ObservableProperty]
     private string _serverName = null!;
+
+    [ObservableProperty]
     private string? _username;
+
+    [ObservableProperty]
     private string? _password;
+
+    [ObservableProperty]
     private bool _rememberMe = true;
+
+    [ObservableProperty]
     private string? _errorMessage;
+
+    [ObservableProperty]
     private bool _quickConnectAvailable;
+
+    [ObservableProperty]
     private string? _quickConnectCode;
 
     /// <summary>
@@ -44,83 +62,7 @@ public class LoginViewModel : BaseViewModel
         _navigationService = navigationService;
         _stateService = stateService;
         _stateStorageService = stateStorageService;
-
-        LoginCommand = new AsyncRelayCommand(LoginAsync);
-        LoginQuickConnectCommand = new AsyncRelayCommand(LoginWithQuickConnectAsync);
     }
-
-    /// <summary>
-    /// Gets or sets the server name.
-    /// </summary>
-    public string ServerName
-    {
-        get => _serverName;
-        set => SetProperty(ref _serverName, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the username.
-    /// </summary>
-    public string? Username
-    {
-        get => _username;
-        set => SetProperty(ref _username, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the password.
-    /// </summary>
-    public string? Password
-    {
-        get => _password;
-        set => SetProperty(ref _password, value);
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether the client should remember the user.
-    /// </summary>
-    public bool RememberMe
-    {
-        get => _rememberMe;
-        set => SetProperty(ref _rememberMe, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the error message.
-    /// </summary>
-    public string? ErrorMessage
-    {
-        get => _errorMessage;
-        set => SetProperty(ref _errorMessage, value);
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether QuickConnect is available.
-    /// </summary>
-    public bool QuickConnectAvailable
-    {
-        get => _quickConnectAvailable;
-        set => SetProperty(ref _quickConnectAvailable, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the QuickConnect code.
-    /// </summary>
-    public string? QuickConnectCode
-    {
-        get => _quickConnectCode;
-        set => SetProperty(ref _quickConnectCode, value);
-    }
-
-    /// <summary>
-    /// Gets the login command.
-    /// </summary>
-    public IAsyncRelayCommand LoginCommand { get; }
-
-    /// <summary>
-    /// Gets the login with QuickConnect command.
-    /// </summary>
-    public IAsyncRelayCommand LoginQuickConnectCommand { get; }
 
     /// <inheritdoc />
     public override async ValueTask InitializeAsync()
@@ -132,8 +74,8 @@ public class LoginViewModel : BaseViewModel
             return;
         }
 
-        _serverId = server.Id;
-        _serverUrl = server.Url;
+        ServerId = server.Id;
+        ServerUrl = server.Url;
         ServerName = server.Name;
 
         var user = _stateService.GetUserState();
@@ -151,6 +93,7 @@ public class LoginViewModel : BaseViewModel
         QuickConnectAvailable = await _authenticationService.IsQuickConnectEnabledAsync().ConfigureAwait(false);
     }
 
+    [ICommand]
     private async Task LoginAsync()
     {
         try
@@ -162,7 +105,7 @@ public class LoginViewModel : BaseViewModel
             }
 
             var (status, errorMessage) = await _authenticationService.AuthenticateAsync(
-                    _serverUrl,
+                    ServerUrl,
                     Username,
                     Password)
                 .ConfigureAwait(false);
@@ -188,6 +131,7 @@ public class LoginViewModel : BaseViewModel
         }
     }
 
+    [ICommand]
     private async Task LoginWithQuickConnectAsync()
     {
         var code = await _authenticationService.InitializeQuickConnectAsync().ConfigureAwait(false);

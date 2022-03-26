@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using Jellyfin.Maui.Services;
 
 namespace Jellyfin.Maui.ViewModels.Facades;
@@ -5,9 +6,12 @@ namespace Jellyfin.Maui.ViewModels.Facades;
 /// <summary>
 /// ViewModel that has an ID parameter.
 /// </summary>
-public abstract class BaseIdViewModel : BaseViewModel
+public abstract partial class BaseIdViewModel : BaseViewModel
 {
+    [ObservableProperty]
     private Guid _id;
+
+    [ObservableProperty]
     private BaseItemDto? _item;
 
     /// <summary>
@@ -17,24 +21,6 @@ public abstract class BaseIdViewModel : BaseViewModel
     protected BaseIdViewModel(INavigationService navigationService)
         : base(navigationService)
     {
-    }
-
-    /// <summary>
-    /// Gets or sets the item.
-    /// </summary>
-    public BaseItemDto? Item
-    {
-        get => _item;
-        protected set => SetProperty(ref _item, value);
-    }
-
-    /// <summary>
-    /// Gets the id.
-    /// </summary>
-    public Guid Id
-    {
-        get => _id;
-        private set => SetProperty(ref _id, value);
     }
 
     /// <summary>

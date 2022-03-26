@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
@@ -7,12 +8,13 @@ namespace Jellyfin.Maui.ViewModels;
 /// <summary>
 /// Home view model.
 /// </summary>
-public class HomeViewModel : BaseViewModel
+public partial class HomeViewModel : BaseViewModel
 {
     private readonly ILibraryService _libraryService;
     private DateTime? _updateTimestamp;
 
-    private IReadOnlyList<HomeRowModel> _homeRowModels = Array.Empty<HomeRowModel>();
+    [ObservableProperty]
+    private IReadOnlyList<HomeRowModel> _homeRowCollection = Array.Empty<HomeRowModel>();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="HomeViewModel"/> class.
@@ -26,15 +28,6 @@ public class HomeViewModel : BaseViewModel
 
         // TODO set order by DisplayPreferences.. eventually.
         BindingBase.EnableCollectionSynchronization(HomeRowCollection, null, ObservableCollectionCallback);
-    }
-
-    /// <summary>
-    /// Gets or sets the list of home rows.
-    /// </summary>
-    public IReadOnlyList<HomeRowModel> HomeRowCollection
-    {
-        get => _homeRowModels;
-        set => SetProperty(ref _homeRowModels, value);
     }
 
     /// <inheritdoc />

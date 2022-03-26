@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
@@ -7,10 +8,11 @@ namespace Jellyfin.Maui.ViewModels;
 /// <summary>
 /// Season view model.
 /// </summary>
-public class SeriesViewModel : BaseIdViewModel
+public partial class SeriesViewModel : BaseIdViewModel
 {
     private readonly ILibraryService _libraryService;
 
+    [ObservableProperty]
     private BaseItemDto? _nextUpItem;
 
     /// <summary>
@@ -30,15 +32,6 @@ public class SeriesViewModel : BaseIdViewModel
     /// Gets the list of seasons.
     /// </summary>
     public ObservableRangeCollection<BaseItemDto> SeasonsCollection { get; } = new();
-
-    /// <summary>
-    /// Gets or sets the next up item.
-    /// </summary>
-    public BaseItemDto? NextUpItem
-    {
-        get => _nextUpItem;
-        set => SetProperty(ref _nextUpItem, value);
-    }
 
     /// <inheritdoc/>
     public override ValueTask InitializeAsync()

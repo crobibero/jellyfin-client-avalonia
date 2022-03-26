@@ -8,7 +8,7 @@ namespace Jellyfin.Maui.ViewModels.Login;
 /// <summary>
 /// The select user view model.
 /// </summary>
-public class SelectUserViewModel : BaseViewModel
+public partial class SelectUserViewModel : BaseViewModel
 {
     private readonly INavigationService _navigationService;
     private readonly IStateStorageService _stateStorageService;
@@ -29,20 +29,7 @@ public class SelectUserViewModel : BaseViewModel
         _navigationService = navigationService;
         _stateStorageService = stateStorageService;
         _stateService = stateService;
-
-        AddUserCommand = new RelayCommand(AddUser);
-        SelectUserCommand = new RelayCommand<UserStateModel>(SelectUser);
     }
-
-    /// <summary>
-    /// Gets the add user command.
-    /// </summary>
-    public IRelayCommand AddUserCommand { get; }
-
-    /// <summary>
-    /// Gets the select user command.
-    /// </summary>
-    public IRelayCommand<UserStateModel> SelectUserCommand { get; }
 
     /// <summary>
     /// Gets the list of users.
@@ -63,11 +50,13 @@ public class SelectUserViewModel : BaseViewModel
         Users.ReplaceRange(state.Users.Where(u => u.ServerId == serverState.Id));
     }
 
+    [ICommand]
     private void AddUser()
     {
         _navigationService.NavigateToLoginPage();
     }
 
+    [ICommand]
     private void SelectUser(UserStateModel? user)
     {
         if (user is not null)

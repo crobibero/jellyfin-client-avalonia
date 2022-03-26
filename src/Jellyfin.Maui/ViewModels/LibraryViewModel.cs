@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
@@ -7,11 +8,14 @@ namespace Jellyfin.Maui.ViewModels;
 /// <summary>
 /// Library view model.
 /// </summary>
-public class LibraryViewModel : BaseIdViewModel
+public partial class LibraryViewModel : BaseIdViewModel
 {
     private readonly ILibraryService _libraryService;
 
+    [ObservableProperty]
     private int _pageSize = 100;
+
+    [ObservableProperty]
     private int _pageIndex;
 
     /// <summary>
@@ -25,24 +29,6 @@ public class LibraryViewModel : BaseIdViewModel
         _libraryService = libraryService;
 
         BindingBase.EnableCollectionSynchronization(LibraryItemsCollection, null, ObservableCollectionCallback);
-    }
-
-    /// <summary>
-    /// Gets or sets the page size.
-    /// </summary>
-    public int PageSize
-    {
-        get => _pageSize;
-        set => SetProperty(ref _pageSize, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the page index.
-    /// </summary>
-    public int PageIndex
-    {
-        get => _pageIndex;
-        set => SetProperty(ref _pageIndex, value);
     }
 
     /// <summary>

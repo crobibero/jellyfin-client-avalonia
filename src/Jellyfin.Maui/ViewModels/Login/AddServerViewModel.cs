@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Services;
@@ -9,13 +10,14 @@ namespace Jellyfin.Maui.ViewModels.Login;
 /// <summary>
 /// The add server view model.
 /// </summary>
-public class AddServerViewModel : BaseViewModel
+public partial class AddServerViewModel : BaseViewModel
 {
     private readonly INavigationService _navigationService;
     private readonly IStateStorageService _stateStorageService;
     private readonly ISystemClient _systemClient;
     private readonly SdkClientSettings _sdkClientSettings;
 
+    [ObservableProperty]
     private string? _serverUrl;
 
     /// <summary>
@@ -36,23 +38,7 @@ public class AddServerViewModel : BaseViewModel
         _stateStorageService = stateStorageService;
         _systemClient = systemClient;
         _sdkClientSettings = sdkClientSettings;
-
-        AddServerCommand = new AsyncRelayCommand(AddServerAsync);
     }
-
-    /// <summary>
-    /// Gets or sets the server url.
-    /// </summary>
-    public string? ServerUrl
-    {
-        get => _serverUrl;
-        set => SetProperty(ref _serverUrl, value);
-    }
-
-    /// <summary>
-    /// Gets the add server command.
-    /// </summary>
-    public IAsyncRelayCommand AddServerCommand { get; }
 
     /// <inheritdoc />
     public override ValueTask InitializeAsync()
@@ -60,6 +46,7 @@ public class AddServerViewModel : BaseViewModel
         return ValueTask.CompletedTask;
     }
 
+    [ICommand]
     private async Task AddServerAsync()
     {
         try

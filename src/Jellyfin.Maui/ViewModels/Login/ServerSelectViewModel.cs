@@ -8,7 +8,7 @@ namespace Jellyfin.Maui.ViewModels.Login;
 /// <summary>
 /// Server select view model.
 /// </summary>
-public class ServerSelectViewModel : BaseViewModel
+public partial class ServerSelectViewModel : BaseViewModel
 {
     private readonly INavigationService _navigationService;
     private readonly IStateStorageService _stateStorageService;
@@ -29,20 +29,7 @@ public class ServerSelectViewModel : BaseViewModel
         _navigationService = navigationService;
         _stateStorageService = stateStorageService;
         _stateService = stateService;
-
-        AddServerCommand = new RelayCommand(AddServer);
-        SelectServerCommand = new RelayCommand<ServerStateModel>(SelectServer);
     }
-
-    /// <summary>
-    /// Gets the add server command.
-    /// </summary>
-    public IRelayCommand AddServerCommand { get; }
-
-    /// <summary>
-    /// Gets the select server command.
-    /// </summary>
-    public IRelayCommand<ServerStateModel> SelectServerCommand { get; }
 
     /// <summary>
     /// Gets the list of servers.
@@ -56,11 +43,13 @@ public class ServerSelectViewModel : BaseViewModel
         Servers.ReplaceRange(state.Servers);
     }
 
+    [ICommand]
     private void AddServer()
     {
         _navigationService.NavigateToAddServerPage();
     }
 
+    [ICommand]
     private void SelectServer(ServerStateModel? server)
     {
         if (server is not null)

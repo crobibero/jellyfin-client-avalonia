@@ -8,7 +8,7 @@ namespace Jellyfin.Maui.ViewModels.Facades;
 /// <summary>
 /// Base view model.
 /// </summary>
-public abstract class BaseViewModel : ObservableObject
+public abstract partial class BaseViewModel : ObservableObject
 {
     private readonly INavigationService _navigationService;
 
@@ -19,19 +19,12 @@ public abstract class BaseViewModel : ObservableObject
     protected BaseViewModel(INavigationService navigationService)
     {
         _navigationService = navigationService;
-
-        NavigateToItemCommand = new RelayCommand<BaseItemDto>(DoNavigateToItemCommand);
     }
 
     /// <summary>
     /// Gets or sets the selected BaseItemDto.
     /// </summary>
     public BaseItemDto? SelectedItem { get; set; }
-
-    /// <summary>
-    /// Gets or sets the navigate to library command.
-    /// </summary>
-    public IRelayCommand<BaseItemDto>? NavigateToItemCommand { get; protected set; }
 
     /// <summary>
     /// Initialize the view model.
@@ -51,10 +44,11 @@ public abstract class BaseViewModel : ObservableObject
     /// <param name="writeAccess">Whether to enable write access.</param>
     protected static void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess)
     {
-        Device.BeginInvokeOnMainThread(accessMethod);
+        Application.Current?.Dispatcher.Dispatch(accessMethod);
     }
 
-    private void DoNavigateToItemCommand(BaseItemDto? item)
+    [ICommand]
+    private void NavigateToItem(BaseItemDto? item)
     {
         if (item is null)
         {
