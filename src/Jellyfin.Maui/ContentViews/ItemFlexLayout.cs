@@ -5,6 +5,7 @@ namespace Jellyfin.Maui.ContentViews;
 
 /// <summary>
 /// Flex layout with dynamic items.
+/// This shouldn't be needed after rc2.
 /// </summary>
 public class ItemFlexLayout : FlexLayout
 {
