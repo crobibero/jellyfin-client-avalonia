@@ -1,3 +1,4 @@
+using Jellyfin.Maui.ContentViews;
 using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.ViewModels;
@@ -21,8 +22,9 @@ public class LibraryPage : BaseContentIdPage<LibraryViewModel>
     /// <inheritdoc />
     protected override void InitializeLayout()
     {
-        Content = new VerticalStackLayout
+        Content = new FlexLayout
         {
+            Direction = Microsoft.Maui.Layouts.FlexDirection.Column,
             Children =
             {
                 /*
@@ -30,16 +32,22 @@ public class LibraryPage : BaseContentIdPage<LibraryViewModel>
                 new Label()
                     .Bind(Label.TextProperty, nameof(ViewModel.Item.Name), source: ViewModel.Item, mode: BindingMode.OneWay),
                 */
+                // Header
                 new Label()
-                    .Bind(Label.TextProperty, "Item.Name", mode: BindingMode.OneWay),
-                new CollectionView
+                    .Bind(Label.TextProperty, "Item.Name", mode: BindingMode.OneWay)
+                    .Basis(BaseStyles.HeaderBasis),
+
+                // Content
+                new ScrollView
                 {
-                    ItemTemplate = TemplateHelper.PosterCardTemplate,
-                    ItemsLayout = LinearItemsLayout.Horizontal,
-                    ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView,
-                    SelectionMode = SelectionMode.Single
+                    Content = new ItemFlexLayout
+                    {
+                        Direction = Microsoft.Maui.Layouts.FlexDirection.Row,
+                        ItemTemplate = TemplateHelper.PosterCardTemplate,
+                    }
+                    .Bind(ItemFlexLayout.ItemsSourceProperty, mode: BindingMode.OneWay, path: nameof(LibraryViewModel.LibraryItemsCollection))
                 }
-                    .Bind(ItemsView.ItemsSourceProperty, mode: BindingMode.OneWay, path: nameof(LibraryViewModel.LibraryItemsCollection))
+                .Grow(1)
             }
         };
     }

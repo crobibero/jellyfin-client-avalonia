@@ -1,5 +1,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:cv="clr-namespace:Jellyfin.Maui.ContentViews">
 
     <!-- Colors -->
     <Color x:Key="JellyfinPrimaryColor">#AA5CC3</Color>
@@ -41,9 +42,23 @@
         <Setter Property="IsOpaque" Value="True" />
     </Style>
 
+    <Style TargetType="cv:ItemFlexLayout" ApplyToDerivedTypes="True">
+        <Setter Property="JustifyContent" Value="Start" />
+        <Setter Property="AlignItems" Value="Start" />
+        <Setter Property="AlignContent" Value="Start" />
+        <Setter Property="Wrap" Value="Wrap" />
+    </Style>
+    
     <!-- Explicit Styles -->
     <Style TargetType="Label" x:Key="LabelHeader">
         <Setter Property="FontSize" Value="{StaticResource FontMedium}" />
+    </Style>
+
+    <Style TargetType="Frame" x:Key="FrameLoginCard">
+        <Setter Property="BorderColor" Value="{StaticResource WhiteColor}"/>
+        <Setter Property="Margin" Value="25" />
+        <Setter Property="HeightRequest" Value="150" />
+        <Setter Property="WidthRequest" Value="300" />
     </Style>
 
 </ResourceDictionary>

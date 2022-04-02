@@ -14,17 +14,27 @@ public class UserSelectView : BaseContentView<UserStateModel>
     /// </summary>
     public UserSelectView()
     {
-        Content = new Label()
-            .Bind(Label.TextProperty, mode: BindingMode.OneTime, path: nameof(UserStateModel.Name))
-            .BindClickGesture(
-                commandPath: nameof(SelectUserViewModel.SelectUserCommand),
-                commandSource: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestorBindingContext, typeof(SelectUserViewModel)),
-                parameterPath: ".",
-                parameterSource: Context)
-            .BindTapGesture(
-                commandPath: nameof(SelectUserViewModel.SelectUserCommand),
-                commandSource: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestorBindingContext, typeof(SelectUserViewModel)),
-                parameterPath: ".",
-                parameterSource: Context);
+        Content = new Frame
+        {
+            Style = BaseStyles.FrameLoginCard,
+            Content = new Grid
+            {
+                Children =
+                {
+                     new Label()
+                        .Bind(Label.TextProperty, mode: BindingMode.OneWay, path: nameof(UserStateModel.Name))
+                }
+            }
+        }
+        .BindClickGesture(
+            commandPath: nameof(SelectUserViewModel.SelectUserCommand),
+            commandSource: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestorBindingContext, typeof(SelectUserViewModel)),
+            parameterPath: ".",
+            parameterSource: Context)
+        .BindTapGesture(
+            commandPath: nameof(SelectUserViewModel.SelectUserCommand),
+            commandSource: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestorBindingContext, typeof(SelectUserViewModel)),
+            parameterPath: ".",
+            parameterSource: Context);
     }
 }

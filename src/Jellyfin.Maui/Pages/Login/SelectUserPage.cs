@@ -1,5 +1,5 @@
+using Jellyfin.Maui.ContentViews;
 using Jellyfin.Maui.DataTemplates;
-using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.ViewModels.Login;
 
@@ -22,20 +22,40 @@ public class SelectUserPage : BaseContentPage<SelectUserViewModel>
     /// <inheritdoc />
     protected override void InitializeLayout()
     {
-        Content = new VerticalStackLayout
+        Content = new FlexLayout
         {
+            Direction = Microsoft.Maui.Layouts.FlexDirection.Column,
             Children =
             {
-                new Button { Text = Strings.Login_AddUser }
-                    .Bind(Button.CommandProperty, nameof(ViewModel.AddUserCommand)),
-                new Label { Text = Strings.Login_ExistingUsers },
-                new CollectionView
+                // Header
+                new FlexLayout
+                {
+                    Direction = Microsoft.Maui.Layouts.FlexDirection.Row,
+                    Children =
                     {
-                        ItemTemplate = TemplateHelper.UserSelectTemplate,
-                        ItemsLayout = LinearItemsLayout.Vertical,
-                        SelectionMode = SelectionMode.Single
+                        new Label
+                        {
+                            Text = Strings.Login_ExistingUsers,
+                            Style = BaseStyles.LabelHeader
+                        }
+                        .Grow(1),
+                        new Button { Text = Strings.Login_AddUser }
+                            .Bind(Button.CommandProperty, nameof(ViewModel.AddUserCommand)),
                     }
-                    .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.Users))
+                }
+                .Basis(BaseStyles.HeaderBasis),
+
+                // Content
+                new ScrollView
+                {
+                    Content = new ItemFlexLayout
+                    {
+                        Direction = Microsoft.Maui.Layouts.FlexDirection.Row,
+                        ItemTemplate = TemplateHelper.UserSelectTemplate
+                    }
+                    .Bind(ItemFlexLayout.ItemsSourceProperty, nameof(ViewModel.Users))
+                }
+                .Grow(1)
             }
         };
     }

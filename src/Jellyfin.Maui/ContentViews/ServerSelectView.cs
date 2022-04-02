@@ -15,12 +15,18 @@ public class ServerSelectView : BaseContentView<ServerStateModel>
     public ServerSelectView()
     {
         Content =
-            new Grid
+            new Frame
             {
-                Children =
+                Style = BaseStyles.FrameLoginCard,
+                Content = new VerticalStackLayout
                 {
-                    new Label()
-                        .Bind(Label.TextProperty, mode: BindingMode.OneTime, path: nameof(Context.Name))
+                    Children =
+                    {
+                        new Label()
+                            .Bind(Label.TextProperty, mode: BindingMode.OneTime, path: nameof(Context.Name)),
+                        new Label()
+                            .Bind(Label.TextProperty, mode: BindingMode.OneTime, path: nameof(Context.Url))
+                    }
                 }
             }
             .BindClickGesture(

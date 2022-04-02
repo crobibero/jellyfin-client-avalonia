@@ -1,3 +1,4 @@
+using Jellyfin.Maui.ContentViews;
 using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.ViewModels.Login;
@@ -18,54 +19,43 @@ public class ServerSelectPage : BaseContentPage<ServerSelectViewModel>
     {
     }
 
-    private enum Column
-    {
-        ServerList = 0,
-        AddButton = 1
-    }
-
-    private enum Row
-    {
-        Header = 0,
-        Content = 1
-    }
-
     /// <inheritdoc />
     protected override void InitializeLayout()
     {
-        Content = new Grid
+        Content = new FlexLayout
         {
-            ColumnDefinitions = GridRowsColumns.Columns.Define(
-                (Column.ServerList, new GridLength(10, GridUnitType.Star)),
-                (Column.AddButton, new GridLength(2, GridUnitType.Star))),
-            RowDefinitions = GridRowsColumns.Rows.Define(
-                (Row.Header, new GridLength(2, GridUnitType.Star)),
-                (Row.Content, new GridLength(10, GridUnitType.Star))),
+            Direction = Microsoft.Maui.Layouts.FlexDirection.Column,
             Children =
             {
-                new Label
+                // Header
+                new FlexLayout
+                {
+                    Direction = Microsoft.Maui.Layouts.FlexDirection.Row,
+                    Children =
                     {
-                        Text = Strings.Login_ExistingServers,
-                        Style = BaseStyles.LabelHeader
+                        new Label
+                        {
+                            Text = Strings.Login_ExistingServers,
+                            Style = BaseStyles.LabelHeader
+                        }
+                        .Grow(1),
+                        new Button { Text = Strings.Login_AddServer }
+                            .Bind(Button.CommandProperty, nameof(ViewModel.AddServerCommand)),
                     }
-                    .Column(Column.ServerList)
-                    .Row(Row.Header),
-                new CollectionView
+                }
+                .Basis(BaseStyles.HeaderBasis),
+
+                // Content
+                new ScrollView
+                {
+                    Content = new ItemFlexLayout
                     {
-                        ItemTemplate = TemplateHelper.ServerSelectTemplate,
-                        ItemsLayout = LinearItemsLayout.Vertical,
-                        SelectionMode = SelectionMode.Single
+                        Direction = Microsoft.Maui.Layouts.FlexDirection.Row,
+                        ItemTemplate = TemplateHelper.ServerSelectTemplate
                     }
-                    .Column(Column.ServerList)
-                    .Row(Row.Content)
-                    .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.Servers)),
-                new Button
-                    {
-                        Text = Strings.Login_AddServer
-                    }
-                    .Column(Column.AddButton)
-                    .Row(Row.Header)
-                    .Bind(Button.CommandProperty, nameof(ViewModel.AddServerCommand)),
+                    .Bind(ItemFlexLayout.ItemsSourceProperty, nameof(ViewModel.Servers))
+                }
+                .Grow(1)
             }
         };
     }
