@@ -11,6 +11,11 @@ public static class TemplateHelper
     public static readonly HomeRowTemplateSelector HomeRowTemplateSelector = new();
 
     /// <summary>
+    /// Gets the <see cref="CardTemplateSelector"/>.
+    /// </summary>
+    public static readonly CardTemplateSelector CardTemplateSelector = new();
+
+    /// <summary>
     /// Gets the <see cref="DataTemplates.LibraryHomeRowTemplate"/>.
     /// </summary>
     public static readonly LibraryHomeRowTemplate LibraryHomeRowTemplate = new();

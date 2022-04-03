@@ -28,7 +28,7 @@ public class SeriesPage : BaseContentIdPage<SeriesViewModel>
             Children =
             {
                 new Label()
-                    .Bind(Label.TextProperty, "Item.Name", mode: BindingMode.OneWay),
+                    .Bind(Label.TextProperty, $"{nameof(ViewModel.Item)}.{nameof(ViewModel.Item.Name)}", mode: BindingMode.OneWay),
                 new Label { Text = Strings.NextUp },
                 new PosterCardView()
                     .Bind(BindingContextProperty, nameof(ViewModel.NextUpItem), mode: BindingMode.OneTime),

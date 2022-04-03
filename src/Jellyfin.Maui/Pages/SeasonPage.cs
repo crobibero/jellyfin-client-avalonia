@@ -27,7 +27,7 @@ public class SeasonPage : BaseContentIdPage<SeasonViewModel>
             Children =
             {
                 new Label()
-                    .Bind(Label.TextProperty, "Item.Name", mode: BindingMode.OneWay),
+                    .Bind(Label.TextProperty, $"{nameof(ViewModel.Item)}.{nameof(ViewModel.Item.Name)}", mode: BindingMode.OneWay),
                 new Label { Text = Strings.Episodes },
                 new CollectionView
                 {

@@ -16,8 +16,7 @@ public class PosterCardView : BaseContentView<BaseItemDto>
     {
         Content = new VerticalStackLayout
         {
-            WidthRequest = 50,
-            HeightRequest = 100,
+            Style = BaseStyles.PosterCard,
             Children =
                 {
                     new Image()

@@ -25,7 +25,6 @@
         <Setter Property="FontFamily" Value="{StaticResource RegularFont}" />
         <Setter Property="LineBreakMode" Value="NoWrap" />
         <Setter Property="FontSize" Value="{StaticResource FontSmall}" />
-        <Setter Property="LineBreakMode" Value="TailTruncation" />
         <Setter Property="HorizontalOptions" Value="Start" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
     </Style>
@@ -56,9 +55,19 @@
 
     <Style TargetType="Frame" x:Key="FrameLoginCard">
         <Setter Property="BorderColor" Value="{StaticResource WhiteColor}"/>
-        <Setter Property="Margin" Value="25" />
-        <Setter Property="HeightRequest" Value="150" />
+        <Setter Property="HeightRequest" Value="100" />
         <Setter Property="WidthRequest" Value="300" />
+    </Style>
+
+    <Style TargetType="VerticalStackLayout" x:Key="HomeRow">
+        <!-- Card Height +50 -->
+        <Setter Property="HeightRequest" Value="250" />
+    </Style>
+     
+    <Style TargetType="VerticalStackLayout" x:Key="PosterCard">
+        <Setter Property="HeightRequest" Value="200" />
+        <Setter Property="WidthRequest" Value="100" />
+        <Setter Property="Margin" Value="10" />
     </Style>
 
 </ResourceDictionary>

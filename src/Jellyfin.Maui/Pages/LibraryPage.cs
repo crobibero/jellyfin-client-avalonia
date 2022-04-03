@@ -27,14 +27,9 @@ public class LibraryPage : BaseContentIdPage<LibraryViewModel>
             Direction = Microsoft.Maui.Layouts.FlexDirection.Column,
             Children =
             {
-                /*
-                 * TODO how to make this work?
-                new Label()
-                    .Bind(Label.TextProperty, nameof(ViewModel.Item.Name), source: ViewModel.Item, mode: BindingMode.OneWay),
-                */
                 // Header
                 new Label()
-                    .Bind(Label.TextProperty, "Item.Name", mode: BindingMode.OneWay)
+                    .Bind(Label.TextProperty, $"{nameof(ViewModel.Item)}.{nameof(ViewModel.Item.Name)}", mode: BindingMode.OneWay)
                     .Basis(BaseStyles.HeaderBasis),
 
                 // Content

@@ -16,13 +16,14 @@ public class HomeRowView : BaseContentView<HomeRowModel>
     {
         Content = new VerticalStackLayout
         {
+            Style = BaseStyles.HomeRow,
             Children =
             {
                 new Label()
                     .Bind(Label.TextProperty, mode: BindingMode.OneTime, path: nameof(HomeRowModel.Name)),
                 new CollectionView
                     {
-                        ItemTemplate = TemplateHelper.PosterCardTemplate,
+                        ItemTemplate = TemplateHelper.CardTemplateSelector,
                         ItemsLayout = LinearItemsLayout.Horizontal,
                         ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView,
                         SelectionMode = SelectionMode.Single
