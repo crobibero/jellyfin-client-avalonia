@@ -1,4 +1,4 @@
-using System.Globalization;
+using CommunityToolkit.Maui.Converters;
 using Jellyfin.Maui.Services;
 
 namespace Jellyfin.Maui.Converters;
@@ -6,7 +6,7 @@ namespace Jellyfin.Maui.Converters;
 /// <summary>
 /// Gets the poster url from the base item.
 /// </summary>
-public class BaseItemDtoCardPosterConverter : IValueConverter
+public class BaseItemDtoCardPosterConverter : BaseConverterOneWay<BaseItemDto?, ImageSource?>
 {
     private readonly ImageType _imageType;
 
@@ -19,28 +19,22 @@ public class BaseItemDtoCardPosterConverter : IValueConverter
         _imageType = imageType;
     }
 
-    /// <inheritdoc />
-    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    /// <inheritdoc/>
+    public override ImageSource? ConvertFrom(BaseItemDto? value)
     {
-        if (targetType != typeof(ImageSource) || value is not BaseItemDto baseItemDto)
+        if (value is null)
         {
             return null;
         }
 
         var host = InternalServiceProvider.GetService<IStateService>().GetHost();
 
-        var itemId = baseItemDto.Id;
-        if (baseItemDto.Type == BaseItemKind.Episode)
+        var itemId = value.Id;
+        if (value.Type == BaseItemKind.Episode)
         {
-            itemId = baseItemDto.SeriesId ?? baseItemDto.Id;
+            itemId = value.SeriesId ?? value.Id;
         }
 
         return ImageSource.FromUri(new Uri($"{host}/Items/{itemId}/Images/{_imageType}?maxHeight=480"));
-    }
-
-    /// <inheritdoc />
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
     }
 }

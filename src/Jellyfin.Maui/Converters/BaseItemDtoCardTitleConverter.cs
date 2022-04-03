@@ -1,31 +1,26 @@
-﻿using System.Globalization;
+using System.Globalization;
+using CommunityToolkit.Maui.Converters;
 
 namespace Jellyfin.Maui.Converters;
 
 /// <summary>
 /// BaseItemDto Card Title Converter.
 /// </summary>
-public class BaseItemDtoCardTitleConverter : IValueConverter
+public class BaseItemDtoCardTitleConverter : BaseConverterOneWay<BaseItemDto?, string?>
 {
-    /// <inheritdoc />
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    /// <inheritdoc/>
+    public override string? ConvertFrom(BaseItemDto? value)
     {
-        if (value is not BaseItemDto baseItemDto)
+        if (value is null)
         {
-            return string.Empty;
+            return null;
         }
 
-        return baseItemDto.Type switch
+        return value.Type switch
         {
-            BaseItemKind.Episode => baseItemDto.SeriesName,
-            BaseItemKind.Season => baseItemDto.SeriesName,
-            _ => baseItemDto.Name?.ToString(culture) ?? string.Empty
+            BaseItemKind.Episode => value.SeriesName,
+            BaseItemKind.Season => value.SeriesName,
+            _ => value.Name?.ToString(CultureInfo.InvariantCulture) ?? string.Empty
         };
-    }
-
-    /// <inheritdoc />
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
     }
 }
