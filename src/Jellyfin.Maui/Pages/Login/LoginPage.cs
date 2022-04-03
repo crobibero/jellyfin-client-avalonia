@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Converters;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.ViewModels.Login;
 
@@ -71,16 +72,15 @@ public class LoginPage : BaseContentPage<LoginViewModel>
                                     new Label()
                                         .Bind(Label.TextProperty, nameof(ViewModel.QuickConnectCode), BindingMode.OneWay),
                                 }
-
-                            // TODO .Bind(HorizontalStackLayout.IsVisibleProperty, nameof(ViewModel.QuickConnectCode), converter: new IsNotNullOrEmptyConverter(), mode: BindingMode.OneWay)
+                                .Bind(HorizontalStackLayout.IsVisibleProperty, nameof(ViewModel.QuickConnectCode), converter: new IsStringNotNullOrWhiteSpaceConverter(), mode: BindingMode.OneWay)
                         }
                         .Bind(VerticalStackLayout.IsVisibleProperty, nameof(ViewModel.QuickConnectAvailable)),
                     new VerticalStackLayout
-                        {
-                            new Label()
-                                .CenterHorizontal()
-                                .Bind(Label.TextProperty, nameof(ViewModel.ErrorMessage))
-                        }
+                    {
+                        new Label()
+                            .CenterHorizontal()
+                            .Bind(Label.TextProperty, nameof(ViewModel.ErrorMessage))
+                    }
                 }
             }
         };
