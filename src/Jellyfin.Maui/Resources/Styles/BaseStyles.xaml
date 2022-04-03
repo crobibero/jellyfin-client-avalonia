@@ -61,12 +61,18 @@
 
     <Style TargetType="VerticalStackLayout" x:Key="HomeRow">
         <!-- Card Height +50 -->
-        <Setter Property="HeightRequest" Value="250" />
+        <Setter Property="HeightRequest" Value="450" />
     </Style>
      
-    <Style TargetType="VerticalStackLayout" x:Key="PosterCard">
-        <Setter Property="HeightRequest" Value="200" />
-        <Setter Property="WidthRequest" Value="100" />
+    <Style TargetType="Grid" x:Key="PosterCard">
+        <Setter Property="HeightRequest" Value="400" />
+        <Setter Property="WidthRequest" Value="200" />
+        <Setter Property="Margin" Value="10" />
+    </Style>
+
+    <Style TargetType="Grid" x:Key="LibraryCard">
+        <Setter Property="HeightRequest" Value="400" />
+        <Setter Property="WidthRequest" Value="400" />
         <Setter Property="Margin" Value="10" />
     </Style>
 

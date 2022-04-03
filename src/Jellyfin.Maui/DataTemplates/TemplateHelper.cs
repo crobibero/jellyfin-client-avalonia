@@ -26,6 +26,11 @@ public static class TemplateHelper
     public static readonly PosterCardTemplate PosterCardTemplate = new();
 
     /// <summary>
+    /// Gets the <see cref="LibraryCardTemplate"/>.
+    /// </summary>
+    public static readonly LibraryCardTemplate LibraryCardTemplate = new();
+
+    /// <summary>
     /// Gets the <see cref="ServerSelectTemplate"/>.
     /// </summary>
     public static readonly ServerSelectTemplate ServerSelectTemplate = new();

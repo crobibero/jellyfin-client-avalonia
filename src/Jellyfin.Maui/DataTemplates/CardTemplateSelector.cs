@@ -10,12 +10,11 @@ public class CardTemplateSelector : DataTemplateSelector
     {
         if (item is BaseItemDto baseItemDto)
         {
-            if (baseItemDto.Type == BaseItemKind.CollectionFolder)
+            return baseItemDto.Type switch
             {
-                // TODO.
-            }
-
-            return TemplateHelper.PosterCardTemplate;
+                BaseItemKind.CollectionFolder => TemplateHelper.LibraryCardTemplate,
+                _ => TemplateHelper.PosterCardTemplate,
+            };
         }
 
         return null;

@@ -26,6 +26,11 @@ namespace Jellyfin.Maui.Resources.Styles
         public static readonly Style? PosterCard = Application.Current?.Resources["PosterCard"] as Style;
 
         /// <summary>
+        /// Gets the library card style.
+        /// </summary>
+        public static readonly Style? LibraryCard = Application.Current?.Resources["LibraryCard"] as Style;
+
+        /// <summary>
         /// Gets the home row style.
         /// </summary>
         public static readonly Style? HomeRow = Application.Current?.Resources["HomeRow"] as Style;

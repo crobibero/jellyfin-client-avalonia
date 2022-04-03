@@ -1,23 +1,22 @@
 namespace Jellyfin.Maui.ContentViews;
 
 /// <summary>
-/// The poster card view.
+/// The library card view.
 /// </summary>
-public class PosterCardView : BaseCardView
+public class LibraryCardView : BaseCardView
 {
     private static readonly (Row, GridLength)[] _rowDefinitions = new (Row, GridLength)[]
     {
         (Row.Image, 300),
-        (Row.Title, 50),
-        (Row.Description, 50)
+        (Row.Title, 50)
     };
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PosterCardView"/> class.
+    /// Initializes a new instance of the <see cref="LibraryCardView"/> class.
     /// </summary>
-    public PosterCardView()
+    public LibraryCardView()
         : base(
-              BaseStyles.PosterCard,
+              BaseStyles.LibraryCard,
               null,
               null,
               null,
