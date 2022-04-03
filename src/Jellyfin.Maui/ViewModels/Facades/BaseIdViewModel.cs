@@ -12,7 +12,7 @@ public abstract partial class BaseIdViewModel : BaseViewModel
     private Guid _id;
 
     [ObservableProperty]
-    private BaseItemDto? _item;
+    private BaseItemDto _item = null!;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseIdViewModel"/> class.

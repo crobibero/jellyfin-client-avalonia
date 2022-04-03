@@ -109,18 +109,6 @@ public class NavigationService : INavigationService
     {
         switch (itemKind)
         {
-            case BaseItemKind.Movie:
-                Navigate<MoviePage, MovieViewModel>(itemId);
-                break;
-            case BaseItemKind.Episode:
-                Navigate<EpisodePage, EpisodeViewModel>(itemId);
-                break;
-            case BaseItemKind.Season:
-                Navigate<SeasonPage, SeasonViewModel>(itemId);
-                break;
-            case BaseItemKind.Series:
-                Navigate<SeriesPage, SeriesViewModel>(itemId);
-                break;
             case BaseItemKind.CollectionFolder:
                 Navigate<LibraryPage, LibraryViewModel>(itemId);
                 break;
