@@ -27,7 +27,6 @@ public partial class HomeViewModel : BaseViewModel
         _libraryService = libraryService;
 
         // TODO set order by DisplayPreferences.. eventually.
-        BindingBase.EnableCollectionSynchronization(HomeRowCollection, null, ObservableCollectionCallback);
     }
 
     /// <inheritdoc />
@@ -42,21 +41,31 @@ public partial class HomeViewModel : BaseViewModel
         }
 
         _updateTimestamp = now;
-        HomeRowCollection = Array.Empty<HomeRowModel>();
 
-        var homeRows = new List<HomeRowModel>();
+        var defaultRows = new List<HomeRowModel>
+        {
+            new HomeRowModel("Libraries"),
+            new HomeRowModel("Continue Watching")
+        };
+
         var libraries = await _libraryService.GetLibrariesAsync().ConfigureAwait(false);
-        homeRows.Add(new HomeRowModel("Libraries", 0, libraries));
-
-        var continueWatching = await _libraryService.GetContinueWatchingAsync().ConfigureAwait(false);
-        homeRows.Add(new HomeRowModel("Continue Watching", 0, continueWatching));
-
         foreach (var library in libraries)
         {
-            var recentlyAdded = await _libraryService.GetRecentlyAddedAsync(library.Id).ConfigureAwait(false);
-            homeRows.Add(new HomeRowModel(library.Name, 0, recentlyAdded));
+            defaultRows.Add(new HomeRowModel(library.Name));
         }
 
-        HomeRowCollection = homeRows;
+        HomeRowCollection = defaultRows;
+
+        defaultRows[0].Items = libraries;
+
+        var continueWatching = await _libraryService.GetContinueWatchingAsync().ConfigureAwait(false);
+        defaultRows[1].Items = continueWatching;
+
+        for (var i = 0; i < libraries.Count; i++)
+        {
+            var library = libraries[i];
+            var recentlyAdded = await _libraryService.GetRecentlyAddedAsync(library.Id).ConfigureAwait(false);
+            defaultRows[i + 2].Items = recentlyAdded;
+        }
     }
 }

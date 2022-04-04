@@ -10,7 +10,7 @@ public class HomeRowTemplateSelector : DataTemplateSelector
     /// <inheritdoc />
     protected override DataTemplate? OnSelectTemplate(object item, BindableObject container)
     {
-        if (item is HomeRowModel homeRowModel && homeRowModel.Items.Count > 0)
+        if (item is HomeRowModel homeRowModel)
         {
             // TODO switch based on item type.
             return TemplateHelper.LibraryHomeRowTemplate;

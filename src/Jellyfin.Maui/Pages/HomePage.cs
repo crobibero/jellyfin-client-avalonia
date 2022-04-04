@@ -34,7 +34,7 @@ public class HomePage : BaseContentPage<HomeViewModel>
                             ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView,
                             ItemsLayout = LinearItemsLayout.Vertical
                         }
-                        .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.HomeRowCollection))
+                        .Bind(ItemsView.ItemsSourceProperty, nameof(ViewModel.HomeRowCollection), mode: BindingMode.OneWay)
                 }
             }
         };

@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Converters;
 using Jellyfin.Maui.ContentViews.Facades;
 using Jellyfin.Maui.DataTemplates;
 using Jellyfin.Maui.Models;
@@ -30,6 +31,6 @@ public class HomeRowView : BaseContentView<HomeRowModel>
                     }
                     .Bind(ItemsView.ItemsSourceProperty, mode: BindingMode.OneWay, path: nameof(HomeRowModel.Items))
             }
-        };
+        }.Bind(IsVisibleProperty, nameof(HomeRowModel.Items), converter: new IsListNotNullOrEmptyConverter(), mode: BindingMode.OneWay);
     }
 }
