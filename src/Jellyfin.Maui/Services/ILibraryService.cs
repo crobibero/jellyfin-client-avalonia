@@ -1,3 +1,5 @@
+using Jellyfin.Maui.Models;
+
 namespace Jellyfin.Maui.Services;
 
 /// <summary>
@@ -41,10 +43,9 @@ public interface ILibraryService
     /// <summary>
     /// Gets the next up items.
     /// </summary>
-    /// <param name="libraryIds">The list of library ids.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The next up items.</returns>
-    ValueTask<IReadOnlyList<BaseItemDto>> GetNextUpAsync(IEnumerable<Guid> libraryIds, CancellationToken cancellationToken = default);
+    ValueTask<IReadOnlyList<BaseItemDto>> GetNextUpAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets the continue watching items.
@@ -85,4 +86,11 @@ public interface ILibraryService
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The list of episodes.</returns>
     ValueTask<BaseItemDtoQueryResult> GetEpisodesAsync(Guid seriesId, Guid seasonId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets the display preferences.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The display preferences.</returns>
+    ValueTask<DisplayPreferencesModel> GetDisplayPreferencesAsync(CancellationToken cancellationToken = default);
 }

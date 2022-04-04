@@ -1,3 +1,5 @@
+using Jellyfin.Maui.Models;
+
 namespace Jellyfin.Maui.Services;
 
 /// <inheritdoc />
@@ -7,6 +9,7 @@ public class LibraryService : ILibraryService
     private readonly ITvShowsClient _tvShowsClient;
     private readonly IUserLibraryClient _userLibraryClient;
     private readonly IUserViewsClient _userViewsClient;
+    private readonly IDisplayPreferencesClient _displayPreferencesClient;
 
     private readonly Guid _userId;
 
@@ -18,17 +21,21 @@ public class LibraryService : ILibraryService
     /// <param name="tvShowsClient">Instance of the <see cref="ITvShowsClient"/> interface.</param>
     /// <param name="userLibraryClient">Instance of the <see cref="IUserLibraryClient"/> interface.</param>
     /// <param name="userViewsClient">Instance of the <see cref="IUserViewsClient"/> interface.</param>
+    /// <param name="displayPreferencesClient">Instance of the <see cref="IDisplayPreferencesClient"/> interface.</param>
     public LibraryService(
         IItemsClient itemsClient,
         IStateService stateService,
         ITvShowsClient tvShowsClient,
         IUserLibraryClient userLibraryClient,
-        IUserViewsClient userViewsClient)
+        IUserViewsClient userViewsClient,
+        IDisplayPreferencesClient displayPreferencesClient)
     {
         _itemsClient = itemsClient;
         _tvShowsClient = tvShowsClient;
         _userLibraryClient = userLibraryClient;
         _userViewsClient = userViewsClient;
+        _displayPreferencesClient = displayPreferencesClient;
+
         _userId = stateService.GetCurrentUser().Id;
     }
 
@@ -84,24 +91,20 @@ public class LibraryService : ILibraryService
     }
 
     /// <inheritdoc />
-    public async ValueTask<IReadOnlyList<BaseItemDto>> GetNextUpAsync(IEnumerable<Guid> libraryIds, CancellationToken cancellationToken)
+    public async ValueTask<IReadOnlyList<BaseItemDto>> GetNextUpAsync(CancellationToken cancellationToken)
     {
-        var items = new List<BaseItemDto>();
-        foreach (var library in libraryIds)
-        {
-            var result = await _tvShowsClient.GetNextUpAsync(
+        var result = await _tvShowsClient.GetNextUpAsync(
                     userId: _userId,
                     limit: 24,
                     fields: new[] { ItemFields.PrimaryImageAspectRatio },
                     imageTypeLimit: 1,
                     enableImageTypes: new[] { ImageType.Primary, ImageType.Backdrop, ImageType.Thumb },
-                    parentId: library,
+                    enableTotalRecordCount: false,
+                    disableFirstEpisode: false,
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
-            items.AddRange(result.Items);
-        }
 
-        return items;
+        return result.Items;
     }
 
     /// <inheritdoc />
@@ -175,6 +178,25 @@ public class LibraryService : ILibraryService
             .ConfigureAwait(false);
     }
 
+    /// <inheritdoc/>
+    public async ValueTask<DisplayPreferencesModel> GetDisplayPreferencesAsync(CancellationToken cancellationToken)
+    {
+        var displayPreferences = await _displayPreferencesClient.GetDisplayPreferencesAsync("usersettings", _userId, "emby", cancellationToken)
+            .ConfigureAwait(false);
+
+        var homeSections = new List<DisplayPreferencesModel.HomeSection>();
+        foreach (var customPreference in displayPreferences.CustomPrefs)
+        {
+            var section = GetHomeSection(customPreference.Key, customPreference.Value);
+            if (section is not null)
+            {
+                homeSections.Add(section.Value);
+            }
+        }
+
+        return new DisplayPreferencesModel(homeSections);
+    }
+
     private static BaseItemKind GetViewType(string collectionType)
     {
         return collectionType switch
@@ -185,5 +207,34 @@ public class LibraryService : ILibraryService
             "music" => BaseItemKind.Audio,
             _ => BaseItemKind.Folder
         };
+    }
+
+    private static DisplayPreferencesModel.HomeSection? GetHomeSection(string preference, string value)
+    {
+        if (preference.StartsWith("homesection", StringComparison.OrdinalIgnoreCase))
+        {
+            if (string.Equals("smalllibrarytiles", value, StringComparison.OrdinalIgnoreCase)
+                || string.Equals("librarybuttons", value, StringComparison.OrdinalIgnoreCase))
+            {
+                return DisplayPreferencesModel.HomeSection.LibraryTiles;
+            }
+
+            if (string.Equals("resume", value, StringComparison.OrdinalIgnoreCase))
+            {
+                return DisplayPreferencesModel.HomeSection.Resume;
+            }
+
+            if (string.Equals("nextup", value, StringComparison.OrdinalIgnoreCase))
+            {
+                return DisplayPreferencesModel.HomeSection.NextUp;
+            }
+
+            if (string.Equals("latestmedia", value, StringComparison.OrdinalIgnoreCase))
+            {
+                return DisplayPreferencesModel.HomeSection.LatestMedia;
+            }
+        }
+
+        return null;
     }
 }

@@ -11,6 +11,7 @@ namespace Jellyfin.Maui.ViewModels;
 public partial class HomeViewModel : BaseViewModel
 {
     private readonly ILibraryService _libraryService;
+    private readonly IStateService _stateService;
     private DateTime? _updateTimestamp;
 
     [ObservableProperty]
@@ -21,12 +22,15 @@ public partial class HomeViewModel : BaseViewModel
     /// </summary>
     /// <param name="libraryService">Instance of the <see cref="ILibraryService"/> interface.</param>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
-    public HomeViewModel(ILibraryService libraryService, INavigationService navigationService)
+    /// <param name="stateService">Instance of the <see cref="IStateService"/> interface.</param>
+    public HomeViewModel(
+        ILibraryService libraryService,
+        INavigationService navigationService,
+        IStateService stateService)
         : base(navigationService)
     {
         _libraryService = libraryService;
-
-        // TODO set order by DisplayPreferences.. eventually.
+        _stateService = stateService;
     }
 
     /// <inheritdoc />
@@ -42,30 +46,87 @@ public partial class HomeViewModel : BaseViewModel
 
         _updateTimestamp = now;
 
-        var defaultRows = new List<HomeRowModel>
-        {
-            new HomeRowModel("Libraries"),
-            new HomeRowModel("Continue Watching")
-        };
+        var displayPreferences = await _libraryService.GetDisplayPreferencesAsync().ConfigureAwait(false);
 
+        var userConfig = _stateService.GetCurrentUser().Configuration;
+
+        var libraryViews = new List<Guid>();
+        var excludedViews = new List<Guid>();
         var libraries = await _libraryService.GetLibrariesAsync().ConfigureAwait(false);
-        foreach (var library in libraries)
+        foreach (var view in userConfig.LatestItemsExcludes)
         {
-            defaultRows.Add(new HomeRowModel(library.Name));
+            if (Guid.TryParse(view, out var parsed))
+            {
+                excludedViews.Add(parsed);
+            }
         }
 
-        HomeRowCollection = defaultRows;
-
-        defaultRows[0].Items = libraries;
-
-        var continueWatching = await _libraryService.GetContinueWatchingAsync().ConfigureAwait(false);
-        defaultRows[1].Items = continueWatching;
-
-        for (var i = 0; i < libraries.Count; i++)
+        foreach (var view in userConfig.OrderedViews)
         {
-            var library = libraries[i];
-            var recentlyAdded = await _libraryService.GetRecentlyAddedAsync(library.Id).ConfigureAwait(false);
-            defaultRows[i + 2].Items = recentlyAdded;
+            if (Guid.TryParse(view, out var parsed) && !excludedViews.Contains(parsed))
+            {
+                libraryViews.Add(parsed);
+            }
         }
+
+        var homeRows = new List<HomeRowModel>();
+        foreach (var homeSection in displayPreferences.HomeSections)
+        {
+            switch (homeSection)
+            {
+                case DisplayPreferencesModel.HomeSection.LibraryTiles:
+                    {
+                        var row = new HomeRowModel("Libraries");
+                        row.Items = libraries;
+                        homeRows.Add(row);
+                        break;
+                    }
+
+                case DisplayPreferencesModel.HomeSection.Resume:
+                    {
+                        var row = new HomeRowModel("Continue Watching");
+                        homeRows.Add(row);
+                        PopulateRowAsync(row, () => _libraryService.GetContinueWatchingAsync()).SafeFireAndForget();
+                        break;
+                    }
+
+                case DisplayPreferencesModel.HomeSection.NextUp:
+                    {
+                        var row = new HomeRowModel("Next Up");
+                        homeRows.Add(row);
+                        PopulateRowAsync(row, () => _libraryService.GetNextUpAsync()).SafeFireAndForget();
+                        break;
+                    }
+
+                case DisplayPreferencesModel.HomeSection.LatestMedia:
+                    {
+                        foreach (var view in libraryViews)
+                        {
+                            var library = libraries.FirstOrDefault(i => i.Id == view);
+                            if (library is null)
+                            {
+                                continue;
+                            }
+
+                            var row = new HomeRowModel(library.Name);
+                            homeRows.Add(row);
+                            PopulateRowAsync(row, () => _libraryService.GetRecentlyAddedAsync(view)).SafeFireAndForget();
+                        }
+
+                        break;
+                    }
+
+                case DisplayPreferencesModel.HomeSection.None:
+                default:
+                    break;
+            }
+        }
+
+        HomeRowCollection = homeRows;
+    }
+
+    private async ValueTask PopulateRowAsync(HomeRowModel homeRowModel, Func<ValueTask<IReadOnlyList<BaseItemDto>>> populateFunction)
+    {
+        homeRowModel.Items = await populateFunction().ConfigureAwait(false);
     }
 }
