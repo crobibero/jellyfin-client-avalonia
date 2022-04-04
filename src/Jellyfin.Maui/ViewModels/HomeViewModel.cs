@@ -1,3 +1,4 @@
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Jellyfin.Maui.Models;
 using Jellyfin.Maui.Services;
@@ -108,7 +109,7 @@ public partial class HomeViewModel : BaseViewModel
                                 continue;
                             }
 
-                            var row = new HomeRowModel(library.Name);
+                            var row = new HomeRowModel(string.Format(CultureInfo.InvariantCulture, Strings.Home_Latest, library.Name));
                             homeRows.Add(row);
                             PopulateRowAsync(row, () => _libraryService.GetRecentlyAddedAsync(view)).SafeFireAndForget();
                         }

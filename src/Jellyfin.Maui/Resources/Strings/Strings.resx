@@ -168,4 +168,7 @@
   <data name="Seasons" xml:space="preserve">
     <value>Seasons</value>
   </data>
+  <data name="Home_Latest" xml:space="preserve">
+    <value>Latest {0}</value>
+  </data>
 </root>

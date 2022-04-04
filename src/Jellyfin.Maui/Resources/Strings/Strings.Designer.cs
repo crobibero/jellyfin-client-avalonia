@@ -88,6 +88,15 @@ namespace Jellyfin.Maui.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Latest {0}.
+        /// </summary>
+        internal static string Home_Latest {
+            get {
+                return ResourceManager.GetString("Home_Latest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Library.
         /// </summary>
         internal static string Library {
