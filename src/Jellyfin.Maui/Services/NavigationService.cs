@@ -105,21 +105,21 @@ public class NavigationService : INavigationService
     }
 
     /// <inheritdoc />
-    public void NavigateToItemView(BaseItemKind itemKind, Guid itemId)
+    public void NavigateToItemView(BaseItemDto item)
     {
-        switch (itemKind)
+        switch (item.Type)
         {
             case BaseItemKind.CollectionFolder:
-                Navigate<LibraryPage, LibraryViewModel>(itemId);
+                Navigate<LibraryPage, LibraryViewModel>(item);
                 break;
             default:
-                Navigate<ItemPage, ItemViewModel>(itemId);
+                Navigate<ItemPage, ItemViewModel>(item);
                 break;
         }
     }
 
-    private void Navigate<TPage, TViewModel>(Guid id)
-        where TViewModel : BaseIdViewModel
+    private void Navigate<TPage, TViewModel>(BaseItemDto item)
+        where TViewModel : BaseItemViewModel
         where TPage : BaseContentIdPage<TViewModel>
     {
         if (_navigationPage is null)
@@ -131,7 +131,7 @@ public class NavigationService : INavigationService
         Application.Current?.Dispatcher.Dispatch(() =>
         {
             var resolvedView = InternalServiceProvider.GetService<TPage>();
-            resolvedView.Initialize(id);
+            resolvedView.Initialize(item);
             _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget();
         });
     }

@@ -55,6 +55,6 @@ public abstract partial class BaseViewModel : ObservableObject
             return;
         }
 
-        _navigationService.NavigateToItemView(item.Type, item.Id);
+        _navigationService.NavigateToItemView(item);
     }
 }

@@ -8,7 +8,7 @@ namespace Jellyfin.Maui.ViewModels;
 /// <summary>
 /// Library view model.
 /// </summary>
-public partial class LibraryViewModel : BaseIdViewModel
+public partial class LibraryViewModel : BaseItemViewModel
 {
     private readonly ILibraryService _libraryService;
 
@@ -37,10 +37,10 @@ public partial class LibraryViewModel : BaseIdViewModel
     public ObservableRangeCollection<BaseItemDto> LibraryItemsCollection { get; } = new();
 
     /// <inheritdoc />
-    public override async ValueTask InitializeAsync()
+    public override ValueTask InitializeAsync()
     {
-        Item = await _libraryService.GetLibraryAsync(Id).ConfigureAwait(false);
         InitializeItemsAsync().SafeFireAndForget();
+        return ValueTask.CompletedTask;
     }
 
     private async ValueTask InitializeItemsAsync()

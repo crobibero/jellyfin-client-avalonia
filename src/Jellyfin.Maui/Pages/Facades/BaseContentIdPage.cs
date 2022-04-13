@@ -7,7 +7,7 @@ namespace Jellyfin.Maui.Pages.Facades;
 /// </summary>
 /// <typeparam name="TViewModel">The type of view model.</typeparam>
 public abstract class BaseContentIdPage<TViewModel> : BaseContentPage<TViewModel>
-    where TViewModel : BaseIdViewModel
+    where TViewModel : BaseItemViewModel
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseContentIdPage{TViewModel}"/> class.
@@ -31,9 +31,9 @@ public abstract class BaseContentIdPage<TViewModel> : BaseContentPage<TViewModel
     /// <summary>
     /// Initialize the view model with an id.
     /// </summary>
-    /// <param name="id">The id.</param>
-    public void Initialize(Guid id)
+    /// <param name="item">The item.</param>
+    public void Initialize(BaseItemDto item)
     {
-        ViewModel.Initialize(id);
+        ViewModel.Initialize(item);
     }
 }

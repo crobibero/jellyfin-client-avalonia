@@ -39,7 +39,6 @@ public interface INavigationService
     /// <summary>
     /// Navigate to the item's view.
     /// </summary>
-    /// <param name="itemKind">The item kind.</param>
-    /// <param name="itemId">The item id.</param>
-    void NavigateToItemView(BaseItemKind itemKind, Guid itemId);
+    /// <param name="item">The item.</param>
+    void NavigateToItemView(BaseItemDto item);
 }

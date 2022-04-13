@@ -8,7 +8,7 @@ namespace Jellyfin.Maui.ViewModels;
 /// <summary>
 /// Item view model.
 /// </summary>
-public partial class ItemViewModel : BaseIdViewModel
+public partial class ItemViewModel : BaseItemViewModel
 {
     private readonly ILibraryService _libraryService;
     private readonly INavigationService _navigationService;
@@ -53,17 +53,14 @@ public partial class ItemViewModel : BaseIdViewModel
     }
 
     /// <inheritdoc/>
-    public override async ValueTask InitializeAsync()
+    public override ValueTask InitializeAsync()
     {
-        var item = await _libraryService.GetItemAsync(Id).ConfigureAwait(false);
-
-        if (item is null)
+        if (Item is null)
         {
             _navigationService.NavigateHome();
-            return;
+            return ValueTask.CompletedTask;
         }
 
-        Item = item;
         PopulateBase();
         switch (Item.Type)
         {
@@ -74,6 +71,8 @@ public partial class ItemViewModel : BaseIdViewModel
                 PopulateSeasonViewAsync().SafeFireAndForget();
                 break;
         }
+
+        return ValueTask.CompletedTask;
     }
 
     private void PopulateBase()
