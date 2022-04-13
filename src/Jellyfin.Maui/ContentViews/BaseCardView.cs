@@ -37,7 +37,7 @@ public class BaseCardView : BaseContentView<BaseItemDto>
                         Style = imageStyle
                     }
                     .Row(Row.Image)
-                    .Bind(Image.SourceProperty, mode: BindingMode.OneTime, converter: new BaseItemDtoCardPosterConverter(imageType)),
+                    .Bind(Image.SourceProperty, mode: BindingMode.OneTime, converter: new BaseItemDtoToImageSourceConverter(imageType)),
                     new Label
                     {
                         Style = titleStyle

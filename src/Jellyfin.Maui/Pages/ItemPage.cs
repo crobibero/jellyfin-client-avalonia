@@ -24,93 +24,95 @@ public class ItemPage : BaseContentIdPage<ItemViewModel>
     /// <inheritdoc />
     protected override void InitializeLayout()
     {
-        Content = new FlexLayout
+        Content = new ScrollView
         {
-            Direction = Microsoft.Maui.Layouts.FlexDirection.Column,
-            Children =
+            Content = new VerticalStackLayout
             {
-                new Image()
-                    .Bind(Image.SourceProperty, path: nameof(ViewModel.Item), mode: BindingMode.OneWay, converter: new BaseItemDtoCardPosterConverter(ImageType.Thumb))
-                    .Basis(BaseStyles.HeaderBasis),
-                new VerticalStackLayout
+                Children =
                 {
-                    Children =
+                    new Grid
                     {
-                        new VerticalStackLayout
+                        ColumnDefinitions = GridRowsColumns.Columns.Define(
+                            (Column.Left, GridRowsColumns.Stars(3)),
+                            (Column.Center, GridRowsColumns.Stars(6)),
+                            (Column.Right, GridRowsColumns.Stars(3))),
+                        Children =
                         {
-                            Children =
+                            new VerticalStackLayout
                             {
-                                new VerticalStackLayout
-                                {
-                                    Children =
-                                    {
-                                        new Label()
+                                new Label { Text = "Director" },
+                                new Label { Text = "Runs" },
+                                new Label { Text = "Ends" }
+                            }
+                            .Column(Column.Left),
+                            new VerticalStackLayout
+                            {
+                                new Label()
                                             .Bind(Label.TextProperty, path: nameof(ViewModel.Title), mode: BindingMode.OneWay),
-                                        new Label()
-                                            .Bind(Label.TextProperty, path: nameof(ViewModel.SubTitle), mode: BindingMode.OneWay),
-                                    }
-                                },
-                                new HorizontalStackLayout
+                                new Label()
+                                    .Bind(Label.TextProperty, path: nameof(ViewModel.SubTitle), mode: BindingMode.OneWay),
+                                new Label
                                 {
-                                    HorizontalOptions = LayoutOptions.End,
-                                    Children =
-                                    {
-                                        new Button { Text = "▶️" },
-                                        new Button { Text = "✔️" },
-                                        new Button { Text = "🤍" }
-                                    }
-                                },
-                            }
-                        },
-                        new Label
-                        {
-                            LineBreakMode = LineBreakMode.WordWrap,
-                            HorizontalTextAlignment = TextAlignment.Start
-                        }
-                        .Bind(Label.TextProperty, path: nameof(ViewModel.Description), mode: BindingMode.OneWay),
-                        new VerticalStackLayout
-                        {
-                            new Label { Text = Strings.NextUp },
-                            new PosterCardView()
-                                .Bind(BindingContextProperty, nameof(ViewModel.NextUpItem), mode: BindingMode.OneWay),
-                        }
-                        .Bind(VerticalStackLayout.IsVisibleProperty, nameof(ViewModel.NextUpItem), mode: BindingMode.OneWay, converter: new IsObjectNotNullConverter()),
-                        new VerticalStackLayout
-                        {
-                            Children =
-                            {
-                                new Label { Text = Strings.Seasons },
-                                new CollectionView
-                                {
-                                    ItemTemplate = TemplateHelper.CardTemplateSelector,
-                                    ItemsLayout = LinearItemsLayout.Horizontal,
-                                    ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView,
-                                    SelectionMode = SelectionMode.Single
+                                    LineBreakMode = LineBreakMode.WordWrap,
+                                    HorizontalTextAlignment = TextAlignment.Start
                                 }
-                                .Bind(ItemsView.ItemsSourceProperty, mode: BindingMode.OneWay, path: nameof(ViewModel.Seasons))
+                                .Bind(Label.TextProperty, path: nameof(ViewModel.Description), mode: BindingMode.OneWay),
+
                             }
+                            .Column(Column.Center),
+                            new Image()
+                                .Bind(Image.SourceProperty, path: nameof(ViewModel.Item), mode: BindingMode.OneWay, converter: new BaseItemDtoToImageSourceConverter(ImageType.Logo))
+                                .Column(Column.Right)
                         }
-                        .Bind(VerticalStackLayout.IsVisibleProperty, path: nameof(ViewModel.Seasons), mode: BindingMode.OneWay, converter: new IsListNotNullOrEmptyConverter()),
-                        new VerticalStackLayout
-                        {
-                            Children =
-                            {
-                                new Label { Text = Strings.Episodes },
-                                new CollectionView
-                                {
-                                    ItemTemplate = TemplateHelper.CardTemplateSelector,
-                                    ItemsLayout = LinearItemsLayout.Horizontal,
-                                    ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView,
-                                    SelectionMode = SelectionMode.Single
-                                }
-                                .Bind(ItemsView.ItemsSourceProperty, mode: BindingMode.OneWay, path: nameof(ViewModel.Episodes))
-                            }
-                        }
-                        .Bind(VerticalStackLayout.IsVisibleProperty, path: nameof(ViewModel.Episodes), mode: BindingMode.OneWay, converter: new IsListNotNullOrEmptyConverter())
+                    },
+                    new VerticalStackLayout
+                    {
+                        new Label { Text = Strings.NextUp },
+                        new PosterCardView()
+                            .Bind(BindingContextProperty, nameof(ViewModel.NextUpItem), mode: BindingMode.OneWay),
                     }
+                    .Bind(VerticalStackLayout.IsVisibleProperty, nameof(ViewModel.NextUpItem), mode: BindingMode.OneWay, converter: new IsObjectNotNullConverter()),
+                    new VerticalStackLayout
+                    {
+                        Children =
+                        {
+                            new Label { Text = Strings.Seasons },
+                            new CollectionView
+                            {
+                                ItemTemplate = TemplateHelper.CardTemplateSelector,
+                                ItemsLayout = LinearItemsLayout.Horizontal,
+                                ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView,
+                                SelectionMode = SelectionMode.Single
+                            }
+                            .Bind(ItemsView.ItemsSourceProperty, mode: BindingMode.OneWay, path: nameof(ViewModel.Seasons))
+                        }
+                    }
+                    .Bind(VerticalStackLayout.IsVisibleProperty, path: nameof(ViewModel.Seasons), mode: BindingMode.OneWay, converter: new IsListNotNullOrEmptyConverter()),
+                    new VerticalStackLayout
+                    {
+                        Children =
+                        {
+                            new Label { Text = Strings.Episodes },
+                            new CollectionView
+                            {
+                                ItemTemplate = TemplateHelper.CardTemplateSelector,
+                                ItemsLayout = LinearItemsLayout.Horizontal,
+                                ItemsUpdatingScrollMode = ItemsUpdatingScrollMode.KeepLastItemInView,
+                                SelectionMode = SelectionMode.Single
+                            }
+                            .Bind(ItemsView.ItemsSourceProperty, mode: BindingMode.OneWay, path: nameof(ViewModel.Episodes))
+                        }
+                    }
+                    .Bind(VerticalStackLayout.IsVisibleProperty, path: nameof(ViewModel.Episodes), mode: BindingMode.OneWay, converter: new IsListNotNullOrEmptyConverter())
                 }
-                .Grow(1),
             }
         };
+    }
+
+    private enum Column
+    {
+        Left = 0,
+        Center = 1,
+        Right = 2
     }
 }

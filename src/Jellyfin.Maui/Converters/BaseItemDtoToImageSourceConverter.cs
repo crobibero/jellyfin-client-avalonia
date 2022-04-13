@@ -6,15 +6,15 @@ namespace Jellyfin.Maui.Converters;
 /// <summary>
 /// Gets the poster url from the base item.
 /// </summary>
-public class BaseItemDtoCardPosterConverter : BaseConverterOneWay<BaseItemDto?, ImageSource?>
+public class BaseItemDtoToImageSourceConverter : BaseConverterOneWay<BaseItemDto?, ImageSource?>
 {
     private readonly ImageType _imageType;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="BaseItemDtoCardPosterConverter"/> class.
+    /// Initializes a new instance of the <see cref="BaseItemDtoToImageSourceConverter"/> class.
     /// </summary>
     /// <param name="imageType">The image type to fetch.</param>
-    public BaseItemDtoCardPosterConverter(ImageType imageType)
+    public BaseItemDtoToImageSourceConverter(ImageType imageType)
     {
         _imageType = imageType;
     }
@@ -35,6 +35,6 @@ public class BaseItemDtoCardPosterConverter : BaseConverterOneWay<BaseItemDto?, 
             itemId = value.SeriesId ?? value.Id;
         }
 
-        return ImageSource.FromUri(new Uri($"{host}/Items/{itemId}/Images/{_imageType}?maxHeight=480"));
+        return ImageSource.FromUri(new Uri($"{host}/Items/{itemId}/Images/{_imageType}"));
     }
 }
