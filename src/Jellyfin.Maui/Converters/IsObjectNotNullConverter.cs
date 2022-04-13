@@ -1,3 +1,4 @@
+using System.Globalization;
 using CommunityToolkit.Maui.Converters;
 
 namespace Jellyfin.Maui.Converters;
@@ -8,5 +9,5 @@ namespace Jellyfin.Maui.Converters;
 public class IsObjectNotNullConverter : BaseConverterOneWay<object?, bool>
 {
     /// <inheritdoc/>
-    public override bool ConvertFrom(object? value) => value is not null;
+    public override bool ConvertFrom(object? value, CultureInfo? culture) => value is not null;
 }

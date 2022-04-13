@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text;
+using CommunityToolkit.Maui;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels.Facades;
@@ -32,6 +33,9 @@ public static class MauiProgram
                 fonts.AddFont("Quicksand-SemiBold.ttf", "QuicksandSemiBold");
             });
 
+        builder
+            .UseMauiCommunityToolkit()
+            .UseMauiCommunityToolkitMarkup();
         builder.Services.AddPages();
         builder.Services.AddSdkClients();
         builder.Services.AddServices();
@@ -41,7 +45,7 @@ public static class MauiProgram
     private static void AddPages(this IServiceCollection services)
     {
         var exportedTypes = typeof(MauiProgram).Assembly.GetTypes();
-        var viewModelIgnoreList = new[] { typeof(BaseViewModel), typeof(BaseIdViewModel) };
+        var viewModelIgnoreList = new[] { typeof(BaseViewModel), typeof(BaseItemViewModel) };
         var pageIgnoreList = new[] { typeof(BaseContentPage<>), typeof(BaseContentIdPage<>) };
         var baseViewModelType = typeof(BaseViewModel);
         var baseContentPageType = typeof(ContentPage);

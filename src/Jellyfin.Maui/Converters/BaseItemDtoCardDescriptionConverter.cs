@@ -9,7 +9,7 @@ namespace Jellyfin.Maui.Converters;
 public class BaseItemDtoCardDescriptionConverter : BaseConverterOneWay<BaseItemDto?, string?>
 {
     /// <inheritdoc/>
-    public override string? ConvertFrom(BaseItemDto? value)
+    public override string? ConvertFrom(BaseItemDto? value, CultureInfo? culture)
     {
         if (value is null)
         {
@@ -20,7 +20,7 @@ public class BaseItemDtoCardDescriptionConverter : BaseConverterOneWay<BaseItemD
         {
             BaseItemKind.Episode => $"S{value.ParentIndexNumber} E{value.IndexNumber} {value.Name}",
             BaseItemKind.Season => value.SeasonName,
-            _ => value.ProductionYear?.ToString(CultureInfo.InvariantCulture) ?? string.Empty
+            _ => value.ProductionYear?.ToString(culture) ?? string.Empty
         };
     }
 }

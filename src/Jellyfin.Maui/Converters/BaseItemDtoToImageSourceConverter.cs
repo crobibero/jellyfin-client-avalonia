@@ -1,3 +1,4 @@
+using System.Globalization;
 using CommunityToolkit.Maui.Converters;
 using Jellyfin.Maui.Services;
 
@@ -20,7 +21,7 @@ public class BaseItemDtoToImageSourceConverter : BaseConverterOneWay<BaseItemDto
     }
 
     /// <inheritdoc/>
-    public override ImageSource? ConvertFrom(BaseItemDto? value)
+    public override ImageSource? ConvertFrom(BaseItemDto? value, CultureInfo? culture)
     {
         if (value is null)
         {
