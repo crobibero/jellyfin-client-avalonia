@@ -7,7 +7,6 @@
     <RootNamespace>Jellyfin.Maui</RootNamespace>
     <UseMaui>true</UseMaui>
     <SingleProject>true</SingleProject>
-    <EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <NeutralLanguage>en</NeutralLanguage>
@@ -17,8 +16,10 @@
 
     <!-- App Identifier -->
     <ApplicationId>org.jellyfin.maui</ApplicationId>
+    <ApplicationId Condition="$(TargetFramework.Contains('-windows'))">A2816DD0-FA6B-423A-8E94-C474D44C36BE</ApplicationId>
 
     <!-- Versions -->
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
     <Version>1.0.0</Version>
 
@@ -85,10 +86,5 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-
-  <PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">
-    <OutputType>WinExe</OutputType>
-    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
-  </PropertyGroup>
 
 </Project>
