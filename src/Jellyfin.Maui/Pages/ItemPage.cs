@@ -21,6 +21,13 @@ public class ItemPage : BaseContentIdPage<ItemViewModel>
     {
     }
 
+    private enum Column
+    {
+        Left = 0,
+        Center = 1,
+        Right = 2
+    }
+
     /// <inheritdoc />
     protected override void InitializeLayout()
     {
@@ -57,7 +64,6 @@ public class ItemPage : BaseContentIdPage<ItemViewModel>
                                     HorizontalTextAlignment = TextAlignment.Start
                                 }
                                 .Bind(Label.TextProperty, path: nameof(ViewModel.Description), mode: BindingMode.OneWay),
-
                             }
                             .Column(Column.Center),
                             new Image()
@@ -107,12 +113,5 @@ public class ItemPage : BaseContentIdPage<ItemViewModel>
                 }
             }
         };
-    }
-
-    private enum Column
-    {
-        Left = 0,
-        Center = 1,
-        Right = 2
     }
 }
