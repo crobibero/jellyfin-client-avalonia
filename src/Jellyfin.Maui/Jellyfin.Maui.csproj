@@ -4,7 +4,6 @@
     <TargetFramework>net6.0-maccatalyst</TargetFramework>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
     <!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
-    <RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
     <OutputType>Exe</OutputType>
     <RootNamespace>Jellyfin.Maui</RootNamespace>
     <UseMaui>true</UseMaui>
