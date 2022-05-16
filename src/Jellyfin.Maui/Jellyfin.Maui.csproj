@@ -63,7 +63,7 @@
   <ItemGroup>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.4" />
     <PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-rc2" />
-    <PackageReference Include="CommunityToolkit.Maui.Markup" Version="1.0.0-rc2" />
+    <PackageReference Include="CommunityToolkit.Maui.Markup" Version="1.0.0-rc3" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
     <PackageReference Include="Jellyfin.Sdk" Version="2022.3.26-unstable.202203260046" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
