@@ -1,12 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xaml-comp compile="true" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:cv="clr-namespace:Jellyfin.Maui.ContentViews">
-
     <!-- Colors -->
-    <Color x:Key="JellyfinPrimaryColor">#AA5CC3</Color>
-    <Color x:Key="JellyfinSecondaryColor">#00A4DC</Color>
-    <Color x:Key="JellyfinBlackColor">#101010</Color>
-    <Color x:Key="WhiteColor">White</Color>
+    <Color x:Key="Primary">#AA5CC3</Color>
+    <Color x:Key="Secondary">#00A4DC</Color>
+    <Color x:Key="Black">#101010</Color>
+    <Color x:Key="White">White</Color>
+
+    <!-- Color Brushes -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
+    <SolidColorBrush x:Key="SeconaryBrush" Color="{StaticResource Secondary}"/>
+    <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}" />
+    <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}" />
 
     <!-- Font Sizes -->
     <x:Int16 x:Key="FontSmall">16</x:Int16>
@@ -21,7 +28,7 @@
 
     <!-- Implicit Styles -->
     <Style TargetType="Label" ApplyToDerivedTypes="True">
-        <Setter Property="TextColor" Value="{StaticResource WhiteColor}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         <Setter Property="FontFamily" Value="{StaticResource RegularFont}" />
         <Setter Property="LineBreakMode" Value="NoWrap" />
         <Setter Property="FontSize" Value="{StaticResource FontSmall}" />
@@ -30,9 +37,9 @@
     </Style>
 
     <Style TargetType="Button" ApplyToDerivedTypes="True">
-        <Setter Property="TextColor" Value="{StaticResource WhiteColor}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         <Setter Property="FontFamily" Value="{StaticResource BoldFont}" />
-        <Setter Property="BackgroundColor" Value="{StaticResource JellyfinSecondaryColor}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
         <Setter Property="FontSize" Value="{StaticResource FontMedium}" />
         <Setter Property="FontFamily" Value="{StaticResource RegularFont}" />
     </Style>
@@ -54,7 +61,7 @@
     </Style>
 
     <Style TargetType="Frame" x:Key="FrameLoginCard">
-        <Setter Property="BorderColor" Value="{StaticResource WhiteColor}"/>
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
         <Setter Property="HeightRequest" Value="100" />
         <Setter Property="WidthRequest" Value="300" />
     </Style>
