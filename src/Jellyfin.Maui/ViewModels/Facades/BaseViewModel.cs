@@ -47,7 +47,7 @@ public abstract partial class BaseViewModel : ObservableObject
         Application.Current?.Dispatcher.Dispatch(accessMethod);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void NavigateToItem(BaseItemDto? item)
     {
         if (item is null)

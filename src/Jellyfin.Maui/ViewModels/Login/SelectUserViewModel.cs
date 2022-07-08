@@ -50,13 +50,13 @@ public partial class SelectUserViewModel : BaseViewModel
         Users.ReplaceRange(state.Users.Where(u => u.ServerId == serverState.Id));
     }
 
-    [ICommand]
+    [RelayCommand]
     private void AddUser()
     {
         _navigationService.NavigateToLoginPage();
     }
 
-    [ICommand]
+    [RelayCommand]
     private void SelectUser(UserStateModel? user)
     {
         if (user is not null)

@@ -28,12 +28,6 @@ jobs:
         uses: actions/setup-dotnet@c0d4ad69d8bd405d234f1c9166d383b7a4f69ed8 # tag=v2
         with:
           dotnet-version: 6.0.x
-      
-      # Needed for Windows build
-#      - name: Setup MSBuild.exe
-#        uses: microsoft/setup-msbuild@v1.1
-#        with:
-#          vs-prerelease: true
 
       - name: Generate version number using date and run number
         shell: pwsh

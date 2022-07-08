@@ -46,7 +46,7 @@ public partial class AddServerViewModel : BaseViewModel
         return ValueTask.CompletedTask;
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task AddServerAsync()
     {
         try

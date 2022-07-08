@@ -2,7 +2,7 @@ using System;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace Jellyfin.Maui.Tizen;
+namespace Jellyfin.Maui.Platforms.Tizen;
 
 class Program : MauiApplication
 {

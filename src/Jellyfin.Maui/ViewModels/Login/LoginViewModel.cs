@@ -93,7 +93,7 @@ public partial class LoginViewModel : BaseViewModel
         QuickConnectAvailable = await _authenticationService.IsQuickConnectEnabledAsync().ConfigureAwait(false);
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task LoginAsync()
     {
         try
@@ -131,21 +131,21 @@ public partial class LoginViewModel : BaseViewModel
         }
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task LoginWithQuickConnectAsync()
     {
-        var code = await _authenticationService.InitializeQuickConnectAsync().ConfigureAwait(false);
-        if (string.IsNullOrEmpty(code))
-        {
-            ErrorMessage = "Unable to initialize QuickConnect";
-        }
-        else
-        {
-            QuickConnectCode = code;
-        }
-
         try
         {
+            var code = await _authenticationService.InitializeQuickConnectAsync().ConfigureAwait(false);
+            if (string.IsNullOrEmpty(code))
+            {
+                ErrorMessage = "Unable to initialize QuickConnect";
+            }
+            else
+            {
+                QuickConnectCode = code;
+            }
+
             bool? authenticated;
 
             do

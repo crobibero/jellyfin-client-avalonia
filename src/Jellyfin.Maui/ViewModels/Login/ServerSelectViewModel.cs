@@ -43,13 +43,13 @@ public partial class ServerSelectViewModel : BaseViewModel
         Servers.ReplaceRange(state.Servers);
     }
 
-    [ICommand]
+    [RelayCommand]
     private void AddServer()
     {
         _navigationService.NavigateToAddServerPage();
     }
 
-    [ICommand]
+    [RelayCommand]
     private void SelectServer(ServerStateModel? server)
     {
         if (server is not null)
