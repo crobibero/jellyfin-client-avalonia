@@ -50,7 +50,7 @@ jobs:
           dotnet publish -f net6.0-maccatalyst -c Release -p:BuildIpa=True -o ./artifacts
 
       - name: Upload MacCatalyst build artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # tag=v2
         with:
           name: maccatalyst-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
           path: ./src/artifacts/**/*.pkg
