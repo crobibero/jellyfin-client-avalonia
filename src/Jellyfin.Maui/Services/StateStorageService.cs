@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Jellyfin.Maui.Models;
 
 namespace Jellyfin.Maui.Services;
@@ -7,7 +7,10 @@ namespace Jellyfin.Maui.Services;
 public class StateStorageService : IStateStorageService
 {
     private const string StateKey = "jellyfin.state";
+    private const string DeviceIdKey = "jellyfin.device.id";
+
     private StateContainerModel? _stateCache;
+    private string? _deviceIdCache;
 
     /// <inheritdoc />
     public async ValueTask<StateContainerModel> GetStoredStateAsync()
@@ -147,5 +150,26 @@ public class StateStorageService : IStateStorageService
         }
 
         await SetStoredStateAsync(state).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc/>
+    public async ValueTask<string> GetDeviceIdAsync()
+    {
+        if (!string.IsNullOrEmpty(_deviceIdCache))
+        {
+            return _deviceIdCache;
+        }
+
+        _deviceIdCache = await SecureStorage.GetAsync(DeviceIdKey).ConfigureAwait(false);
+        if (!string.IsNullOrEmpty(_deviceIdCache))
+        {
+            return _deviceIdCache;
+        }
+
+        // DeviceId not set, create and store a new one.
+        _deviceIdCache = Guid.NewGuid().ToString();
+        await SecureStorage.SetAsync(DeviceIdKey, _deviceIdCache).ConfigureAwait(false);
+
+        return _deviceIdCache;
     }
 }

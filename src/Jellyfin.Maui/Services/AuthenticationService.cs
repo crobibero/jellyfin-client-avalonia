@@ -168,6 +168,7 @@ public class AuthenticationService : IAuthenticationService
         }
         catch (Exception)
         {
+            _sdkClientSettings.AccessToken = null;
             return false;
         }
     }

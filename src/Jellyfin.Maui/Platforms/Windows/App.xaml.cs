@@ -1,5 +1,3 @@
-using Microsoft.UI.Xaml;
-
 namespace Jellyfin.Maui.WinUI;
 
 /// <summary>
@@ -21,19 +19,4 @@ public partial class App : MauiWinUIApplication
 
     /// <inheritdoc/>
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
-
-    /// <inheritdoc/>
-    protected override void OnLaunched(LaunchActivatedEventArgs args)
-    {
-        base.OnLaunched(args);
-
-        var version = typeof(MauiProgram).Assembly.GetName().Version?.ToString() ?? "0.0.0.1";
-        // TODO only 1 token per DeviceId is allowed...
-        Services.GetRequiredService<SdkClientSettings>()
-            .InitializeClientSettings(
-                "Jellyfin Maui Windows",
-                version,
-                "Windows",
-                Guid.NewGuid().ToString("N"));
-    }
 }

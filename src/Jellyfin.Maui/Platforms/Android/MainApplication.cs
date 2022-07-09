@@ -1,7 +1,7 @@
-﻿using Android.App;
+using Android.App;
 using Android.Runtime;
 
-namespace Jellyfin.Maui.Platforms.Android;
+namespace Jellyfin.Maui;
 
 [Application]
 public class MainApplication : MauiApplication

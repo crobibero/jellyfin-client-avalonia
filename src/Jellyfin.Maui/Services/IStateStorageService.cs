@@ -1,4 +1,4 @@
-﻿using Jellyfin.Maui.Models;
+using Jellyfin.Maui.Models;
 
 namespace Jellyfin.Maui.Services;
 
@@ -7,6 +7,12 @@ namespace Jellyfin.Maui.Services;
 /// </summary>
 public interface IStateStorageService
 {
+    /// <summary>
+    /// Gets the stored device id.
+    /// </summary>
+    /// <returns>The device id.</returns>
+    ValueTask<string> GetDeviceIdAsync();
+
     /// <summary>
     /// Gets the stored state.
     /// </summary>

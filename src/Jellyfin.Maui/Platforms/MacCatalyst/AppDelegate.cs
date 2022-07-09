@@ -1,6 +1,6 @@
-﻿using Foundation;
+using Foundation;
 
-namespace Jellyfin.Maui.Platforms.MacCatalyst;
+namespace Jellyfin.Maui;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

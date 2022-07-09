@@ -1,7 +1,7 @@
-﻿using ObjCRuntime;
+using ObjCRuntime;
 using UIKit;
 
-namespace Jellyfin.Maui.Platforms.MacCatalyst;
+namespace Jellyfin.Maui;
 
 public class Program
 {

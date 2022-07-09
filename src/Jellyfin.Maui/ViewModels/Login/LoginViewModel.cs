@@ -140,6 +140,7 @@ public partial class LoginViewModel : BaseViewModel
             if (string.IsNullOrEmpty(code))
             {
                 ErrorMessage = "Unable to initialize QuickConnect";
+                return;
             }
             else
             {

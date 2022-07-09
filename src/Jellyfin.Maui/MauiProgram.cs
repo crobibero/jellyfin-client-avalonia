@@ -70,11 +70,14 @@ public static class MauiProgram
 
     private static void AddServices(this IServiceCollection services)
     {
+        services.AddSingleton<IDeviceInfo>(Microsoft.Maui.Devices.DeviceInfo.Current);
+
         services.AddSingleton<IStateService, StateService>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IAuthenticationService, AuthenticationService>();
         services.AddSingleton<ILibraryService, LibraryService>();
         services.AddSingleton<IStateStorageService, StateStorageService>();
+        services.AddSingleton<ISdkService, SdkService>();
     }
 
     private static void AddSdkClients(this IServiceCollection services)
