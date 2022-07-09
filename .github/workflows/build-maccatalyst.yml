@@ -20,13 +20,9 @@ env:
 
 jobs:
   maui-maccatalyst:
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
-
-      - uses: maxim-lobanov/setup-xcode@4aa4176a819ae7c019451acfda0bba67bffc6704 # tag=v1
-        with:
-          xcode-version: '13.1'
 
       - name: Setup .NET
         uses: actions/setup-dotnet@c0d4ad69d8bd405d234f1c9166d383b7a4f69ed8 # tag=v2
@@ -49,14 +45,16 @@ jobs:
         
       - name: Build
         working-directory: ./src
-        run: dotnet build -c Release -f net6.0-maccatalyst
+        run: |
+          dotnet build -f net6.0-maccatalyst -c Release -o ./artifacts
+          dotnet publish -f net6.0-maccatalyst -c Release -p:BuildIpa=True -o ./artifacts
 
       #- name: Test
       #  working-directory: ./src
       #  run: dotnet test -c Release -f net6.0-maccatalyst
 
-      #- name: Upload MacCatalyst build artifacts
-      #  uses: actions/upload-artifact@v2
-      #  with:
-      #    name: maccatalyst-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
-      #    path: '*maccatalyst/**/*.app/**'
+      - name: Upload MacCatalyst build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: maccatalyst-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
+          path: ./artifacts/**/*.pkg

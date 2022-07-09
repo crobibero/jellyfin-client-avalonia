@@ -42,14 +42,37 @@ jobs:
         
       - name: Build
         working-directory: ./src
-        run: dotnet build -c Release -f net6.0-windows10.0.19041.0
+        run: |
+          dotnet build -c Release -f net6.0-windows10.0.19041.0
+          dotnet publish -c Release -f net6.0-windows10.0.19041.0
 
       #- name: Test
       #  working-directory: ./src
       #  run: dotnet test -c Release -f net6.0-windows10
 
-      #- name: Upload build artifacts
-      #  uses: actions/upload-artifact@v2
-      #  with:
-      #    name: windows-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
-      #    path: '*Windows\**\*.msix'
+      - name: Create signing pfx file from secrets
+        shell: pwsh
+        id: secret-file
+        env:
+          SECRET_DATA1: ${{ secrets.WIN_SIGN_CERT }}
+        run: |
+          $secretFile = "WinSignCert.pfx"; 
+          $encodedBytes = [System.Convert]::FromBase64String($env:SECRET_DATA1); 
+          Set-Content $secretFile -Value $encodedBytes -AsByteStream;
+          Write-Output "::set-output name=SECRET_FILE::$secretFile";
+          Write-Output " ";
+          Write-Output "CHECK FILE EXISTS";
+          Write-Output " ";
+          ls
+
+      - name: Sign Windows App
+        shell: pwsh
+        env:
+          CERT_PASSWORD: ${{ secrets.WIN_CERT_PASSWORD }}
+        run: |
+          '"C:\Program Files (x86)\Windows Kits\10\App Certification Kit\SignTool" sign /a /fd SHA256 /f WinSignCert.pfx /p ($env:CERT_PASSWORD) **\*.msix'
+      - uses: actions/upload-artifact@v2
+        with:
+          name: windows-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
+          path: |             
+            **\*.msix
