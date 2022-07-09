@@ -41,14 +41,13 @@ jobs:
         run: dotnet workload install maui-windows
         
       - name: Build
-        working-directory: ./src
+        working-directory: .\src
+        shell: pwsh
         run: |
           dotnet build -c Release -f net6.0-windows10.0.19041.0
           dotnet publish -c Release -f net6.0-windows10.0.19041.0
-
-      #- name: Test
-      #  working-directory: ./src
-      #  run: dotnet test -c Release -f net6.0-windows10
+          New-Item -Path . -Name "artifacts" -ItemType Directory
+          Get-ChildItem -Path Jellyfin.Maui*.msix -Recurse -File | Copy-Item -Destination .\artifacts\
 
       - name: Create signing pfx file from secrets
         shell: pwsh
@@ -70,9 +69,9 @@ jobs:
         env:
           CERT_PASSWORD: ${{ secrets.WIN_CERT_PASSWORD }}
         run: |
-          '"C:\Program Files (x86)\Windows Kits\10\App Certification Kit\SignTool" sign /a /fd SHA256 /f WinSignCert.pfx /p ($env:CERT_PASSWORD) **\Jellyfin.Maui*.msix'
+          '"C:\Program Files (x86)\Windows Kits\10\App Certification Kit\SignTool" sign /a /fd SHA256 /f WinSignCert.pfx /p ($env:CERT_PASSWORD) .\src\artifacts\Jellyfin.Maui*.msix'
       - uses: actions/upload-artifact@v2
         with:
           name: windows-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
           path: |             
-            **\Jellyfin.Maui*.msix
+            .\src\artifacts\Jellyfin.Maui*.msix
