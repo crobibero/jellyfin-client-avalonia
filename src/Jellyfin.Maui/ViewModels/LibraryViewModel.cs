@@ -56,9 +56,9 @@ public partial class LibraryViewModel : BaseItemViewModel
                 PageSize * PageIndex)
             .ConfigureAwait(false);
 
-        Application.Current?.Dispatcher.Dispatch(() =>
+        Application.Current?.Dispatcher.DispatchAsync(() =>
         {
             LibraryItemsCollection.ReplaceRange(queryResult.Items);
-        });
+        }).SafeFireAndForget();
     }
 }

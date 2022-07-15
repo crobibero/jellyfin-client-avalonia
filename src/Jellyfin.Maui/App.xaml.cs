@@ -21,7 +21,7 @@ public partial class App : Application
     /// <inheritdoc/>
     protected override async void OnStart()
     {
-        await InternalServiceProvider.GetService<ISdkService>().InitializeAsync();
+        await InternalServiceProvider.GetService<ISdkService>().InitializeAsync().ConfigureAwait(false);
         base.OnStart();
     }
 }
