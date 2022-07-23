@@ -1,6 +1,7 @@
 using System.Globalization;
 using CommunityToolkit.Maui.Converters;
-using Jellyfin.Maui.Models;
+using Jellyfin.Maui.Extensions;
+using Jellyfin.Maui.Services;
 
 namespace Jellyfin.Maui.Converters;
 
@@ -10,6 +11,7 @@ namespace Jellyfin.Maui.Converters;
 public class BaseItemDtoToImageSourceConverter : BaseConverterOneWay<BaseItemDto?, ImageSource?>
 {
     private readonly ImageType _imageType;
+    private readonly IImageClient _imageClient;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseItemDtoToImageSourceConverter"/> class.
@@ -18,6 +20,7 @@ public class BaseItemDtoToImageSourceConverter : BaseConverterOneWay<BaseItemDto
     public BaseItemDtoToImageSourceConverter(ImageType imageType)
     {
         _imageType = imageType;
+        _imageClient = InternalServiceProvider.GetService<IImageClient>();
     }
 
     /// <inheritdoc/>
@@ -41,6 +44,6 @@ public class BaseItemDtoToImageSourceConverter : BaseConverterOneWay<BaseItemDto
             itemId = value.SeriesId ?? value.Id;
         }
 
-        return ImageSource.FromUri(new Uri($"{CurrentStateModel.StaticHost}/Items/{itemId}/Images/{imageTypeStr}"));
+        return ImageSource.FromUri(_imageClient.GetItemImageUrl(itemId, _imageType).ToUri());
     }
 }
