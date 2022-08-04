@@ -5,6 +5,16 @@ namespace Jellyfin.Maui.DataTemplates;
 /// </summary>
 public class CardTemplateSelector : DataTemplateSelector
 {
+    /// <summary>
+    /// Gets or sets the library card template.
+    /// </summary>
+    public DataTemplate? LibraryCardTemplate { get; set; }
+
+    /// <summary>
+    /// Gets or sets the poster card template.
+    /// </summary>
+    public DataTemplate? PosterCardTemplate { get; set; }
+
     /// <inheritdoc/>
     protected override DataTemplate? OnSelectTemplate(object item, BindableObject container)
     {
@@ -12,8 +22,8 @@ public class CardTemplateSelector : DataTemplateSelector
         {
             return baseItemDto.Type switch
             {
-                BaseItemKind.CollectionFolder => TemplateHelper.LibraryCardTemplate,
-                _ => TemplateHelper.PosterCardTemplate,
+                BaseItemKind.CollectionFolder => LibraryCardTemplate,
+                _ => PosterCardTemplate,
             };
         }
 

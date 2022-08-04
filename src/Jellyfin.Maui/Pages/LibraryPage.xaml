@@ -1,0 +1,21 @@
+<page:BaseContentIdPage x:Class="Jellyfin.Maui.Pages.LibraryPage"
+                        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                        xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
+                        xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
+                        xmlns:views="clr-namespace:Jellyfin.Maui.ContentViews"
+                        xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels"
+                        x:DataType="vm:LibraryViewModel"
+                        x:TypeArguments="vm:LibraryViewModel">
+    <FlexLayout Direction="Column">
+        <!--  Header  -->
+        <Label FlexLayout.Basis="100"
+               Text="{Binding Item.Name, Mode=OneWay}" />
+        <!--  Content  -->
+        <ScrollView FlexLayout.Grow="1">
+            <views:ItemFlexLayout Direction="Row"
+                                  ItemTemplate="{StaticResource PosterCardTemplate}"
+                                  ItemsSource="{Binding LibraryItemsCollection, Mode=OneWay}" />
+        </ScrollView>
+    </FlexLayout>
+</page:BaseContentIdPage>

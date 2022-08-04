@@ -8,16 +8,16 @@ namespace Jellyfin.Maui.Converters;
 /// <summary>
 /// Gets the poster url from the base item.
 /// </summary>
-public class BaseItemDtoToImageSourceConverter : BaseConverterOneWay<BaseItemDto?, ImageSource?>
+public class BaseImageSourceConverter : BaseConverterOneWay<BaseItemDto?, ImageSource?>
 {
     private readonly ImageType _imageType;
     private readonly IImageClient _imageClient;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="BaseItemDtoToImageSourceConverter"/> class.
+    /// Initializes a new instance of the <see cref="BaseImageSourceConverter"/> class.
     /// </summary>
     /// <param name="imageType">The image type to fetch.</param>
-    public BaseItemDtoToImageSourceConverter(ImageType imageType)
+    public BaseImageSourceConverter(ImageType imageType)
     {
         _imageType = imageType;
         _imageClient = InternalServiceProvider.GetService<IImageClient>();

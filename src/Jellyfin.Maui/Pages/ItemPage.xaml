@@ -1,0 +1,67 @@
+﻿<page:BaseContentIdPage x:Class="Jellyfin.Maui.Pages.ItemPage"
+                        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                        xmlns:converter="clr-namespace:Jellyfin.Maui.Converters"
+                        xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
+                        xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                        xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
+                        xmlns:sdk="clr-namespace:Jellyfin.Sdk;assembly=Jellyfin.Sdk"
+                        xmlns:views="clr-namespace:Jellyfin.Maui.ContentViews"
+                        xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels"
+                        x:DataType="vm:ItemViewModel"
+                        x:TypeArguments="vm:ItemViewModel">
+    <ScrollView>
+        <VerticalStackLayout>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+                <VerticalStackLayout Grid.Column="0">
+                    <Label Text="Director" />
+                    <Label Text="Runs" />
+                    <Label Text="Ends" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1">
+                    <Label Text="{Binding Title, Mode=OneWay}" />
+                    <Label Text="{Binding SubTitle, Mode=OneWay}" />
+                    <Label HorizontalTextAlignment="Start"
+                           LineBreakMode="WordWrap"
+                           Text="{Binding Description, Mode=OneWay}" />
+                </VerticalStackLayout>
+                <!--  TODO ImageType.Logo  -->
+                <!--
+                <Image Grid.Column="2"
+                       Source="{Binding Item, Mode=OneWay, Converter={converter:BaseItemDtoToImageSourceConverter}}}" />
+                -->
+            </Grid>
+            <VerticalStackLayout IsVisible="{Binding NextUpItem, Mode=OneWay, Converter={mct:IsNotNullConverter}}">
+                <Label Text="{ext:Localize NextUp}" />
+                <!--<views:PosterCardView BindingContext="{Binding NextUpItem, Mode=OneWay}" />-->
+            </VerticalStackLayout>
+            <VerticalStackLayout IsVisible="{Binding Seasons, Converter={mct:IsListNotNullOrEmptyConverter}}">
+                <Label Text="{ext:Localize Seasons}" />
+                <CollectionView ItemTemplate="{StaticResource CardTemplateSelector}"
+                                ItemsSource="{Binding Seasons, Mode=OneWay}"
+                                ItemsUpdatingScrollMode="KeepLastItemInView"
+                                SelectionMode="Single">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" />
+                    </CollectionView.ItemsLayout>
+                </CollectionView>
+            </VerticalStackLayout>
+            <VerticalStackLayout IsVisible="{Binding Episodes, Converter={mct:IsListNotNullOrEmptyConverter}}">
+                <Label Text="{ext:Localize Episodes}" />
+                <CollectionView ItemTemplate="{StaticResource CardTemplateSelector}"
+                                ItemsSource="{Binding Episodes, Mode=OneWay}"
+                                ItemsUpdatingScrollMode="KeepLastItemInView"
+                                SelectionMode="Single">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" />
+                    </CollectionView.ItemsLayout>
+                </CollectionView>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</page:BaseContentIdPage>

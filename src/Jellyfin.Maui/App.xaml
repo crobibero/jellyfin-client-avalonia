@@ -1,7 +1,34 @@
-<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<Application x:Class="Jellyfin.Maui.App"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Jellyfin.Maui.App">
+             xmlns:converters="clr-namespace:Jellyfin.Maui.Converters"
+             xmlns:dt="clr-namespace:Jellyfin.Maui.DataTemplates"
+             xmlns:local="clr-namespace:Jellyfin.Maui.Models"
+             xmlns:sdk="clr-namespace:Jellyfin.Sdk;assembly=Jellyfin.Sdk">
     <Application.Resources>
-        <ResourceDictionary Source="Resources/Styles/BaseStyles.xaml"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--  Styles  -->
+                <ResourceDictionary Source="Resources/Styles/BaseStyles.xaml" />
+                <ResourceDictionary Source="Resources/Styles/DataTemplates.xaml" />
+                <!--  Template Selectors  -->
+                <ResourceDictionary>
+                    <dt:CardTemplateSelector x:Key="CardTemplateSelector"
+                                             LibraryCardTemplate="{StaticResource LibraryCardTemplate}"
+                                             PosterCardTemplate="{StaticResource PosterCardTemplate}" />
+                    <dt:HomeRowTemplateSelector x:Key="HomeRowTemplateSelector"
+                                                LibraryHomeRowTemplate="{StaticResource HomeRowTemplate}" />
+                </ResourceDictionary>
+                <!--  Converters  -->
+                <ResourceDictionary>
+                    <converters:BaseItemDtoCardTitleConverter x:Key="BaseItemDtoCardTitleConverter"
+                                                              x:DataType="sdk:BaseItemDto" />
+                    <converters:BaseItemDtoCardDescriptionConverter x:Key="BaseItemDtoCardDescriptionConverter"
+                                                                    x:DataType="sdk:BaseItemDto" />
+                    <converters:PrimaryImageSourceConverter x:Key="PrimaryImageSourceConverter"
+                                                            x:DataType="sdk:BaseItemDto" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

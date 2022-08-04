@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Specialized;
+using Maui.BindableProperty.Generator.Core;
 
 namespace Jellyfin.Maui.ContentViews;
 
@@ -7,64 +8,35 @@ namespace Jellyfin.Maui.ContentViews;
 /// Flex layout with dynamic items.
 /// This shouldn't be needed after rc2.
 /// </summary>
-public class ItemFlexLayout : FlexLayout
+public partial class ItemFlexLayout : FlexLayout
 {
-    /// <summary>
-    /// The <see cref="ItemsSource"/> property.
-    /// </summary>
-    public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(
-        nameof(ItemsSource),
-        typeof(IEnumerable),
-        typeof(ItemFlexLayout),
-        propertyChanged: OnItemsSourceChanged);
+    [AutoBindable(OnChanged = nameof(OnItemsSourceChanged))]
+    private IEnumerable? _itemsSource;
 
-    /// <summary>
-    /// The <see cref="ItemTemplate"/> property.
-    /// </summary>
-    public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create(
-        nameof(ItemTemplate),
-        typeof(DataTemplate),
-        typeof(ItemFlexLayout));
+    [AutoBindable]
+    private DataTemplate? _itemTemplate;
 
-    /// <summary>
-    /// Gets or sets the list of items.
-    /// </summary>
-    public IEnumerable ItemsSource
+    private void OnItemsSourceChanged(IEnumerable newVal)
     {
-        get => (IEnumerable)GetValue(ItemsSourceProperty);
-        set => SetValue(ItemsSourceProperty, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the item template.
-    /// </summary>
-    public DataTemplate ItemTemplate
-    {
-        get => (DataTemplate)GetValue(ItemTemplateProperty);
-        set => SetValue(ItemTemplateProperty, value);
-    }
-
-    private static void OnItemsSourceChanged(BindableObject bindable, object oldVal, object newVal)
-    {
-        var layout = (ItemFlexLayout)bindable;
-
         if (newVal is INotifyCollectionChanged observableCollection)
         {
-            observableCollection.CollectionChanged += layout.OnItemsSourceCollectionChanged;
+            observableCollection.CollectionChanged += OnItemsSourceCollectionChanged;
         }
 
-        layout.Children.Clear();
+        Children.Clear();
         if (newVal is IEnumerable enumerable)
         {
             foreach (var item in enumerable)
             {
-                layout.Children.Add(layout.CreateChildView(item));
+                Children.Add(CreateChildView(item));
             }
         }
     }
 
     private View CreateChildView(object item)
     {
+        ArgumentNullException.ThrowIfNull(ItemTemplate);
+
         if (ItemTemplate is DataTemplateSelector dts)
         {
             var itemTemplate = dts.SelectTemplate(item, null);

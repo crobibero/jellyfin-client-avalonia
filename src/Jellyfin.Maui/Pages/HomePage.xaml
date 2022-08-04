@@ -1,0 +1,17 @@
+<page:BaseContentPage x:Class="Jellyfin.Maui.Pages.HomePage"
+                      xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
+                      xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
+                      xmlns:views="clr-namespace:Jellyfin.Maui.ContentViews"
+                      xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels"
+                      x:DataType="vm:HomeViewModel"
+                      x:TypeArguments="vm:HomeViewModel">
+    <ScrollView>
+        <StackLayout Padding="16">
+            <CollectionView ItemTemplate="{StaticResource HomeRowTemplateSelector}"
+                            ItemsSource="{Binding HomeRowCollection, Mode=OneWay}"
+                            ItemsUpdatingScrollMode="KeepLastItemInView" />
+        </StackLayout>
+    </ScrollView>
+</page:BaseContentPage>
