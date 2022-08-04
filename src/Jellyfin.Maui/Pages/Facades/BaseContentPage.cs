@@ -27,10 +27,6 @@ public abstract class BaseContentPage<TViewModel> : ContentPage
     {
         BindingContext = ViewModel = viewModel;
         Title = pageTitle;
-
-#pragma warning disable CA2214 // Do not call overridable methods in constructors
-        InitializeLayout();
-#pragma warning restore CA2214 // Do not call overridable methods in constructors
     }
 
     /// <summary>
@@ -55,9 +51,4 @@ public abstract class BaseContentPage<TViewModel> : ContentPage
 
         base.OnDisappearing();
     }
-
-    /// <summary>
-    /// Called during construction to initialize the layout.
-    /// </summary>
-    protected abstract void InitializeLayout();
 }

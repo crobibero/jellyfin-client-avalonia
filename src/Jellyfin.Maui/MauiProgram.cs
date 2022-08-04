@@ -1,9 +1,13 @@
 using System.Net;
 using System.Text;
 using CommunityToolkit.Maui;
+using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Pages.Facades;
+using Jellyfin.Maui.Pages.Login;
 using Jellyfin.Maui.Services;
+using Jellyfin.Maui.ViewModels;
 using Jellyfin.Maui.ViewModels.Facades;
+using Jellyfin.Maui.ViewModels.Login;
 using Polly;
 using Polly.Extensions.Http;
 
@@ -33,9 +37,7 @@ public static class MauiProgram
                 fonts.AddFont("Quicksand-SemiBold.ttf", "QuicksandSemiBold");
             });
 
-        builder
-            .UseMauiCommunityToolkit()
-            .UseMauiCommunityToolkitMarkup();
+        builder.UseMauiCommunityToolkit();
         builder.Services.AddPages();
         builder.Services.AddSdkClients();
         builder.Services.AddServices();
@@ -44,32 +46,19 @@ public static class MauiProgram
 
     private static void AddPages(this IServiceCollection services)
     {
-        var exportedTypes = typeof(MauiProgram).Assembly.GetTypes();
-        var viewModelIgnoreList = new[] { typeof(BaseViewModel), typeof(BaseItemViewModel) };
-        var pageIgnoreList = new[] { typeof(BaseContentPage<>), typeof(BaseContentIdPage<>) };
-        var baseViewModelType = typeof(BaseViewModel);
-        var baseContentPageType = typeof(ContentPage);
-
-        foreach (var type in exportedTypes)
-        {
-            if (Array.IndexOf(viewModelIgnoreList, type) == -1 && baseViewModelType.IsAssignableFrom(type))
-            {
-                // Add View Models
-                services.AddTransient(type);
-                continue;
-            }
-
-            if (Array.IndexOf(pageIgnoreList, type) == -1 && baseContentPageType.IsAssignableFrom(type))
-            {
-                // Add Pages
-                services.AddTransient(type);
-                continue;
-            }
-        }
+        services.AddTransient<AddServerPage, AddServerViewModel>();
+        services.AddTransient<LoginPage, LoginViewModel>();
+        services.AddTransient<SelectServerPage, ServerSelectViewModel>();
+        services.AddTransient<SelectUserPage, SelectUserViewModel>();
+        services.AddTransient<HomePage, HomeViewModel>();
+        services.AddTransient<ItemPage, ItemViewModel>();
+        services.AddTransient<LibraryPage, LibraryViewModel>();
+        services.AddTransient<MainPage>();
     }
 
     private static void AddServices(this IServiceCollection services)
     {
+        services.AddLocalization();
         services.AddSingleton<IDeviceInfo>(Microsoft.Maui.Devices.DeviceInfo.Current);
 
         services.AddSingleton<IStateService, StateService>();
@@ -98,6 +87,7 @@ public static class MauiProgram
         // Register sdk services
         services.AddSingleton<SdkClientSettings>();
 
+        // TODO remove unused clients.
         services.AddHttpClient<IApiKeyClient, ApiKeyClient>()
             .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
             .AddPolicyHandler(retryPolicy);

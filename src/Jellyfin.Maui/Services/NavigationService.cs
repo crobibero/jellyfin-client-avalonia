@@ -59,7 +59,7 @@ public class NavigationService : INavigationService
         {
             Application.Current?.Dispatcher.Dispatch(() =>
             {
-                var serverSelectPage = InternalServiceProvider.GetService<ServerSelectPage>();
+                var serverSelectPage = InternalServiceProvider.GetService<SelectServerPage>();
                 _loginNavigationPage = new NavigationPage(serverSelectPage);
                 _application.MainPage = _loginNavigationPage;
             });

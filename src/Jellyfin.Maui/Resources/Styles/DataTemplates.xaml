@@ -1,0 +1,106 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:converter="clr-namespace:Jellyfin.Maui.Converters"
+                    xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
+                    xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                    xmlns:models="clr-namespace:Jellyfin.Maui.Models"
+                    xmlns:sdk="clr-namespace:Jellyfin.Sdk;assembly=Jellyfin.Sdk"
+                    xmlns:view="clr-namespace:Jellyfin.Maui.ContentViews"
+                    xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels"
+                    xmlns:vmf="clr-namespace:Jellyfin.Maui.ViewModels.Facades">
+    <!--  Server Select  -->
+    <DataTemplate x:Key="ServerSelectTemplate"
+                  x:DataType="models:ServerStateModel">
+        <Frame Style="{StaticResource FrameLoginCard}">
+            <Frame.GestureRecognizers>
+                <ClickGestureRecognizer Command="{Binding SelectServerCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
+                                        CommandParameter="{Binding .}" />
+                <TapGestureRecognizer Command="{Binding SelectServerCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
+                                      CommandParameter="{Binding .}" />
+            </Frame.GestureRecognizers>
+            <VerticalStackLayout>
+                <Label Text="{Binding Name, Mode=OneTime}" />
+                <Label Text="{Binding Url, Mode=OneTime}" />
+            </VerticalStackLayout>
+        </Frame>
+    </DataTemplate>
+
+    <!--  User Select  -->
+    <DataTemplate x:Key="UserSelectTemplate"
+                  x:DataType="models:UserStateModel">
+        <Frame Style="{StaticResource FrameLoginCard}">
+            <Frame.GestureRecognizers>
+                <ClickGestureRecognizer Command="{Binding SelectUserCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
+                                        CommandParameter="{Binding .}" />
+                <TapGestureRecognizer Command="{Binding SelectUserCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
+                                      CommandParameter="{Binding .}" />
+            </Frame.GestureRecognizers>
+            <Label Text="{Binding Name, Mode=OneTime}" />
+        </Frame>
+    </DataTemplate>
+
+    <!--  Library Card  -->
+    <DataTemplate x:Key="LibraryCardTemplate"
+                  x:DataType="sdk:BaseItemDto">
+        <Grid Style="{StaticResource LibraryCard}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="300" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <!--
+            <Grid.GestureRecognizers>
+                <ClickGestureRecognizer Command="{Binding NavigateToItemCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
+                                        CommandParameter="{Binding .}" />
+                <TapGestureRecognizer Command="{Binding NavigateToItemCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
+                                      CommandParameter="{Binding .}" />
+            </Grid.GestureRecognizers>
+            -->
+            <Image Grid.Row="0"
+                   Source="{Binding ., Converter={StaticResource PrimaryImageSourceConverter}}" />
+            <Label Grid.Row="1"
+                   Text="{Binding ., Converter={StaticResource BaseItemDtoCardTitleConverter}}" />
+        </Grid>
+    </DataTemplate>
+
+    <!--  Poster Card  -->
+    <DataTemplate x:Key="PosterCardTemplate"
+                  x:DataType="sdk:BaseItemDto">
+        <Grid Style="{StaticResource PosterCard}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="300" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Grid.GestureRecognizers>
+                <ClickGestureRecognizer Command="{Binding NavigateToItemCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
+                                        CommandParameter="{Binding .}" />
+                <TapGestureRecognizer Command="{Binding NavigateToItemCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
+                                      CommandParameter="{Binding .}" />
+            </Grid.GestureRecognizers>
+            <Image Grid.Row="0"
+                   Source="{Binding ., Converter={StaticResource PrimaryImageSourceConverter}}" />
+            <Label Grid.Row="1"
+                   Text="{Binding ., Converter={StaticResource BaseItemDtoCardTitleConverter}}" />
+            <Label Grid.Row="2"
+                   Text="{Binding ., Converter={StaticResource BaseItemDtoCardDescriptionConverter}}" />
+        </Grid>
+    </DataTemplate>
+
+    <!--  Home Row  -->
+    <DataTemplate x:Key="HomeRowTemplate"
+                  x:DataType="models:HomeRowModel">
+        <VerticalStackLayout IsVisible="{Binding Items, Converter={mct:IsListNotNullOrEmptyConverter}, Mode=OneWay}"
+                             Style="{StaticResource HomeRow}">
+            <Label Text="{Binding Name, Mode=OneTime}" />
+            <!--  TODO use HomeRowTemplateSelector  -->
+            <CollectionView ItemTemplate="{StaticResource PosterCardTemplate}"
+                            ItemsSource="{Binding Items, Mode=OneWay}"
+                            ItemsUpdatingScrollMode="KeepLastItemInView"
+                            SelectionMode="Single">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" />
+                </CollectionView.ItemsLayout>
+            </CollectionView>
+        </VerticalStackLayout>
+    </DataTemplate>
+</ResourceDictionary>
