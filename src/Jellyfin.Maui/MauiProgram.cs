@@ -60,6 +60,7 @@ public static class MauiProgram
     {
         services.AddLocalization();
         services.AddSingleton<IDeviceInfo>(Microsoft.Maui.Devices.DeviceInfo.Current);
+        services.AddSingleton<ISecureStorage>(Microsoft.Maui.Storage.SecureStorage.Default);
 
         services.AddSingleton<IStateService, StateService>();
         services.AddSingleton<INavigationService, NavigationService>();

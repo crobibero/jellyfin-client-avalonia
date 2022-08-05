@@ -8,9 +8,18 @@ public class StateStorageService : IStateStorageService
 {
     private const string StateKey = "jellyfin.state";
     private const string DeviceIdKey = "jellyfin.device.id";
-
+    private readonly ISecureStorage _secureStorage;
     private StateContainerModel? _stateCache;
     private string? _deviceIdCache;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="StateStorageService"/> class.
+    /// </summary>
+    /// <param name="secureStorage">Instance of the <see cref="ISecureStorage"/> interface.</param>
+    public StateStorageService(ISecureStorage secureStorage)
+    {
+        _secureStorage = secureStorage;
+    }
 
     /// <inheritdoc />
     public async ValueTask<StateContainerModel> GetStoredStateAsync()
@@ -22,8 +31,7 @@ public class StateStorageService : IStateStorageService
                 return _stateCache;
             }
 
-            var storedState = await SecureStorage.GetAsync(StateKey)
-                .ConfigureAwait(false);
+            var storedState = await GetAsync(StateKey).ConfigureAwait(false);
 
             if (string.IsNullOrEmpty(storedState))
             {
@@ -45,13 +53,12 @@ public class StateStorageService : IStateStorageService
         _stateCache = stateModel;
         if (stateModel is null)
         {
-            SecureStorage.Remove(StateKey);
+            Remove(StateKey);
         }
         else
         {
             var stateString = JsonSerializer.Serialize(stateModel);
-            await SecureStorage.SetAsync(StateKey, stateString)
-                .ConfigureAwait(false);
+            await SetAsync(StateKey, stateString).ConfigureAwait(false);
         }
     }
 
@@ -160,7 +167,7 @@ public class StateStorageService : IStateStorageService
             return _deviceIdCache;
         }
 
-        _deviceIdCache = await SecureStorage.GetAsync(DeviceIdKey).ConfigureAwait(false);
+        _deviceIdCache = await GetAsync(DeviceIdKey).ConfigureAwait(false);
         if (!string.IsNullOrEmpty(_deviceIdCache))
         {
             return _deviceIdCache;
@@ -168,8 +175,45 @@ public class StateStorageService : IStateStorageService
 
         // DeviceId not set, create and store a new one.
         _deviceIdCache = Guid.NewGuid().ToString();
-        await SecureStorage.SetAsync(DeviceIdKey, _deviceIdCache).ConfigureAwait(false);
+        await SetAsync(DeviceIdKey, _deviceIdCache).ConfigureAwait(false);
 
         return _deviceIdCache;
+    }
+
+    private async Task<string?> GetAsync(string key)
+    {
+        try
+        {
+            return await _secureStorage.GetAsync(key).ConfigureAwait(false);
+        }
+        catch (Exception)
+        {
+            // Catch all exceptions, SecureStorage doesn't currenlt work on MacCatalyst.
+            return null;
+        }
+    }
+
+    private async Task SetAsync(string key, string value)
+    {
+        try
+        {
+            await _secureStorage.SetAsync(key, value).ConfigureAwait(false);
+        }
+        catch (Exception)
+        {
+            // Catch all exceptions, SecureStorage doesn't currenlt work on MacCatalyst.
+        }
+    }
+
+    private void Remove(string key)
+    {
+        try
+        {
+            _secureStorage.Remove(key);
+        }
+        catch (Exception)
+        {
+            // Catch all exceptions, SecureStorage doesn't currenlt work on MacCatalyst.
+        }
     }
 }
