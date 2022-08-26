@@ -185,7 +185,6 @@ public class LibraryService : ILibraryService
             .ConfigureAwait(false);
 
         var homeSections = new List<DisplayPreferencesModel.HomeSection>();
-        homeSections.AddRange(Enum.GetValues<DisplayPreferencesModel.HomeSection>());
         foreach (var customPreference in displayPreferences.CustomPrefs)
         {
             var section = GetHomeSection(customPreference.Key, customPreference.Value);

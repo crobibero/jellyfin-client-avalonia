@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:converter="clr-namespace:Jellyfin.Maui.Converters"
                     xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
@@ -11,32 +11,32 @@
     <!--  Server Select  -->
     <DataTemplate x:Key="ServerSelectTemplate"
                   x:DataType="models:ServerStateModel">
-        <Frame Style="{StaticResource FrameLoginCard}">
-            <Frame.GestureRecognizers>
+        <Border Style="{StaticResource BorderLoginCard}">
+            <Border.GestureRecognizers>
                 <ClickGestureRecognizer Command="{Binding SelectServerCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
                                         CommandParameter="{Binding .}" />
                 <TapGestureRecognizer Command="{Binding SelectServerCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
                                       CommandParameter="{Binding .}" />
-            </Frame.GestureRecognizers>
+            </Border.GestureRecognizers>
             <VerticalStackLayout>
                 <Label Text="{Binding Name, Mode=OneTime}" />
                 <Label Text="{Binding Url, Mode=OneTime}" />
             </VerticalStackLayout>
-        </Frame>
+        </Border>
     </DataTemplate>
 
     <!--  User Select  -->
     <DataTemplate x:Key="UserSelectTemplate"
                   x:DataType="models:UserStateModel">
-        <Frame Style="{StaticResource FrameLoginCard}">
-            <Frame.GestureRecognizers>
+        <Border Style="{StaticResource BorderLoginCard}">
+            <Border.GestureRecognizers>
                 <ClickGestureRecognizer Command="{Binding SelectUserCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
                                         CommandParameter="{Binding .}" />
                 <TapGestureRecognizer Command="{Binding SelectUserCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
                                       CommandParameter="{Binding .}" />
-            </Frame.GestureRecognizers>
+            </Border.GestureRecognizers>
             <Label Text="{Binding Name, Mode=OneTime}" />
-        </Frame>
+        </Border>
     </DataTemplate>
 
     <!--  Library Card  -->
@@ -47,14 +47,12 @@
                 <RowDefinition Height="300" />
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
-            <!--
             <Grid.GestureRecognizers>
                 <ClickGestureRecognizer Command="{Binding NavigateToItemCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
                                         CommandParameter="{Binding .}" />
                 <TapGestureRecognizer Command="{Binding NavigateToItemCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
                                       CommandParameter="{Binding .}" />
             </Grid.GestureRecognizers>
-            -->
             <Image Grid.Row="0"
                    Source="{Binding ., Converter={StaticResource PrimaryImageSourceConverter}}" />
             <Label Grid.Row="1"

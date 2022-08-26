@@ -89,9 +89,9 @@
         <Setter Property="FontSize" Value="{StaticResource FontMedium}" />
     </Style>
 
-    <Style x:Key="FrameLoginCard"
-           TargetType="Frame">
-        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+    <Style x:Key="BorderLoginCard"
+           TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource Black}"/>
         <Setter Property="HeightRequest" Value="100" />
         <Setter Property="WidthRequest" Value="300" />
     </Style>
