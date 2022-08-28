@@ -14,6 +14,9 @@ public partial class LibraryViewModel : BaseItemViewModel
     private readonly ILibraryService _libraryService;
 
     [ObservableProperty]
+    private bool _loading = true;
+
+    [ObservableProperty]
     private int _pageSize = 100;
 
     [ObservableProperty]
@@ -54,6 +57,7 @@ public partial class LibraryViewModel : BaseItemViewModel
             return;
         }
 
+        Loading = true;
         var queryResult = await _libraryService.GetLibraryItemsAsync(
                 Item,
                 PageSize,
@@ -64,6 +68,7 @@ public partial class LibraryViewModel : BaseItemViewModel
         Application.Current?.Dispatcher.DispatchAsync(() =>
         {
             LibraryItemsCollection.ReplaceRange(queryResult.Items);
+            Loading = false;
         }).SafeFireAndForget();
     }
 

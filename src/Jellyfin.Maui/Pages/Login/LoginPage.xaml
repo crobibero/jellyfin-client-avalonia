@@ -6,43 +6,49 @@
                       xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels.Login"
                       x:DataType="vm:LoginViewModel"
                       x:TypeArguments="vm:LoginViewModel">
-    <ScrollView>
-        <VerticalStackLayout Padding="30">
-            <Label Text="{Binding ServerName}"
-                   VerticalOptions="Fill" />
-            <VerticalStackLayout>
-                <Label Text="{ext:Localize Login_Username}" />
-                <Entry HorizontalOptions="Fill"
-                       Text="{Binding Username}" />
-            </VerticalStackLayout>
-            <VerticalStackLayout>
-                <Label Text="{ext:Localize Login_Password}" />
-                <Entry HorizontalOptions="Fill"
-                       Text="{Binding Password}" />
-            </VerticalStackLayout>
-            <HorizontalStackLayout>
-                <CheckBox IsChecked="{Binding RememberMe}" />
-                <Label Text="{ext:Localize Login_RememberMe}" />
-            </HorizontalStackLayout>
-            <VerticalStackLayout>
-                <Button Command="{Binding LoginCommand}"
-                        HorizontalOptions="Center"
-                        Text="{ext:Localize Login_LoginButton}" />
-            </VerticalStackLayout>
-            <VerticalStackLayout IsVisible="{Binding QuickConnectAvailable}">
-                <Button Command="{Binding LoginWithQuickConnectCommand}"
-                        HorizontalOptions="Center"
-                        Text="{ext:Localize Login_QuickConnectButton}" />
+    <Grid>
+        <ActivityIndicator IsRunning="{Binding Loading}" />
+        <ScrollView IsVisible="{Binding Loading, Converter={StaticResource InvertedBoolConverter}}">
+            <VerticalStackLayout Padding="30">
+                <Label Text="{Binding ServerName}"
+                       VerticalOptions="Fill" />
+                <VerticalStackLayout>
+                    <Label Text="{ext:Localize Login_Username}" />
+                    <Entry HorizontalOptions="Fill"
+                           Text="{Binding Username}" />
+                </VerticalStackLayout>
+                <VerticalStackLayout>
+                    <Label Text="{ext:Localize Login_Password}" />
+                    <Entry HorizontalOptions="Fill"
+                           Text="{Binding Password}" />
+                </VerticalStackLayout>
                 <HorizontalStackLayout>
-                    <Label Padding="0,0,5,0"
-                           Text="{ext:Localize Login_QuickConnectCode}" />
-                    <Label Text="{Binding QuickConnectCode, Mode=OneWay}" />
+                    <CheckBox IsChecked="{Binding RememberMe}" />
+                    <Label Text="{ext:Localize Login_RememberMe}" />
                 </HorizontalStackLayout>
+                <VerticalStackLayout>
+                    <Button Command="{Binding LoginCommand}"
+                            HorizontalOptions="Center"
+                            Text="{ext:Localize Login_LoginButton}" />
+                </VerticalStackLayout>
+                <VerticalStackLayout IsVisible="{Binding QuickConnectAvailable}">
+                    <Button Command="{Binding LoginWithQuickConnectCommand}"
+                            HorizontalOptions="Center"
+                            Text="{ext:Localize Login_QuickConnectButton}" />
+                    <HorizontalStackLayout HorizontalOptions="Center"
+                                           IsVisible="{Binding QuickConnectCode, Converter={StaticResource IsStringNotNullOrEmptyConverter}}">
+                        <Label Padding="0,0,5,0"
+                               Style="{StaticResource LabelHeader}"
+                               Text="{ext:Localize Login_QuickConnectCode}" />
+                        <Label Style="{StaticResource LabelHeader}"
+                               Text="{Binding QuickConnectCode, Mode=OneWay}" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+                <VerticalStackLayout>
+                    <Label HorizontalOptions="Center"
+                           Text="{Binding ErrorMessage, Mode=OneWay}" />
+                </VerticalStackLayout>
             </VerticalStackLayout>
-            <VerticalStackLayout>
-                <Label HorizontalOptions="Center"
-                       Text="{Binding ErrorMessage, Mode=OneWay}" />
-            </VerticalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+    </Grid>
 </page:BaseContentPage>

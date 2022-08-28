@@ -16,6 +16,9 @@ public partial class HomeViewModel : BaseViewModel
     private DateTime? _updateTimestamp;
 
     [ObservableProperty]
+    private bool _loading = true;
+
+    [ObservableProperty]
     private IReadOnlyList<HomeRowModel> _homeRowCollection = Array.Empty<HomeRowModel>();
 
     /// <summary>
@@ -42,9 +45,11 @@ public partial class HomeViewModel : BaseViewModel
         if (_updateTimestamp > now.AddMinutes(-5))
         {
             // Home page was updated recently.
+            Loading = false;
             return;
         }
 
+        Loading = true;
         _updateTimestamp = now;
 
         var displayPreferences = await _libraryService.GetDisplayPreferencesAsync().ConfigureAwait(false);
@@ -124,6 +129,7 @@ public partial class HomeViewModel : BaseViewModel
         }
 
         HomeRowCollection = homeRows;
+        Loading = false;
     }
 
     private async ValueTask PopulateRowAsync(HomeRowModel homeRowModel, Func<ValueTask<IReadOnlyList<BaseItemDto>>> populateFunction)

@@ -21,6 +21,9 @@ public partial class LoginViewModel : BaseViewModel
     private string _serverUrl = null!;
 
     [ObservableProperty]
+    private bool _loading = true;
+
+    [ObservableProperty]
     private Guid _serverId;
 
     [ObservableProperty]
@@ -87,10 +90,12 @@ public partial class LoginViewModel : BaseViewModel
             if (status)
             {
                 _navigationService.NavigateHome();
+                return;
             }
         }
 
         QuickConnectAvailable = await _authenticationService.IsQuickConnectEnabledAsync().ConfigureAwait(false);
+        Loading = false;
     }
 
     [RelayCommand]

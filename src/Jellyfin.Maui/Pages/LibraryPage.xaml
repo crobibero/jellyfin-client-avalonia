@@ -6,28 +6,31 @@
                         xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels"
                         x:DataType="vm:LibraryViewModel"
                         x:TypeArguments="vm:LibraryViewModel">
-    <VerticalStackLayout>
-        <!--  Header  -->
-        <HorizontalStackLayout VerticalOptions="Start">
-            <Label HorizontalOptions="Center"
-                   Style="{StaticResource LabelHeader}"
-                   Text="{Binding Item.Name, Mode=OneWay}" />
-        </HorizontalStackLayout>
+    <Grid>
+        <ActivityIndicator IsRunning="{Binding Loading}" />
+        <VerticalStackLayout IsVisible="{Binding Loading, Converter={StaticResource InvertedBoolConverter}}">
+            <!--  Header  -->
+            <HorizontalStackLayout VerticalOptions="Start">
+                <Label HorizontalOptions="Center"
+                       Style="{StaticResource LabelHeader}"
+                       Text="{Binding Item.Name, Mode=OneWay}" />
+            </HorizontalStackLayout>
 
-        <!--  Content  -->
-        <ScrollView HorizontalOptions="Fill"
-                    VerticalOptions="Fill">
-            <FlexLayout BindableLayout.ItemTemplate="{StaticResource PosterCardTemplate}"
-                        BindableLayout.ItemsSource="{Binding LibraryItemsCollection, Mode=OneWay}"
-                        Direction="Row" />
-        </ScrollView>
+            <!--  Content  -->
+            <ScrollView HorizontalOptions="Fill"
+                        VerticalOptions="Fill">
+                <FlexLayout BindableLayout.ItemTemplate="{StaticResource PosterCardTemplate}"
+                            BindableLayout.ItemsSource="{Binding LibraryItemsCollection, Mode=OneWay}"
+                            Direction="Row" />
+            </ScrollView>
 
-        <!--  Footer  -->
-        <HorizontalStackLayout VerticalOptions="End">
-            <Button Command="{Binding PreviousPageCommand}"
-                    Text="Previous" />
-            <Button Command="{Binding NextPageCommand}"
-                    Text="Next" />
-        </HorizontalStackLayout>
-    </VerticalStackLayout>
+            <!--  Footer  -->
+            <HorizontalStackLayout VerticalOptions="End">
+                <Button Command="{Binding PreviousPageCommand}"
+                        Text="Previous" />
+                <Button Command="{Binding NextPageCommand}"
+                        Text="Next" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Grid>
 </page:BaseContentIdPage>
