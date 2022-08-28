@@ -1,6 +1,6 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    xmlns:cv="clr-namespace:Jellyfin.Maui.ContentViews">
+                    xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades">
     <!--  Colors  -->
     <Color x:Key="Primary">
         #AA5CC3
@@ -51,6 +51,12 @@
     </x:String>
 
     <!--  Implicit Styles  -->
+
+    <Style ApplyToDerivedTypes="True"
+           TargetType="ContentPage">
+        <Setter Property="Padding" Value="10, 0" />
+    </Style>
+
     <Style ApplyToDerivedTypes="True"
            TargetType="Label">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
@@ -76,7 +82,7 @@
     </Style>
 
     <Style ApplyToDerivedTypes="True"
-           TargetType="cv:ItemFlexLayout">
+           TargetType="FlexLayout">
         <Setter Property="JustifyContent" Value="Start" />
         <Setter Property="AlignItems" Value="Start" />
         <Setter Property="AlignContent" Value="Start" />
@@ -91,20 +97,28 @@
 
     <Style x:Key="BorderLoginCard"
            TargetType="Border">
-        <Setter Property="BackgroundColor" Value="{StaticResource Black}"/>
+        <Setter Property="BackgroundColor" Value="{StaticResource Black}" />
+        <Setter Property="Stroke" Value="{StaticResource White}" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 4" />
         <Setter Property="HeightRequest" Value="100" />
         <Setter Property="WidthRequest" Value="300" />
+        <Setter Property="Padding" Value="10" />
     </Style>
 
     <Style x:Key="HomeRow"
            TargetType="VerticalStackLayout">
         <!--  Card Height +50  -->
-        <Setter Property="HeightRequest" Value="450" />
+        <Setter Property="HeightRequest" Value="400" />
+    </Style>
+
+    <Style x:Key="PortraitImage"
+           TargetType="Image">
+        <Setter Property="HeightRequest" Value="300" />
     </Style>
 
     <Style x:Key="PosterCard"
-           TargetType="Grid">
-        <Setter Property="HeightRequest" Value="400" />
+           TargetType="Border">
+        <Setter Property="HeightRequest" Value="350" />
         <Setter Property="WidthRequest" Value="200" />
         <Setter Property="Margin" Value="10" />
     </Style>

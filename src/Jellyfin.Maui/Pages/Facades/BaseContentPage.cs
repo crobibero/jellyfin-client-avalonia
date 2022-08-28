@@ -14,19 +14,9 @@ public abstract class BaseContentPage<TViewModel> : ContentPage
     /// </summary>
     /// <param name="viewModel">Instance of the view model.</param>
     protected BaseContentPage(TViewModel viewModel)
-        : this(viewModel, string.Empty)
-    {
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="BaseContentPage{TViewModel}"/> class.
-    /// </summary>
-    /// <param name="viewModel">Instance of the view model.</param>
-    /// <param name="pageTitle">The page title.</param>
-    protected BaseContentPage(TViewModel viewModel, string pageTitle)
     {
         BindingContext = ViewModel = viewModel;
-        Title = pageTitle;
+        Title = null;
     }
 
     /// <summary>

@@ -1,27 +1,39 @@
-<page:BaseContentPage x:Class="Jellyfin.Maui.Pages.Login.SelectUserPage"
+﻿<page:BaseContentPage x:Class="Jellyfin.Maui.Pages.Login.SelectUserPage"
                       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                       xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
                       xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
-                      xmlns:views="clr-namespace:Jellyfin.Maui.ContentViews"
                       xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels.Login"
                       x:DataType="vm:SelectUserViewModel"
                       x:TypeArguments="vm:SelectUserViewModel">
-    <FlexLayout Direction="Column">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
         <!--  Header  -->
-        <FlexLayout Direction="Row"
-                    FlexLayout.Basis="100">
-            <Label FlexLayout.Grow="1"
-                   Style="{StaticResource LabelHeader}"
-                   Text="{ext:Localize Login_ExistingUsers}" />
-            <Button Command="{Binding AddUserCommand}"
-                    Text="{ext:Localize Login_AddUser}" />
-        </FlexLayout>
+        <Label Grid.Row="0"
+               Grid.Column="0"
+               HorizontalOptions="Start"
+               Style="{StaticResource LabelHeader}"
+               Text="{ext:Localize Login_ExistingUsers}" />
+        <Button Grid.Row="0"
+                Grid.Column="1"
+                Command="{Binding AddUserCommand}"
+                HorizontalOptions="End"
+                Text="{ext:Localize Login_AddUser}" />
         <!--  Content  -->
-        <ScrollView FlexLayout.Grow="1">
-            <views:ItemFlexLayout Direction="Row"
-                                  ItemTemplate="{StaticResource UserSelectTemplate}"
-                                  ItemsSource="{Binding Users, Mode=OneWay}" />
+        <ScrollView Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill">
+            <FlexLayout BindableLayout.ItemTemplate="{StaticResource UserSelectTemplate}"
+                        BindableLayout.ItemsSource="{Binding Users, Mode=OneWay}"
+                        Direction="Row" />
         </ScrollView>
-    </FlexLayout>
+    </Grid>
 </page:BaseContentPage>

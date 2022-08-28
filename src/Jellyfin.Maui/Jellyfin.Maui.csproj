@@ -85,4 +85,9 @@
     </Compile>
   </ItemGroup>
 
+  <Target Name="Format Xaml" AfterTargets="PreBuildEvent">
+    <Exec Command="dotnet tool restore" />
+    <Exec Command="dotnet xstyler --recursive --directory ." />
+  </Target>
+  
 </Project>

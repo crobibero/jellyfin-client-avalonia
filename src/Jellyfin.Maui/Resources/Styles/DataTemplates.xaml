@@ -1,11 +1,10 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:converter="clr-namespace:Jellyfin.Maui.Converters"
                     xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
                     xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                     xmlns:models="clr-namespace:Jellyfin.Maui.Models"
                     xmlns:sdk="clr-namespace:Jellyfin.Sdk;assembly=Jellyfin.Sdk"
-                    xmlns:view="clr-namespace:Jellyfin.Maui.ContentViews"
                     xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels"
                     xmlns:vmf="clr-namespace:Jellyfin.Maui.ViewModels.Facades">
     <!--  Server Select  -->
@@ -63,25 +62,20 @@
     <!--  Poster Card  -->
     <DataTemplate x:Key="PosterCardTemplate"
                   x:DataType="sdk:BaseItemDto">
-        <Grid Style="{StaticResource PosterCard}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="300" />
-                <RowDefinition Height="50" />
-                <RowDefinition Height="50" />
-            </Grid.RowDefinitions>
-            <Grid.GestureRecognizers>
+        <Border Style="{StaticResource PosterCard}">
+            <Border.GestureRecognizers>
                 <ClickGestureRecognizer Command="{Binding NavigateToItemCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
                                         CommandParameter="{Binding .}" />
                 <TapGestureRecognizer Command="{Binding NavigateToItemCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
                                       CommandParameter="{Binding .}" />
-            </Grid.GestureRecognizers>
-            <Image Grid.Row="0"
-                   Source="{Binding ., Converter={StaticResource PrimaryImageSourceConverter}}" />
-            <Label Grid.Row="1"
-                   Text="{Binding ., Converter={StaticResource BaseItemDtoCardTitleConverter}}" />
-            <Label Grid.Row="2"
-                   Text="{Binding ., Converter={StaticResource BaseItemDtoCardDescriptionConverter}}" />
-        </Grid>
+            </Border.GestureRecognizers>
+            <VerticalStackLayout>
+                <Image Source="{Binding ., Converter={StaticResource PrimaryImageSourceConverter}}"
+                       Style="{StaticResource PortraitImage}" />
+                <Label Text="{Binding ., Converter={StaticResource BaseItemDtoCardTitleConverter}}" />
+                <Label Text="{Binding ., Converter={StaticResource BaseItemDtoCardDescriptionConverter}}" />
+            </VerticalStackLayout>
+        </Border>
     </DataTemplate>
 
     <!--  Home Row  -->

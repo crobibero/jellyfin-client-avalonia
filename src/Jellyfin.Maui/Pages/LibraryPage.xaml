@@ -1,21 +1,33 @@
-<page:BaseContentIdPage x:Class="Jellyfin.Maui.Pages.LibraryPage"
+﻿<page:BaseContentIdPage x:Class="Jellyfin.Maui.Pages.LibraryPage"
                         xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                         xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
                         xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
-                        xmlns:views="clr-namespace:Jellyfin.Maui.ContentViews"
                         xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels"
                         x:DataType="vm:LibraryViewModel"
                         x:TypeArguments="vm:LibraryViewModel">
-    <FlexLayout Direction="Column">
+    <VerticalStackLayout>
         <!--  Header  -->
-        <Label FlexLayout.Basis="100"
-               Text="{Binding Item.Name, Mode=OneWay}" />
+        <HorizontalStackLayout VerticalOptions="Start">
+            <Label HorizontalOptions="Center"
+                   Style="{StaticResource LabelHeader}"
+                   Text="{Binding Item.Name, Mode=OneWay}" />
+        </HorizontalStackLayout>
+
         <!--  Content  -->
-        <ScrollView FlexLayout.Grow="1">
-            <views:ItemFlexLayout Direction="Row"
-                                  ItemTemplate="{StaticResource PosterCardTemplate}"
-                                  ItemsSource="{Binding LibraryItemsCollection, Mode=OneWay}" />
+        <ScrollView HorizontalOptions="Fill"
+                    VerticalOptions="Fill">
+            <FlexLayout BindableLayout.ItemTemplate="{StaticResource PosterCardTemplate}"
+                        BindableLayout.ItemsSource="{Binding LibraryItemsCollection, Mode=OneWay}"
+                        Direction="Row" />
         </ScrollView>
-    </FlexLayout>
+
+        <!--  Footer  -->
+        <HorizontalStackLayout VerticalOptions="End">
+            <Button Command="{Binding PreviousPageCommand}"
+                    Text="Previous" />
+            <Button Command="{Binding NextPageCommand}"
+                    Text="Next" />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
 </page:BaseContentIdPage>

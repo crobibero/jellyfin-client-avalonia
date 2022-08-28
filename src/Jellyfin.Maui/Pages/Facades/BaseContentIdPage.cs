@@ -19,16 +19,6 @@ public abstract class BaseContentIdPage<TViewModel> : BaseContentPage<TViewModel
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="BaseContentIdPage{TViewModel}"/> class.
-    /// </summary>
-    /// <param name="viewModel">The view model.</param>
-    /// <param name="pageTitle">The page title.</param>
-    protected BaseContentIdPage(TViewModel viewModel, string pageTitle)
-        : base(viewModel, pageTitle)
-    {
-    }
-
-    /// <summary>
     /// Initialize the view model with an id.
     /// </summary>
     /// <param name="item">The item.</param>

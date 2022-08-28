@@ -2,11 +2,9 @@ using System.Net;
 using System.Text;
 using CommunityToolkit.Maui;
 using Jellyfin.Maui.Pages;
-using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Pages.Login;
 using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels;
-using Jellyfin.Maui.ViewModels.Facades;
 using Jellyfin.Maui.ViewModels.Login;
 using Polly;
 using Polly.Extensions.Http;
@@ -35,9 +33,9 @@ public static class MauiProgram
                 fonts.AddFont("Quicksand-Medium.ttf", "QuicksandMedium");
                 fonts.AddFont("Quicksand-Regular.ttf", "QuicksandRegular");
                 fonts.AddFont("Quicksand-SemiBold.ttf", "QuicksandSemiBold");
-            });
+            })
+            .UseMauiCommunityToolkit();
 
-        builder.UseMauiCommunityToolkit();
         builder.Services.AddPages();
         builder.Services.AddSdkClients();
         builder.Services.AddServices();
