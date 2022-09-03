@@ -1,14 +1,15 @@
-﻿<page:BaseContentIdPage x:Class="Jellyfin.Maui.Pages.LibraryPage"
+<page:BaseContentIdPage x:Class="Jellyfin.Maui.Pages.LibraryPage"
                         xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                         xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
+                        xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                         xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
                         xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels"
                         x:DataType="vm:LibraryViewModel"
                         x:TypeArguments="vm:LibraryViewModel">
     <Grid>
         <ActivityIndicator IsRunning="{Binding Loading}" />
-        <VerticalStackLayout IsVisible="{Binding Loading, Converter={StaticResource InvertedBoolConverter}}">
+        <VerticalStackLayout IsVisible="{Binding Loading, Converter={mct:InvertedBoolConverter}}">
             <!--  Header  -->
             <HorizontalStackLayout VerticalOptions="Start">
                 <Label HorizontalOptions="Center"
