@@ -1,11 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <page:BaseContentIdPage x:Class="Jellyfin.Maui.Pages.ItemPage"
                         xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                        xmlns:converter="clr-namespace:Jellyfin.Maui.Converters"
                         xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
                         xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                         xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
-                        xmlns:sdk="clr-namespace:Jellyfin.Sdk;assembly=Jellyfin.Sdk"
                         xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels"
                         x:DataType="vm:ItemViewModel"
                         x:TypeArguments="vm:ItemViewModel">
