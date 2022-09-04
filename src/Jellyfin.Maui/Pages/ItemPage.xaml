@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <page:BaseContentIdPage x:Class="Jellyfin.Maui.Pages.ItemPage"
                         xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                        xmlns:cv="clr-namespace:Jellyfin.Maui.ContentViews"
                         xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
                         xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                         xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
@@ -10,21 +11,29 @@
                         x:TypeArguments="vm:ItemViewModel">
     <ScrollView>
         <VerticalStackLayout>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*" />
-                    <ColumnDefinition Width="6*" />
-                    <ColumnDefinition Width="3*" />
-                </Grid.ColumnDefinitions>
+
+            <!--  Header  -->
+            <Grid ColumnDefinitions="3*,6*,3">
                 <VerticalStackLayout Grid.Column="0">
-                    <Label Text="Director" />
-                    <Label Text="Runs" />
-                    <Label Text="Ends" />
+                    <HorizontalStackLayout IsVisible="{Binding Director, Mode=OneWay, Converter={mct:IsStringNotNullOrEmptyConverter}}">
+                        <Label Text="Director" />
+                        <Label Text="{Binding Director, Mode=OneWay}" />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout IsVisible="{Binding Runtime, Mode=OneWay, Converter={mct:IsStringNotNullOrEmptyConverter}}">
+                        <Label Text="Runtime" />
+                        <Label Text="{Binding Runtime, Mode=OneWay}" />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout IsVisible="{Binding EndTime, Mode=OneWay, Converter={mct:IsStringNotNullOrEmptyConverter}}">
+                        <Label Text="End Time" />
+                        <Label Text="{Binding EndTime, Mode=OneWay}" />
+                    </HorizontalStackLayout>
                 </VerticalStackLayout>
                 <VerticalStackLayout Grid.Column="1">
                     <Label Text="{Binding Title, Mode=OneWay}" />
-                    <Label Text="{Binding SubTitle, Mode=OneWay}" />
+                    <Label IsVisible="{Binding SubTitle, Mode=OneWay, Converter={mct:IsStringNotNullOrEmptyConverter}}"
+                           Text="{Binding SubTitle, Mode=OneWay}" />
                     <Label HorizontalTextAlignment="Start"
+                           IsVisible="{Binding Description, Mode=OneWay, Converter={mct:IsStringNotNullOrEmptyConverter}}"
                            LineBreakMode="WordWrap"
                            Text="{Binding Description, Mode=OneWay}" />
                 </VerticalStackLayout>
@@ -34,11 +43,33 @@
                        Source="{Binding Item, Mode=OneWay, Converter={converter:BaseItemDtoToImageSourceConverter}}}" />
                 -->
             </Grid>
-            <VerticalStackLayout IsVisible="{Binding NextUpItem, Mode=OneWay, Converter={mct:IsNotNullConverter}}">
+
+            <!--  Next Up  -->
+            <VerticalStackLayout HorizontalOptions="Start"
+                                 IsVisible="{Binding NextUpItem, Mode=OneWay, Converter={mct:IsNotNullConverter}}">
                 <Label Text="{ext:Localize NextUp}" />
-                <!--<views:PosterCardView BindingContext="{Binding NextUpItem, Mode=OneWay}" />-->
+                <cv:DataTemplateView Item="{Binding NextUpItem, Mode=OneWay}"
+                                     ItemTemplate="{StaticResource CardTemplateSelector}" />
             </VerticalStackLayout>
-            <VerticalStackLayout IsVisible="{Binding Seasons, Converter={mct:IsListNotNullOrEmptyConverter}}">
+
+            <!--  Show  -->
+            <VerticalStackLayout HorizontalOptions="Start"
+                                 IsVisible="{Binding ParentShow, Mode=OneWay, Converter={mct:IsNotNullConverter}}">
+                <Label Text="Show" />
+                <cv:DataTemplateView Item="{Binding ParentShow, Mode=OneWay}"
+                                     ItemTemplate="{StaticResource CardTemplateSelector}" />
+            </VerticalStackLayout>
+
+            <!--  Parent Season  -->
+            <VerticalStackLayout HorizontalOptions="Start"
+                                 IsVisible="{Binding ParentSeason, Mode=OneWay, Converter={mct:IsNotNullConverter}}">
+                <Label Text="Season" />
+                <cv:DataTemplateView Item="{Binding ParentSeason, Mode=OneWay}"
+                                     ItemTemplate="{StaticResource CardTemplateSelector}" />
+            </VerticalStackLayout>
+
+            <!--  Seasons  -->
+            <VerticalStackLayout IsVisible="{Binding Seasons, Mode=OneWay, Converter={mct:IsListNotNullOrEmptyConverter}}">
                 <Label Text="{ext:Localize Seasons}" />
                 <CollectionView ItemTemplate="{StaticResource CardTemplateSelector}"
                                 ItemsSource="{Binding Seasons, Mode=OneWay}"
@@ -49,11 +80,25 @@
                     </CollectionView.ItemsLayout>
                 </CollectionView>
             </VerticalStackLayout>
-            <VerticalStackLayout IsVisible="{Binding Episodes, Converter={mct:IsListNotNullOrEmptyConverter}}">
+
+            <!--  Episodes  -->
+            <VerticalStackLayout IsVisible="{Binding Episodes, Mode=OneWay, Converter={mct:IsListNotNullOrEmptyConverter}}">
                 <Label Text="{ext:Localize Episodes}" />
                 <CollectionView ItemTemplate="{StaticResource CardTemplateSelector}"
                                 ItemsSource="{Binding Episodes, Mode=OneWay}"
                                 ItemsUpdatingScrollMode="KeepLastItemInView"
+                                SelectionMode="Single">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" />
+                    </CollectionView.ItemsLayout>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <!--  People  -->
+            <VerticalStackLayout IsVisible="{Binding People, Mode=OneWay, Converter={mct:IsListNotNullOrEmptyConverter}}">
+                <Label Text="{ext:Localize People}" />
+                <CollectionView ItemTemplate="{StaticResource CardTemplateSelector}"
+                                ItemsSource="{Binding People, Mode=OneWay}"
                                 SelectionMode="Single">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Horizontal" />

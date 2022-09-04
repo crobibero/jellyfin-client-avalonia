@@ -23,6 +23,15 @@ public partial class ItemViewModel : BaseItemViewModel
     private string? _description;
 
     [ObservableProperty]
+    private string? _director;
+
+    [ObservableProperty]
+    private string? _runtime;
+
+    [ObservableProperty]
+    private string? _endTime;
+
+    [ObservableProperty]
     private string? _videoStream;
 
     [ObservableProperty]
@@ -30,6 +39,12 @@ public partial class ItemViewModel : BaseItemViewModel
 
     [ObservableProperty]
     private BaseItemDto? _nextUpItem;
+
+    [ObservableProperty]
+    private BaseItemDto? _parentShow;
+
+    [ObservableProperty]
+    private BaseItemDto? _parentSeason;
 
     [ObservableProperty]
     private IReadOnlyList<BaseItemDto>? _seasons;
@@ -55,33 +70,53 @@ public partial class ItemViewModel : BaseItemViewModel
     /// <inheritdoc/>
     public override ValueTask InitializeAsync()
     {
-        if (Item is null)
-        {
-            _navigationService.NavigateHome();
-            return ValueTask.CompletedTask;
-        }
-
         PopulateBase();
+
         switch (Item.Type)
         {
             case BaseItemKind.Series:
                 PopulateSeriesViewAsync().SafeFireAndForget();
                 break;
             case BaseItemKind.Season:
-                PopulateSeasonViewAsync().SafeFireAndForget();
+                PopulateCurrentShowAsync().SafeFireAndForget();
+                PopulateSeasonEpisodesAsync().SafeFireAndForget();
+                break;
+            case BaseItemKind.Episode:
+                PopulateCurrentShowAsync().SafeFireAndForget();
+                PopulateCurrentSeasonAsync().SafeFireAndForget();
                 break;
         }
 
         return ValueTask.CompletedTask;
     }
 
+    private void Reset()
+    {
+        Title = null;
+        SubTitle = null;
+        Description = null;
+        Director = null;
+        Runtime = null;
+        EndTime = null;
+        VideoStream = null;
+        AudioStream = null;
+        NextUpItem = null;
+        ParentShow = null;
+        ParentSeason = null;
+        Seasons = null;
+        Episodes = null;
+        People = null;
+    }
+
     private void PopulateBase()
     {
+        Reset();
+
         Title = Item.Type switch
         {
             BaseItemKind.Episode => Item.SeriesName,
             BaseItemKind.Season => Item.SeriesName,
-            _ => Item.Name?.ToString(CultureInfo.InvariantCulture) ?? string.Empty
+            _ => Item.Name
         };
 
         SubTitle = Item.Type switch
@@ -106,7 +141,7 @@ public partial class ItemViewModel : BaseItemViewModel
         }
     }
 
-    private async ValueTask PopulateSeasonViewAsync()
+    private async ValueTask PopulateSeasonEpisodesAsync()
     {
         if (Item.SeriesId is null)
         {
@@ -115,5 +150,25 @@ public partial class ItemViewModel : BaseItemViewModel
 
         var episodeResult = await _libraryService.GetEpisodesAsync(Item.SeriesId.Value, Item.Id).ConfigureAwait(false);
         Episodes = episodeResult.Items;
+    }
+
+    private async ValueTask PopulateCurrentSeasonAsync()
+    {
+        if (Item.SeasonId is null)
+        {
+            return;
+        }
+
+        ParentSeason = await _libraryService.GetItemAsync(Item.SeasonId.Value).ConfigureAwait(false);
+    }
+
+    private async ValueTask PopulateCurrentShowAsync()
+    {
+        if (Item.SeriesId is null)
+        {
+            return;
+        }
+
+        ParentShow = await _libraryService.GetItemAsync(Item.SeriesId.Value).ConfigureAwait(false);
     }
 }

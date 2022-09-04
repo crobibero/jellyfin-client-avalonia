@@ -132,7 +132,7 @@ public partial class HomeViewModel : BaseViewModel
         Loading = false;
     }
 
-    private async ValueTask PopulateRowAsync(HomeRowModel homeRowModel, Func<ValueTask<IReadOnlyList<BaseItemDto>>> populateFunction)
+    private static async ValueTask PopulateRowAsync(HomeRowModel homeRowModel, Func<ValueTask<IReadOnlyList<BaseItemDto>>> populateFunction)
     {
         homeRowModel.Items = await populateFunction().ConfigureAwait(false);
     }
