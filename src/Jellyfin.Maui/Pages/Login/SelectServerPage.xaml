@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <page:BaseContentPage x:Class="Jellyfin.Maui.Pages.Login.SelectServerPage"
                       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                       xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
+                      xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                       xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
                       xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels.Login"
                       x:DataType="vm:ServerSelectViewModel"
@@ -32,9 +33,8 @@
                     Grid.ColumnSpan="2"
                     HorizontalOptions="Fill"
                     VerticalOptions="Fill">
-            <FlexLayout BindableLayout.ItemTemplate="{StaticResource ServerSelectTemplate}"
-                        BindableLayout.ItemsSource="{Binding Servers, Mode=OneWay}"
-                        Direction="Row" />
+            <mct:UniformItemsLayout BindableLayout.ItemTemplate="{StaticResource ServerSelectTemplate}"
+                                    BindableLayout.ItemsSource="{Binding Servers, Mode=OneWay}" />
         </ScrollView>
     </Grid>
 </page:BaseContentPage>

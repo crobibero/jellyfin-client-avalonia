@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
     <!--  Colors  -->
     <Color x:Key="Primary">
         #AA5CC3
@@ -79,14 +80,6 @@
     <Style ApplyToDerivedTypes="True"
            TargetType="Image">
         <Setter Property="IsOpaque" Value="True" />
-    </Style>
-
-    <Style ApplyToDerivedTypes="True"
-           TargetType="FlexLayout">
-        <Setter Property="JustifyContent" Value="Start" />
-        <Setter Property="AlignItems" Value="Start" />
-        <Setter Property="AlignContent" Value="Start" />
-        <Setter Property="Wrap" Value="Wrap" />
     </Style>
 
     <!--  Explicit Styles  -->
