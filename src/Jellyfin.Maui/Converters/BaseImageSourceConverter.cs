@@ -24,6 +24,9 @@ public class BaseImageSourceConverter : BaseConverterOneWay<BaseItemDto?, ImageS
     }
 
     /// <inheritdoc/>
+    public override ImageSource? DefaultConvertReturnValue { get; set; }
+
+    /// <inheritdoc/>
     public override ImageSource? ConvertFrom(BaseItemDto? value, CultureInfo? culture)
     {
         if (value is null)

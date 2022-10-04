@@ -9,6 +9,9 @@ namespace Jellyfin.Maui.Converters;
 public class BaseItemDtoCardDescriptionConverter : BaseConverterOneWay<BaseItemDto?, string?>
 {
     /// <inheritdoc/>
+    public override string? DefaultConvertReturnValue { get; set; }
+
+    /// <inheritdoc/>
     public override string? ConvertFrom(BaseItemDto? value, CultureInfo? culture)
     {
         if (value is null)
