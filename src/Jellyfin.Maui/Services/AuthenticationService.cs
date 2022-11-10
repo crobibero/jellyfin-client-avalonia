@@ -80,7 +80,7 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-            var response = await _quickConnectClient.InitiateAsync(cancellationToken).ConfigureAwait(false);
+            var response = await _quickConnectClient.InitiateQuickConnectAsync(cancellationToken).ConfigureAwait(false);
             _quickConnectSecret = response?.Secret;
             return response?.Code;
         }
@@ -95,7 +95,7 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-            var result = await _quickConnectClient.ConnectAsync(_quickConnectSecret, cancellationToken)
+            var result = await _quickConnectClient.GetQuickConnectStateAsync(_quickConnectSecret, cancellationToken)
                 .ConfigureAwait(false);
             return result?.Authenticated;
         }
@@ -131,7 +131,7 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-            return await _quickConnectClient.GetEnabledAsync(cancellationToken).ConfigureAwait(false);
+            return await _quickConnectClient.GetQuickConnectEnabledAsync(cancellationToken).ConfigureAwait(false);
         }
         catch (QuickConnectException)
         {
@@ -159,6 +159,12 @@ public class AuthenticationService : IAuthenticationService
     /// <inheritdoc />
     public async ValueTask<bool> IsAuthenticatedAsync(CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrEmpty(_sdkClientSettings.BaseUrl))
+        {
+            _sdkClientSettings.AccessToken = null;
+            return false;
+        }
+
         try
         {
             var user = await _userClient.GetCurrentUserAsync(cancellationToken)
