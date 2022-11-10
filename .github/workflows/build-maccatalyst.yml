@@ -38,7 +38,7 @@ jobs:
           runNum=$GITHUB_RUN_NUMBER
           ver="${buildDay}.${runNum}.0"
           echo $ver
-          echo "::set-output name=APP_VERSION::$ver"
+          echo "APP_VERSION::$ver >> $GITHUB_OUTPUT"
 
       - name: Install Maui Workload
         run: dotnet workload install maui-maccatalyst
