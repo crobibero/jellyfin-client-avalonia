@@ -7,6 +7,7 @@ namespace Jellyfin.Maui.ContentViews;
 /// </summary>
 public partial class DataTemplateView : ContentView
 {
+#pragma warning disable CS0169 // Used in source generators.
     [AutoBindable(OnChanged = nameof(BuildItem))]
     private DataTemplate? _itemTemplate;
 
@@ -15,6 +16,7 @@ public partial class DataTemplateView : ContentView
 
     [AutoBindable(OnChanged = nameof(BuildItem))]
     private bool _hideOnNullContent = true;
+#pragma warning restore CS0169
 
     private void BuildItem()
     {

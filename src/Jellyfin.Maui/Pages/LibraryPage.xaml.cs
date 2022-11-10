@@ -20,6 +20,5 @@ public partial class LibraryPage : BaseContentIdPage<LibraryViewModel>
 
     private void ScrollView_Scrolled(object sender, ScrolledEventArgs e)
     {
-
     }
 }

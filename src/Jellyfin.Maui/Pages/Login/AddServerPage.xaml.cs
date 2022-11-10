@@ -13,8 +13,8 @@ public partial class AddServerPage : BaseContentPage<AddServerViewModel>
     /// </summary>
     /// <param name="viewModel">Instance of the <see cref="AddServerViewModel"/>.</param>
     public AddServerPage(AddServerViewModel viewModel)
-        : base(viewModel)
-	{
-		InitializeComponent();
-	}
+    : base(viewModel)
+    {
+        InitializeComponent();
+    }
 }
