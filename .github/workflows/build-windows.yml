@@ -58,7 +58,7 @@ jobs:
           $secretFile = "WinSignCert.pfx"; 
           $encodedBytes = [System.Convert]::FromBase64String($env:SECRET_DATA1); 
           Set-Content $secretFile -Value $encodedBytes -AsByteStream;
-          Write-Output "::set-output name=SECRET_FILE::$secretFile";
+          Write-Output "SECRET_FILE::$secretFile >> $env:GITHUB_OUTPUT";
           Write-Output " ";
           Write-Output "CHECK FILE EXISTS";
           Write-Output " ";
