@@ -15,13 +15,7 @@ public partial class App : Application
     {
         InitializeComponent();
         MainPage = InternalServiceProvider.GetService<MainPage>();
+        InternalServiceProvider.GetService<ISdkService>().InitializeAsync().GetAwaiter().GetResult();
         InternalServiceProvider.GetService<INavigationService>().Initialize(this);
-    }
-
-    /// <inheritdoc/>
-    protected override async void OnStart()
-    {
-        await InternalServiceProvider.GetService<ISdkService>().InitializeAsync().ConfigureAwait(false);
-        base.OnStart();
     }
 }
