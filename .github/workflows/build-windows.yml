@@ -35,7 +35,7 @@ jobs:
         run: |
           $buildDay = Get-Date -Format "yyyy.Mdd"
           $ver = $buildDay + "." + $env:GITHUB_RUN_NUMBER + ".0"
-          echo "APP_VERSION::$ver >> $GITHUB_OUTPUT"
+          echo "APP_VERSION::$ver >> $env:GITHUB_OUTPUT"
 
       - name: Install Maui Workload
         run: dotnet workload install maui-windows
