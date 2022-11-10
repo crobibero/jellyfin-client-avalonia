@@ -3,7 +3,6 @@
                       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                       xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
-                      xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                       xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
                       xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels.Login"
                       x:DataType="vm:SelectUserViewModel"
@@ -33,8 +32,9 @@
                     Grid.ColumnSpan="2"
                     HorizontalOptions="Fill"
                     VerticalOptions="Fill">
-            <mct:UniformItemsLayout BindableLayout.ItemTemplate="{StaticResource UserSelectTemplate}"
-                                    BindableLayout.ItemsSource="{Binding Users, Mode=OneWay}" />
+            <FlexLayout BindableLayout.ItemTemplate="{StaticResource UserSelectTemplate}"
+                        BindableLayout.ItemsSource="{Binding Users, Mode=OneWay}"
+                        Direction="Row" />
         </ScrollView>
     </Grid>
 </page:BaseContentPage>

@@ -20,8 +20,9 @@
             <!--  Content  -->
             <ScrollView HorizontalOptions="Fill"
                         VerticalOptions="Fill">
-                <mct:UniformItemsLayout BindableLayout.ItemTemplate="{StaticResource PosterCardTemplate}"
-                                        BindableLayout.ItemsSource="{Binding LibraryItemsCollection, Mode=OneWay}" />
+                <FlexLayout BindableLayout.ItemTemplate="{StaticResource PosterCardTemplate}"
+                            BindableLayout.ItemsSource="{Binding LibraryItemsCollection, Mode=OneWay}"
+                            Direction="Row" />
             </ScrollView>
 
             <!--  Footer  -->

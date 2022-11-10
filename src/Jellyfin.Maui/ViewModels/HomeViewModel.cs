@@ -61,17 +61,14 @@ public partial class HomeViewModel : BaseViewModel
         var libraries = await _libraryService.GetLibrariesAsync().ConfigureAwait(false);
         foreach (var view in userConfig.LatestItemsExcludes)
         {
-            if (Guid.TryParse(view, out var parsed))
-            {
-                excludedViews.Add(parsed);
-            }
+            excludedViews.Add(view);
         }
 
         foreach (var view in userConfig.OrderedViews)
         {
-            if (Guid.TryParse(view, out var parsed) && !excludedViews.Contains(parsed))
+            if (!excludedViews.Contains(view))
             {
-                libraryViews.Add(parsed);
+                libraryViews.Add(view);
             }
         }
 
