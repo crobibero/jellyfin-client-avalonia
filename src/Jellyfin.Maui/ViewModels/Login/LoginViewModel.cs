@@ -47,6 +47,9 @@ public partial class LoginViewModel : BaseViewModel
     [ObservableProperty]
     private string? _quickConnectCode;
 
+    [ObservableProperty]
+    private bool _checkingQuickConnectAvailablity;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
     /// </summary>
@@ -93,9 +96,20 @@ public partial class LoginViewModel : BaseViewModel
                 return;
             }
         }
-
-        QuickConnectAvailable = await _authenticationService.IsQuickConnectEnabledAsync().ConfigureAwait(false);
+     
         Loading = false;
+
+        CheckQuickConnectAvailablity().SafeFireAndForget();
+    }
+
+    private async Task CheckQuickConnectAvailablity()
+    {
+        CheckingQuickConnectAvailablity = true;
+
+        await Task.Delay(2_000).ConfigureAwait(false);  // mock slow network
+        QuickConnectAvailable = await _authenticationService.IsQuickConnectEnabledAsync().ConfigureAwait(false);
+
+        CheckingQuickConnectAvailablity = false;
     }
 
     [RelayCommand]
