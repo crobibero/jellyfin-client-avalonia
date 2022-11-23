@@ -100,7 +100,7 @@ public class StateStorageService : IStateStorageService
         }
         else
         {
-            // Update stored server.
+            // Update stored user.
             existing.Name = userStateModel.Name;
             existing.Token = userStateModel.Token;
         }
