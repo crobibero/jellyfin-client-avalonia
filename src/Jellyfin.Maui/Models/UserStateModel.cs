@@ -6,37 +6,22 @@
 public class UserStateModel
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="UserStateModel"/> class.
+    /// Gets or sets the user id.
     /// </summary>
-    /// <param name="id">The user id.</param>
-    /// <param name="serverId">The server id the user belongs to.</param>
-    /// <param name="name">The user name.</param>
-    /// <param name="token">The user token.</param>
-    public UserStateModel(Guid id, Guid serverId, string name, string token)
-    {
-        Id = id;
-        ServerId = serverId;
-        Name = name;
-        Token = token;
-    }
+    required public Guid Id { get; init; }
 
     /// <summary>
-    /// Gets the user id.
+    /// Gets or sets the server id the user belongs to.
     /// </summary>
-    public Guid Id { get; init; }
+    required public Guid ServerId { get; init; }
 
     /// <summary>
-    /// Gets the server id the user belongs to.
+    /// Gets or sets the user name.
     /// </summary>
-    public Guid ServerId { get; init; }
+    required public string Name { get; set; }
 
     /// <summary>
-    /// Gets the user name.
+    /// Gets or sets the user token.
     /// </summary>
-    public string Name { get; init; }
-
-    /// <summary>
-    /// Gets the user token.
-    /// </summary>
-    public string Token { get; init; }
+    required public string Token { get; set; }
 }

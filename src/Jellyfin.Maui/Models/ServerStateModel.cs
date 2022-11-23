@@ -1,4 +1,4 @@
-﻿namespace Jellyfin.Maui.Models;
+namespace Jellyfin.Maui.Models;
 
 /// <summary>
 /// The server state model.
@@ -6,30 +6,17 @@
 public class ServerStateModel
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="ServerStateModel"/> class.
+    /// Gets or sets the server id.
     /// </summary>
-    /// <param name="id">The server id.</param>
-    /// <param name="name">The server name.</param>
-    /// <param name="url">The server url.</param>
-    public ServerStateModel(Guid id, string name, string url)
-    {
-        Id = id;
-        Name = name;
-        Url = url;
-    }
+    required public Guid Id { get; init; }
 
     /// <summary>
-    /// Gets the server id.
+    /// Gets or sets the server name.
     /// </summary>
-    public Guid Id { get; init; }
+    required public string Name { get; set; }
 
     /// <summary>
-    /// Gets the server name.
+    /// Gets or sets the server url.
     /// </summary>
-    public string Name { get; init; }
-
-    /// <summary>
-    /// Gets the server url.
-    /// </summary>
-    public string Url { get; init; }
+    required public string Url { get; set; }
 }

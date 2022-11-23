@@ -63,10 +63,13 @@ public partial class AddServerViewModel : BaseViewModel
             var publicSystemInfo = await _systemClient.GetPublicSystemInfoAsync()
                 .ConfigureAwait(false);
 
-            var serverId = new Guid(publicSystemInfo.Id);
+            await _stateStorageService.AddServerAsync(new ServerStateModel
+            {
+                Id = new Guid(publicSystemInfo.Id),
+                Name = publicSystemInfo.ServerName,
+                Url = _sdkClientSettings.BaseUrl!
+            }).ConfigureAwait(false);
 
-            var serverStateModel = new ServerStateModel(serverId, publicSystemInfo.ServerName, _sdkClientSettings.BaseUrl!);
-            await _stateStorageService.AddServerAsync(serverStateModel).ConfigureAwait(false);
             _navigationService.NavigateToServerSelectPage();
         }
         catch (SystemException)

@@ -133,7 +133,13 @@ public partial class LoginViewModel : BaseViewModel
                 if (_rememberMe)
                 {
                     var user = _stateService.GetCurrentUser();
-                    await _stateStorageService.AddUserAsync(new UserStateModel(user.Id, _serverId, user.Name, _stateService.GetToken()))
+                    await _stateStorageService.AddUserAsync(new UserStateModel
+                        {
+                            Id = user.Id,
+                            ServerId = _serverId,
+                            Name = user.Name,
+                            Token = _stateService.GetToken()
+                        })
                         .ConfigureAwait(false);
                 }
 
@@ -186,7 +192,13 @@ public partial class LoginViewModel : BaseViewModel
                     if (_rememberMe)
                     {
                         var user = _stateService.GetCurrentUser();
-                        await _stateStorageService.AddUserAsync(new UserStateModel(user.Id, _serverId, user.Name, _stateService.GetToken()))
+                        await _stateStorageService.AddUserAsync(new UserStateModel
+                            {
+                                Id = user.Id,
+                                ServerId = _serverId,
+                                Name = user.Name,
+                                Token = _stateService.GetToken()
+                            })
                             .ConfigureAwait(false);
                     }
 
