@@ -14,8 +14,8 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
-        MainPage = InternalServiceProvider.GetService<MainPage>();
-        InternalServiceProvider.GetService<ISdkService>().InitializeAsync().GetAwaiter().GetResult();
+
         InternalServiceProvider.GetService<INavigationService>().Initialize(this);
+        MainPage = InternalServiceProvider.GetService<LoadingPage>();
     }
 }

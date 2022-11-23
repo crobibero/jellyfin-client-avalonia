@@ -12,6 +12,11 @@ public interface INavigationService
     void Initialize(Application application);
 
     /// <summary>
+    /// Navigate to the main page.
+    /// </summary>
+    void NavigateToMainPage();
+
+    /// <summary>
     /// Navigate to the server selection page.
     /// </summary>
     void NavigateToServerSelectPage();
