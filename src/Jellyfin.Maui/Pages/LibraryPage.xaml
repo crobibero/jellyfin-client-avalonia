@@ -38,11 +38,15 @@
 
         <!--  Footer  -->
         <HorizontalStackLayout Grid.Row="2"
-                               VerticalOptions="End">
+                               HorizontalOptions="Center"
+                               IsVisible="{Binding IsPaginationAvailable}">
+            <!--  IsEnabled does not properly work on windows https://github.com/dotnet/maui/issues/7377  -->
             <Button Command="{Binding PreviousPageCommand}"
-                    Text="Previous" />
+                    IsEnabled="{Binding CanGoBack}"
+                    Text="⏴" />
             <Button Command="{Binding NextPageCommand}"
-                    Text="Next" />
+                    IsEnabled="{Binding CanGoForward}"
+                    Text="⏵" />
         </HorizontalStackLayout>
 
     </Grid>
