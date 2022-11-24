@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
@@ -51,7 +51,7 @@
                                       CommandParameter="{Binding .}" />
             </Grid.GestureRecognizers>
             <Image Grid.Row="0"
-                   Source="{Binding ., Converter={StaticResource PrimaryImageSourceConverter}}" />
+                   Source="{Binding ., Converter={StaticResource PrimaryImageSourceConverter}, ConverterParameter='300'}" />
             <Label Grid.Row="1"
                    Text="{Binding ., Converter={StaticResource BaseItemDtoCardTitleConverter}}" />
         </Grid>
@@ -68,7 +68,7 @@
                                       CommandParameter="{Binding .}" />
             </Border.GestureRecognizers>
             <VerticalStackLayout>
-                <Image Source="{Binding ., Converter={StaticResource PrimaryImageSourceConverter}}"
+                <Image Source="{Binding ., Converter={StaticResource PrimaryImageSourceConverter}, ConverterParameter='300'}"
                        Style="{StaticResource PortraitImage}" />
                 <Label Text="{Binding ., Converter={StaticResource BaseItemDtoCardTitleConverter}}" />
                 <Label Text="{Binding ., Converter={StaticResource BaseItemDtoCardDescriptionConverter}}" />

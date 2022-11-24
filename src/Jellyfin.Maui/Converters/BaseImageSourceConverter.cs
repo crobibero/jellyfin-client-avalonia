@@ -8,7 +8,7 @@ namespace Jellyfin.Maui.Converters;
 /// <summary>
 /// Gets the poster url from the base item.
 /// </summary>
-public class BaseImageSourceConverter : BaseConverterOneWay<BaseItemDto?, ImageSource?>
+public class BaseImageSourceConverter : BaseConverterOneWay<BaseItemDto?, ImageSource?, string?>
 {
     private readonly ImageType _imageType;
     private readonly IImageClient _imageClient;
@@ -27,11 +27,17 @@ public class BaseImageSourceConverter : BaseConverterOneWay<BaseItemDto?, ImageS
     public override ImageSource? DefaultConvertReturnValue { get; set; }
 
     /// <inheritdoc/>
-    public override ImageSource? ConvertFrom(BaseItemDto? value, CultureInfo? culture)
+    public override ImageSource? ConvertFrom(BaseItemDto? value, string? parameter, CultureInfo? culture)
     {
         if (value is null)
         {
             return null;
+        }
+
+        int? maxHeight = null;
+        if (int.TryParse(parameter, out int temp))
+        {
+            maxHeight = temp;
         }
 
         var itemId = value.Id;
@@ -47,6 +53,6 @@ public class BaseImageSourceConverter : BaseConverterOneWay<BaseItemDto?, ImageS
             itemId = value.SeriesId ?? value.Id;
         }
 
-        return ImageSource.FromUri(_imageClient.GetItemImageUrl(itemId, _imageType).ToUri());
+        return ImageSource.FromUri(_imageClient.GetItemImageUrl(itemId, _imageType, maxHeight: maxHeight).ToUri());
     }
 }
