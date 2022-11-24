@@ -44,11 +44,7 @@ public partial class LibraryViewModel : BaseItemViewModel
     public ObservableRangeCollection<BaseItemDto> LibraryItemsCollection { get; } = new();
 
     /// <inheritdoc />
-    public override ValueTask InitializeAsync()
-    {
-        InitializeItemsAsync().SafeFireAndForget();
-        return ValueTask.CompletedTask;
-    }
+    public override ValueTask InitializeAsync() => InitializeItemsAsync();
 
     private async ValueTask InitializeItemsAsync()
     {
