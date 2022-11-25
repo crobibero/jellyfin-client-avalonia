@@ -92,11 +92,16 @@ public partial class LibraryViewModel : BaseItemViewModel
             .ConfigureAwait(false);
 
         TotalCount = queryResult.TotalRecordCount;
-        Application.Current?.Dispatcher.DispatchAsync(() =>
+
+        // prevents unnecessary refresh (back navigation)
+        if (!LibraryItemsCollection.Select(x => x.Id).SequenceEqual(queryResult.Items.Select(x => x.Id)))
         {
-            LibraryItemsCollection.ReplaceRange(queryResult.Items);
-            Loading = false;
-        }).SafeFireAndForget();
+            Application.Current?.Dispatcher.DispatchAsync(() =>
+            {
+                LibraryItemsCollection.ReplaceRange(queryResult.Items);
+                Loading = false;
+            }).SafeFireAndForget();
+        }
     }
 
     [RelayCommand(CanExecute = nameof(CanGoBack))]
