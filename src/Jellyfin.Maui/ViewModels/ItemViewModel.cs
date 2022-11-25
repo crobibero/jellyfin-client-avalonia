@@ -70,6 +70,7 @@ public partial class ItemViewModel : BaseItemViewModel
     /// <inheritdoc/>
     public override async ValueTask InitializeAsync()
     {
+        // BaseItemDto Item originates from search query and does not contain all details, retrieve full object.
         var itemWithFullDetails = await _libraryService.GetItemAsync(Item.Id);
 
         if (itemWithFullDetails != null)
