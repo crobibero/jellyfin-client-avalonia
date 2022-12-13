@@ -68,7 +68,6 @@ public partial class LibraryViewModel : BaseItemViewModel
     /// </summary>
     public bool CanGoForward => PageIndex != NextIndex;
 
-
     /// <summary>
     /// Gets the list of items.
     /// </summary>

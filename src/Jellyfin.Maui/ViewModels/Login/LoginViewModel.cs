@@ -96,7 +96,7 @@ public partial class LoginViewModel : BaseViewModel
                 return;
             }
         }
-     
+
         Loading = false;
 
         CheckQuickConnectAvailablity().SafeFireAndForget();
