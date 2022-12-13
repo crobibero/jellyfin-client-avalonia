@@ -17,6 +17,7 @@ public partial class LoadingPage : ContentPage
         InitializeComponent();
     }
 
+    /// <inheritdoc/>
     protected override async void OnAppearing()
     {
         base.OnAppearing();

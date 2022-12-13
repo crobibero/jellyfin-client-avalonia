@@ -6,14 +6,14 @@
 public class UserStateModel
 {
     /// <summary>
-    /// Gets or sets the user id.
+    /// Gets the user id.
     /// </summary>
-    required public Guid Id { get; init; }
+    public required Guid Id { get; init; }
 
     /// <summary>
-    /// Gets or sets the server id the user belongs to.
+    /// Gets the server id the user belongs to.
     /// </summary>
-    required public Guid ServerId { get; init; }
+    public required Guid ServerId { get; init; }
 
     /// <summary>
     /// Gets or sets the user name.
@@ -23,5 +23,5 @@ public class UserStateModel
     /// <summary>
     /// Gets or sets the user token.
     /// </summary>
-    required public string Token { get; set; }
+    public required string Token { get; set; }
 }
