@@ -1,4 +1,4 @@
-﻿namespace Jellyfin.Maui.Models;
+namespace Jellyfin.Maui.Models;
 
 /// <summary>
 /// The user state model.
@@ -18,7 +18,7 @@ public class UserStateModel
     /// <summary>
     /// Gets or sets the user name.
     /// </summary>
-    required public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Gets or sets the user token.

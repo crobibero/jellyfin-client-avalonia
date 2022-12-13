@@ -6,7 +6,7 @@ namespace Jellyfin.Maui.Models;
 public class ServerStateModel
 {
     /// <summary>
-    /// Gets or sets the server id.
+    /// Gets the server id.
     /// </summary>
     public required Guid Id { get; init; }
 
