@@ -29,6 +29,8 @@ public partial class ServerSelectViewModel : BaseViewModel
         _navigationService = navigationService;
         _stateStorageService = stateStorageService;
         _stateService = stateService;
+
+        BindingBase.EnableCollectionSynchronization(Servers, null, ObservableCollectionCallback);
     }
 
     /// <summary>
