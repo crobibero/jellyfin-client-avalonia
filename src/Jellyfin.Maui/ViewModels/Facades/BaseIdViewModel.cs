@@ -27,6 +27,5 @@ public abstract partial class BaseItemViewModel : BaseViewModel
     public void Initialize(BaseItemDto item)
     {
         Item = item;
-        InitializeAsync().SafeFireAndForget();
     }
 }

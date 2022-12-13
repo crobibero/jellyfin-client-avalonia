@@ -69,21 +69,17 @@ public class StateStorageService : IStateStorageService
 
         var state = await GetStoredStateAsync().ConfigureAwait(false);
 
-        var found = false;
-        for (var index = 0; index < state.Servers.Count; index++)
-        {
-            if (state.Servers[index].Id == serverStateModel.Id)
-            {
-                // Update stored server.
-                state.Servers[index] = serverStateModel;
-                found = true;
-                break;
-            }
-        }
+        var existing = state.Servers.FirstOrDefault(x => x.Id == serverStateModel.Id);
 
-        if (!found)
+        if (existing is null)
         {
             state.Servers.Add(serverStateModel);
+        }
+        else
+        {
+            // Update stored server.
+            existing.Name = serverStateModel.Name;
+            existing.Url = serverStateModel.Url;
         }
 
         await SetStoredStateAsync(state).ConfigureAwait(false);
@@ -96,22 +92,17 @@ public class StateStorageService : IStateStorageService
 
         var state = await GetStoredStateAsync().ConfigureAwait(false);
 
-        var found = false;
-        for (var index = 0; index < state.Users.Count; index++)
-        {
-            var current = state.Users[index];
-            if (current.Id == userStateModel.Id && current.ServerId == userStateModel.ServerId)
-            {
-                // Update stored user.
-                state.Users[index] = userStateModel;
-                found = true;
-                break;
-            }
-        }
+        var existing = state.Users.FirstOrDefault(x => x.Id == userStateModel.Id && x.ServerId == userStateModel.Id);
 
-        if (!found)
+        if (existing is null)
         {
             state.Users.Add(userStateModel);
+        }
+        else
+        {
+            // Update stored user.
+            existing.Name = userStateModel.Name;
+            existing.Token = userStateModel.Token;
         }
 
         await SetStoredStateAsync(state).ConfigureAwait(false);
@@ -121,23 +112,20 @@ public class StateStorageService : IStateStorageService
     public async ValueTask RemoveServerAsync(Guid serverId)
     {
         var state = await GetStoredStateAsync().ConfigureAwait(false);
-        for (var index = 0; index < state.Servers.Count; index++)
-        {
-            if (state.Servers[index].Id == serverId)
-            {
-                // Remove all linked users.
-                for (var userIndex = state.Users.Count; userIndex >= 0; userIndex--)
-                {
-                    if (state.Users[userIndex].ServerId == serverId)
-                    {
-                        state.Users.RemoveAt(userIndex);
-                    }
-                }
 
-                state.Servers.RemoveAt(index);
-                break;
-            }
+        var server = state.Servers.FirstOrDefault(x => x.Id == serverId);
+
+        if (server is null)
+        {
+            return;
         }
+
+        foreach (var user in state.Users.Where(x => x.ServerId == serverId))
+        {
+            state.Users.Remove(user);
+        }
+
+        state.Servers.Remove(server);
 
         await SetStoredStateAsync(state).ConfigureAwait(false);
     }
@@ -146,15 +134,15 @@ public class StateStorageService : IStateStorageService
     public async ValueTask RemoveUserAsync(Guid userId, Guid serverId)
     {
         var state = await GetStoredStateAsync().ConfigureAwait(false);
-        for (var index = 0; index < state.Users.Count; index++)
+
+        var user = state.Users.FirstOrDefault(x => x.Id == userId && x.ServerId == serverId);
+
+        if (user is null)
         {
-            var current = state.Users[index];
-            if (current.Id == userId && current.ServerId == serverId)
-            {
-                state.Servers.RemoveAt(index);
-                break;
-            }
+            return;
         }
+
+        state.Users.Remove(user);
 
         await SetStoredStateAsync(state).ConfigureAwait(false);
     }

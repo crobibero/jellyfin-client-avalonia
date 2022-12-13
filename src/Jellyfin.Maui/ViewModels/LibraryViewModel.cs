@@ -20,9 +20,14 @@ public partial class LibraryViewModel : BaseItemViewModel
     private int _pageSize = 100;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanGoForward))]
+    [NotifyPropertyChangedFor(nameof(CanGoBack))]
     private int _pageIndex;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsPaginationAvailable))]
+    [NotifyPropertyChangedFor(nameof(CanGoForward))]
+    [NotifyPropertyChangedFor(nameof(CanGoBack))]
     private int _totalCount;
 
     /// <summary>
@@ -39,16 +44,37 @@ public partial class LibraryViewModel : BaseItemViewModel
     }
 
     /// <summary>
+    /// Gets a value indicating whether the pagination is available.
+    /// </summary>
+    public bool IsPaginationAvailable => TotalCount > PageSize;
+
+    /// <summary>
+    /// Gets the previous index.
+    /// </summary>
+    public int PreviousIndex => Math.Max(0, PageIndex - 1);
+
+    /// <summary>
+    /// Gets the next index.
+    /// </summary>
+    public int NextIndex => Math.Min(TotalCount / PageSize, PageIndex + 1);
+
+    /// <summary>
+    /// Gets a value indicating whether there is a page before the current page.
+    /// </summary>
+    public bool CanGoBack => PageIndex != PreviousIndex;
+
+    /// <summary>
+    /// Gets a value indicating whether there is a page after the current page.
+    /// </summary>
+    public bool CanGoForward => PageIndex != NextIndex;
+
+    /// <summary>
     /// Gets the list of items.
     /// </summary>
     public ObservableRangeCollection<BaseItemDto> LibraryItemsCollection { get; } = new();
 
     /// <inheritdoc />
-    public override ValueTask InitializeAsync()
-    {
-        InitializeItemsAsync().SafeFireAndForget();
-        return ValueTask.CompletedTask;
-    }
+    public override ValueTask InitializeAsync() => InitializeItemsAsync();
 
     private async ValueTask InitializeItemsAsync()
     {
@@ -65,37 +91,29 @@ public partial class LibraryViewModel : BaseItemViewModel
             .ConfigureAwait(false);
 
         TotalCount = queryResult.TotalRecordCount;
-        Application.Current?.Dispatcher.DispatchAsync(() =>
+
+        // prevents unnecessary refresh (back navigation)
+        if (!LibraryItemsCollection.Select(x => x.Id).SequenceEqual(queryResult.Items.Select(x => x.Id)))
         {
-            LibraryItemsCollection.ReplaceRange(queryResult.Items);
-            Loading = false;
-        }).SafeFireAndForget();
+            Application.Current?.Dispatcher.DispatchAsync(() =>
+            {
+                LibraryItemsCollection.ReplaceRange(queryResult.Items);
+                Loading = false;
+            }).SafeFireAndForget();
+        }
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanGoBack))]
     private async Task PreviousPageAsync()
     {
-        var newIndex = Math.Max(0, PageIndex - 1);
-        if (newIndex == PageIndex)
-        {
-            return;
-        }
-
-        PageIndex = newIndex;
+        PageIndex = PreviousIndex;
         await InitializeItemsAsync().ConfigureAwait(false);
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanGoForward))]
     private async Task NextPageAsync()
     {
-        var totalPages = TotalCount / PageSize;
-        var newIndex = Math.Min(totalPages, PageIndex + 1);
-        if (newIndex == PageIndex)
-        {
-            return;
-        }
-
-        PageIndex = newIndex;
+        PageIndex = NextIndex;
         await InitializeItemsAsync().ConfigureAwait(false);
     }
 }

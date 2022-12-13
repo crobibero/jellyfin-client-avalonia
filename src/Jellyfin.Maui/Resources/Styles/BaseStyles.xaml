@@ -56,6 +56,7 @@
     <Style ApplyToDerivedTypes="True"
            TargetType="ContentPage">
         <Setter Property="Padding" Value="10, 0" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
     </Style>
 
     <Style ApplyToDerivedTypes="True"
@@ -90,8 +91,8 @@
 
     <Style x:Key="BorderLoginCard"
            TargetType="Border">
-        <Setter Property="BackgroundColor" Value="{StaticResource Black}" />
-        <Setter Property="Stroke" Value="{StaticResource White}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         <Setter Property="StrokeShape" Value="RoundRectangle 4" />
         <Setter Property="HeightRequest" Value="100" />
         <Setter Property="WidthRequest" Value="300" />

@@ -47,6 +47,9 @@ public partial class LoginViewModel : BaseViewModel
     [ObservableProperty]
     private string? _quickConnectCode;
 
+    [ObservableProperty]
+    private bool _checkingQuickConnectAvailability;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
     /// </summary>
@@ -94,8 +97,20 @@ public partial class LoginViewModel : BaseViewModel
             }
         }
 
-        QuickConnectAvailable = await _authenticationService.IsQuickConnectEnabledAsync().ConfigureAwait(false);
         Loading = false;
+
+        CheckQuickConnectAvailability().SafeFireAndForget();
+    }
+
+    private async Task CheckQuickConnectAvailability()
+    {
+        CheckingQuickConnectAvailability = true;
+#if DEBUG
+        await Task.Delay(2_000).ConfigureAwait(false);  // mock slow network
+#endif
+        QuickConnectAvailable = await _authenticationService.IsQuickConnectEnabledAsync().ConfigureAwait(false);
+
+        CheckingQuickConnectAvailability = false;
     }
 
     [RelayCommand]
@@ -119,7 +134,13 @@ public partial class LoginViewModel : BaseViewModel
                 if (_rememberMe)
                 {
                     var user = _stateService.GetCurrentUser();
-                    await _stateStorageService.AddUserAsync(new UserStateModel(user.Id, _serverId, user.Name, _stateService.GetToken()))
+                    await _stateStorageService.AddUserAsync(new UserStateModel
+                        {
+                            Id = user.Id,
+                            ServerId = _serverId,
+                            Name = user.Name,
+                            Token = _stateService.GetToken()
+                        })
                         .ConfigureAwait(false);
                 }
 
@@ -172,7 +193,13 @@ public partial class LoginViewModel : BaseViewModel
                     if (_rememberMe)
                     {
                         var user = _stateService.GetCurrentUser();
-                        await _stateStorageService.AddUserAsync(new UserStateModel(user.Id, _serverId, user.Name, _stateService.GetToken()))
+                        await _stateStorageService.AddUserAsync(new UserStateModel
+                            {
+                                Id = user.Id,
+                                ServerId = _serverId,
+                                Name = user.Name,
+                                Token = _stateService.GetToken()
+                            })
                             .ConfigureAwait(false);
                     }
 

@@ -33,19 +33,22 @@
                             HorizontalOptions="Center"
                             Text="{ext:Localize Login_LoginButton}" />
                 </VerticalStackLayout>
-                <VerticalStackLayout IsVisible="{Binding QuickConnectAvailable}">
-                    <Button Command="{Binding LoginWithQuickConnectCommand}"
-                            HorizontalOptions="Center"
-                            Text="{ext:Localize Login_QuickConnectButton}" />
-                    <HorizontalStackLayout HorizontalOptions="Center"
-                                           IsVisible="{Binding QuickConnectCode, Converter={mct:IsStringNotNullOrEmptyConverter}}">
-                        <Label Padding="0,0,5,0"
-                               Style="{StaticResource LabelHeader}"
-                               Text="{ext:Localize Login_QuickConnectCode}" />
-                        <Label Style="{StaticResource LabelHeader}"
-                               Text="{Binding QuickConnectCode, Mode=OneWay}" />
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
+                <Grid>
+                    <VerticalStackLayout IsVisible="{Binding QuickConnectAvailable}">
+                        <Button Command="{Binding LoginWithQuickConnectCommand}"
+                                HorizontalOptions="Center"
+                                Text="{ext:Localize Login_QuickConnectButton}" />
+                        <HorizontalStackLayout HorizontalOptions="Center"
+                                               IsVisible="{Binding QuickConnectCode, Converter={mct:IsStringNotNullOrEmptyConverter}}">
+                            <Label Padding="0,0,5,0"
+                                   Style="{StaticResource LabelHeader}"
+                                   Text="{ext:Localize Login_QuickConnectCode}" />
+                            <Label Style="{StaticResource LabelHeader}"
+                                   Text="{Binding QuickConnectCode, Mode=OneWay}" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                    <ActivityIndicator IsRunning="{Binding CheckingQuickConnectAvailability}" />
+                </Grid>
                 <VerticalStackLayout>
                     <Label HorizontalOptions="Center"
                            Text="{Binding ErrorMessage, Mode=OneWay}" />

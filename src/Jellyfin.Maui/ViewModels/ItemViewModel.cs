@@ -68,8 +68,16 @@ public partial class ItemViewModel : BaseItemViewModel
     }
 
     /// <inheritdoc/>
-    public override ValueTask InitializeAsync()
+    public override async ValueTask InitializeAsync()
     {
+        // BaseItemDto Item originates from search query and does not contain all details, retrieve full object.
+        var itemWithFullDetails = await _libraryService.GetItemAsync(Item.Id);
+
+        if (itemWithFullDetails != null)
+        {
+            Item = itemWithFullDetails;
+        }
+
         PopulateBase();
 
         switch (Item.Type)
@@ -86,8 +94,6 @@ public partial class ItemViewModel : BaseItemViewModel
                 PopulateCurrentSeasonAsync().SafeFireAndForget();
                 break;
         }
-
-        return ValueTask.CompletedTask;
     }
 
     private void Reset()

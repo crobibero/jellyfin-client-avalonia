@@ -51,7 +51,7 @@
                                       CommandParameter="{Binding .}" />
             </Grid.GestureRecognizers>
             <Image Grid.Row="0"
-                   Source="{Binding ., Converter={StaticResource PrimaryImageSourceConverter}}" />
+                   Source="{Binding ., Converter={StaticResource PrimaryImageSourceConverter}, ConverterParameter='300'}" />
             <Label Grid.Row="1"
                    Text="{Binding ., Converter={StaticResource BaseItemDtoCardTitleConverter}}" />
         </Grid>
@@ -68,10 +68,14 @@
                                       CommandParameter="{Binding .}" />
             </Border.GestureRecognizers>
             <VerticalStackLayout>
-                <Image Source="{Binding ., Converter={StaticResource PrimaryImageSourceConverter}}"
+                <Image Source="{Binding ., Converter={StaticResource PrimaryImageSourceConverter}, ConverterParameter='300'}"
                        Style="{StaticResource PortraitImage}" />
-                <Label Text="{Binding ., Converter={StaticResource BaseItemDtoCardTitleConverter}}" />
-                <Label Text="{Binding ., Converter={StaticResource BaseItemDtoCardDescriptionConverter}}" />
+                <Label HorizontalOptions="CenterAndExpand"
+                       LineBreakMode="TailTruncation"
+                       Text="{Binding ., Converter={StaticResource BaseItemDtoCardTitleConverter}}" />
+                <Label HorizontalOptions="CenterAndExpand"
+                       LineBreakMode="TailTruncation"
+                       Text="{Binding ., Converter={StaticResource BaseItemDtoCardDescriptionConverter}}" />
             </VerticalStackLayout>
         </Border>
     </DataTemplate>

@@ -8,30 +8,46 @@
                         x:DataType="vm:LibraryViewModel"
                         x:TypeArguments="vm:LibraryViewModel">
     <Grid>
-        <ActivityIndicator IsRunning="{Binding Loading}" />
-        <VerticalStackLayout IsVisible="{Binding Loading, Converter={mct:InvertedBoolConverter}}">
-            <!--  Header  -->
-            <HorizontalStackLayout VerticalOptions="Start">
-                <Label HorizontalOptions="Center"
-                       Style="{StaticResource LabelHeader}"
-                       Text="{Binding Item.Name, Mode=OneWay}" />
-            </HorizontalStackLayout>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-            <!--  Content  -->
-            <ScrollView HorizontalOptions="Fill"
-                        VerticalOptions="Fill">
-                <FlexLayout BindableLayout.ItemTemplate="{StaticResource PosterCardTemplate}"
-                            BindableLayout.ItemsSource="{Binding LibraryItemsCollection, Mode=OneWay}"
-                            Direction="Row" />
-            </ScrollView>
+        <!--  Header  -->
+        <HorizontalStackLayout Grid.Row="0"
+                               VerticalOptions="Start">
+            <Label HorizontalOptions="Center"
+                   Style="{StaticResource LabelHeader}"
+                   Text="{Binding Item.Name, Mode=OneWay}" />
+        </HorizontalStackLayout>
 
-            <!--  Footer  -->
-            <HorizontalStackLayout VerticalOptions="End">
-                <Button Command="{Binding PreviousPageCommand}"
-                        Text="Previous" />
-                <Button Command="{Binding NextPageCommand}"
-                        Text="Next" />
-            </HorizontalStackLayout>
-        </VerticalStackLayout>
+        <!--  Content  -->
+        <ActivityIndicator Grid.Row="1"
+                           IsRunning="{Binding Loading}" />
+
+        <ScrollView Grid.Row="1"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill">
+            <FlexLayout BindableLayout.ItemTemplate="{StaticResource PosterCardTemplate}"
+                        BindableLayout.ItemsSource="{Binding LibraryItemsCollection, Mode=OneWay}"
+                        Direction="Row"
+                        JustifyContent="SpaceAround"
+                        Wrap="Wrap" />
+        </ScrollView>
+
+        <!--  Footer  -->
+        <HorizontalStackLayout Grid.Row="2"
+                               HorizontalOptions="Center"
+                               IsVisible="{Binding IsPaginationAvailable}">
+            <!--  IsEnabled does not properly work on windows https://github.com/dotnet/maui/issues/7377  -->
+            <Button Command="{Binding PreviousPageCommand}"
+                    IsEnabled="{Binding CanGoBack}"
+                    Text="⏴" />
+            <Button Command="{Binding NextPageCommand}"
+                    IsEnabled="{Binding CanGoForward}"
+                    Text="⏵" />
+        </HorizontalStackLayout>
+
     </Grid>
 </page:BaseContentIdPage>
