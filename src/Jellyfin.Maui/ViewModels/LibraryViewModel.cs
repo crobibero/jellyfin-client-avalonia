@@ -101,6 +101,10 @@ public partial class LibraryViewModel : BaseItemViewModel
                 Loading = false;
             }).SafeFireAndForget();
         }
+        else
+        {
+            Loading = false;
+        }
     }
 
     [RelayCommand(CanExecute = nameof(CanGoBack))]
