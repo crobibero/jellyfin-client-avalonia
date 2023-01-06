@@ -70,7 +70,7 @@ jobs:
           CERT_PASSWORD: ${{ secrets.WIN_CERT_PASSWORD }}
         run: |
           '"C:\Program Files (x86)\Windows Kits\10\App Certification Kit\SignTool" sign /a /fd SHA256 /f WinSignCert.pfx /p ($env:CERT_PASSWORD) .\src\artifacts\Jellyfin.Maui*.msix'
-      - uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb # tag=v3
+      - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
         with:
           name: windows-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
           path: |             
