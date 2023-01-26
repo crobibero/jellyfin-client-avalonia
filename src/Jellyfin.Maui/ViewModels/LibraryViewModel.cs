@@ -40,7 +40,7 @@ public partial class LibraryViewModel : BaseItemViewModel
     {
         _libraryService = libraryService;
 
-        BindingBase.EnableCollectionSynchronization(LibraryItemsCollection, null, ObservableCollectionCallback);
+        NavigationService.EnableCollectionSynchronization(LibraryItemsCollection, null, ObservableCollectionCallback);
     }
 
     /// <summary>
@@ -95,7 +95,7 @@ public partial class LibraryViewModel : BaseItemViewModel
         // prevents unnecessary refresh (back navigation)
         if (!LibraryItemsCollection.Select(x => x.Id).SequenceEqual(queryResult.Items.Select(x => x.Id)))
         {
-            Application.Current?.Dispatcher.DispatchAsync(() =>
+            NavigationService.DispatchAsync(() =>
             {
                 LibraryItemsCollection.ReplaceRange(queryResult.Items);
                 Loading = false;

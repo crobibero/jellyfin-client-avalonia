@@ -30,7 +30,7 @@ public partial class SelectUserViewModel : BaseViewModel
         _stateStorageService = stateStorageService;
         _stateService = stateService;
 
-        BindingBase.EnableCollectionSynchronization(Users, null, ObservableCollectionCallback);
+        NavigationService.EnableCollectionSynchronization(Users, null, ObservableCollectionCallback);
     }
 
     /// <summary>

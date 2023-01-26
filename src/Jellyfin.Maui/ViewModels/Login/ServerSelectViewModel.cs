@@ -30,7 +30,7 @@ public partial class ServerSelectViewModel : BaseViewModel
         _stateStorageService = stateStorageService;
         _stateService = stateService;
 
-        BindingBase.EnableCollectionSynchronization(Servers, null, ObservableCollectionCallback);
+        NavigationService.EnableCollectionSynchronization(Servers, null, ObservableCollectionCallback);
     }
 
     /// <summary>

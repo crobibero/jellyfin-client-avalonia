@@ -1,3 +1,4 @@
+using System.Collections;
 using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Pages.Login;
@@ -9,23 +10,15 @@ namespace Jellyfin.Maui.Services;
 /// <inheritdoc />
 public class NavigationService : INavigationService
 {
-    // Application is initialized on startup.
-    private Application _application = null!;
     private NavigationPage? _navigationPage;
     private NavigationPage? _loginNavigationPage;
-
-    /// <inheritdoc />
-    public void Initialize(Application application)
-    {
-        _application = application;
-    }
 
     /// <inheritdoc />
     public void NavigateToMainPage()
     {
         Application.Current?.Dispatcher.Dispatch(() => // dispatcher is useless here since NavigateToMainPage is always called from main thread ui
         {
-            _application.MainPage = InternalServiceProvider.GetService<MainPage>();
+            Application.Current!.MainPage = InternalServiceProvider.GetService<MainPage>();
         });
     }
 
@@ -70,7 +63,7 @@ public class NavigationService : INavigationService
             {
                 var serverSelectPage = InternalServiceProvider.GetService<SelectServerPage>();
                 _loginNavigationPage = new NavigationPage(serverSelectPage);
-                _application.MainPage = _loginNavigationPage;
+                Application.Current!.MainPage = _loginNavigationPage;
             });
         }
         else
@@ -104,7 +97,7 @@ public class NavigationService : INavigationService
             Application.Current?.Dispatcher.Dispatch(() =>
             {
                 var homePage = InternalServiceProvider.GetService<HomePage>();
-                _application.MainPage = _navigationPage = new NavigationPage(homePage);
+                Application.Current!.MainPage = _navigationPage = new NavigationPage(homePage);
             });
         }
         else
@@ -144,4 +137,14 @@ public class NavigationService : INavigationService
             _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget();
         });
     }
+
+    /// <inheritdoc />
+    public bool Dispatch(Action action) => Application.Current!.Dispatcher.Dispatch(action);
+
+    /// <inheritdoc />
+    public Task DispatchAsync(Action action) => Application.Current!.Dispatcher.DispatchAsync(action);
+
+    /// <inheritdoc />
+    public void EnableCollectionSynchronization(IEnumerable collection, object? context, Action<IEnumerable, object, Action, bool> callback)
+        => BindingBase.EnableCollectionSynchronization(collection, context, new CollectionSynchronizationCallback(callback));
 }
