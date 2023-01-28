@@ -1,6 +1,6 @@
 namespace Jellyfin.Maui.Services;
 
-internal interface ISdkService
+public interface ISdkService
 {
     /// <summary>
     /// Perform platform-specific initialization.
