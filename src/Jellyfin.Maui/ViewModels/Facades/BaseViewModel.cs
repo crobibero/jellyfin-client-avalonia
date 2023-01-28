@@ -10,19 +10,23 @@ namespace Jellyfin.Maui.ViewModels.Facades;
 /// </summary>
 public abstract partial class BaseViewModel : ObservableObject
 {
+    private readonly INavigationService _navigationService;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseViewModel"/> class.
     /// </summary>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
-    protected BaseViewModel(INavigationService navigationService)
+    /// <param name="applicationService">Instance of the <see cref="IApplicationService"/> interface.</param>
+    protected BaseViewModel(INavigationService navigationService, IApplicationService applicationService)
     {
-        NavigationService = navigationService;
+        _navigationService = navigationService;
+        ApplicationService = applicationService;
     }
 
     /// <summary>
-    /// Gets the NavigationService.
+    /// Gets the ApplicationService.
     /// </summary>
-    protected INavigationService NavigationService { get; }
+    protected IApplicationService ApplicationService { get; }
 
     /// <summary>
     /// Gets or sets the selected BaseItemDto.
@@ -47,7 +51,7 @@ public abstract partial class BaseViewModel : ObservableObject
     /// <param name="writeAccess">Whether to enable write access.</param>
     protected void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess)
     {
-        NavigationService.Dispatch(accessMethod);
+        ApplicationService.Dispatch(accessMethod);
     }
 
     [RelayCommand]
@@ -58,6 +62,6 @@ public abstract partial class BaseViewModel : ObservableObject
             return;
         }
 
-        NavigationService.NavigateToItemView(item);
+        _navigationService.NavigateToItemView(item);
     }
 }

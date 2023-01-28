@@ -63,6 +63,7 @@ public static class MauiProgram
 
         services.AddSingleton<IStateService, StateService>();
         services.AddSingleton<INavigationService, NavigationService>();
+        services.AddSingleton<IApplicationService, ApplicationService>();
         services.AddSingleton<IAuthenticationService, AuthenticationService>();
         services.AddSingleton<ILibraryService, LibraryService>();
         services.AddSingleton<IStateStorageService, StateStorageService>();

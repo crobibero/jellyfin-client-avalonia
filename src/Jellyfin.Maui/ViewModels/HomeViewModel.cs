@@ -26,12 +26,14 @@ public partial class HomeViewModel : BaseViewModel
     /// </summary>
     /// <param name="libraryService">Instance of the <see cref="ILibraryService"/> interface.</param>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
+    /// <param name="applicationService">Instance of the <see cref="IApplicationService"/> interface.</param>
     /// <param name="stateService">Instance of the <see cref="IStateService"/> interface.</param>
     public HomeViewModel(
         ILibraryService libraryService,
         INavigationService navigationService,
+        IApplicationService applicationService,
         IStateService stateService)
-        : base(navigationService)
+        : base(navigationService, applicationService)
     {
         _libraryService = libraryService;
         _stateService = stateService;

@@ -18,19 +18,21 @@ public partial class ServerSelectViewModel : BaseViewModel
     /// Initializes a new instance of the <see cref="ServerSelectViewModel"/> class.
     /// </summary>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
+    /// <param name="applicationService">Instance of the <see cref="IApplicationService"/> interface.</param>
     /// <param name="stateStorageService">Instance of the <see cref="IStateStorageService"/> interface.</param>
     /// <param name="stateService">Instance of the <see cref="IStateService"/> interface.</param>
     public ServerSelectViewModel(
         INavigationService navigationService,
+        IApplicationService applicationService,
         IStateStorageService stateStorageService,
         IStateService stateService)
-        : base(navigationService)
+        : base(navigationService, applicationService)
     {
         _navigationService = navigationService;
         _stateStorageService = stateStorageService;
         _stateService = stateService;
 
-        NavigationService.EnableCollectionSynchronization(Servers, null, ObservableCollectionCallback);
+        ApplicationService.EnableCollectionSynchronization(Servers, null, ObservableCollectionCallback);
     }
 
     /// <summary>

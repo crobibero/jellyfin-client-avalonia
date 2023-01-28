@@ -60,8 +60,9 @@ public partial class ItemViewModel : BaseItemViewModel
     /// </summary>
     /// <param name="libraryService">Instance of the <see cref="ILibraryService"/> interface.</param>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
-    public ItemViewModel(ILibraryService libraryService, INavigationService navigationService)
-        : base(navigationService)
+    /// <param name="applicationService">Instance of the <see cref="IApplicationService"/> interface.</param>
+    public ItemViewModel(ILibraryService libraryService, INavigationService navigationService, IApplicationService applicationService)
+        : base(navigationService, applicationService)
     {
         _libraryService = libraryService;
         _navigationService = navigationService;
