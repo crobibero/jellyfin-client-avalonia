@@ -55,14 +55,16 @@ public partial class LoginViewModel : BaseViewModel
     /// </summary>
     /// <param name="authenticationService">Instance of the <see cref="IAuthenticationService"/> interface.</param>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
+    /// <param name="applicationService">Instance of the <see cref="IApplicationService"/> interface.</param>
     /// <param name="stateService">Instance of the <see cref="IStateService"/> interface.</param>
     /// <param name="stateStorageService">Instance of the <see cref="IStateStorageService"/> interface.</param>
     public LoginViewModel(
         IAuthenticationService authenticationService,
         INavigationService navigationService,
+        IApplicationService applicationService,
         IStateService stateService,
         IStateStorageService stateStorageService)
-        : base(navigationService)
+        : base(navigationService, applicationService)
     {
         _authenticationService = authenticationService;
         _navigationService = navigationService;

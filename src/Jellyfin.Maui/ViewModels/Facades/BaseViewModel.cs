@@ -16,10 +16,17 @@ public abstract partial class BaseViewModel : ObservableObject
     /// Initializes a new instance of the <see cref="BaseViewModel"/> class.
     /// </summary>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
-    protected BaseViewModel(INavigationService navigationService)
+    /// <param name="applicationService">Instance of the <see cref="IApplicationService"/> interface.</param>
+    protected BaseViewModel(INavigationService navigationService, IApplicationService applicationService)
     {
         _navigationService = navigationService;
+        ApplicationService = applicationService;
     }
+
+    /// <summary>
+    /// Gets the ApplicationService.
+    /// </summary>
+    protected IApplicationService ApplicationService { get; }
 
     /// <summary>
     /// Gets or sets the selected BaseItemDto.
@@ -42,9 +49,9 @@ public abstract partial class BaseViewModel : ObservableObject
     /// <param name="context">The context.</param>
     /// <param name="accessMethod">The access method.</param>
     /// <param name="writeAccess">Whether to enable write access.</param>
-    protected static void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess)
+    protected void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess)
     {
-        Application.Current?.Dispatcher.Dispatch(accessMethod);
+        ApplicationService.Dispatch(accessMethod);
     }
 
     [RelayCommand]

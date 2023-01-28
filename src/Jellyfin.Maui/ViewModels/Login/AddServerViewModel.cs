@@ -24,15 +24,17 @@ public partial class AddServerViewModel : BaseViewModel
     /// Initializes a new instance of the <see cref="AddServerViewModel"/> class.
     /// </summary>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
+    /// <param name="applicationService">Instance of the <see cref="IApplicationService"/> interface.</param>
     /// <param name="stateStorageService">Instance of the <see cref="IStateStorageService"/> interface.</param>
     /// <param name="systemClient">Instance of the <see cref="ISystemClient"/> interface.</param>
     /// <param name="sdkClientSettings">Instance of the <see cref="SdkClientSettings"/>.</param>
     public AddServerViewModel(
         INavigationService navigationService,
+        IApplicationService applicationService,
         IStateStorageService stateStorageService,
         ISystemClient systemClient,
         SdkClientSettings sdkClientSettings)
-        : base(navigationService)
+        : base(navigationService, applicationService)
     {
         _navigationService = navigationService;
         _stateStorageService = stateStorageService;

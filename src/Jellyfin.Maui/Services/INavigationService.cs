@@ -6,12 +6,6 @@ namespace Jellyfin.Maui.Services;
 public interface INavigationService
 {
     /// <summary>
-    /// Initialize the application.
-    /// </summary>
-    /// <param name="application">The application.</param>
-    void Initialize(Application application);
-
-    /// <summary>
     /// Navigate to the main page.
     /// </summary>
     void NavigateToMainPage();

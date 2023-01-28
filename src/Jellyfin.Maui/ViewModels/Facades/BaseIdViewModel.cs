@@ -15,8 +15,9 @@ public abstract partial class BaseItemViewModel : BaseViewModel
     /// Initializes a new instance of the <see cref="BaseItemViewModel"/> class.
     /// </summary>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
-    protected BaseItemViewModel(INavigationService navigationService)
-        : base(navigationService)
+    /// <param name="applicationService">Instance of the <see cref="IApplicationService"/> interface.</param>
+    protected BaseItemViewModel(INavigationService navigationService, IApplicationService applicationService)
+        : base(navigationService, applicationService)
     {
     }
 

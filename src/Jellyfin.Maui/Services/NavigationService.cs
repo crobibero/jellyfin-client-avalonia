@@ -9,16 +9,9 @@ namespace Jellyfin.Maui.Services;
 /// <inheritdoc />
 public class NavigationService : INavigationService
 {
-    // Application is initialized on startup.
-    private Application _application = null!;
+    private Application _application = Application.Current!;
     private NavigationPage? _navigationPage;
     private NavigationPage? _loginNavigationPage;
-
-    /// <inheritdoc />
-    public void Initialize(Application application)
-    {
-        _application = application;
-    }
 
     /// <inheritdoc />
     public void NavigateToMainPage()

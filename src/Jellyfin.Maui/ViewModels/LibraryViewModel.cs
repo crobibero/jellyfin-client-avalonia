@@ -35,12 +35,13 @@ public partial class LibraryViewModel : BaseItemViewModel
     /// </summary>
     /// <param name="libraryService">Instance of the <see cref="ILibraryService"/> interface.</param>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
-    public LibraryViewModel(ILibraryService libraryService, INavigationService navigationService)
-        : base(navigationService)
+    /// <param name="applicationService">Instance of the <see cref="IApplicationService"/> interface.</param>
+    public LibraryViewModel(ILibraryService libraryService, INavigationService navigationService, IApplicationService applicationService)
+        : base(navigationService, applicationService)
     {
         _libraryService = libraryService;
 
-        BindingBase.EnableCollectionSynchronization(LibraryItemsCollection, null, ObservableCollectionCallback);
+        ApplicationService.EnableCollectionSynchronization(LibraryItemsCollection, null, ObservableCollectionCallback);
     }
 
     /// <summary>
@@ -95,7 +96,7 @@ public partial class LibraryViewModel : BaseItemViewModel
         // prevents unnecessary refresh (back navigation)
         if (!LibraryItemsCollection.Select(x => x.Id).SequenceEqual(queryResult.Items.Select(x => x.Id)))
         {
-            Application.Current?.Dispatcher.DispatchAsync(() =>
+            ApplicationService.DispatchAsync(() =>
             {
                 LibraryItemsCollection.ReplaceRange(queryResult.Items);
                 Loading = false;
