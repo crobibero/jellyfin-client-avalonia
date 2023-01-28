@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 
 namespace Jellyfin.Maui.Services;
 
@@ -11,14 +11,14 @@ public interface IApplicationService
     /// Schedules the provided action on the UI thread from a worker thread.
     /// </summary>
     /// <returns>true when the action has been dispatched successfully, otherwise false.</returns>
-    /// <param name="action">he method to be executed by the dispatcher.</param>
+    /// <param name="action">The method to be executed by the dispatcher.</param>
     bool Dispatch(Action action);
 
     /// <summary>
     /// Schedules the provided action on the UI thread from a worker thread.
     /// </summary>
     /// <returns>true when the action has been dispatched successfully, otherwise false.</returns>
-    /// <param name="action">he method to be executed by the dispatcher.</param>
+    /// <param name="action">The method to be executed by the dispatcher.</param>
     Task DispatchAsync(Action action);
 
     /// <summary>
