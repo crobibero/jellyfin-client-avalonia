@@ -65,7 +65,7 @@ public class StateStorageService : IStateStorageService
     /// <inheritdoc />
     public async ValueTask AddServerAsync(ServerStateModel serverStateModel)
     {
-        ArgumentNullException.ThrowIfNull(serverStateModel, nameof(serverStateModel));
+        ArgumentNullException.ThrowIfNull(serverStateModel);
 
         var state = await GetStoredStateAsync().ConfigureAwait(false);
 
@@ -88,7 +88,7 @@ public class StateStorageService : IStateStorageService
     /// <inheritdoc />
     public async ValueTask AddUserAsync(UserStateModel userStateModel)
     {
-        ArgumentNullException.ThrowIfNull(userStateModel, nameof(userStateModel));
+        ArgumentNullException.ThrowIfNull(userStateModel);
 
         var state = await GetStoredStateAsync().ConfigureAwait(false);
 
