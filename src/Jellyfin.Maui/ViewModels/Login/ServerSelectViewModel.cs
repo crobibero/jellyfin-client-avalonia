@@ -44,7 +44,12 @@ public partial class ServerSelectViewModel : BaseViewModel
     public override async ValueTask InitializeAsync()
     {
         var state = await _stateStorageService.GetStoredStateAsync().ConfigureAwait(false);
-        Servers.ReplaceRange(state.Servers);
+
+        // if ConfigureAwait(continueOnCapturedContext: true), then there's no need to Dispatch
+        ApplicationService.DispatchAsync(() =>
+        {
+            Servers.ReplaceRange(state.Servers);
+        }).SafeFireAndForget();
     }
 
     [RelayCommand]

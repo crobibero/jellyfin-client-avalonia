@@ -51,7 +51,11 @@ public partial class SelectUserViewModel : BaseViewModel
             return;
         }
 
-        Users.ReplaceRange(state.Users.Where(u => u.ServerId == serverState.Id));
+        // if ConfigureAwait(continueOnCapturedContext: true), then there's no need to Dispatch
+        ApplicationService.DispatchAsync(() =>
+        {
+            Users.ReplaceRange(state.Users.Where(u => u.ServerId == serverState.Id));
+        }).SafeFireAndForget();
     }
 
     [RelayCommand]
