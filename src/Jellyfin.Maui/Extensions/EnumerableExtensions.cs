@@ -15,10 +15,7 @@ public static class EnumerableExtensions
     /// <exception cref="ArgumentNullException">The source is null.</exception>
     public static bool Contains(this IEnumerable<string> source, ReadOnlySpan<char> value, StringComparison stringComparison)
     {
-        if (source == null)
-        {
-            throw new ArgumentNullException(nameof(source));
-        }
+        ArgumentNullException.ThrowIfNull(source);
 
         if (source is IList<string> list)
         {
