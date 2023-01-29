@@ -44,8 +44,8 @@ jobs:
         working-directory: .\src
         shell: pwsh
         run: |
-          dotnet build -c Release -f net7.0-windows10.0.19041.0
-          dotnet publish -c Release -f net7.0-windows10.0.19041.0
+          dotnet build Jellyfin.Maui -c Release -f net7.0-windows10.0.19041.0
+          dotnet publish Jellyfin.Maui -c Release -f net7.0-windows10.0.19041.0
           New-Item -Path . -Name "artifacts" -ItemType Directory
           Get-ChildItem -Path Jellyfin.Maui*.msix -Recurse -File | Copy-Item -Destination .\artifacts\
 

@@ -46,8 +46,8 @@ jobs:
       - name: Build
         working-directory: ./src
         run: |
-          dotnet build -f net7.0-maccatalyst -c Release -o ./artifacts
-          dotnet publish -f net7.0-maccatalyst -c Release -p:BuildIpa=True -o ./artifacts
+          dotnet build Jellyfin.Maui -f net7.0-maccatalyst -c Release -o ./artifacts
+          dotnet publish Jellyfin.Maui -f net7.0-maccatalyst -c Release -p:BuildIpa=True -o ./artifacts
 
       - name: Upload MacCatalyst build artifacts
         uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
