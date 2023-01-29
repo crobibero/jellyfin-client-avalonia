@@ -14,15 +14,6 @@ public class NavigationService : INavigationService
     private NavigationPage? _loginNavigationPage;
 
     /// <inheritdoc />
-    public void NavigateToMainPage()
-    {
-        Application.Current?.Dispatcher.Dispatch(() => // dispatcher is useless here since NavigateToMainPage is always called from main thread ui
-        {
-            _application.MainPage = InternalServiceProvider.GetService<MainPage>();
-        });
-    }
-
-    /// <inheritdoc />
     public void NavigateToUserSelectPage()
     {
         if (_loginNavigationPage is null)
