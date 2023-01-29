@@ -7,14 +7,23 @@ namespace Jellyfin.Maui.Pages;
 /// </summary>
 public partial class LoadingPage : ContentPage
 {
-    private bool busy;
+    private readonly INavigationService _navigationService;
+    private readonly IAuthenticationService _authenticationService;
+
+    private bool _busy;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LoadingPage"/> class.
     /// </summary>
-    public LoadingPage()
+    /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
+    /// <param name="authenticationService">Instance of the <see cref="IAuthenticationService"/> interface.</param>
+    public LoadingPage(
+        INavigationService navigationService,
+        IAuthenticationService authenticationService)
     {
         InitializeComponent();
+        _navigationService = navigationService;
+        _authenticationService = authenticationService;
     }
 
     /// <inheritdoc/>
@@ -22,21 +31,31 @@ public partial class LoadingPage : ContentPage
     {
         base.OnAppearing();
 
-        if (busy)
+        if (_busy)
         {
             return;
         }
 
-        busy = true;
+        _busy = true;
 
-        await InternalServiceProvider.GetService<ISdkService>().InitializeAsync();
+        await InternalServiceProvider.GetService<ISdkService>().InitializeAsync()
+            .ConfigureAwait(true);
 
 #if DEBUG
-        await Task.Delay(1000); // mock slow perfs
+        await Task.Delay(1000)
+            .ConfigureAwait(true); // mock slow perfs
 #endif
 
-        InternalServiceProvider.GetService<INavigationService>().NavigateToMainPage();
+        if (await _authenticationService.IsAuthenticatedAsync()
+            .ConfigureAwait(true))
+        {
+            _navigationService.NavigateHome();
+        }
+        else
+        {
+            _navigationService.NavigateToAddServerPage();
+        }
 
-        busy = false;
+        _busy = false;
     }
 }

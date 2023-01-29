@@ -6,11 +6,6 @@ namespace Jellyfin.Maui.Services;
 public interface INavigationService
 {
     /// <summary>
-    /// Navigate to the main page.
-    /// </summary>
-    void NavigateToMainPage();
-
-    /// <summary>
     /// Navigate to the server selection page.
     /// </summary>
     void NavigateToServerSelectPage();
