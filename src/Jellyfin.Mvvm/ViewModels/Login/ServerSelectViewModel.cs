@@ -74,7 +74,7 @@ public partial class ServerSelectViewModel : BaseViewModel
         if (server is not null)
         {
             await _stateStorageService.RemoveServerAsync(server.Id);
-            InitializeAsync().SafeFireAndForget();
+            await InitializeAsync();
         }
     }
 }

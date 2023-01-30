@@ -80,7 +80,7 @@ public partial class SelectUserViewModel : BaseViewModel
         if (user is not null)
         {
             await _stateStorageService.RemoveUserAsync(user.Id, user.ServerId);
-            InitializeAsync().SafeFireAndForget();
+            await InitializeAsync();
         }
     }
 }
