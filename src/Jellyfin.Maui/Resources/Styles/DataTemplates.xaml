@@ -31,10 +31,10 @@
                         Grid.RowSpan="2"
                         Grid.Column="1"
                         BackgroundColor="Transparent"
-                        Text="🗑"
-                        VerticalOptions="Center"
                         Command="{Binding DeleteServerCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
-                        CommandParameter="{Binding .}" />
+                        CommandParameter="{Binding .}"
+                        Text="🗑"
+                        VerticalOptions="Center" />
                 <Label Grid.Row="1"
                        Grid.Column="0"
                        Text="{Binding Url, Mode=OneTime}" />
@@ -61,11 +61,10 @@
                        Text="{Binding Name, Mode=OneTime}" />
                 <Button Grid.Column="1"
                         BackgroundColor="Transparent"
-                        Text="🗑"
-                        VerticalOptions="Center"
                         Command="{Binding DeleteUserCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
-                        CommandParameter="{Binding .}">
-                </Button>
+                        CommandParameter="{Binding .}"
+                        Text="🗑"
+                        VerticalOptions="Center" />
             </Grid>
         </Border>
     </DataTemplate>
