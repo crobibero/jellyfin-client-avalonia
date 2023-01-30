@@ -67,4 +67,14 @@ public partial class ServerSelectViewModel : BaseViewModel
             _navigationService.NavigateToUserSelectPage();
         }
     }
+
+    [RelayCommand]
+    private async Task DeleteServerAsync(ServerStateModel? server)
+    {
+        if (server is not null)
+        {
+            await _stateStorageService.RemoveServerAsync(server.Id);
+            InitializeAsync().SafeFireAndForget();
+        }
+    }
 }

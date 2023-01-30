@@ -15,10 +15,32 @@
                 <TapGestureRecognizer Command="{Binding SelectServerCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
                                       CommandParameter="{Binding .}" />
             </Border.GestureRecognizers>
-            <VerticalStackLayout>
-                <Label Text="{Binding Name, Mode=OneTime}" />
-                <Label Text="{Binding Url, Mode=OneTime}" />
-            </VerticalStackLayout>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0"
+                       Grid.Column="0"
+                       Text="{Binding Name, Mode=OneTime}" />
+                <Label Grid.Row="0"
+                       Grid.RowSpan="2"
+                       Grid.Column="1"
+                       Text="🗑"
+                       VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding DeleteServerCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
+                                              CommandParameter="{Binding .}" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label Grid.Row="1"
+                       Grid.Column="0"
+                       Text="{Binding Url, Mode=OneTime}" />
+            </Grid>
         </Border>
     </DataTemplate>
 
@@ -32,7 +54,22 @@
                 <TapGestureRecognizer Command="{Binding SelectUserCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
                                       CommandParameter="{Binding .}" />
             </Border.GestureRecognizers>
-            <Label Text="{Binding Name, Mode=OneTime}" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0"
+                       Text="{Binding Name, Mode=OneTime}" />
+                <Label Grid.Column="1"
+                       Text="🗑"
+                       VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding DeleteUserCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
+                                              CommandParameter="{Binding .}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
         </Border>
     </DataTemplate>
 
