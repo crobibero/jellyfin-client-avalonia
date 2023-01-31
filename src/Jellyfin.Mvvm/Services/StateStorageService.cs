@@ -8,17 +8,17 @@ public class StateStorageService : IStateStorageService
 {
     private const string StateKey = "jellyfin.state";
     private const string DeviceIdKey = "jellyfin.device.id";
-    private readonly ISecureStorage _secureStorage;
+    private readonly ISettingsService _settingsService;
     private StateContainerModel? _stateCache;
     private string? _deviceIdCache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StateStorageService"/> class.
     /// </summary>
-    /// <param name="secureStorage">Instance of the <see cref="ISecureStorage"/> interface.</param>
-    public StateStorageService(ISecureStorage secureStorage)
+    /// <param name="settingsService">Instance of the <see cref="ISettingsService"/> interface.</param>
+    public StateStorageService(ISettingsService settingsService)
     {
-        _secureStorage = secureStorage;
+        _settingsService = settingsService;
     }
 
     /// <inheritdoc />
@@ -172,7 +172,7 @@ public class StateStorageService : IStateStorageService
     {
         try
         {
-            return await _secureStorage.GetAsync(key).ConfigureAwait(false);
+            return await _settingsService.GetAsync(key).ConfigureAwait(false);
         }
         catch (Exception)
         {
@@ -185,7 +185,7 @@ public class StateStorageService : IStateStorageService
     {
         try
         {
-            await _secureStorage.SetAsync(key, value).ConfigureAwait(false);
+            await _settingsService.SetAsync(key, value).ConfigureAwait(false);
         }
         catch (Exception)
         {
@@ -197,7 +197,7 @@ public class StateStorageService : IStateStorageService
     {
         try
         {
-            _secureStorage.Remove(key);
+            _settingsService.Remove(key);
         }
         catch (Exception)
         {
