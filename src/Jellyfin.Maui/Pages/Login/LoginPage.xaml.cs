@@ -17,7 +17,7 @@ public partial class LoginPage : BaseContentPage<LoginViewModel>
     {
         InitializeComponent();
 
-        UserNameEntry.Completed += (s, e) => PasswordEntry.Focus();
-        PasswordEntry.Completed += (s, e) => viewModel.LoginCommand.Execute(null);
+        UserNameEntry.Completed += (_, _) => PasswordEntry.Focus();
+        PasswordEntry.Completed += (_, _) => viewModel.LoginCommand.Execute(null);
     }
 }
