@@ -16,12 +16,15 @@
                        VerticalOptions="Fill" />
                 <VerticalStackLayout>
                     <Label Text="{ext:Localize Login_Username}" />
-                    <Entry HorizontalOptions="Fill"
+                    <Entry x:Name="UserNameEntry"
+                           HorizontalOptions="Fill"
                            Text="{Binding Username}" />
                 </VerticalStackLayout>
                 <VerticalStackLayout>
                     <Label Text="{ext:Localize Login_Password}" />
-                    <Entry HorizontalOptions="Fill"
+                    <Entry x:Name="PasswordEntry"
+                           HorizontalOptions="Fill"
+                           IsPassword="True"
                            Text="{Binding Password}" />
                 </VerticalStackLayout>
                 <HorizontalStackLayout>

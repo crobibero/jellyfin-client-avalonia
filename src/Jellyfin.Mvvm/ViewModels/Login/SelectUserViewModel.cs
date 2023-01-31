@@ -73,4 +73,14 @@ public partial class SelectUserViewModel : BaseViewModel
             _navigationService.NavigateToLoginPage();
         }
     }
+
+    [RelayCommand]
+    private async Task DeleteUserAsync(UserStateModel? user)
+    {
+        if (user is not null)
+        {
+            await _stateStorageService.RemoveUserAsync(user.Id, user.ServerId);
+            await InitializeAsync();
+        }
+    }
 }
