@@ -120,7 +120,7 @@ public class StateStorageService : IStateStorageService
             return;
         }
 
-        foreach (var user in state.Users.Where(x => x.ServerId == serverId))
+        foreach (var user in state.Users.Where(x => x.ServerId == serverId).ToList())
         {
             state.Users.Remove(user);
         }
