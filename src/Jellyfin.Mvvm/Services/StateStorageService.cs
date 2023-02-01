@@ -92,7 +92,7 @@ public class StateStorageService : IStateStorageService
 
         var state = await GetStoredStateAsync().ConfigureAwait(false);
 
-        var existing = state.Users.FirstOrDefault(x => x.Id == userStateModel.Id && x.ServerId == userStateModel.Id);
+        var existing = state.Users.FirstOrDefault(x => x.Id == userStateModel.Id && x.ServerId == userStateModel.ServerId);
 
         if (existing is null)
         {
