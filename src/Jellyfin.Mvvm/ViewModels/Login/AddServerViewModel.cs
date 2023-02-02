@@ -20,6 +20,9 @@ public partial class AddServerViewModel : BaseViewModel
     [ObservableProperty]
     private string? _serverUrl;
 
+    [ObservableProperty]
+    private bool _loading = false;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="AddServerViewModel"/> class.
     /// </summary>
@@ -51,6 +54,8 @@ public partial class AddServerViewModel : BaseViewModel
     [RelayCommand]
     private async Task AddServerAsync()
     {
+        Loading = true;
+
         try
         {
             _sdkClientSettings.BaseUrl = ServerUrl;
@@ -72,11 +77,17 @@ public partial class AddServerViewModel : BaseViewModel
                 Url = _sdkClientSettings.BaseUrl!
             }).ConfigureAwait(false);
 
+#if DEBUG
+            await Task.Delay(1_000).ConfigureAwait(false);  // mock slow network
+#endif
+
             _navigationService.NavigateToServerSelectPage();
         }
         catch (SystemException)
         {
             // TODO
         }
+
+        Loading = false;
     }
 }

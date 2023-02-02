@@ -171,4 +171,10 @@
   <data name="Home_Latest" xml:space="preserve">
     <value>Latest {0}</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SwitchUser" xml:space="preserve">
+    <value>Switch user</value>
+  </data>
 </root>

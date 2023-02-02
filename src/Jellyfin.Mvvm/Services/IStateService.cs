@@ -8,6 +8,12 @@ namespace Jellyfin.Maui.Services;
 public interface IStateService
 {
     /// <summary>
+    /// Initialization.
+    /// </summary>
+    /// <returns>A <see cref="ValueTask"/> representing the asyncronous operation.</returns>
+    ValueTask InitializeAsync();
+
+    /// <summary>
     /// Store the authentication response in the state.
     /// </summary>
     /// <param name="host">The server host.</param>

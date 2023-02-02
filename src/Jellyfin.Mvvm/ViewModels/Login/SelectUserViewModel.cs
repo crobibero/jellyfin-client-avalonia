@@ -65,11 +65,13 @@ public partial class SelectUserViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private void SelectUser(UserStateModel? user)
+    private async Task SelectUserAsync(UserStateModel? user)
     {
         if (user is not null)
         {
             _stateService.SetUserState(user);
+            await _stateStorageService.AddUserAsync(user).ConfigureAwait(false); // TODO: refactor, quick trick to save SelectedUser
+
             _navigationService.NavigateToLoginPage();
         }
     }
@@ -79,8 +81,8 @@ public partial class SelectUserViewModel : BaseViewModel
     {
         if (user is not null)
         {
-            await _stateStorageService.RemoveUserAsync(user.Id, user.ServerId);
-            await InitializeAsync();
+            await _stateStorageService.RemoveUserAsync(user.Id, user.ServerId).ConfigureAwait(true);
+            await InitializeAsync().ConfigureAwait(true);
         }
     }
 }

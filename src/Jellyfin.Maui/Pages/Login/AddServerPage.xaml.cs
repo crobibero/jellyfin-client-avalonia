@@ -16,5 +16,6 @@ public partial class AddServerPage : BaseContentPage<AddServerViewModel>
     : base(viewModel)
     {
         InitializeComponent();
+        ServerUrlEntry.Completed += (_, _) => viewModel.AddServerCommand.Execute(null);
     }
 }
