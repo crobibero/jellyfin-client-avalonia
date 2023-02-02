@@ -59,11 +59,13 @@ public partial class ServerSelectViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private void SelectServer(ServerStateModel? server)
+    private async Task SelectServerAsync(ServerStateModel? server)
     {
         if (server is not null)
         {
             _stateService.SetServerState(server);
+            await _stateStorageService.AddServerAsync(server).ConfigureAwait(false); // TODO: refactor, quick trick to save SelectedUser
+
             _navigationService.NavigateToUserSelectPage();
         }
     }
@@ -73,8 +75,8 @@ public partial class ServerSelectViewModel : BaseViewModel
     {
         if (server is not null)
         {
-            await _stateStorageService.RemoveServerAsync(server.Id);
-            await InitializeAsync();
+            await _stateStorageService.RemoveServerAsync(server.Id).ConfigureAwait(true);
+            await InitializeAsync().ConfigureAwait(true);
         }
     }
 }

@@ -41,6 +41,9 @@ public partial class LoadingPage : ContentPage
         await InternalServiceProvider.GetService<ISdkService>().InitializeAsync()
             .ConfigureAwait(true);
 
+        await InternalServiceProvider.GetService<IStateService>().InitializeAsync()
+            .ConfigureAwait(true);
+
 #if DEBUG
         await Task.Delay(1000)
             .ConfigureAwait(true); // mock slow perfs

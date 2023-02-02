@@ -221,5 +221,23 @@ namespace Jellyfin.Mvvm.Strings {
                 return ResourceManager.GetString("Seasons", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch user.
+        /// </summary>
+        public static string SwitchUser {
+            get {
+                return ResourceManager.GetString("SwitchUser", resourceCulture);
+            }
+        }
     }
 }

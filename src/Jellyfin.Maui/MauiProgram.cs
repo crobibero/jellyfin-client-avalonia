@@ -52,6 +52,7 @@ public static class MauiProgram
         services.AddTransient<ItemPage, ItemViewModel>();
         services.AddTransient<LibraryPage, LibraryViewModel>();
         services.AddTransient<LoadingPage>();
+        services.AddTransient<AppShell>();
     }
 
     private static void AddServices(this IServiceCollection services)

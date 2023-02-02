@@ -7,18 +7,43 @@ public class StateService : IStateService
 {
     private readonly CurrentStateModel _state;
     private readonly SdkClientSettings _sdkClientSettings;
+    private readonly IStateStorageService _stateStorageService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StateService"/> class.
     /// </summary>
     /// <param name="sdkClientSettings">Instance of the <see cref="SdkClientSettings"/>.</param>
-    public StateService(SdkClientSettings sdkClientSettings)
+    /// <param name="stateStorageService">Instance of the <see cref="IStateStorageService"/> interface.</param>
+    public StateService(SdkClientSettings sdkClientSettings, IStateStorageService stateStorageService)
     {
         _sdkClientSettings = sdkClientSettings;
+        _stateStorageService = stateStorageService;
         // TODO load from disk
         _state = new CurrentStateModel();
         _sdkClientSettings.BaseUrl = _state.Host;
         _sdkClientSettings.AccessToken = _state.Token;
+    }
+
+    /// <inheritdoc/>
+    public async ValueTask InitializeAsync()
+    {
+        var storeState = await _stateStorageService.GetStoredStateAsync().ConfigureAwait(false);
+
+        var selectedServer = storeState.Servers.FirstOrDefault(x => x.Id == storeState.SelectedServerId);
+
+        if (selectedServer != null)
+        {
+            var selectedUser = storeState.Users.FirstOrDefault(x => x.Id == storeState.SelectedUserId && x.ServerId == selectedServer.Id);
+
+            if (selectedUser != null)
+            {
+                SetServerState(selectedServer);
+                SetUserState(selectedUser);
+
+                _sdkClientSettings.AccessToken = selectedUser.Token;
+                _sdkClientSettings.BaseUrl = selectedServer.Url;
+            }
+        }
     }
 
     /// <inheritdoc />

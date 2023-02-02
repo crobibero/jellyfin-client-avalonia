@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Jellyfin.Maui.ViewModels.Facades;
 
 namespace Jellyfin.Maui.Pages.Facades;
@@ -6,9 +7,12 @@ namespace Jellyfin.Maui.Pages.Facades;
 /// Interface for initializing a view with an id.
 /// </summary>
 /// <typeparam name="TViewModel">The type of view model.</typeparam>
+[QueryProperty(nameof(Args), "args")]
 public abstract class BaseContentIdPage<TViewModel> : BaseContentPage<TViewModel>
     where TViewModel : BaseItemViewModel
 {
+    private string? _args;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseContentIdPage{TViewModel}"/> class.
     /// </summary>
@@ -16,6 +20,33 @@ public abstract class BaseContentIdPage<TViewModel> : BaseContentPage<TViewModel
     protected BaseContentIdPage(TViewModel viewModel)
         : base(viewModel)
     {
+    }
+
+    /// <summary>
+    /// Gets or sets the selected Args.
+    /// </summary>
+    public string? Args
+    {
+        get => _args;
+
+        set
+        {
+            if (value == null // PopToRootAsync()
+                || value == _args) // back button
+            {
+                return;
+            }
+
+            _args = value;
+
+            var unescaped = Uri.UnescapeDataString(value);
+            var item = JsonSerializer.Deserialize<BaseItemDto>(unescaped);
+
+            if (item != null)
+            {
+                ViewModel.Initialize(item);
+            }
+        }
     }
 
     /// <summary>
