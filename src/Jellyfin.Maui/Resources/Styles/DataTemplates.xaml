@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
                     xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                     xmlns:models="clr-namespace:Jellyfin.Maui.Models;assembly=Jellyfin.Mvvm"
                     xmlns:sdk="clr-namespace:Jellyfin.Sdk;assembly=Jellyfin.Sdk"
@@ -27,14 +28,18 @@
                 <Label Grid.Row="0"
                        Grid.Column="0"
                        Text="{Binding Name, Mode=OneTime}" />
-                <Button Grid.Row="0"
-                        Grid.RowSpan="2"
-                        Grid.Column="1"
-                        BackgroundColor="Transparent"
-                        Command="{Binding DeleteServerCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
-                        CommandParameter="{Binding .}"
-                        Text="🗑"
-                        VerticalOptions="Center" />
+                <ImageButton Grid.Row="0"
+                             Grid.RowSpan="2"
+                             Grid.Column="1"
+                             BackgroundColor="Transparent"
+                             Command="{Binding DeleteServerCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
+                             CommandParameter="{Binding .}"
+                             VerticalOptions="Start">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MaterialRegular"
+                                         Glyph="{x:Static m:MaterialRegular.Delete}" />
+                    </ImageButton.Source>
+                </ImageButton>
                 <Label Grid.Row="1"
                        Grid.Column="0"
                        Text="{Binding Url, Mode=OneTime}" />
@@ -59,12 +64,16 @@
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0"
                        Text="{Binding Name, Mode=OneTime}" />
-                <Button Grid.Column="1"
-                        BackgroundColor="Transparent"
-                        Command="{Binding DeleteUserCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
-                        CommandParameter="{Binding .}"
-                        Text="🗑"
-                        VerticalOptions="Center" />
+                <ImageButton Grid.Column="1"
+                             BackgroundColor="Transparent"
+                             Command="{Binding DeleteUserCommand, Source={RelativeSource Mode=FindAncestorBindingContext, AncestorType={Type vmf:BaseViewModel}}}"
+                             CommandParameter="{Binding .}"
+                             VerticalOptions="Start">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MaterialRegular"
+                                         Glyph="{x:Static m:MaterialRegular.Delete}" />
+                    </ImageButton.Source>
+                </ImageButton>
             </Grid>
         </Border>
     </DataTemplate>

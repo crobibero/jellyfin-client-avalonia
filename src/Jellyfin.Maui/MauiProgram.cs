@@ -10,6 +10,7 @@ using Jellyfin.Maui.ViewModels.Login;
 using Polly;
 using Polly.Extensions.Http;
 using Serilog;
+using UraniumUI;
 
 namespace Jellyfin.Maui;
 
@@ -36,8 +37,11 @@ public static class MauiProgram
                 fonts.AddFont("Quicksand-Medium.ttf", "QuicksandMedium");
                 fonts.AddFont("Quicksand-Regular.ttf", "QuicksandRegular");
                 fonts.AddFont("Quicksand-SemiBold.ttf", "QuicksandSemiBold");
+                fonts.AddMaterialIconFonts();
             })
-            .UseMauiCommunityToolkit();
+            .UseMauiCommunityToolkit()
+            .UseUraniumUI()
+            .UseUraniumUIMaterial();
 
         BuildLogger();
         builder.Services.AddPages(useShellNavigation);
