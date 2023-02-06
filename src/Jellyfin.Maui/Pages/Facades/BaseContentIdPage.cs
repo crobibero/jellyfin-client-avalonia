@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Jellyfin.Maui.ViewModels.Facades;
 
 namespace Jellyfin.Maui.Pages.Facades;
@@ -7,11 +6,11 @@ namespace Jellyfin.Maui.Pages.Facades;
 /// Interface for initializing a view with an id.
 /// </summary>
 /// <typeparam name="TViewModel">The type of view model.</typeparam>
-[QueryProperty(nameof(Args), "args")]
+[QueryProperty(nameof(ItemId), "itemId")]
 public abstract class BaseContentIdPage<TViewModel> : BaseContentPage<TViewModel>
     where TViewModel : BaseItemViewModel
 {
-    private string? _args;
+    private string? _itemId;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseContentIdPage{TViewModel}"/> class.
@@ -25,26 +24,23 @@ public abstract class BaseContentIdPage<TViewModel> : BaseContentPage<TViewModel
     /// <summary>
     /// Gets or sets the selected Args.
     /// </summary>
-    public string? Args
+    public string? ItemId
     {
-        get => _args;
+        get => _itemId;
 
         set
         {
             if (value == null // PopToRootAsync()
-                || value == _args) // back button
+                || value == _itemId) // back button
             {
                 return;
             }
 
-            _args = value;
+            _itemId = value;
 
-            var unescaped = Uri.UnescapeDataString(value);
-            var item = JsonSerializer.Deserialize<BaseItemDto>(unescaped);
-
-            if (item != null)
+            if (Guid.TryParse(value, out Guid itemId))
             {
-                ViewModel.Initialize(item);
+                ViewModel.Initialize(itemId);
             }
         }
     }
@@ -52,9 +48,9 @@ public abstract class BaseContentIdPage<TViewModel> : BaseContentPage<TViewModel
     /// <summary>
     /// Initialize the view model with an id.
     /// </summary>
-    /// <param name="item">The item.</param>
-    public void Initialize(BaseItemDto item)
+    /// <param name="itemId">The item id.</param>
+    public void Initialize(Guid itemId)
     {
-        ViewModel.Initialize(item);
+        ViewModel.Initialize(itemId);
     }
 }

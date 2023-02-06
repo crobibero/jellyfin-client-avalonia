@@ -71,12 +71,12 @@ public partial class ItemViewModel : BaseItemViewModel
     /// <inheritdoc/>
     public override async ValueTask InitializeAsync()
     {
-        // BaseItemDto Item originates from search query and does not contain all details, retrieve full object.
-        var itemWithFullDetails = await _libraryService.GetItemAsync(Item.Id);
+        Item = await _libraryService.GetItemAsync(ItemId)
+           .ConfigureAwait(false);
 
-        if (itemWithFullDetails != null)
+        if (Item is null)
         {
-            Item = itemWithFullDetails;
+            return;
         }
 
         PopulateBase();
@@ -119,7 +119,7 @@ public partial class ItemViewModel : BaseItemViewModel
     {
         Reset();
 
-        Title = Item.Type switch
+        Title = Item!.Type switch
         {
             BaseItemKind.Episode => Item.SeriesName,
             BaseItemKind.Season => Item.SeriesName,
@@ -138,7 +138,7 @@ public partial class ItemViewModel : BaseItemViewModel
 
     private async ValueTask PopulateSeriesViewAsync()
     {
-        var seasonResult = await _libraryService.GetSeasonsAsync(Item.Id).ConfigureAwait(false);
+        var seasonResult = await _libraryService.GetSeasonsAsync(Item!.Id).ConfigureAwait(false);
         Seasons = seasonResult.Items;
 
         var nextUpResult = await _libraryService.GetNextUpAsync(Item.Id).ConfigureAwait(false);
@@ -150,7 +150,7 @@ public partial class ItemViewModel : BaseItemViewModel
 
     private async ValueTask PopulateSeasonEpisodesAsync()
     {
-        if (Item.SeriesId is null)
+        if (Item?.SeriesId is null)
         {
             return;
         }
@@ -161,7 +161,7 @@ public partial class ItemViewModel : BaseItemViewModel
 
     private async ValueTask PopulateCurrentSeasonAsync()
     {
-        if (Item.SeasonId is null)
+        if (Item?.SeasonId is null)
         {
             return;
         }
@@ -171,7 +171,7 @@ public partial class ItemViewModel : BaseItemViewModel
 
     private async ValueTask PopulateCurrentShowAsync()
     {
-        if (Item.SeriesId is null)
+        if (Item?.SeriesId is null)
         {
             return;
         }

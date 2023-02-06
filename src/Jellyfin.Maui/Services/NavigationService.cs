@@ -83,8 +83,9 @@ public class NavigationService : INavigationService
     public void NavigateHome()
     {
         _loginNavigationPage = null;
-        if (_navigationPage is null
-            || _application.MainPage != _navigationPage)
+
+        if (_navigationPage is null // first appearance
+            || _application.MainPage != _navigationPage) // after logout
         {
             Application.Current?.Dispatcher.Dispatch(() =>
             {
@@ -104,15 +105,15 @@ public class NavigationService : INavigationService
         switch (item.Type)
         {
             case BaseItemKind.CollectionFolder:
-                Navigate<LibraryPage, LibraryViewModel>(item);
+                Navigate<LibraryPage, LibraryViewModel>(item.Id);
                 break;
             default:
-                Navigate<ItemPage, ItemViewModel>(item);
+                Navigate<ItemPage, ItemViewModel>(item.Id);
                 break;
         }
     }
 
-    private void Navigate<TPage, TViewModel>(BaseItemDto item)
+    private void Navigate<TPage, TViewModel>(Guid itemId)
         where TViewModel : BaseItemViewModel
         where TPage : BaseContentIdPage<TViewModel>
     {
@@ -125,7 +126,7 @@ public class NavigationService : INavigationService
         Application.Current?.Dispatcher.Dispatch(() =>
         {
             var resolvedView = InternalServiceProvider.GetService<TPage>();
-            resolvedView.Initialize(item);
+            resolvedView.Initialize(itemId);
             _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget();
         });
     }

@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Pages.Login;
@@ -102,15 +101,15 @@ public class ShellNavigationService : INavigationService
         switch (item.Type)
         {
             case BaseItemKind.CollectionFolder:
-                Navigate<LibraryViewModel>(item);
+                Navigate<LibraryViewModel>(item.Id);
                 break;
             default:
-                Navigate<ItemViewModel>(item);
+                Navigate<ItemViewModel>(item.Id);
                 break;
         }
     }
 
-    private void Navigate<TViewModel>(BaseItemDto item)
+    private void Navigate<TViewModel>(Guid itemId)
         where TViewModel : BaseItemViewModel
     {
         var pageType = typeof(ShellNavigationService).Assembly.GetTypes()
@@ -126,7 +125,7 @@ public class ShellNavigationService : INavigationService
 
         Application.Current?.Dispatcher.Dispatch(() =>
         {
-            Shell.Current.GoToAsync($"{pageType.Name}?args={Uri.EscapeDataString(JsonSerializer.Serialize(item))}", true);
+            Shell.Current.GoToAsync($"{pageType.Name}?itemId={itemId}", true);
         });
     }
 }
