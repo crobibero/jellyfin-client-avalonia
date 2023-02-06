@@ -1,7 +1,7 @@
 namespace Jellyfin.Maui.Services;
 
 /// <summary>
-/// ApplicationService service interface.
+/// SettingsService service interface.
 /// </summary>
 public interface ISettingsService
 {

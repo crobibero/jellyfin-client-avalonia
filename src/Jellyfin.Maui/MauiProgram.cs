@@ -16,7 +16,7 @@ namespace Jellyfin.Maui;
 /// </summary>
 public static class MauiProgram
 {
-    private const bool UseShellNavigation = false;
+    private const bool UseShellNavigation = true;
 
     /// <summary>
     /// Create the maui app.
@@ -58,11 +58,12 @@ public static class MauiProgram
         if (UseShellNavigation)
         {
             services.AddTransient<AppShell>();
+
+            // DO NOT register 'HomePage' route, it's already registered inside AppShell's constructor.
             services.AddTransientWithShellRoute<AddServerPage, AddServerViewModel>(nameof(AddServerPage));
             services.AddTransientWithShellRoute<LoginPage, LoginViewModel>(nameof(LoginPage));
             services.AddTransientWithShellRoute<SelectServerPage, ServerSelectViewModel>(nameof(SelectServerPage));
             services.AddTransientWithShellRoute<SelectUserPage, SelectUserViewModel>(nameof(SelectUserPage));
-            services.AddTransientWithShellRoute<HomePage, HomeViewModel>(nameof(HomePage));
             services.AddTransientWithShellRoute<ItemPage, ItemViewModel>(nameof(ItemPage));
             services.AddTransientWithShellRoute<LibraryPage, LibraryViewModel>(nameof(LibraryPage));
         }
