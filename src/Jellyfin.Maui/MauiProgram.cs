@@ -16,6 +16,8 @@ namespace Jellyfin.Maui;
 /// </summary>
 public static class MauiProgram
 {
+    private const bool UseShellNavigation = false;
+
     /// <summary>
     /// Create the maui app.
     /// </summary>
@@ -53,14 +55,17 @@ public static class MauiProgram
         services.AddTransient<LibraryPage, LibraryViewModel>();
         services.AddTransient<LoadingPage>();
 
-        services.AddTransient<AppShell>();
-        services.AddTransientWithShellRoute<AddServerPage, AddServerViewModel>(nameof(AddServerPage));
-        services.AddTransientWithShellRoute<LoginPage, LoginViewModel>(nameof(LoginPage));
-        services.AddTransientWithShellRoute<SelectServerPage, ServerSelectViewModel>(nameof(SelectServerPage));
-        services.AddTransientWithShellRoute<SelectUserPage, SelectUserViewModel>(nameof(SelectUserPage));
-        services.AddTransientWithShellRoute<HomePage, HomeViewModel>(nameof(HomePage));
-        services.AddTransientWithShellRoute<ItemPage, ItemViewModel>(nameof(ItemPage));
-        services.AddTransientWithShellRoute<LibraryPage, LibraryViewModel>(nameof(LibraryPage));
+        if (UseShellNavigation)
+        {
+            services.AddTransient<AppShell>();
+            services.AddTransientWithShellRoute<AddServerPage, AddServerViewModel>(nameof(AddServerPage));
+            services.AddTransientWithShellRoute<LoginPage, LoginViewModel>(nameof(LoginPage));
+            services.AddTransientWithShellRoute<SelectServerPage, ServerSelectViewModel>(nameof(SelectServerPage));
+            services.AddTransientWithShellRoute<SelectUserPage, SelectUserViewModel>(nameof(SelectUserPage));
+            services.AddTransientWithShellRoute<HomePage, HomeViewModel>(nameof(HomePage));
+            services.AddTransientWithShellRoute<ItemPage, ItemViewModel>(nameof(ItemPage));
+            services.AddTransientWithShellRoute<LibraryPage, LibraryViewModel>(nameof(LibraryPage));
+        }
     }
 
     private static void AddServices(this IServiceCollection services)
@@ -71,7 +76,15 @@ public static class MauiProgram
         services.AddSingleton<ISettingsService, SettingsService>();
 
         services.AddSingleton<IStateService, StateService>();
-        services.AddSingleton<INavigationService, NavigationService>();
+        if (UseShellNavigation)
+        {
+            services.AddSingleton<INavigationService, ShellNavigationService>();
+        }
+        else
+        {
+            services.AddSingleton<INavigationService, NavigationService>();
+        }
+
         services.AddSingleton<IApplicationService, ApplicationService>();
         services.AddSingleton<IAuthenticationService, AuthenticationService>();
         services.AddSingleton<ILibraryService, LibraryService>();

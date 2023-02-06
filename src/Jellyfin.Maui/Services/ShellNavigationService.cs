@@ -1,16 +1,17 @@
+using System.Text.Json;
 using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Pages.Login;
 using Jellyfin.Maui.ViewModels;
 using Jellyfin.Maui.ViewModels.Facades;
+using Microsoft.Extensions.Logging;
 
 namespace Jellyfin.Maui.Services;
 
 /// <inheritdoc />
-public class NavigationService : INavigationService
+public class ShellNavigationService : INavigationService
 {
     private Application _application = Application.Current!;
-    private NavigationPage? _navigationPage;
     private NavigationPage? _loginNavigationPage;
 
     /// <inheritdoc />
@@ -82,19 +83,17 @@ public class NavigationService : INavigationService
     /// <inheritdoc />
     public void NavigateHome()
     {
-        _loginNavigationPage = null;
-        if (_navigationPage is null)
+        Application.Current?.Dispatcher.Dispatch(() =>
         {
-            Application.Current?.Dispatcher.Dispatch(() =>
+            if (Shell.Current == null)
             {
-                var homePage = InternalServiceProvider.GetService<HomePage>();
-                _application.MainPage = _navigationPage = new NavigationPage(homePage);
-            });
-        }
-        else
-        {
-            Application.Current?.Dispatcher.Dispatch(() => _navigationPage.PopToRootAsync(true).SafeFireAndForget());
-        }
+                _application.MainPage = InternalServiceProvider.GetService<AppShell>();
+            }
+            else
+            {
+                Shell.Current.GoToAsync($"//{nameof(HomePage)}", true);
+            }
+        });
     }
 
     /// <inheritdoc />
@@ -103,29 +102,31 @@ public class NavigationService : INavigationService
         switch (item.Type)
         {
             case BaseItemKind.CollectionFolder:
-                Navigate<LibraryPage, LibraryViewModel>(item);
+                Navigate<LibraryViewModel>(item);
                 break;
             default:
-                Navigate<ItemPage, ItemViewModel>(item);
+                Navigate<ItemViewModel>(item);
                 break;
         }
     }
 
-    private void Navigate<TPage, TViewModel>(BaseItemDto item)
+    private void Navigate<TViewModel>(BaseItemDto item)
         where TViewModel : BaseItemViewModel
-        where TPage : BaseContentIdPage<TViewModel>
     {
-        if (_navigationPage is null)
+        var pageType = typeof(ShellNavigationService).Assembly.GetTypes()
+            .FirstOrDefault(x => typeof(BaseContentPage<TViewModel>).IsAssignableFrom(x));
+
+        if (pageType == null)
         {
-            NavigateHome();
+#pragma warning disable CA2254
+            InternalServiceProvider.GetService<ILogger>().LogWarning($"The ViewModel '{typeof(TViewModel).Name}' is not associated with a BaseContentPage<>");
+#pragma warning restore CA2254
             return;
         }
 
         Application.Current?.Dispatcher.Dispatch(() =>
         {
-            var resolvedView = InternalServiceProvider.GetService<TPage>();
-            resolvedView.Initialize(item);
-            _navigationPage.PushAsync(resolvedView, true).SafeFireAndForget();
+            Shell.Current.GoToAsync($"{pageType.Name}?args={Uri.EscapeDataString(JsonSerializer.Serialize(item))}", true);
         });
     }
 }
