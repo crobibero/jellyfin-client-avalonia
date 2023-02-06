@@ -16,13 +16,12 @@ namespace Jellyfin.Maui;
 /// </summary>
 public static class MauiProgram
 {
-    private const bool UseShellNavigation = true;
-
     /// <summary>
     /// Create the maui app.
     /// </summary>
+    /// <param name="useShellNavigation">whether or not should the app use shell navigation.</param>
     /// <returns>The created maui app.</returns>
-    public static MauiApp CreateMauiApp()
+    public static MauiApp CreateMauiApp(bool useShellNavigation = true)
     {
         var builder = MauiApp.CreateBuilder();
         builder
@@ -38,13 +37,13 @@ public static class MauiProgram
             })
             .UseMauiCommunityToolkit();
 
-        builder.Services.AddPages();
+        builder.Services.AddPages(useShellNavigation);
         builder.Services.AddSdkClients();
-        builder.Services.AddServices();
+        builder.Services.AddServices(useShellNavigation);
         return builder.Build();
     }
 
-    private static void AddPages(this IServiceCollection services)
+    private static void AddPages(this IServiceCollection services, bool useShellNavigation)
     {
         services.AddTransient<AddServerPage, AddServerViewModel>();
         services.AddTransient<LoginPage, LoginViewModel>();
@@ -55,7 +54,7 @@ public static class MauiProgram
         services.AddTransient<LibraryPage, LibraryViewModel>();
         services.AddTransient<LoadingPage>();
 
-        if (UseShellNavigation)
+        if (useShellNavigation)
         {
             services.AddTransient<AppShell>();
 
@@ -67,7 +66,7 @@ public static class MauiProgram
         }
     }
 
-    private static void AddServices(this IServiceCollection services)
+    private static void AddServices(this IServiceCollection services, bool useShellNavigation)
     {
         services.AddLocalization();
         services.AddSingleton<IDeviceInfo>(Microsoft.Maui.Devices.DeviceInfo.Current);
@@ -75,7 +74,7 @@ public static class MauiProgram
         services.AddSingleton<ISettingsService, SettingsService>();
 
         services.AddSingleton<IStateService, StateService>();
-        if (UseShellNavigation)
+        if (useShellNavigation)
         {
             services.AddSingleton<INavigationService, ShellNavigationService>();
         }
