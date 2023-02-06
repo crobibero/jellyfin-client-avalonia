@@ -1,10 +1,10 @@
-using System.Diagnostics;
 using System.Text.Json;
 using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Pages.Login;
 using Jellyfin.Maui.ViewModels;
 using Jellyfin.Maui.ViewModels.Facades;
+using Microsoft.Extensions.Logging;
 
 namespace Jellyfin.Maui.Services;
 
@@ -118,7 +118,9 @@ public class NavigationService : INavigationService
 
         if (pageType == null)
         {
-            Debug.WriteLine($"The ViewModel '{typeof(TViewModel).Name}' is not associated with a BaseContentPage<>");
+#pragma warning disable CA2254
+            InternalServiceProvider.GetService<ILogger>().LogWarning($"The ViewModel '{typeof(TViewModel).Name}' is not associated with a BaseContentPage<>");
+#pragma warning restore CA2254
             return;
         }
 

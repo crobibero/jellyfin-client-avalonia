@@ -52,7 +52,15 @@ public static class MauiProgram
         services.AddTransient<ItemPage, ItemViewModel>();
         services.AddTransient<LibraryPage, LibraryViewModel>();
         services.AddTransient<LoadingPage>();
+
         services.AddTransient<AppShell>();
+        services.AddTransientWithShellRoute<AddServerPage, AddServerViewModel>(nameof(AddServerPage));
+        services.AddTransientWithShellRoute<LoginPage, LoginViewModel>(nameof(LoginPage));
+        services.AddTransientWithShellRoute<SelectServerPage, ServerSelectViewModel>(nameof(SelectServerPage));
+        services.AddTransientWithShellRoute<SelectUserPage, SelectUserViewModel>(nameof(SelectUserPage));
+        services.AddTransientWithShellRoute<HomePage, HomeViewModel>(nameof(HomePage));
+        services.AddTransientWithShellRoute<ItemPage, ItemViewModel>(nameof(ItemPage));
+        services.AddTransientWithShellRoute<LibraryPage, LibraryViewModel>(nameof(LibraryPage));
     }
 
     private static void AddServices(this IServiceCollection services)

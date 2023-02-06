@@ -1,5 +1,3 @@
-using Jellyfin.Maui.Pages.Facades;
-using Jellyfin.Maui.Pages.Login;
 using Jellyfin.Maui.Services;
 
 namespace Jellyfin.Maui.Pages;
@@ -64,17 +62,5 @@ public partial class AppShell : Shell
                 _navigationService.NavigateToServerSelectPage();
             }),
         });
-
-        var allTypesOfPages = from x in typeof(AppShell).Assembly.GetTypes()
-                                let y = x.BaseType
-                                where !x.IsAbstract && !x.IsInterface
-                                && y != null && y.IsGenericType
-                                && (y.GetGenericTypeDefinition() == typeof(BaseContentPage<>) || y.GetGenericTypeDefinition() == typeof(BaseContentIdPage<>))
-                                select x;
-
-        foreach (var pageType in allTypesOfPages)
-        {
-            Routing.RegisterRoute(pageType.Name, pageType);
-        }
     }
 }
