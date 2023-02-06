@@ -83,7 +83,8 @@ public class NavigationService : INavigationService
     public void NavigateHome()
     {
         _loginNavigationPage = null;
-        if (_navigationPage is null)
+        if (_navigationPage is null
+            || _application.MainPage != _navigationPage)
         {
             Application.Current?.Dispatcher.Dispatch(() =>
             {
