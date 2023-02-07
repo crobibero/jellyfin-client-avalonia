@@ -22,7 +22,7 @@ public class ShellNavigationService : INavigationService
             return;
         }
 
-        Application.Current?.Dispatcher.Dispatch(() =>
+        _application.Dispatcher.Dispatch(() =>
         {
             var userSelectPage = InternalServiceProvider.GetService<SelectUserPage>();
             _loginNavigationPage.PushAsync(userSelectPage).SafeFireAndForget();
@@ -38,7 +38,7 @@ public class ShellNavigationService : INavigationService
             return;
         }
 
-        Application.Current?.Dispatcher.Dispatch(() =>
+        _application.Dispatcher.Dispatch(() =>
         {
             var loginPage = InternalServiceProvider.GetService<LoginPage>();
             _loginNavigationPage.PushAsync(loginPage).SafeFireAndForget();
@@ -50,16 +50,15 @@ public class ShellNavigationService : INavigationService
     {
         if (_loginNavigationPage is null)
         {
-            Application.Current?.Dispatcher.Dispatch(() =>
+            _application.Dispatcher.Dispatch(() =>
             {
                 var serverSelectPage = InternalServiceProvider.GetService<SelectServerPage>();
-                _loginNavigationPage = new NavigationPage(serverSelectPage);
-                _application.MainPage = _loginNavigationPage;
+                _application.MainPage = _loginNavigationPage = new NavigationPage(serverSelectPage);
             });
         }
         else
         {
-            Application.Current?.Dispatcher.Dispatch(() => _loginNavigationPage.PopToRootAsync(true).SafeFireAndForget());
+            _application.Dispatcher.Dispatch(() => _loginNavigationPage.PopToRootAsync(true).SafeFireAndForget());
         }
     }
 
@@ -72,7 +71,7 @@ public class ShellNavigationService : INavigationService
             return;
         }
 
-        Application.Current?.Dispatcher.Dispatch(() =>
+        _application.Dispatcher.Dispatch(() =>
         {
             var addServerPage = InternalServiceProvider.GetService<AddServerPage>();
             _loginNavigationPage.PushAsync(addServerPage).SafeFireAndForget();
@@ -82,7 +81,7 @@ public class ShellNavigationService : INavigationService
     /// <inheritdoc />
     public void NavigateHome()
     {
-        Application.Current?.Dispatcher.Dispatch(() =>
+        _application.Dispatcher.Dispatch(() =>
         {
             if (Shell.Current == null)
             {
@@ -117,13 +116,11 @@ public class ShellNavigationService : INavigationService
 
         if (pageType == null)
         {
-#pragma warning disable CA2254
-            InternalServiceProvider.GetService<ILogger>().LogWarning($"The ViewModel '{typeof(TViewModel).Name}' is not associated with a BaseContentPage<>");
-#pragma warning restore CA2254
+            InternalServiceProvider.GetService<ILogger>().LogWarning("The ViewModel '{Name}' is not associated with a BaseContentPage<>", typeof(TViewModel).Name);
             return;
         }
 
-        Application.Current?.Dispatcher.Dispatch(() =>
+        _application.Dispatcher.Dispatch(() =>
         {
             Shell.Current.GoToAsync($"{pageType.Name}?itemId={itemId}", true);
         });

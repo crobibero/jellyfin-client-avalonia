@@ -18,7 +18,7 @@ public class StateService : IStateService
     {
         _sdkClientSettings = sdkClientSettings;
         _stateStorageService = stateStorageService;
-        // TODO load from disk
+
         _state = new CurrentStateModel();
         _sdkClientSettings.BaseUrl = _state.Host;
         _sdkClientSettings.AccessToken = _state.Token;
@@ -29,21 +29,31 @@ public class StateService : IStateService
     {
         var storeState = await _stateStorageService.GetStoredStateAsync().ConfigureAwait(false);
 
+        if (storeState.SelectedServerId == null
+            || storeState.SelectedUserId == null)
+        {
+            return;
+        }
+
         var selectedServer = storeState.Servers.FirstOrDefault(x => x.Id == storeState.SelectedServerId);
 
-        if (selectedServer != null)
+        if (selectedServer == null)
         {
-            var selectedUser = storeState.Users.FirstOrDefault(x => x.Id == storeState.SelectedUserId && x.ServerId == selectedServer.Id);
-
-            if (selectedUser != null)
-            {
-                SetServerState(selectedServer);
-                SetUserState(selectedUser);
-
-                _sdkClientSettings.AccessToken = selectedUser.Token;
-                _sdkClientSettings.BaseUrl = selectedServer.Url;
-            }
+            return;
         }
+
+        var selectedUser = storeState.Users.FirstOrDefault(x => x.Id == storeState.SelectedUserId && x.ServerId == selectedServer.Id);
+
+        if (selectedUser == null)
+        {
+            return;
+        }
+
+        SetServerState(selectedServer);
+        SetUserState(selectedUser);
+
+        _sdkClientSettings.AccessToken = selectedUser.Token;
+        _sdkClientSettings.BaseUrl = selectedServer.Url;
     }
 
     /// <inheritdoc />

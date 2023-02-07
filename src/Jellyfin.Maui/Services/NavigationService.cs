@@ -22,7 +22,7 @@ public class NavigationService : INavigationService
             return;
         }
 
-        Application.Current?.Dispatcher.Dispatch(() =>
+        _application.Dispatcher.Dispatch(() =>
         {
             var userSelectPage = InternalServiceProvider.GetService<SelectUserPage>();
             _loginNavigationPage.PushAsync(userSelectPage).SafeFireAndForget();
@@ -38,7 +38,7 @@ public class NavigationService : INavigationService
             return;
         }
 
-        Application.Current?.Dispatcher.Dispatch(() =>
+        _application.Dispatcher.Dispatch(() =>
         {
             var loginPage = InternalServiceProvider.GetService<LoginPage>();
             _loginNavigationPage.PushAsync(loginPage).SafeFireAndForget();
@@ -50,16 +50,15 @@ public class NavigationService : INavigationService
     {
         if (_loginNavigationPage is null)
         {
-            Application.Current?.Dispatcher.Dispatch(() =>
+            _application.Dispatcher.Dispatch(() =>
             {
                 var serverSelectPage = InternalServiceProvider.GetService<SelectServerPage>();
-                _loginNavigationPage = new NavigationPage(serverSelectPage);
-                _application.MainPage = _loginNavigationPage;
+                _application.MainPage = _loginNavigationPage = new NavigationPage(serverSelectPage);
             });
         }
         else
         {
-            Application.Current?.Dispatcher.Dispatch(() => _loginNavigationPage.PopToRootAsync(true).SafeFireAndForget());
+            _application.Dispatcher.Dispatch(() => _loginNavigationPage.PopToRootAsync(true).SafeFireAndForget());
         }
     }
 
@@ -72,7 +71,7 @@ public class NavigationService : INavigationService
             return;
         }
 
-        Application.Current?.Dispatcher.Dispatch(() =>
+        _application.Dispatcher.Dispatch(() =>
         {
             var addServerPage = InternalServiceProvider.GetService<AddServerPage>();
             _loginNavigationPage.PushAsync(addServerPage).SafeFireAndForget();
@@ -87,7 +86,7 @@ public class NavigationService : INavigationService
         if (_navigationPage is null // first appearance
             || _application.MainPage != _navigationPage) // after logout
         {
-            Application.Current?.Dispatcher.Dispatch(() =>
+            _application.Dispatcher.Dispatch(() =>
             {
                 var homePage = InternalServiceProvider.GetService<HomePage>();
                 _application.MainPage = _navigationPage = new NavigationPage(homePage);
@@ -95,7 +94,7 @@ public class NavigationService : INavigationService
         }
         else
         {
-            Application.Current?.Dispatcher.Dispatch(() => _navigationPage.PopToRootAsync(true).SafeFireAndForget());
+            _application.Dispatcher.Dispatch(() => _navigationPage.PopToRootAsync(true).SafeFireAndForget());
         }
     }
 
@@ -123,7 +122,7 @@ public class NavigationService : INavigationService
             return;
         }
 
-        Application.Current?.Dispatcher.Dispatch(() =>
+        _application.Dispatcher.Dispatch(() =>
         {
             var resolvedView = InternalServiceProvider.GetService<TPage>();
             resolvedView.Initialize(itemId);

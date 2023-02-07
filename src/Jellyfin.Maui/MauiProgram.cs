@@ -61,8 +61,8 @@ public static class MauiProgram
             // Remark 1: DO NOT register 'HomePage' route, it's already registered inside AppShell's constructor.
             // Remark 2: AddServerPage, SelectServerPage, SelectUserPage and LoginPage do not use shell navigation.
 
-            services.AddTransientWithShellRoute<ItemPage, ItemViewModel>(nameof(ItemPage));
-            services.AddTransientWithShellRoute<LibraryPage, LibraryViewModel>(nameof(LibraryPage));
+            Routing.RegisterRoute(nameof(ItemPage), typeof(ItemPage));
+            Routing.RegisterRoute(nameof(LibraryPage), typeof(LibraryPage));
         }
     }
 

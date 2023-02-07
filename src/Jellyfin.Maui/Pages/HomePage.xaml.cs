@@ -17,8 +17,14 @@ public partial class HomePage : BaseContentPage<HomeViewModel>
         : base(viewModel)
     {
         InitializeComponent();
+    }
 
-        if (Shell.Current == null)
+    /// <inheritdoc />
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (Shell.Current == null && !ToolbarItems.Any())
         {
             ToolbarItems.Add(new ToolbarItem
             {
