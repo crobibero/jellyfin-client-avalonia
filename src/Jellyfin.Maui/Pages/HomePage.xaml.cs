@@ -1,4 +1,5 @@
 using Jellyfin.Maui.Pages.Facades;
+using Jellyfin.Maui.Services;
 using Jellyfin.Maui.ViewModels;
 
 namespace Jellyfin.Maui.Pages;
@@ -16,5 +17,24 @@ public partial class HomePage : BaseContentPage<HomeViewModel>
         : base(viewModel)
     {
         InitializeComponent();
+    }
+
+    /// <inheritdoc />
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (Shell.Current == null && !ToolbarItems.Any())
+        {
+            ToolbarItems.Add(new ToolbarItem
+            {
+                IconImageSource = "logout.png",
+                Command = new Command(() =>
+                {
+                    InternalServiceProvider.GetService<IAuthenticationService>().Logout();
+                    InternalServiceProvider.GetService<INavigationService>().NavigateToServerSelectPage();
+                }),
+            });
+        }
     }
 }

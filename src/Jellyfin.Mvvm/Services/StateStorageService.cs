@@ -82,6 +82,8 @@ public class StateStorageService : IStateStorageService
             existing.Url = serverStateModel.Url;
         }
 
+        state.SelectedServerId = serverStateModel.Id;
+
         await SetStoredStateAsync(state).ConfigureAwait(false);
     }
 
@@ -105,6 +107,8 @@ public class StateStorageService : IStateStorageService
             existing.Token = userStateModel.Token;
         }
 
+        state.SelectedUserId = userStateModel.Id;
+
         await SetStoredStateAsync(state).ConfigureAwait(false);
     }
 
@@ -127,6 +131,8 @@ public class StateStorageService : IStateStorageService
 
         state.Servers.Remove(server);
 
+        state.SelectedServerId = null;
+
         await SetStoredStateAsync(state).ConfigureAwait(false);
     }
 
@@ -143,6 +149,8 @@ public class StateStorageService : IStateStorageService
         }
 
         state.Users.Remove(user);
+
+        state.SelectedUserId = null;
 
         await SetStoredStateAsync(state).ConfigureAwait(false);
     }

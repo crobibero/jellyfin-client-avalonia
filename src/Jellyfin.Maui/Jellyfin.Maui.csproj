@@ -48,6 +48,8 @@
 
     <!-- Custom Fonts -->
     <MauiFont Include="Resources\Fonts\*" />
+    <None Remove="Resources\Images\appiconfg.svg" />
+    <None Remove="Resources\Images\logout.svg" />
 
     <!-- Views / Styles -->
     <MauiXaml Update="**\*.xaml">

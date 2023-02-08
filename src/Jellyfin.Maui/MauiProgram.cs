@@ -19,8 +19,9 @@ public static class MauiProgram
     /// <summary>
     /// Create the maui app.
     /// </summary>
+    /// <param name="useShellNavigation">whether or not should the app use shell navigation.</param>
     /// <returns>The created maui app.</returns>
-    public static MauiApp CreateMauiApp()
+    public static MauiApp CreateMauiApp(bool useShellNavigation = true)
     {
         var builder = MauiApp.CreateBuilder();
         builder
@@ -36,13 +37,13 @@ public static class MauiProgram
             })
             .UseMauiCommunityToolkit();
 
-        builder.Services.AddPages();
+        builder.Services.AddPages(useShellNavigation);
         builder.Services.AddSdkClients();
-        builder.Services.AddServices();
+        builder.Services.AddServices(useShellNavigation);
         return builder.Build();
     }
 
-    private static void AddPages(this IServiceCollection services)
+    private static void AddPages(this IServiceCollection services, bool useShellNavigation)
     {
         services.AddTransient<AddServerPage, AddServerViewModel>();
         services.AddTransient<LoginPage, LoginViewModel>();
@@ -52,9 +53,20 @@ public static class MauiProgram
         services.AddTransient<ItemPage, ItemViewModel>();
         services.AddTransient<LibraryPage, LibraryViewModel>();
         services.AddTransient<LoadingPage>();
+
+        if (useShellNavigation)
+        {
+            services.AddTransient<AppShell>();
+
+            // Remark 1: DO NOT register 'HomePage' route, it's already registered inside AppShell's constructor.
+            // Remark 2: AddServerPage, SelectServerPage, SelectUserPage and LoginPage do not use shell navigation.
+
+            Routing.RegisterRoute(nameof(ItemPage), typeof(ItemPage));
+            Routing.RegisterRoute(nameof(LibraryPage), typeof(LibraryPage));
+        }
     }
 
-    private static void AddServices(this IServiceCollection services)
+    private static void AddServices(this IServiceCollection services, bool useShellNavigation)
     {
         services.AddLocalization();
         services.AddSingleton<IDeviceInfo>(Microsoft.Maui.Devices.DeviceInfo.Current);
@@ -62,7 +74,15 @@ public static class MauiProgram
         services.AddSingleton<ISettingsService, SettingsService>();
 
         services.AddSingleton<IStateService, StateService>();
-        services.AddSingleton<INavigationService, NavigationService>();
+        if (useShellNavigation)
+        {
+            services.AddSingleton<INavigationService, ShellNavigationService>();
+        }
+        else
+        {
+            services.AddSingleton<INavigationService, NavigationService>();
+        }
+
         services.AddSingleton<IApplicationService, ApplicationService>();
         services.AddSingleton<IAuthenticationService, AuthenticationService>();
         services.AddSingleton<ILibraryService, LibraryService>();

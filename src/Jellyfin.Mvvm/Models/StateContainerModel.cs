@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 
 namespace Jellyfin.Maui.Models;
 
@@ -26,5 +26,13 @@ public class StateContainerModel
     /// </summary>
     public Collection<UserStateModel> Users { get; init; }
 
-    // TODO store current user & server.
+    /// <summary>
+    /// Gets or sets the last selected ServerId.
+    /// </summary>
+    public Guid? SelectedServerId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the last selected UserId.
+    /// </summary>
+    public Guid? SelectedUserId { get; set; }
 }

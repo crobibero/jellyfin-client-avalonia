@@ -79,6 +79,9 @@ public partial class LibraryViewModel : BaseItemViewModel
 
     private async ValueTask InitializeItemsAsync()
     {
+        Item = await _libraryService.GetItemAsync(ItemId)
+            .ConfigureAwait(false);
+
         if (Item is null)
         {
             return;
