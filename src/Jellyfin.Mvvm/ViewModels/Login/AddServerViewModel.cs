@@ -21,6 +21,9 @@ public partial class AddServerViewModel : BaseViewModel
     private string? _serverUrl;
 
     [ObservableProperty]
+    private bool _isValid;
+
+    [ObservableProperty]
     private bool _loading = false;
 
     /// <summary>
@@ -54,6 +57,11 @@ public partial class AddServerViewModel : BaseViewModel
     [RelayCommand]
     private async Task AddServerAsync()
     {
+        if (!IsValid)
+        {
+            return;
+        }
+
         Loading = true;
 
         try

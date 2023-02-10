@@ -1,4 +1,5 @@
 using Jellyfin.Maui.ViewModels.Facades;
+using UraniumUI.Pages;
 
 namespace Jellyfin.Maui.Pages.Facades;
 
@@ -6,7 +7,7 @@ namespace Jellyfin.Maui.Pages.Facades;
 /// The base content page.
 /// </summary>
 /// <typeparam name="TViewModel">The type of view model.</typeparam>
-public abstract class BaseContentPage<TViewModel> : ContentPage
+public abstract class BaseContentPage<TViewModel> : UraniumContentPage
     where TViewModel : BaseViewModel
 {
     /// <summary>

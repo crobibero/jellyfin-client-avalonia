@@ -50,6 +50,9 @@ public partial class LoginViewModel : BaseViewModel
     [ObservableProperty]
     private bool _checkingQuickConnectAvailability;
 
+    [ObservableProperty]
+    private bool _isValid;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
     /// </summary>
@@ -118,6 +121,11 @@ public partial class LoginViewModel : BaseViewModel
     [RelayCommand]
     private async Task LoginAsync()
     {
+        if (!IsValid)
+        {
+            return;
+        }
+
         try
         {
             if (string.IsNullOrEmpty(Username))
