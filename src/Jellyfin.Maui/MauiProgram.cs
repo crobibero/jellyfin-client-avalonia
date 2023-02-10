@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using System.Text;
 using CommunityToolkit.Maui;
@@ -8,6 +9,7 @@ using Jellyfin.Maui.ViewModels;
 using Jellyfin.Maui.ViewModels.Login;
 using Polly;
 using Polly.Extensions.Http;
+using Serilog;
 
 namespace Jellyfin.Maui;
 
@@ -37,9 +39,11 @@ public static class MauiProgram
             })
             .UseMauiCommunityToolkit();
 
+        BuildLogger();
         builder.Services.AddPages(useShellNavigation);
         builder.Services.AddSdkClients();
         builder.Services.AddServices(useShellNavigation);
+        builder.Logging.AddSerilog();
         return builder.Build();
     }
 
@@ -340,5 +344,28 @@ public static class MauiProgram
         services.AddHttpClient<IYearsClient, YearsClient>()
             .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
             .AddPolicyHandler(retryPolicy);
+    }
+
+    private static void BuildLogger()
+    {
+        Log.Logger = new LoggerConfiguration()
+#if DEBUG
+            .WriteTo.Debug(formatProvider: CultureInfo.InvariantCulture)
+#endif
+#if IOS || MACCATALYST
+            .WriteTo.NSLog()
+#elif ANDROID
+            .WriteTo.AndroidLog()
+#elif WINDOWS
+            /* Path is %LocalAppData%/Packages/org.jellyfin.maui_{unique} */
+            .WriteTo.File(
+                path: Path.Combine(FileSystem.AppDataDirectory, "Jellyfin.Maui..log"),
+                formatProvider: CultureInfo.InvariantCulture,
+                encoding: Encoding.UTF8,
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: 10)
+#endif
+            .Enrich.FromLogContext()
+            .CreateLogger();
     }
 }
