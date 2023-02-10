@@ -27,6 +27,7 @@
                     </input:AdvancedEntry.Validations>
                 </input:AdvancedEntry>
                 <input:AdvancedEntry Title="{ext:Localize Login_Password}"
+                                     CompletedCommand="{Binding LoginCommand}"
                                      HorizontalOptions="Fill"
                                      IconImage="{FontImageSource FontFamily=MaterialRegular,
                                                                  Glyph={x:Static mi:MaterialRegular.Key},
