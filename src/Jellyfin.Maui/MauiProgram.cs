@@ -349,14 +349,14 @@ public static class MauiProgram
     private static void BuildLogger()
     {
         Log.Logger = new LoggerConfiguration()
-#if DEBUG
-            .WriteTo.Debug(formatProvider: CultureInfo.InvariantCulture)
-#endif
 #if IOS || MACCATALYST
-            .WriteTo.NSLog()
+            .WriteTo.NSLog(formatProvider: CultureInfo.InvariantCulture)
 #elif ANDROID
             .WriteTo.AndroidLog()
 #elif WINDOWS
+#if DEBUG
+            .WriteTo.Debug(formatProvider: CultureInfo.InvariantCulture)
+#endif
             /* Path is %LocalAppData%/Packages/org.jellyfin.maui_{unique} */
             .WriteTo.File(
                 path: Path.Combine(FileSystem.AppDataDirectory, "Jellyfin.Maui..log"),
