@@ -21,7 +21,10 @@ public abstract partial class BaseItemViewModel : BaseViewModel
     {
     }
 
-    protected Guid ItemId { get; set; }
+    /// <summary>
+    /// Gets the current item id.
+    /// </summary>
+    protected Guid ItemId { get; private set; }
 
     /// <summary>
     /// Initialize the view model's item id.

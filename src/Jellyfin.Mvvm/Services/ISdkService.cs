@@ -1,5 +1,8 @@
 namespace Jellyfin.Maui.Services;
 
+/// <summary>
+/// Jellyfin sdk service.
+/// </summary>
 public interface ISdkService
 {
     /// <summary>
