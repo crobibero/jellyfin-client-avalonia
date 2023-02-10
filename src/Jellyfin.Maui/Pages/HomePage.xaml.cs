@@ -24,7 +24,7 @@ public partial class HomePage : BaseContentPage<HomeViewModel>
     {
         base.OnAppearing();
 
-        if (Shell.Current == null && !ToolbarItems.Any())
+        if (Shell.Current is null && !ToolbarItems.Any())
         {
             ToolbarItems.Add(new ToolbarItem
             {

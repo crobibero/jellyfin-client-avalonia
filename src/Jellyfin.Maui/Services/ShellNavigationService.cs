@@ -83,7 +83,7 @@ public class ShellNavigationService : INavigationService
     {
         _application.Dispatcher.Dispatch(() =>
         {
-            if (Shell.Current == null)
+            if (Shell.Current is null)
             {
                 _application.MainPage = InternalServiceProvider.GetService<AppShell>();
             }
@@ -114,7 +114,7 @@ public class ShellNavigationService : INavigationService
         var pageType = typeof(ShellNavigationService).Assembly.GetTypes()
             .FirstOrDefault(x => typeof(BaseContentPage<TViewModel>).IsAssignableFrom(x));
 
-        if (pageType == null)
+        if (pageType is null)
         {
             InternalServiceProvider.GetService<ILogger>().LogWarning("The ViewModel '{Name}' is not associated with a BaseContentPage<>", typeof(TViewModel).Name);
             return;

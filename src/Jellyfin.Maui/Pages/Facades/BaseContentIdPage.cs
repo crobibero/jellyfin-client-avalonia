@@ -30,15 +30,14 @@ public abstract class BaseContentIdPage<TViewModel> : BaseContentPage<TViewModel
 
         set
         {
-            if (value == null // PopToRootAsync()
-                || value == _itemId) // back button
+            if (value is null || string.Equals(value, _itemId, StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
 
             _itemId = value;
 
-            if (Guid.TryParse(value, out Guid itemId))
+            if (Guid.TryParse(value, out var itemId))
             {
                 ViewModel.Initialize(itemId);
             }
