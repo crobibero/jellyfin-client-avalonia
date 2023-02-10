@@ -29,22 +29,22 @@ public class StateService : IStateService
     {
         var storeState = await _stateStorageService.GetStoredStateAsync().ConfigureAwait(false);
 
-        if (storeState.SelectedServerId == null
-            || storeState.SelectedUserId == null)
+        if (storeState.SelectedServerId is null
+            || storeState.SelectedUserId is null)
         {
             return;
         }
 
         var selectedServer = storeState.Servers.FirstOrDefault(x => x.Id == storeState.SelectedServerId);
 
-        if (selectedServer == null)
+        if (selectedServer is null)
         {
             return;
         }
 
         var selectedUser = storeState.Users.FirstOrDefault(x => x.Id == storeState.SelectedUserId && x.ServerId == selectedServer.Id);
 
-        if (selectedUser == null)
+        if (selectedUser is null)
         {
             return;
         }
