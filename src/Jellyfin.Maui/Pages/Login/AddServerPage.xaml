@@ -15,6 +15,7 @@
         <input:FormView IsValidated="{Binding IsValid}"
                         SubmitCommand="{Binding AddServerCommand}">
             <input:AdvancedEntry Title="{ext:Localize Login_ServerUrl}"
+                                 CompletedCommand="{Binding AddServerCommand}"
                                  IconImage="{FontImageSource FontFamily=MaterialRegular,
                                                              Glyph={x:Static mi:MaterialRegular.Link},
                                                              Color={StaticResource Primary}}"
