@@ -5,8 +5,7 @@ namespace Jellyfin.Maui.Models;
 /// <summary>
 /// The home row model.
 /// </summary>
-[INotifyPropertyChanged]
-public partial class HomeRowModel
+public partial class HomeRowModel : ObservableObject
 {
     [ObservableProperty]
     private IReadOnlyList<BaseItemDto> _items = null!;

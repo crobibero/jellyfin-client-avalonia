@@ -90,7 +90,7 @@ public partial class LoginViewModel : BaseViewModel
         if (user is not null)
         {
             Username = user.Name;
-            var status = await _authenticationService.IsAuthenticatedAsync(_serverUrl, user.Token)
+            var status = await _authenticationService.IsAuthenticatedAsync(ServerUrl, user.Token)
                 .ConfigureAwait(false);
             if (status)
             {
@@ -133,13 +133,13 @@ public partial class LoginViewModel : BaseViewModel
                 .ConfigureAwait(false);
             if (status)
             {
-                if (_rememberMe)
+                if (RememberMe)
                 {
                     var user = _stateService.GetCurrentUser();
                     await _stateStorageService.AddUserAsync(new UserStateModel
                         {
                             Id = user.Id,
-                            ServerId = _serverId,
+                            ServerId = ServerId,
                             Name = user.Name,
                             Token = _stateService.GetToken()
                         })
@@ -192,13 +192,13 @@ public partial class LoginViewModel : BaseViewModel
 
                 if (status)
                 {
-                    if (_rememberMe)
+                    if (RememberMe)
                     {
                         var user = _stateService.GetCurrentUser();
                         await _stateStorageService.AddUserAsync(new UserStateModel
                             {
                                 Id = user.Id,
-                                ServerId = _serverId,
+                                ServerId = ServerId,
                                 Name = user.Name,
                                 Token = _stateService.GetToken()
                             })
