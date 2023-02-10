@@ -10,8 +10,18 @@ namespace Jellyfin.Maui.Services;
 /// <inheritdoc />
 public class ShellNavigationService : INavigationService
 {
-    private Application _application = Application.Current!;
+    private readonly ILogger<ShellNavigationService> _logger;
+    private readonly Application _application = Application.Current!;
     private NavigationPage? _loginNavigationPage;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ShellNavigationService"/> class.
+    /// </summary>
+    /// <param name="logger">Instance of the <see cref="ILogger{ShellNavigationService}"/> interface.</param>
+    public ShellNavigationService(ILogger<ShellNavigationService> logger)
+    {
+        _logger = logger;
+    }
 
     /// <inheritdoc />
     public void NavigateToUserSelectPage()
@@ -116,7 +126,7 @@ public class ShellNavigationService : INavigationService
 
         if (pageType == null)
         {
-            InternalServiceProvider.GetService<ILogger>().LogWarning("The ViewModel '{Name}' is not associated with a BaseContentPage<>", typeof(TViewModel).Name);
+            _logger.LogWarning("The ViewModel '{Name}' is not associated with a BaseContentPage<>", typeof(TViewModel).Name);
             return;
         }
 
