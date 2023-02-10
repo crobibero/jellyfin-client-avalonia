@@ -1,11 +1,12 @@
 using Maui.BindableProperty.Generator.Core;
+using UraniumUI.Views;
 
 namespace Jellyfin.Maui.ContentViews;
 
 /// <summary>
 /// Direct <see cref="DataTemplate"/> view.
 /// </summary>
-public partial class DataTemplateView : ContentView
+public partial class DataTemplateView : StatefulContentView
 {
 #pragma warning disable CS0169 // Used in source generators.
     [AutoBindable(OnChanged = nameof(BuildItem))]

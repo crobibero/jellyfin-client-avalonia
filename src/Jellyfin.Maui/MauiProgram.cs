@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Net;
 using System.Text;
 using CommunityToolkit.Maui;
+using InputKit.Handlers;
 using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Pages.Login;
 using Jellyfin.Maui.Services;
@@ -38,6 +39,10 @@ public static class MauiProgram
                 fonts.AddFont("Quicksand-Regular.ttf", "QuicksandRegular");
                 fonts.AddFont("Quicksand-SemiBold.ttf", "QuicksandSemiBold");
                 fonts.AddMaterialIconFonts();
+            })
+            .ConfigureMauiHandlers(handlers =>
+            {
+                handlers.AddInputKitHandlers();
             })
             .UseMauiCommunityToolkit()
             .UseUraniumUI()
