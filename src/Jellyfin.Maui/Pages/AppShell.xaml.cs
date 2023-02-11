@@ -1,4 +1,6 @@
 using Jellyfin.Maui.Services;
+using Jellyfin.Maui.ViewModels;
+using UraniumUI.Icons.MaterialIcons;
 
 namespace Jellyfin.Maui.Pages;
 
@@ -16,18 +18,27 @@ public partial class AppShell : Shell
     /// </summary>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
     /// <param name="authenticationService">Instance of the <see cref="IAuthenticationService"/> interface.</param>
+    /// <param name="viewModel">Instance of the view model.</param>
     public AppShell(
         INavigationService navigationService,
-        IAuthenticationService authenticationService)
+        IAuthenticationService authenticationService,
+        AppViewModel viewModel)
     {
+        BindingContext = viewModel;
         InitializeComponent();
 
         _navigationService = navigationService;
         _authenticationService = authenticationService;
 
-        this.Items.Add(_tabBar = new FlyoutItem
+        Items.Add(_tabBar = new FlyoutItem
         {
+            Title = Strings.Home,
             FlyoutDisplayOptions = FlyoutDisplayOptions.AsSingleItem,
+            Icon = new FontImageSource
+            {
+                FontFamily = nameof(MaterialRegular),
+                Glyph = MaterialRegular.Home
+            },
         });
 
         _tabBar.Items.Add(new ShellContent
@@ -37,7 +48,8 @@ public partial class AppShell : Shell
             Title = Strings.Home,
             Icon = new FontImageSource
             {
-                Glyph = "⌂",
+                FontFamily = nameof(MaterialRegular),
+                Glyph = MaterialRegular.Home
             },
         });
 
@@ -48,14 +60,19 @@ public partial class AppShell : Shell
             Title = Strings.Settings,
             Icon = new FontImageSource
             {
-                Glyph = "⚙",
+                FontFamily = nameof(MaterialRegular),
+                Glyph = MaterialRegular.Settings
             },
         });
 
-        this.Items.Add(new MenuItem
+        Items.Add(new MenuItem
         {
             Text = Strings.SwitchUser,
-            IconImageSource = "logout.png",
+            IconImageSource = new FontImageSource
+            {
+                FontFamily = nameof(MaterialRegular),
+                Glyph = MaterialRegular.Logout
+            },
             Command = new Command(() =>
             {
                 _authenticationService.Logout();
