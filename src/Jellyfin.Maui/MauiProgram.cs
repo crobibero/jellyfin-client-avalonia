@@ -69,7 +69,7 @@ public static class MauiProgram
 
         if (useShellNavigation)
         {
-            services.AddTransient<AppShell>();
+            services.AddTransient<AppShell, AppViewModel>();
 
             // Remark 1: DO NOT register 'HomePage' route, it's already registered inside AppShell's constructor.
             // Remark 2: AddServerPage, SelectServerPage, SelectUserPage and LoginPage do not use shell navigation.

@@ -38,8 +38,14 @@ public class StateStorageService : IStateStorageService
                 return new StateContainerModel();
             }
 
-            return _stateCache = JsonSerializer.Deserialize<StateContainerModel>(storedState)
+            _stateCache = JsonSerializer.Deserialize<StateContainerModel>(storedState)
                                  ?? new StateContainerModel();
+
+            // Remove invalid users and servers.
+            _stateCache.Users.Remove(null!);
+            _stateCache.Servers.Remove(null!);
+
+            return _stateCache;
         }
         catch (JsonException)
         {

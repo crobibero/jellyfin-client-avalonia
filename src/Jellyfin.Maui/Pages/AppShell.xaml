@@ -2,7 +2,9 @@
 <Shell x:Class="Jellyfin.Maui.Pages.AppShell"
        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       Title="AppShell">
+       xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels;assembly=Jellyfin.Mvvm"
+       Title="AppShell"
+       x:DataType="vm:AppViewModel">
     <Shell.FlyoutHeader>
         <Grid HeightRequest="200">
             <StackLayout Padding="0,20,0,0"
@@ -13,8 +15,8 @@
                        WidthRequest="150" />
                 <Label FontSize="Medium"
                        HorizontalTextAlignment="Center"
-                       Text="BindToUserName"
-                       TextColor="Black" />
+                       Text="{Binding Username}"
+                       TextColor="White" />
             </StackLayout>
         </Grid>
     </Shell.FlyoutHeader>
