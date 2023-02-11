@@ -1,8 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using Jellyfin.Maui.Services;
-using Jellyfin.Maui.ViewModels.Facades;
+using Jellyfin.Mvvm.Services;
+using Jellyfin.Mvvm.ViewModels.Facades;
 
-namespace Jellyfin.Maui.ViewModels;
+namespace Jellyfin.Mvvm.ViewModels;
 
 /// <summary>
 /// App view model.

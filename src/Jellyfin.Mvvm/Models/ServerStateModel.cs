@@ -1,4 +1,4 @@
-namespace Jellyfin.Maui.Models;
+namespace Jellyfin.Mvvm.Models;
 
 /// <summary>
 /// The server state model.

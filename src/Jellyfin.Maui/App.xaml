@@ -3,7 +3,7 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:Jellyfin.Maui.Converters"
-             xmlns:dt="clr-namespace:Jellyfin.Maui.DataTemplates"
+             xmlns:dataTemplateSelectors="using:Jellyfin.Maui.DataTemplateSelectors"
              xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
              xmlns:sdk="clr-namespace:Jellyfin.Sdk;assembly=Jellyfin.Sdk">
     <Application.Resources>
@@ -19,11 +19,11 @@
 
                 <!--  Template Selectors  -->
                 <ResourceDictionary>
-                    <dt:CardTemplateSelector x:Key="CardTemplateSelector"
-                                             LibraryCardTemplate="{StaticResource LibraryCardTemplate}"
-                                             PosterCardTemplate="{StaticResource PosterCardTemplate}" />
-                    <dt:HomeRowTemplateSelector x:Key="HomeRowTemplateSelector"
-                                                LibraryHomeRowTemplate="{StaticResource HomeRowTemplate}" />
+                    <dataTemplateSelectors:CardTemplateSelector x:Key="CardTemplateSelector"
+                                                                LibraryCardTemplate="{StaticResource LibraryCardTemplate}"
+                                                                PosterCardTemplate="{StaticResource PosterCardTemplate}" />
+                    <dataTemplateSelectors:HomeRowTemplateSelector x:Key="HomeRowTemplateSelector"
+                                                                   LibraryHomeRowTemplate="{StaticResource HomeRowTemplate}" />
                 </ResourceDictionary>
                 <!--  Converters  -->
                 <ResourceDictionary>

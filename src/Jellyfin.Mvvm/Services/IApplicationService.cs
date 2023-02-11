@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Jellyfin.Maui.Services;
+namespace Jellyfin.Mvvm.Services;
 
 /// <summary>
 /// ApplicationService service interface.

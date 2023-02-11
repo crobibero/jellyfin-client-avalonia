@@ -1,8 +1,9 @@
 using Jellyfin.Maui.Pages;
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Pages.Login;
-using Jellyfin.Maui.ViewModels;
-using Jellyfin.Maui.ViewModels.Facades;
+using Jellyfin.Mvvm.Services;
+using Jellyfin.Mvvm.ViewModels;
+using Jellyfin.Mvvm.ViewModels.Facades;
 
 namespace Jellyfin.Maui.Services;
 

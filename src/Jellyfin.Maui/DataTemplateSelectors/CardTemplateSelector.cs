@@ -1,4 +1,4 @@
-namespace Jellyfin.Maui.DataTemplates;
+namespace Jellyfin.Maui.DataTemplateSelectors;
 
 /// <summary>
 /// Card template selector.

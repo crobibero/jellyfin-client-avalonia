@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Jellyfin.Maui.Models;
+namespace Jellyfin.Mvvm.Models;
 
 /// <summary>
 /// The home row model.

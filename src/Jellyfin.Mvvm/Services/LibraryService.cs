@@ -1,6 +1,6 @@
-using Jellyfin.Maui.Models;
+using Jellyfin.Mvvm.Models;
 
-namespace Jellyfin.Maui.Services;
+namespace Jellyfin.Mvvm.Services;
 
 /// <inheritdoc />
 public class LibraryService : ILibraryService

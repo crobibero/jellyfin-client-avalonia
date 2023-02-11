@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Jellyfin.Mvvm.Services;
 
 namespace Jellyfin.Maui.Services;
 

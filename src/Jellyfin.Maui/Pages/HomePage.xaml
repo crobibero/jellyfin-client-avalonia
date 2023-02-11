@@ -4,7 +4,7 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                       xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                       xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
-                      xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels;assembly=Jellyfin.Mvvm"
+                      xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
                       x:DataType="vm:HomeViewModel"
                       x:TypeArguments="vm:HomeViewModel">
     <ScrollView>

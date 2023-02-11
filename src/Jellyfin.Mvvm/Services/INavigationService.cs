@@ -1,4 +1,4 @@
-namespace Jellyfin.Maui.Services;
+namespace Jellyfin.Mvvm.Services;
 
 /// <summary>
 /// Navigation service interface.

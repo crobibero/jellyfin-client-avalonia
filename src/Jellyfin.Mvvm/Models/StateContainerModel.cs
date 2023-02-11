@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace Jellyfin.Maui.Models;
+namespace Jellyfin.Mvvm.Models;
 
 /// <summary>
 /// The state container.

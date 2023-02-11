@@ -4,7 +4,7 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                       xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
                       xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
-                      xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels.Login;assembly=Jellyfin.Mvvm"
+                      xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
                       x:DataType="vm:ServerSelectViewModel"
                       x:TypeArguments="vm:ServerSelectViewModel">
     <Grid>

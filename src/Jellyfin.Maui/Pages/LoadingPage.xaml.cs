@@ -1,4 +1,5 @@
 using Jellyfin.Maui.Services;
+using Jellyfin.Mvvm.Services;
 
 namespace Jellyfin.Maui.Pages;
 
