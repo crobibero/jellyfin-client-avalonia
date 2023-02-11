@@ -1,10 +1,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Jellyfin.Maui.Models;
-using Jellyfin.Maui.Services;
-using Jellyfin.Maui.ViewModels.Facades;
+using Jellyfin.Mvvm.Models;
+using Jellyfin.Mvvm.Services;
+using Jellyfin.Mvvm.ViewModels.Facades;
 
-namespace Jellyfin.Maui.ViewModels;
+namespace Jellyfin.Mvvm.ViewModels;
 
 /// <summary>
 /// Library view model.
@@ -57,7 +57,7 @@ public partial class LibraryViewModel : BaseItemViewModel
     /// <summary>
     /// Gets the next index.
     /// </summary>
-    public int NextIndex => Math.Min(TotalCount / PageSize, PageIndex + 1);
+    public int NextIndex => Math.Min((int)(TotalCount / PageSize), PageIndex + 1);
 
     /// <summary>
     /// Gets a value indicating whether there is a page before the current page.

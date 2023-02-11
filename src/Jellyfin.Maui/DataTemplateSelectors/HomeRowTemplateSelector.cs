@@ -1,6 +1,6 @@
-using Jellyfin.Maui.Models;
+using Jellyfin.Mvvm.Models;
 
-namespace Jellyfin.Maui.DataTemplates;
+namespace Jellyfin.Maui.DataTemplateSelectors;
 
 /// <summary>
 /// Home row template selector.

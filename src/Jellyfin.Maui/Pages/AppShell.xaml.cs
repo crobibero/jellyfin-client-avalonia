@@ -1,5 +1,6 @@
 using Jellyfin.Maui.Services;
-using Jellyfin.Maui.ViewModels;
+using Jellyfin.Mvvm.Services;
+using Jellyfin.Mvvm.ViewModels;
 using UraniumUI.Icons.MaterialIcons;
 
 namespace Jellyfin.Maui.Pages;

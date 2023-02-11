@@ -1,11 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Jellyfin.Maui.Models;
-using Jellyfin.Maui.Services;
-using Jellyfin.Maui.ViewModels.Facades;
+using Jellyfin.Mvvm.Models;
+using Jellyfin.Mvvm.Services;
+using Jellyfin.Mvvm.ViewModels.Facades;
 using SystemException = Jellyfin.Sdk.SystemException;
 
-namespace Jellyfin.Maui.ViewModels.Login;
+namespace Jellyfin.Mvvm.ViewModels.Login;
 
 /// <summary>
 /// The add server view model.

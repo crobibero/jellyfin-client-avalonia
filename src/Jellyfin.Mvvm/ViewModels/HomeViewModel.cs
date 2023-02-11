@@ -1,10 +1,10 @@
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Jellyfin.Maui.Models;
-using Jellyfin.Maui.Services;
-using Jellyfin.Maui.ViewModels.Facades;
+using Jellyfin.Mvvm.Models;
+using Jellyfin.Mvvm.Services;
+using Jellyfin.Mvvm.ViewModels.Facades;
 
-namespace Jellyfin.Maui.ViewModels;
+namespace Jellyfin.Mvvm.ViewModels;
 
 /// <summary>
 /// Home view model.
@@ -113,7 +113,7 @@ public partial class HomeViewModel : BaseViewModel
                                 continue;
                             }
 
-                            var row = new HomeRowModel(string.Format(CultureInfo.InvariantCulture, Strings.Home_Latest, library.Name));
+                            var row = new HomeRowModel(string.Format(CultureInfo.InvariantCulture, Strings.Strings.Home_Latest, library.Name));
                             homeRows.Add(row);
                             PopulateRowAsync(row, () => _libraryService.GetRecentlyAddedAsync(view)).SafeFireAndForget();
                         }

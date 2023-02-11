@@ -1,5 +1,5 @@
 using Jellyfin.Maui.Pages.Facades;
-using Jellyfin.Maui.ViewModels.Login;
+using Jellyfin.Mvvm.ViewModels.Login;
 
 namespace Jellyfin.Maui.Pages.Login;
 

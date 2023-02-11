@@ -2,7 +2,7 @@
 <Shell x:Class="Jellyfin.Maui.Pages.AppShell"
        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels;assembly=Jellyfin.Mvvm"
+       xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
        Title="AppShell"
        x:DataType="vm:AppViewModel">
     <Shell.FlyoutHeader>

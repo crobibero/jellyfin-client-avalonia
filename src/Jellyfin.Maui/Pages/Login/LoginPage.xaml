@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <page:BaseContentPage x:Class="Jellyfin.Maui.Pages.Login.LoginPage"
                       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -8,7 +8,7 @@
                       xmlns:mi="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
                       xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
                       xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
-                      xmlns:vm="clr-namespace:Jellyfin.Maui.ViewModels.Login;assembly=Jellyfin.Mvvm"
+                      xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
                       x:DataType="vm:LoginViewModel"
                       x:TypeArguments="vm:LoginViewModel">
     <Grid>

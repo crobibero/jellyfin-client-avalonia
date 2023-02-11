@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using Jellyfin.Maui.Services;
+using Jellyfin.Mvvm.Services;
 
-namespace Jellyfin.Maui.ViewModels.Facades;
+namespace Jellyfin.Mvvm.ViewModels.Facades;
 
 /// <summary>
 /// ViewModel that has an ID parameter.

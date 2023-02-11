@@ -6,6 +6,9 @@
         <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)/jellyfin.ruleset</CodeAnalysisRuleSet>
         <AnalysisMode>AllEnabledByDefault</AnalysisMode>
         <WarningsAsErrors>nullable</WarningsAsErrors>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <NeutralLanguage>en</NeutralLanguage>
     </PropertyGroup>
 
     <ItemGroup>

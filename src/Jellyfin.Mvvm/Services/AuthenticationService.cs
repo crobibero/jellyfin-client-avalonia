@@ -1,6 +1,6 @@
 using SystemException = Jellyfin.Sdk.SystemException;
 
-namespace Jellyfin.Maui.Services;
+namespace Jellyfin.Mvvm.Services;
 
 /// <inheritdoc />
 public class AuthenticationService : IAuthenticationService
