@@ -71,6 +71,7 @@ public static class MauiProgram
 
         if (useShellNavigation)
         {
+            services.AddTransient<AppShell, AppViewModel>();
             services.AddTransientWithShellRoute<ItemPage, ItemViewModel>(nameof(ItemPage));
             services.AddTransientWithShellRoute<LibraryPage, LibraryViewModel>(nameof(LibraryViewModel));
         }
