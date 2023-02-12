@@ -10,7 +10,7 @@ namespace Jellyfin.Maui.Services;
 /// <inheritdoc />
 public class NavigationService : INavigationService
 {
-    private Application _application = Application.Current!;
+    private readonly Application _application = Application.Current!;
     private NavigationPage? _navigationPage;
     private NavigationPage? _loginNavigationPage;
 
@@ -102,6 +102,7 @@ public class NavigationService : INavigationService
     /// <inheritdoc />
     public void NavigateToItemView(BaseItemDto item)
     {
+        ArgumentNullException.ThrowIfNull(item);
         switch (item.Type)
         {
             case BaseItemKind.CollectionFolder:

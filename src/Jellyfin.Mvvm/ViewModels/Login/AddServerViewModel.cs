@@ -86,7 +86,8 @@ public partial class AddServerViewModel : BaseViewModel
             }).ConfigureAwait(false);
 
 #if DEBUG
-            await Task.Delay(1_000).ConfigureAwait(false);  // mock slow network
+            // Mock slow network
+            await Task.Delay(1_000).ConfigureAwait(false);
 #endif
 
             _navigationService.NavigateToServerSelectPage();
