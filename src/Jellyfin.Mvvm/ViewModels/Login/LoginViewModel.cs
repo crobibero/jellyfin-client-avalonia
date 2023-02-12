@@ -111,7 +111,8 @@ public partial class LoginViewModel : BaseViewModel
     {
         CheckingQuickConnectAvailability = true;
 #if DEBUG
-        await Task.Delay(2_000).ConfigureAwait(false);  // mock slow network
+        // Mock slow network
+        await Task.Delay(2_000).ConfigureAwait(false);
 #endif
         QuickConnectAvailable = await _authenticationService.IsQuickConnectEnabledAsync().ConfigureAwait(false);
 
@@ -187,10 +188,10 @@ public partial class LoginViewModel : BaseViewModel
 
             do
             {
+                // Delay for QuickConnect to be completed.
                 await Task.Delay(3_000).ConfigureAwait(false);
                 authenticated = await _authenticationService.TestQuickConnectAsync().ConfigureAwait(false);
-            }
-            while (authenticated == false);
+            } while (authenticated == false);
 
             QuickConnectCode = null;
             if (authenticated == true)

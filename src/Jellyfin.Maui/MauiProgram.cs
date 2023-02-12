@@ -31,6 +31,9 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
+            .UseUraniumUI()
+            .UseUraniumUIMaterial()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -44,10 +47,7 @@ public static class MauiProgram
             .ConfigureMauiHandlers(handlers =>
             {
                 handlers.AddInputKitHandlers();
-            })
-            .UseMauiCommunityToolkit()
-            .UseUraniumUI()
-            .UseUraniumUIMaterial();
+            });
 
         BuildLogger();
         builder.Services.AddPages(useShellNavigation);
@@ -59,32 +59,33 @@ public static class MauiProgram
 
     private static void AddPages(this IServiceCollection services, bool useShellNavigation)
     {
+        // Login Flow doesn't use shell navigation.
         services.AddTransient<AddServerPage, AddServerViewModel>();
         services.AddTransient<LoginPage, LoginViewModel>();
         services.AddTransient<SelectServerPage, ServerSelectViewModel>();
         services.AddTransient<SelectUserPage, SelectUserViewModel>();
+
+        // HomePage is automatically registered if using shell navigation.
         services.AddTransient<HomePage, HomeViewModel>();
-        services.AddTransient<ItemPage, ItemViewModel>();
-        services.AddTransient<LibraryPage, LibraryViewModel>();
         services.AddTransient<LoadingPage>();
 
         if (useShellNavigation)
         {
-            services.AddTransient<AppShell, AppViewModel>();
-
-            // Remark 1: DO NOT register 'HomePage' route, it's already registered inside AppShell's constructor.
-            // Remark 2: AddServerPage, SelectServerPage, SelectUserPage and LoginPage do not use shell navigation.
-
-            Routing.RegisterRoute(nameof(ItemPage), typeof(ItemPage));
-            Routing.RegisterRoute(nameof(LibraryPage), typeof(LibraryPage));
+            services.AddTransientWithShellRoute<ItemPage, ItemViewModel>(nameof(ItemPage));
+            services.AddTransientWithShellRoute<LibraryPage, LibraryViewModel>(nameof(LibraryViewModel));
+        }
+        else
+        {
+            services.AddTransient<ItemPage, ItemViewModel>();
+            services.AddTransient<LibraryPage, LibraryViewModel>();
         }
     }
 
     private static void AddServices(this IServiceCollection services, bool useShellNavigation)
     {
         services.AddLocalization();
-        services.AddSingleton<IDeviceInfo>(Microsoft.Maui.Devices.DeviceInfo.Current);
-        services.AddSingleton<ISecureStorage>(Microsoft.Maui.Storage.SecureStorage.Default);
+        services.AddSingleton(Microsoft.Maui.Devices.DeviceInfo.Current);
+        services.AddSingleton(SecureStorage.Default);
         services.AddSingleton<ISettingsService, SettingsService>();
 
         services.AddSingleton<IStateService, StateService>();
@@ -358,18 +359,22 @@ public static class MauiProgram
 
     private static void BuildLogger()
     {
+        const string OutputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}] [{Level:u3}] {SourceContext}: {Message}{NewLine}{Exception}";
         Log.Logger = new LoggerConfiguration()
 #if IOS || MACCATALYST
-            .WriteTo.NSLog(formatProvider: CultureInfo.InvariantCulture)
-#elif ANDROID
-            .WriteTo.AndroidLog()
+            .WriteTo.NSLog(
+                outputTemplate: OutputTemplate,
+                formatProvider: CultureInfo.InvariantCulture)
 #elif WINDOWS
 #if DEBUG
-            .WriteTo.Debug(formatProvider: CultureInfo.InvariantCulture)
+            .WriteTo.Debug(
+                outputTemplate: OutputTemplate,
+                formatProvider: CultureInfo.InvariantCulture)
 #endif
             /* Path is %LocalAppData%/Packages/org.jellyfin.maui_{unique} */
             .WriteTo.File(
                 path: Path.Combine(FileSystem.AppDataDirectory, "Jellyfin.Maui..log"),
+                outputTemplate: OutputTemplate,
                 formatProvider: CultureInfo.InvariantCulture,
                 encoding: Encoding.UTF8,
                 rollingInterval: RollingInterval.Day,

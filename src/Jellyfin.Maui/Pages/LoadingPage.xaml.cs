@@ -39,19 +39,15 @@ public partial class LoadingPage : ContentPage
 
         _busy = true;
 
-        await InternalServiceProvider.GetService<ISdkService>().InitializeAsync()
-            .ConfigureAwait(true);
-
-        await InternalServiceProvider.GetService<IStateService>().InitializeAsync()
-            .ConfigureAwait(true);
+        await InternalServiceProvider.GetService<ISdkService>().InitializeAsync().ConfigureAwait(true);
+        await InternalServiceProvider.GetService<IStateService>().InitializeAsync().ConfigureAwait(true);
 
 #if DEBUG
-        await Task.Delay(1000)
-            .ConfigureAwait(true); // mock slow perfs
+        // Mock slow performance.
+        await Task.Delay(1_000).ConfigureAwait(true);
 #endif
 
-        if (await _authenticationService.IsAuthenticatedAsync()
-            .ConfigureAwait(true))
+        if (await _authenticationService.IsAuthenticatedAsync().ConfigureAwait(true))
         {
             _navigationService.NavigateHome();
         }

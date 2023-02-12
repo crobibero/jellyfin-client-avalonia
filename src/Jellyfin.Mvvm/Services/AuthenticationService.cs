@@ -51,8 +51,7 @@ public class AuthenticationService : IAuthenticationService
 
         try
         {
-            _ = await _systemClient.GetPublicSystemInfoAsync(cancellationToken)
-                .ConfigureAwait(false);
+            _ = await _systemClient.GetPublicSystemInfoAsync(cancellationToken).ConfigureAwait(false);
         }
         catch (SystemException)
         {
@@ -95,8 +94,7 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-            var result = await _quickConnectClient.GetQuickConnectStateAsync(_quickConnectSecret, cancellationToken)
-                .ConfigureAwait(false);
+            var result = await _quickConnectClient.GetQuickConnectStateAsync(_quickConnectSecret, cancellationToken).ConfigureAwait(false);
             return result?.Authenticated;
         }
         catch (QuickConnectException)
@@ -110,7 +108,9 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-            var response = await _userClient.AuthenticateWithQuickConnectAsync(new QuickConnectDto { Secret = _quickConnectSecret }, cancellationToken)
+            var response = await _userClient.AuthenticateWithQuickConnectAsync(
+                new QuickConnectDto { Secret = _quickConnectSecret },
+                cancellationToken)
                 .ConfigureAwait(false);
             if (response is null)
             {
