@@ -35,7 +35,7 @@ jobs:
         run: |
           $buildDay = Get-Date -Format "yyyy.Mdd"
           $ver = $buildDay + "." + $env:GITHUB_RUN_NUMBER + ".0"
-          echo "APP_VERSION::$ver >> $env:GITHUB_OUTPUT"
+          echo "APP_VERSION=$ver" >> $env:GITHUB_OUTPUT
 
       - name: Install Maui Workload
         run: dotnet workload install maui-windows
@@ -56,6 +56,7 @@ jobs:
         run: | 
           $buffer = [System.Convert]::FromBase64String($env:CERT); 
           $certificate = [System.Security.Cryptography.X509Certificates.X509Certificate2]::New($buffer, $env:PASS)
+          Get-ChildItem .\src\artifacts -File -Recurse -Include *.msix
           $null = Get-ChildItem .\src\artifacts -File -Recurse -Include *.msix | Set-AuthenticodeSignature -HashAlgorithm SHA256 -Certificate $certificate -TimestampServer http://timestamp.digicert.com
 
       - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
