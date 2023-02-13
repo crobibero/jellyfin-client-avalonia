@@ -44,10 +44,19 @@ jobs:
         working-directory: .\src
         shell: pwsh
         run: |
-          dotnet build Jellyfin.Maui -c Release -f net7.0-windows10.0.19041.0
-          dotnet publish Jellyfin.Maui -c Release -f net7.0-windows10.0.19041.0
+          dotnet publish Jellyfin.Maui -c Release -f net7.0-windows10.0.19041.0 /p:RuntimeIdentifierOverride=win10-x64
           New-Item -Path . -Name "artifacts" -ItemType Directory
           Get-ChildItem -Path Jellyfin.Maui*.msix -Recurse -File | Copy-Item -Destination .\artifacts\
+
+      - name: Sign msix
+        shell: pwsh
+        env:
+          CERT: ${{ secrets.WIN_SIGN_CERT }}
+          PASS: ${{ secrets.WIN_CERT_PASSWORD }}          
+        run: | 
+          $buffer = [System.Convert]::FromBase64String($env:CERT); 
+          $certificate = [System.Security.Cryptography.X509Certificates.X509Certificate2]::New($buffer, $env:PASS)
+          $null = Get-ChildItem .\src\artifacts -File -Recurse -Include *.msix | Set-AuthenticodeSignature -HashAlgorithm SHA256 -Certificate $certificate -TimestampServer http://timestamp.digicert.com
 
       - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
         with:

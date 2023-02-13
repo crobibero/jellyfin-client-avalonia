@@ -46,7 +46,6 @@ jobs:
       - name: Build
         working-directory: ./src
         run: |
-          dotnet build Jellyfin.Maui -f net7.0-maccatalyst -c Release -o ./artifacts
           dotnet publish Jellyfin.Maui -f net7.0-maccatalyst -c Release -p:BuildIpa=True -o ./artifacts
 
       - name: Upload MacCatalyst build artifacts
