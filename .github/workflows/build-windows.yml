@@ -54,10 +54,10 @@ jobs:
           CERT: ${{ secrets.WIN_SIGN_CERT }}
           PASS: ${{ secrets.WIN_CERT_PASSWORD }}          
         run: | 
-          $buffer = [System.Convert]::FromBase64String($env:CERT); 
-          $certificate = [System.Security.Cryptography.X509Certificates.X509Certificate2]::New($buffer, $env:PASS)
-          Get-ChildItem .\src\artifacts -File -Recurse -Include *.msix
-          $null = Get-ChildItem .\src\artifacts -File -Recurse -Include *.msix | Set-AuthenticodeSignature -HashAlgorithm SHA256 -Certificate $certificate -TimestampServer http://timestamp.digicert.com
+          $pfx = "WinSignCert.pfx"
+          $buffer = [System.Convert]::FromBase64String($env:CERT);
+          Set-Content $pfx -Value $buffer -AsByteStream;
+          '"C:\Program Files (x86)\Windows Kits\10\App Certification Kit\SignTool" sign /a /fd SHA256 /f $pfx /p $env:PASS .\src\artifacts\Jellyfin.Maui*.msix'
 
       - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
         with:
