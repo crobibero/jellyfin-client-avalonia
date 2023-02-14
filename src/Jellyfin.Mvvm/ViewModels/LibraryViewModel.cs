@@ -14,9 +14,6 @@ public partial class LibraryViewModel : BaseItemViewModel
     private readonly ILibraryService _libraryService;
 
     [ObservableProperty]
-    private bool _loading = true;
-
-    [ObservableProperty]
     private int _pageSize = 100;
 
     [ObservableProperty]
@@ -87,7 +84,6 @@ public partial class LibraryViewModel : BaseItemViewModel
             return;
         }
 
-        Loading = true;
         var queryResult = await _libraryService.GetLibraryItemsAsync(
                 Item,
                 PageSize,
@@ -99,15 +95,10 @@ public partial class LibraryViewModel : BaseItemViewModel
         // prevents unnecessary refresh (back navigation)
         if (!LibraryItemsCollection.Select(x => x.Id).SequenceEqual(queryResult.Items.Select(x => x.Id)))
         {
-            ApplicationService.DispatchAsync(() =>
+            await ApplicationService.DispatchAsync(() =>
             {
                 LibraryItemsCollection.ReplaceRange(queryResult.Items);
-                Loading = false;
-            }).SafeFireAndForget();
-        }
-        else
-        {
-            Loading = false;
+            }).ConfigureAwait(false);
         }
     }
 

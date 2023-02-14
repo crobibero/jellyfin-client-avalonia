@@ -23,9 +23,6 @@ public partial class AddServerViewModel : BaseViewModel
     [ObservableProperty]
     private bool _isValid;
 
-    [ObservableProperty]
-    private bool _loading = false;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="AddServerViewModel"/> class.
     /// </summary>
