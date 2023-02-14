@@ -17,6 +17,7 @@ on:
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_NOLOGO: true
+  POWERSHELL_TELEMETRY_OPTOUT: true
 
 jobs:
   maui-windows:
@@ -55,9 +56,10 @@ jobs:
           PASS: ${{ secrets.WIN_CERT_PASSWORD }}          
         run: | 
           $pfx = "WinSignCert.pfx"
+          $password = "$env:PASS"
           $buffer = [System.Convert]::FromBase64String($env:CERT);
           Set-Content $pfx -Value $buffer -AsByteStream;
-          '"C:\Program Files (x86)\Windows Kits\10\App Certification Kit\SignTool" sign /a /fd SHA256 /f $pfx /p $env:PASS .\src\artifacts\Jellyfin.Maui*.msix'
+          &'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\SignTool' sign /a /fd SHA256 /f $pfx /p $password '.\src\artifacts\Jellyfin.Maui*.msix'
 
       - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
         with:
