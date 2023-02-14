@@ -59,7 +59,7 @@ jobs:
           $password = "$env:PASS"
           $buffer = [System.Convert]::FromBase64String($env:CERT);
           Set-Content $pfx -Value $buffer -AsByteStream;
-          &'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\SignTool' sign /a /fd SHA256 /f $pfx /p $password /t http://timestamp.digicert.com '.\src\artifacts\Jellyfin.Maui*.msix'
+          &'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\SignTool' sign /a /fd SHA256 /f $pfx /p $password /td SHA256 /tr http://timestamp.digicert.com '.\src\artifacts\Jellyfin.Maui*.msix'
 
       - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
         with:
