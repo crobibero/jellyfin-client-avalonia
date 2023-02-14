@@ -49,13 +49,17 @@ jobs:
           New-Item -Path . -Name "artifacts" -ItemType Directory
           Get-ChildItem -Path Jellyfin.Maui*.msix -Recurse -File | Copy-Item -Destination .\artifacts\
 
-      - name: Sign installer
-        uses: GabrielAcostaEngler/signtool-code-sign@65c104a80f652b927e6237dc6c5b12a1b0cd18b0 # v1
-        with:
-          certificate: ${{ secrets.WIN_SIGN_CERT }}
-          cert-password: ${{ secrets.WIN_CERT_PASSWORD }}
-          cert-sha1: ${{ secrets.WIN_CERT_SHA1 }}
-          folder: '.\src\artifacts'
+      - name: Sign msix
+        shell: pwsh
+        env:
+          CERT: ${{ secrets.WIN_SIGN_CERT }}
+          PASS: ${{ secrets.WIN_CERT_PASSWORD }}
+        run: | 
+          $pfx = "WinSignCert.pfx"
+          $password = "$env:PASS"
+          $buffer = [System.Convert]::FromBase64String($env:CERT);
+          Set-Content $pfx -Value $buffer -AsByteStream;
+          &'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\SignTool' sign /a /fd SHA256 /f $pfx /p $password '.\src\artifacts\Jellyfin.Maui*.msix'
 
       - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
         with:
