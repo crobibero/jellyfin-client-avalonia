@@ -11,8 +11,9 @@ namespace Jellyfin.Maui.Services;
 public class ShellNavigationService : INavigationService
 {
     private readonly Application _application = Application.Current!;
-    private readonly Shell? _shell = Shell.Current;
     private NavigationPage? _loginNavigationPage;
+
+    private Shell? Shell => Shell.Current;
 
     /// <inheritdoc />
     public void NavigateToUserSelectPage()
@@ -84,13 +85,13 @@ public class ShellNavigationService : INavigationService
     {
         _application.Dispatcher.Dispatch(() =>
         {
-            if (_shell is null)
+            if (Shell is null)
             {
                 _application.MainPage = InternalServiceProvider.GetService<AppShell>();
             }
             else
             {
-                _shell.GoToAsync($"//{nameof(HomePage)}", true);
+                Shell.GoToAsync($"//{nameof(HomePage)}", true);
             }
         });
     }
@@ -114,7 +115,7 @@ public class ShellNavigationService : INavigationService
         where TViewModel : BaseItemViewModel
         where TPage : BaseContentIdPage<TViewModel>
     {
-        if (_shell is null)
+        if (Shell is null)
         {
             NavigateHome();
             return;
@@ -122,7 +123,7 @@ public class ShellNavigationService : INavigationService
 
         _application.Dispatcher.Dispatch(() =>
         {
-            _shell.GoToAsync($"{typeof(TPage).Name}?itemId={itemId}", true);
+            Shell.GoToAsync($"{typeof(TPage).Name}?itemId={itemId}", true);
         });
     }
 }
