@@ -21,9 +21,6 @@ public partial class LoginViewModel : BaseViewModel
     private string _serverUrl = null!;
 
     [ObservableProperty]
-    private bool _loading = true;
-
-    [ObservableProperty]
     private Guid _serverId;
 
     [ObservableProperty]
@@ -101,8 +98,6 @@ public partial class LoginViewModel : BaseViewModel
                 return;
             }
         }
-
-        Loading = false;
 
         CheckQuickConnectAvailability().SafeFireAndForget();
     }

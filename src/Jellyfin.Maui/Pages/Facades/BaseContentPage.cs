@@ -26,9 +26,12 @@ public abstract class BaseContentPage<TViewModel> : UraniumContentPage
     protected TViewModel ViewModel { get; }
 
     /// <inheritdoc />
-    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    protected override async void OnNavigatedTo(NavigatedToEventArgs args)
     {
-        ViewModel.InitializeAsync().SafeFireAndForget();
+        ViewModel.Loading = true;
+        await ViewModel.InitializeAsync().ConfigureAwait(true);
+        ViewModel.Loading = false;
+
         base.OnNavigatedTo(args);
     }
 
