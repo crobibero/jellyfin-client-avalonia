@@ -43,7 +43,7 @@ public partial class SelectUserViewModel : BaseViewModel
     /// <inheritdoc />
     public override async ValueTask InitializeAsync()
     {
-        var state = await _stateStorageService.GetStoredStateAsync().ConfigureAwait(false);
+        var state = await _stateStorageService.GetStoredStateAsync().ConfigureAwait(true);
         var serverState = _stateService.GetServerState();
         if (serverState is null)
         {
@@ -51,11 +51,7 @@ public partial class SelectUserViewModel : BaseViewModel
             return;
         }
 
-        // if ConfigureAwait(continueOnCapturedContext: true), then there's no need to Dispatch
-        ApplicationService.DispatchAsync(() =>
-        {
-            Users.ReplaceRange(state.Users.Where(u => u.ServerId == serverState.Id));
-        }).SafeFireAndForget();
+        Users.ReplaceRange(state.Users.Where(u => u.ServerId == serverState.Id));
     }
 
     [RelayCommand]
