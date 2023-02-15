@@ -70,7 +70,7 @@ public partial class ItemViewModel : BaseItemViewModel
     public override async ValueTask InitializeAsync()
     {
         Item = await _libraryService.GetItemAsync(ItemId)
-           .ConfigureAwait(false);
+           .ConfigureAwait(true);
 
         if (Item is null)
         {

@@ -77,7 +77,7 @@ public partial class LibraryViewModel : BaseItemViewModel
     private async ValueTask InitializeItemsAsync()
     {
         Item = await _libraryService.GetItemAsync(ItemId)
-            .ConfigureAwait(false);
+            .ConfigureAwait(true);
 
         if (Item is null)
         {
@@ -88,17 +88,14 @@ public partial class LibraryViewModel : BaseItemViewModel
                 Item,
                 PageSize,
                 PageSize * PageIndex)
-            .ConfigureAwait(false);
+            .ConfigureAwait(true);
 
         TotalCount = queryResult.TotalRecordCount;
 
         // prevents unnecessary refresh (back navigation)
         if (!LibraryItemsCollection.Select(x => x.Id).SequenceEqual(queryResult.Items.Select(x => x.Id)))
         {
-            await ApplicationService.DispatchAsync(() =>
-            {
-                LibraryItemsCollection.ReplaceRange(queryResult.Items);
-            }).ConfigureAwait(false);
+            LibraryItemsCollection.ReplaceRange(queryResult.Items);
         }
     }
 
@@ -106,13 +103,13 @@ public partial class LibraryViewModel : BaseItemViewModel
     private async Task PreviousPageAsync()
     {
         PageIndex = PreviousIndex;
-        await InitializeItemsAsync().ConfigureAwait(false);
+        await InitializeItemsAsync().ConfigureAwait(true);
     }
 
     [RelayCommand(CanExecute = nameof(CanGoForward))]
     private async Task NextPageAsync()
     {
         PageIndex = NextIndex;
-        await InitializeItemsAsync().ConfigureAwait(false);
+        await InitializeItemsAsync().ConfigureAwait(true);
     }
 }
