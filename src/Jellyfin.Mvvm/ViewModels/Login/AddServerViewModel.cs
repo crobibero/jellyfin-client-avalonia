@@ -54,10 +54,12 @@ public partial class AddServerViewModel : BaseViewModel
     [RelayCommand]
     private async Task AddServerAsync()
     {
+        /* TODO enable after InputKit update.
         if (!IsValid)
         {
             return;
         }
+        */
 
         Loading = true;
 

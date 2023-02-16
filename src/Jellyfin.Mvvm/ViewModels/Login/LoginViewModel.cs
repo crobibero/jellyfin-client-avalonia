@@ -117,10 +117,12 @@ public partial class LoginViewModel : BaseViewModel
     [RelayCommand]
     private async Task LoginAsync()
     {
+        /* TODO enable after InputKit update.
         if (!IsValid)
         {
             return;
         }
+        */
 
         try
         {
