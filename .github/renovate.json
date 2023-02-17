@@ -1,23 +1,30 @@
 {
-	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": [
-		"github>jellyfin/.github//renovate-presets/dotnet"
-	],
-	"packageRules": [
-		{
-			"description": "Group Microsoft dependencies",
-			"groupName": "Microsoft",
-			"matchPackagePrefixes": [
-				"System.*",
-				"Microsoft.*"
-			]
-		},
-		{
-			"description": "Group Community Toolkit dependencies",
-			"groupName": "CommunityToolkit",
-			"matchPackagePrefixes": [
-				"CommunityToolkit"
-			]
-		}
-	]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>jellyfin/.github//renovate-presets/dotnet"
+  ],
+  "packageRules": [
+    {
+      "description": "Group Microsoft dependencies",
+      "groupName": "Microsoft",
+      "matchPackagePrefixes": [
+        "System.*",
+        "Microsoft.*"
+      ]
+    },
+    {
+      "description": "Group Community Toolkit dependencies",
+      "groupName": "CommunityToolkit",
+      "matchPackagePrefixes": [
+        "CommunityToolkit"
+      ]
+    },
+    {
+      "description": "UraniumUI",
+      "groupName": "UraniumUI",
+      "matchPackagePrefixes": [
+        "UraniumUI"
+      ]
+    }
+  ]
 }
