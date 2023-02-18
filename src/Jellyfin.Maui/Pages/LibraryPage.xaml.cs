@@ -1,5 +1,6 @@
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Mvvm.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace Jellyfin.Maui.Pages;
 
@@ -12,8 +13,9 @@ public partial class LibraryPage : BaseContentIdPage<LibraryViewModel>
     /// Initializes a new instance of the <see cref="LibraryPage"/> class.
     /// </summary>
     /// <param name="viewModel">Instance of the <see cref="LibraryViewModel"/>.</param>
-    public LibraryPage(LibraryViewModel viewModel)
-        : base(viewModel)
+    /// <param name="logger">Instance of the <see cref="ILogger{LibraryPage}"/>.</param>
+    public LibraryPage(LibraryViewModel viewModel, ILogger<LibraryPage> logger)
+        : base(viewModel, logger)
     {
         InitializeComponent();
     }

@@ -13,7 +13,7 @@ public abstract partial class BaseViewModel : ObservableObject
     private readonly INavigationService _navigationService;
 
     [ObservableProperty]
-    private bool _loading = true;
+    private string _state = ContentState.Loading;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseViewModel"/> class.

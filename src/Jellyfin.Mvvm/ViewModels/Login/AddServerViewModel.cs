@@ -59,7 +59,7 @@ public partial class AddServerViewModel : BaseViewModel
             return;
         }
 
-        Loading = true;
+        State = ContentState.Loading;
 
         try
         {
@@ -94,6 +94,6 @@ public partial class AddServerViewModel : BaseViewModel
             // TODO
         }
 
-        Loading = false;
+        State = ContentState.Success;
     }
 }

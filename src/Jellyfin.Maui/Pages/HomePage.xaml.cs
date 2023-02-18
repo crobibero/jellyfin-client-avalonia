@@ -2,6 +2,7 @@ using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Maui.Services;
 using Jellyfin.Mvvm.Services;
 using Jellyfin.Mvvm.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace Jellyfin.Maui.Pages;
 
@@ -14,8 +15,9 @@ public partial class HomePage : BaseContentPage<HomeViewModel>
     /// Initializes a new instance of the <see cref="HomePage"/> class.
     /// </summary>
     /// <param name="viewModel">Instance of the <see cref="HomeViewModel"/>.</param>
-    public HomePage(HomeViewModel viewModel)
-        : base(viewModel)
+    /// <param name="logger">Instance of the <see cref="ILogger{HomePage}"/>.</param>
+    public HomePage(HomeViewModel viewModel, ILogger<HomePage> logger)
+        : base(viewModel, logger)
     {
         InitializeComponent();
     }

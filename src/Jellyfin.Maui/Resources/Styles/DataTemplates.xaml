@@ -7,6 +7,13 @@
                     xmlns:sdk="clr-namespace:Jellyfin.Sdk;assembly=Jellyfin.Sdk"
                     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
                     xmlns:vmf="clr-namespace:Jellyfin.Mvvm.ViewModels.Facades;assembly=Jellyfin.Mvvm">
+    <!--  Loading Template  -->
+    <ControlTemplate x:Key="LoadingTemplate">
+        <ActivityIndicator HorizontalOptions="Center"
+                           IsRunning="True"
+                           VerticalOptions="Center" />
+    </ControlTemplate>
+
     <!--  Server Select  -->
     <DataTemplate x:Key="ServerSelectTemplate"
                   x:DataType="models:ServerStateModel">

@@ -1,5 +1,6 @@
 using Jellyfin.Maui.Pages.Facades;
 using Jellyfin.Mvvm.ViewModels.Login;
+using Microsoft.Extensions.Logging;
 
 namespace Jellyfin.Maui.Pages.Login;
 
@@ -12,8 +13,9 @@ public partial class LoginPage : BaseContentPage<LoginViewModel>
     /// Initializes a new instance of the <see cref="LoginPage"/> class.
     /// </summary>
     /// <param name="viewModel">Instance of the <see cref="LoginViewModel"/>.</param>
-    public LoginPage(LoginViewModel viewModel)
-        : base(viewModel)
+    /// <param name="logger">Instance of the <see cref="ILogger{LoginPage}"/>.</param>
+    public LoginPage(LoginViewModel viewModel, ILogger<LoginPage> logger)
+        : base(viewModel, logger)
     {
         InitializeComponent();
     }

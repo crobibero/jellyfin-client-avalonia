@@ -1,7 +1,20 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+
+    <!--  States. Should match Jellyfin.Mvvm.ContentState  -->
+    <x:String x:Key="State.Loading">
+        Loading
+    </x:String>
+    <x:String x:Key="State.Success">
+        Success
+    </x:String>
+    <x:String x:Key="State.Error">
+        Error
+    </x:String>
+
+
     <!--  Colors  -->
     <Color x:Key="Primary">
         #AA5CC3

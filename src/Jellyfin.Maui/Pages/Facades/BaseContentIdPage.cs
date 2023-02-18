@@ -1,4 +1,5 @@
 using Jellyfin.Mvvm.ViewModels.Facades;
+using Microsoft.Extensions.Logging;
 
 namespace Jellyfin.Maui.Pages.Facades;
 
@@ -16,8 +17,9 @@ public abstract class BaseContentIdPage<TViewModel> : BaseContentPage<TViewModel
     /// Initializes a new instance of the <see cref="BaseContentIdPage{TViewModel}"/> class.
     /// </summary>
     /// <param name="viewModel">The view model.</param>
-    protected BaseContentIdPage(TViewModel viewModel)
-        : base(viewModel)
+    /// <param name="logger">Instance of the logger.</param>
+    protected BaseContentIdPage(TViewModel viewModel, ILogger<BaseContentIdPage<TViewModel>> logger)
+        : base(viewModel, logger)
     {
     }
 
