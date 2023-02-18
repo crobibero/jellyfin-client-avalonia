@@ -35,4 +35,10 @@ public interface INavigationService
     /// </summary>
     /// <param name="item">The item.</param>
     void NavigateToItemView(BaseItemDto item);
+
+    /// <summary>
+    /// Navigate to the item player.
+    /// </summary>
+    /// <param name="itemId">The item id.</param>
+    void NavigateToPlayer(Guid itemId);
 }

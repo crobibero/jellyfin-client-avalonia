@@ -1,5 +1,6 @@
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Mvvm.Services;
 using Jellyfin.Mvvm.ViewModels.Facades;
 
@@ -11,6 +12,7 @@ namespace Jellyfin.Mvvm.ViewModels;
 public partial class ItemViewModel : BaseItemViewModel
 {
     private readonly ILibraryService _libraryService;
+    private readonly INavigationService _navigationService;
 
     [ObservableProperty]
     private string? _title;
@@ -64,6 +66,7 @@ public partial class ItemViewModel : BaseItemViewModel
         : base(navigationService, applicationService)
     {
         _libraryService = libraryService;
+        _navigationService = navigationService;
     }
 
     /// <inheritdoc/>
@@ -175,5 +178,11 @@ public partial class ItemViewModel : BaseItemViewModel
         }
 
         ParentShow = await _libraryService.GetItemAsync(Item.SeriesId.Value).ConfigureAwait(false);
+    }
+
+    [RelayCommand]
+    private void PlayItem()
+    {
+        _navigationService.NavigateToPlayer(ItemId);
     }
 }

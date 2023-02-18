@@ -80,5 +80,19 @@ public partial class AppShell : Shell
                 _navigationService.NavigateToServerSelectPage();
             }),
         });
+
+        Items.Add(new MenuItem
+        {
+            Text = "Player",
+            IconImageSource = new FontImageSource
+            {
+                FontFamily = nameof(MaterialRegular),
+                Glyph = MaterialRegular.Play_arrow
+            },
+            Command = new Command(() =>
+            {
+                _navigationService.NavigateToPlayer(Guid.NewGuid());
+            })
+        });
     }
 }

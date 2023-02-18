@@ -32,6 +32,7 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
+            .UseMauiCommunityToolkitMediaElement()
             .UseUraniumUI()
             .UseUraniumUIMaterial()
             .ConfigureFonts(fonts =>
@@ -74,11 +75,13 @@ public static class MauiProgram
             services.AddTransient<AppShell, AppViewModel>();
             services.AddTransientWithShellRoute<ItemPage, ItemViewModel>(nameof(ItemPage));
             services.AddTransientWithShellRoute<LibraryPage, LibraryViewModel>(nameof(LibraryPage));
+            services.AddTransientWithShellRoute<VideoPlaybackPage, VideoPlaybackViewModel>(nameof(VideoPlaybackPage));
         }
         else
         {
             services.AddTransient<ItemPage, ItemViewModel>();
             services.AddTransient<LibraryPage, LibraryViewModel>();
+            services.AddTransient<VideoPlaybackPage, VideoPlaybackViewModel>();
         }
     }
 

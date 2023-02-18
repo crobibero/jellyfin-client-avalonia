@@ -114,6 +114,12 @@ public class NavigationService : INavigationService
         }
     }
 
+    /// <inheritdoc/>
+    public void NavigateToPlayer(Guid itemId)
+    {
+        Navigate<VideoPlaybackPage, VideoPlaybackViewModel>(itemId);
+    }
+
     private void Navigate<TPage, TViewModel>(Guid itemId)
         where TViewModel : BaseItemViewModel
         where TPage : BaseContentIdPage<TViewModel>

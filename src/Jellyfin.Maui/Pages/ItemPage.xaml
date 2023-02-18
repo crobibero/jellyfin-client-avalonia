@@ -4,6 +4,7 @@
                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                         xmlns:cv="clr-namespace:Jellyfin.Maui.ContentViews"
                         xmlns:ext="clr-namespace:Jellyfin.Maui.Extensions"
+                        xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
                         xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                         xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
                         xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
@@ -27,6 +28,13 @@
                         <Label Text="End Time" />
                         <Label Text="{Binding EndTime, Mode=OneWay}" />
                     </HorizontalStackLayout>
+                    <ImageButton Command="{Binding PlayItemCommand}">
+                        <ImageButton.Source>
+                            <FontImageSource FontFamily="MaterialRegular"
+                                             Glyph="{x:Static m:MaterialRegular.Play_arrow}"
+                                             Color="{StaticResource Primary}" />
+                        </ImageButton.Source>
+                    </ImageButton>
                 </VerticalStackLayout>
                 <VerticalStackLayout Grid.Column="1">
                     <Label Text="{Binding Title, Mode=OneWay}" />

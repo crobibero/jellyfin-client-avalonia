@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<page:BaseContentIdPage x:Class="Jellyfin.Maui.Pages.VideoPlaybackPage"
+                        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                        xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+                        xmlns:page="clr-namespace:Jellyfin.Maui.Pages.Facades"
+                        xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                        xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
+                        x:DataType="vm:VideoPlaybackViewModel"
+                        x:TypeArguments="vm:VideoPlaybackViewModel"
+                        Unloaded="PageUnloaded">
+    <Grid>
+        <VerticalStackLayout>
+            <toolkit:MediaElement x:Name="MediaElement"
+                                  Grid.Row="0"
+                                  ShouldAutoPlay="False"
+                                  ShouldKeepScreenOn="True"
+                                  ShouldShowPlaybackControls="False"
+                                  Source="{Binding PlaybackUrl}" />
+            <HorizontalStackLayout Grid.Row="1"
+                                   x:DataType="toolkit:IMediaElement"
+                                   BindingContext="{x:Reference MediaElement}">
+                <!--  Play Button  -->
+                <ImageButton Clicked="OnPlayPause"
+                             HorizontalOptions="CenterAndExpand">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MaterialRegular"
+                                         Glyph="{x:Static m:MaterialRegular.Play_arrow}"
+                                         Color="{StaticResource Primary}" />
+                    </ImageButton.Source>
+                    <!--
+                <ImageButton.Triggers>
+                    <DataTrigger Binding="{Binding CurrentState}"
+                                 TargetType="ImageButton"
+                                 Value="{x:Static toolkit:MediaElementState.Playing}">
+                        <Setter Property="IsVisible" Value="False" />
+                    </DataTrigger>
+                </ImageButton.Triggers>
+                    -->
+                </ImageButton>
+                <!--  Pause Button  -->
+                <ImageButton Clicked="OnPlayPause"
+                             HorizontalOptions="CenterAndExpand">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="MaterialRegular"
+                                         Glyph="{x:Static m:MaterialRegular.Pause}"
+                                         Color="{StaticResource Primary}" />
+                    </ImageButton.Source>
+                    <!--
+                <ImageButton.Triggers>
+                    <DataTrigger Binding="{Binding CurrentState}"
+                                 TargetType="ImageButton"
+                                 Value="{x:Static toolkit:MediaElementState.Playing}">
+                        <Setter Property="IsVisible" Value="False" />
+                    </DataTrigger>
+                </ImageButton.Triggers>
+                    -->
+                </ImageButton>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Grid>
+</page:BaseContentIdPage>
