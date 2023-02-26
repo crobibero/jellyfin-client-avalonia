@@ -87,6 +87,7 @@ public class ShellNavigationService : INavigationService
         {
             if (Shell is null)
             {
+                _loginNavigationPage = null;
                 _application.MainPage = InternalServiceProvider.GetService<AppShell>();
             }
             else
