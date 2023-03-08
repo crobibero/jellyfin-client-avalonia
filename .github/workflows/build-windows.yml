@@ -50,6 +50,7 @@ jobs:
           Get-ChildItem -Path Jellyfin.Maui*.msix -Recurse -File | Copy-Item -Destination .\artifacts\
 
       - name: Sign msix
+        if: ${{ github.ref == 'refs/heads/master' }}
         shell: pwsh
         env:
           CERT: ${{ secrets.WIN_SIGN_CERT }}
