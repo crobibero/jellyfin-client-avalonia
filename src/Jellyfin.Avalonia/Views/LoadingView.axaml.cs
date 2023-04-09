@@ -13,12 +13,5 @@ public partial class LoadingView : BaseUserView<LoadingViewModel>
     /// Initializes a new instance of the <see cref="LoadingView"/> class.
     /// </summary>
     public LoadingView()
-    {
-        InitializeComponent();
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
+        => AvaloniaXamlLoader.Load(this);
 }

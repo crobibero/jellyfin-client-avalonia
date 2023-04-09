@@ -32,7 +32,7 @@ public class SdkService : ISdkService
         var version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.1";
         var deviceId = await _stateStorageService.GetDeviceIdAsync().ConfigureAwait(false);
         var platformInfo = _runtimePlatform.GetRuntimeInfo();
-        var clientName = $"Jellyfin Avalonia ({platformInfo.OperatingSystem})";
+        var clientName = $"Jellyfin Avalonia ({platformInfo.FormFactor})";
 
         _sdkClientSettings.InitializeClientSettings(
             clientName,

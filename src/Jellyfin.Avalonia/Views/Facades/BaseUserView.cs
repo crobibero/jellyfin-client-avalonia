@@ -1,7 +1,5 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.LogicalTree;
-using Avalonia.Markup.Xaml;
 using Jellyfin.Mvvm.ViewModels.Facades;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,7 +23,7 @@ public class BaseUserView<TViewModel> : UserControl
     /// <summary>
     /// Gets the view model.
     /// </summary>
-    protected TViewModel ViewModel { get; }
+    public TViewModel ViewModel { get; }
 
     /// <summary>
     /// Gets the service provider.

@@ -24,7 +24,7 @@ public class ViewLocator : IDataTemplate
     }
 
     /// <inheritdoc />
-    public IControl Build(object param)
+    public Control Build(object? param)
     {
         ArgumentNullException.ThrowIfNull(param);
 
@@ -61,6 +61,6 @@ public class ViewLocator : IDataTemplate
     }
 
     /// <inheritdoc />
-    public bool Match(object data)
+    public bool Match(object? data)
         => data is BaseViewModel;
 }

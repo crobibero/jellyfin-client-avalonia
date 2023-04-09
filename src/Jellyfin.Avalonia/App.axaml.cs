@@ -27,11 +27,10 @@ public class App : Application
     /// </summary>
     public override void Initialize()
     {
-        Resources[typeof(IServiceProvider)] = _serviceProvider;
+        AvaloniaXamlLoader.Load(this);
 
         DataTemplates.Add(_serviceProvider.GetRequiredService<ViewLocator>());
-
-        AvaloniaXamlLoader.Load(this);
+        Resources.Add(typeof(IServiceProvider), _serviceProvider);
     }
 
     /// <inheritdoc />
