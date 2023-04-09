@@ -3,11 +3,11 @@
                     xmlns:models="clr-namespace:Jellyfin.Mvvm.Models;assembly=Jellyfin.Mvvm"
                     xmlns:login="clr-namespace:Jellyfin.Avalonia.Views.Login">
 
-    <DataTemplate x:DataType="models:ServerStateModel" x:Key="ServerSelectDataTemplate">
-        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" x:Name="ServerSelectTemplate">
+    <DataTemplate x:DataType="models:UserStateModel" x:Key="UserSelectDataTemplate">
+        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" x:Name="UserSelectTemplate">
             <Interaction.Behaviors>
-                <EventTriggerBehavior EventName="Tapped" SourceObject="{Binding #ServerSelectTemplate}">
-                    <InvokeCommandAction Command="{Binding  $parent[login:ServerSelectView].ViewModel.SelectServerCommand}"
+                <EventTriggerBehavior EventName="Tapped" SourceObject="{Binding #UserSelectTemplate}">
+                    <InvokeCommandAction Command="{Binding  $parent[login:SelectUserView].ViewModel.SelectUserCommand}"
                                          CommandParameter="{Binding .}"/>
                 </EventTriggerBehavior>
             </Interaction.Behaviors>
@@ -19,15 +19,11 @@
                     Grid.RowSpan="2"
                     Grid.Column="1"
                     Background="Transparent"
-                    Command="{Binding $parent[login:ServerSelectView].ViewModel.DeleteServerCommand}"
+                    Command="{Binding $parent[login:SelectUserView].ViewModel.DeleteUserCommand}"
                     CommandParameter="{Binding .}"
                     VerticalAlignment="Top">
-                DELETE
+                DELETE todo icon
             </Button>
-            <TextBlock Grid.Row="1"
-                       Grid.Column="0"
-                       Text="{Binding Url, Mode= OneTime}" />
         </Grid>
     </DataTemplate>
 </ResourceDictionary>
-

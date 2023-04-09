@@ -8,11 +8,15 @@
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>
+            <!-- Merge all templates -->
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="/Resources/Templates/ServerSelectTemplate.axaml" />
+                <ResourceInclude Source="/Resources/Templates/UserSelectTemplate.axaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <!-- Add DataTemplates as static resource -->
             <StaticResource x:Key="ServerSelectTemplate" ResourceKey="ServerSelectDataTemplate" />
+            <StaticResource x:Key="UserSelectTemplate" ResourceKey="UserSelectDataTemplate" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

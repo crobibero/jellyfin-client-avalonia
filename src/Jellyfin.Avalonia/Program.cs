@@ -338,10 +338,13 @@ public static class Program
         services.AddTransient<ServerSelectView>();
         services.AddTransient<ServerSelectViewModel>();
 
+        services.AddTransient<AddServerView>();
         services.AddTransient<AddServerViewModel>();
 
+        services.AddTransient<LoginView>();
         services.AddTransient<LoginViewModel>();
 
+        services.AddTransient<SelectUserView>();
         services.AddTransient<SelectUserViewModel>();
 
         /* Content Pages */

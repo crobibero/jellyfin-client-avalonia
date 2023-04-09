@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+             xmlns:login="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
+             x:Class="Jellyfin.Avalonia.Views.Login.LoginView"
+             x:DataType="login:LoginViewModel">
+
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="{Binding ServerName}" />
+
+            <TextBlock Text="{x:Static strings:Strings.Login_Username}" />
+            <TextBox Text="{Binding Username}" />
+
+            <TextBlock Text="{x:Static strings:Strings.Login_Password}" />
+            <TextBox Text="{Binding Password}" PasswordChar="*" />
+
+            <CheckBox Content="{x:Static strings:Strings.Login_RememberMe}" />
+            <Button Command="{Binding LoginCommand}"
+                    Content="{x:Static strings:Strings.Login_LoginButton}"/>
+
+            <StackPanel Orientation="Vertical"
+                        IsVisible="{Binding QuickConnectAvailable}">
+                <Button Content="{x:Static strings:Strings.Login_QuickConnectButton}"
+                        Command="{Binding LoginWithQuickConnectCommand}" />
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            IsVisible="{Binding QuickConnectCode, Converter={x:Static StringConverters.IsNotNullOrEmpty}, Mode=OneWay}">
+                    <TextBlock Text="{x:Static strings:Strings.Login_QuickConnectCode}" />
+                    <TextBlock Text="{Binding QuickConnectCode, Mode=OneWay}" />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>
+
