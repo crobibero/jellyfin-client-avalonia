@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jellyfin.Maui", "Jellyfin.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellyfin.Mvvm", "Jellyfin.Mvvm\Jellyfin.Mvvm.csproj", "{FEA8682F-0BA5-49DD-8A48-A71D67E41B22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellyfin.Avalonia", "Jellyfin.Avalonia\Jellyfin.Avalonia.csproj", "{A9A32E5D-8547-48FC-A8CD-2744B5115779}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,14 @@ Global
 		{FEA8682F-0BA5-49DD-8A48-A71D67E41B22}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FEA8682F-0BA5-49DD-8A48-A71D67E41B22}.Release|x64.ActiveCfg = Release|Any CPU
 		{FEA8682F-0BA5-49DD-8A48-A71D67E41B22}.Release|x64.Build.0 = Release|Any CPU
+		{A9A32E5D-8547-48FC-A8CD-2744B5115779}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9A32E5D-8547-48FC-A8CD-2744B5115779}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9A32E5D-8547-48FC-A8CD-2744B5115779}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A9A32E5D-8547-48FC-A8CD-2744B5115779}.Debug|x64.Build.0 = Debug|Any CPU
+		{A9A32E5D-8547-48FC-A8CD-2744B5115779}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9A32E5D-8547-48FC-A8CD-2744B5115779}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9A32E5D-8547-48FC-A8CD-2744B5115779}.Release|x64.ActiveCfg = Release|Any CPU
+		{A9A32E5D-8547-48FC-A8CD-2744B5115779}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

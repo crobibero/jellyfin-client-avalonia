@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
+             xmlns:models="clr-namespace:Jellyfin.Mvvm.Models;assembly=Jellyfin.Mvvm"
+             x:Class="Jellyfin.Avalonia.Views.Login.ServerSelectView"
+             x:DataType="vm:ServerSelectViewModel">
+    <Grid ColumnDefinitions="*,*"
+          RowDefinitions="Auto,*">
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   HorizontalAlignment="Left"
+                   Text="Existing Servers" />
+        <Button Grid.Row="0"
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Command="{Binding AddServerCommand}">
+            Add Server
+        </Button>
+
+        <ScrollViewer Grid.Row="1"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2">
+            <ItemsRepeater Items="{Binding Servers, Mode=OneWay}">
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="models:ServerStateModel">
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
+
