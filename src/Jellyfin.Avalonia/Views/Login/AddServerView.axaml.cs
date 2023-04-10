@@ -15,4 +15,3 @@ public partial class AddServerView : BaseUserView<AddServerViewModel>
     public AddServerView()
         => AvaloniaXamlLoader.Load(this);
 }
-

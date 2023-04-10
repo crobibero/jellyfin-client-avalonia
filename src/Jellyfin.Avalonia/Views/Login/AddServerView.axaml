@@ -15,4 +15,3 @@
                 Command="{Binding AddServerCommand}" />
     </StackPanel>
 </UserControl>
-
