@@ -1,0 +1,18 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sdk="clr-namespace:Jellyfin.Sdk;assembly=Jellyfin.Sdk"
+                    xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia">
+    <DataTemplate x:Key="PosterCardDataTemplate"
+                  x:DataType="sdk:BaseItemDto">
+        <Border>
+            <Interaction.Behaviors>
+            </Interaction.Behaviors>
+            <StackPanel Orientation="Vertical">
+                <Image asyncImageLoader:ImageLoader.Source="{Binding ., Converter={StaticResource PrimaryImageSourceConverter}, ConverterParameter=300}" />
+                <TextBlock HorizontalAlignment="Center"
+                           Text="{Binding Name}" />
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+</ResourceDictionary>
+

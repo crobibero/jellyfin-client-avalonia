@@ -7,29 +7,37 @@ namespace Jellyfin.Avalonia.Services;
 /// </summary>
 public class SettingsService : ISettingsService
 {
+    private readonly string _basePath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "jellyfin.avalonia", "settings");
+
     /// <inheritdoc />
-    public Task<string> GetAsync(string key)
+    public async Task<string> GetAsync(string key)
     {
-        // TODO.
-        return Task.FromResult(string.Empty);
+        var filePath = GetFilePath(key);
+        if (!File.Exists(filePath))
+        {
+            return string.Empty;
+        }
+
+        return await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public void Remove(string key)
-    {
-        // TODO
-    }
+        => File.Delete(GetFilePath(key));
 
     /// <inheritdoc />
     public void RemoveAll()
-    {
-        // TODO
-    }
+        => Directory.Delete(_basePath);
 
     /// <inheritdoc />
-    public Task SetAsync(string key, string value)
+    public async Task SetAsync(string key, string value)
     {
-        // TODO
-        return Task.CompletedTask;
+        Directory.CreateDirectory(_basePath);
+
+        var filePath = GetFilePath(key);
+        await File.WriteAllTextAsync(filePath, value).ConfigureAwait(false);
     }
+
+    private string GetFilePath(string input)
+        => Path.Join(_basePath, input + ".config");
 }

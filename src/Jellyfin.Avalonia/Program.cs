@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Globalization;
+using System.Net;
 using System.Text;
 using Avalonia;
 using Jellyfin.Avalonia.Services;
@@ -12,6 +13,7 @@ using Jellyfin.Sdk;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Extensions.Http;
+using Serilog;
 
 namespace Jellyfin.Avalonia;
 
@@ -27,8 +29,22 @@ public static class Program
     /// </summary>
     /// <param name="args">The program arguments.</param>
     [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
+    public static void Main(string[] args)
+    {
+        try
+        {
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args);
+        }
+        catch (Exception ex)
+        {
+            Log.Logger.ForContext<App>().Fatal(ex, "Something went wrong");
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
+    }
 
     /// <summary>
     /// Avalonia configuration, don't remove; also used by visual designer.
@@ -39,17 +55,18 @@ public static class Program
         var serviceProvider = BuildServiceProvider();
         return AppBuilder
             .Configure(() => new App(serviceProvider))
-            .UsePlatformDetect()
-            .LogToTrace();
+            .UsePlatformDetect();
     }
 
     private static ServiceProvider BuildServiceProvider()
     {
         var services = new ServiceCollection();
 
+        BuildLogger();
         services.AddSdkClients();
         services.AddServices();
         services.AddViewsAndModels();
+        services.AddLogging(c => c.AddSerilog());
 
         return services.BuildServiceProvider();
     }
@@ -348,10 +365,30 @@ public static class Program
         services.AddTransient<SelectUserViewModel>();
 
         /* Content Pages */
+        services.AddTransient<HomeView>();
         services.AddTransient<HomeViewModel>();
 
         services.AddTransient<ItemViewModel>();
 
         services.AddTransient<LibraryViewModel>();
+    }
+
+    private static void BuildLogger()
+    {
+        var outputPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "jellyfin.avalonia", "logs");
+        const string OutputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}] [{Level:u3}] {SourceContext}: {Message}{NewLine}{Exception}";
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Debug(
+                outputTemplate: OutputTemplate,
+                formatProvider: CultureInfo.InvariantCulture)
+            .WriteTo.File(
+                path: Path.Combine(outputPath, "Jellyfin.Avalonia..log"),
+                outputTemplate: OutputTemplate,
+                formatProvider: CultureInfo.InvariantCulture,
+                encoding: Encoding.UTF8,
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: 10)
+            .Enrich.FromLogContext()
+            .CreateLogger();
     }
 }

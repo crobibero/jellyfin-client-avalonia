@@ -20,7 +20,7 @@
         <ScrollViewer Grid.Row="1"
                       Grid.Column="0"
                       Grid.ColumnSpan="2">
-            <ItemsRepeater Items="{Binding Servers, Mode=OneWay}"
+            <ItemsRepeater ItemsSource="{Binding Servers, Mode=OneWay}"
                            ItemTemplate="{StaticResource ServerSelectTemplate}">
             </ItemsRepeater>
         </ScrollViewer>

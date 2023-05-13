@@ -12,13 +12,13 @@ public class ApplicationService : IApplicationService
     /// <inheritdoc />
     public bool Dispatch(Action action)
     {
-        Dispatcher.UIThread.InvokeAsync(action).GetAwaiter().GetResult();
+        Dispatcher.UIThread.Invoke(action);
         return true;
     }
 
     /// <inheritdoc />
     public async Task DispatchAsync(Action action)
-        => await Dispatcher.UIThread.InvokeAsync(action).ConfigureAwait(false);
+        => await Dispatcher.UIThread.InvokeAsync(action);
 
     /// <inheritdoc />
     public void EnableCollectionSynchronization(IEnumerable collection, object? context, Action<IEnumerable, object, Action, bool> callback)

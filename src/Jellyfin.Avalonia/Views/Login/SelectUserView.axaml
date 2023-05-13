@@ -23,7 +23,7 @@
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch">
             <WrapPanel Orientation="Horizontal">
-                <ItemsRepeater Items="{Binding Users, Mode=OneWay}"
+                <ItemsRepeater ItemsSource="{Binding Users, Mode=OneWay}"
                                ItemTemplate="{StaticResource UserSelectTemplate}" />
             </WrapPanel>
         </ScrollViewer>
