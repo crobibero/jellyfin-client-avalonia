@@ -1,5 +1,4 @@
-using Avalonia;
-using Avalonia.Platform;
+using System.Runtime.InteropServices;
 using Jellyfin.Mvvm.Services;
 using Jellyfin.Sdk;
 
@@ -12,7 +11,6 @@ public class SdkService : ISdkService
 {
     private readonly SdkClientSettings _sdkClientSettings;
     private readonly IStateStorageService _stateStorageService;
-    private readonly IRuntimePlatform _runtimePlatform;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SdkService"/> class.
@@ -23,7 +21,6 @@ public class SdkService : ISdkService
     {
         _sdkClientSettings = sdkClientSettings;
         _stateStorageService = stateStorageService;
-        _runtimePlatform = AvaloniaLocator.Current.GetRequiredService<IRuntimePlatform>();
     }
 
     /// <inheritdoc />
@@ -31,13 +28,13 @@ public class SdkService : ISdkService
     {
         var version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.1";
         var deviceId = await _stateStorageService.GetDeviceIdAsync().ConfigureAwait(false);
-        var platformInfo = _runtimePlatform.GetRuntimeInfo();
-        var clientName = $"Jellyfin Avalonia ({platformInfo.FormFactor})";
+        var clientName = $"Jellyfin Avalonia ({RuntimeInformation.OSDescription})";
+        var deviceName = Environment.MachineName;
 
         _sdkClientSettings.InitializeClientSettings(
             clientName,
             version,
-            "TODO get device name",
+            deviceName,
             deviceId);
     }
 }

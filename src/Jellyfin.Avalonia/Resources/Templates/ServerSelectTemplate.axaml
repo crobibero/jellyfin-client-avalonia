@@ -6,7 +6,8 @@
     <DataTemplate x:DataType="models:ServerStateModel" x:Key="ServerSelectDataTemplate">
         <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" x:Name="ServerSelectTemplate">
             <Interaction.Behaviors>
-                <EventTriggerBehavior EventName="Tapped" SourceObject="{Binding #ServerSelectTemplate}">
+                <EventTriggerBehavior EventName="Tapped"
+                                      SourceObject="{Binding #ServerSelectTemplate}">
                     <InvokeCommandAction Command="{Binding  $parent[login:ServerSelectView].ViewModel.SelectServerCommand}"
                                          CommandParameter="{Binding .}"/>
                 </EventTriggerBehavior>

@@ -15,4 +15,3 @@ public partial class HomeView : BaseUserView<HomeViewModel>
     public HomeView()
         => AvaloniaXamlLoader.Load(this);
 }
-

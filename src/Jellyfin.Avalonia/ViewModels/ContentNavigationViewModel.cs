@@ -21,6 +21,7 @@ public partial class ContentNavigationViewModel : BaseViewModel
     /// </summary>
     /// <param name="navigationService">Instance of the <see cref="INavigationService"/> interface.</param>
     /// <param name="applicationService">Instance of the <see cref="IApplicationService"/> interface.</param>
+    /// <param name="serviceProvider">Instance of the <see cref="IServiceProvider"/> interface.</param>
     public ContentNavigationViewModel(INavigationService navigationService, IApplicationService applicationService, IServiceProvider serviceProvider)
         : base(navigationService, applicationService)
     {

@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Jellyfin.Mvvm.ViewModels.Facades;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +27,7 @@ public class BaseUserView<TViewModel> : UserControl
     /// <summary>
     /// Gets the service provider.
     /// </summary>
-    protected IServiceProvider ServiceProvider => (IServiceProvider)Application.Current!.Resources[typeof(IServiceProvider)]!;
+    protected IServiceProvider ServiceProvider => App.Current.ServiceProvider;
 
     /// <inheritdoc />
     public override async void EndInit()

@@ -1,6 +1,4 @@
 using System.Globalization;
-using Avalonia;
-using Avalonia.Data.Converters;
 using Jellyfin.Sdk;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,7 +7,7 @@ namespace Jellyfin.Avalonia.Converters;
 /// <summary>
 /// Generate the image url from the item.
 /// </summary>
-public class BaseImageSourceConverter : IValueConverter
+public class BaseImageSourceConverter : BaseConverterOneWay<BaseItemDto?, string?, int?>
 {
     private readonly ImageType _imageType;
     private readonly IImageClient _imageClient;
@@ -20,27 +18,19 @@ public class BaseImageSourceConverter : IValueConverter
     /// <param name="imageType">The image type to fetch.</param>
     protected BaseImageSourceConverter(ImageType imageType)
     {
-        var serviceProvider = (IServiceProvider)Application.Current!.Resources[typeof(IServiceProvider)]!;
-        _imageClient = serviceProvider.GetRequiredService<IImageClient>();
+        _imageClient = App.Current.ServiceProvider.GetRequiredService<IImageClient>();
         _imageType = imageType;
     }
 
     /// <inheritdoc />
-    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    protected override string? ConvertFrom(BaseItemDto? value, int? parameter, CultureInfo? culture)
     {
-        if (value is not BaseItemDto item)
+        if (value is null)
         {
             return null;
         }
 
-        int? maxHeight = null;
-
-        if (int.TryParse(parameter?.ToString(), out int tmp))
-        {
-            maxHeight = tmp;
-        }
-
-        var itemId = item.Id;
+        var itemId = value.Id;
 
         var imageTypeStr = _imageType.ToString();
 
@@ -48,16 +38,12 @@ public class BaseImageSourceConverter : IValueConverter
          * If the item is an Episode or Season and the requested image type doesn't exist,
          * request the Series' image.
          */
-        if ((item.Type is BaseItemKind.Episode or BaseItemKind.Season)
-            && !item.ImageTags.Keys.Contains(imageTypeStr, StringComparer.OrdinalIgnoreCase))
+        if ((value.Type is BaseItemKind.Episode or BaseItemKind.Season)
+            && !value.ImageTags.Keys.Contains(imageTypeStr, StringComparer.OrdinalIgnoreCase))
         {
-            itemId = item.SeriesId ?? item.Id;
+            itemId = value.SeriesId ?? value.Id;
         }
 
-        return _imageClient.GetItemImageUrl(itemId, _imageType, maxHeight: maxHeight);
+        return _imageClient.GetItemImageUrl(itemId, _imageType, maxHeight: parameter);
     }
-
-    /// <inheritdoc />
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-        => throw new NotImplementedException();
 }

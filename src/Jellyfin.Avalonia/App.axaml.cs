@@ -11,16 +11,25 @@ namespace Jellyfin.Avalonia;
 /// </summary>
 public class App : Application
 {
-    private readonly IServiceProvider _serviceProvider;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="App"/> class.
     /// </summary>
     /// <param name="serviceProvider">Instance of the <see cref="IServiceProvider"/> interface.</param>
     public App(IServiceProvider serviceProvider)
     {
-        _serviceProvider = serviceProvider;
+        Current = this;
+        ServiceProvider = serviceProvider;
     }
+
+    /// <summary>
+    /// Gets the current application.
+    /// </summary>
+    public static new App Current { get; private set; } = null!;
+
+    /// <summary>
+    /// Gets the current service provided.
+    /// </summary>
+    public IServiceProvider ServiceProvider { get; }
 
     /// <summary>
     /// Initialize the application.
@@ -29,8 +38,7 @@ public class App : Application
     {
         AvaloniaXamlLoader.Load(this);
 
-        DataTemplates.Add(_serviceProvider.GetRequiredService<ViewLocator>());
-        Resources.Add(typeof(IServiceProvider), _serviceProvider);
+        DataTemplates.Add(ServiceProvider.GetRequiredService<ViewLocator>());
     }
 
     /// <inheritdoc />
@@ -39,10 +47,10 @@ public class App : Application
         switch (ApplicationLifetime)
         {
             case IClassicDesktopStyleApplicationLifetime desktop:
-                desktop.MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+                desktop.MainWindow = ServiceProvider.GetRequiredService<MainWindow>();
                 break;
             case ISingleViewApplicationLifetime singeView:
-                singeView.MainView = _serviceProvider.GetRequiredService<MainWindow>();
+                singeView.MainView = ServiceProvider.GetRequiredService<MainWindow>();
                 break;
             default:
                 throw new NotImplementedException();
