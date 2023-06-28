@@ -48,7 +48,7 @@ public partial class LoginViewModel : BaseViewModel
     private bool _checkingQuickConnectAvailability;
 
     [ObservableProperty]
-    private bool _isValid;
+    private bool _isValid = true;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
