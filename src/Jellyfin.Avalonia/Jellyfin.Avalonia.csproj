@@ -37,6 +37,10 @@
     <ProjectReference Include="..\Jellyfin.Mvvm\Jellyfin.Mvvm.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AvaloniaResource Include="Resources\Assets\**" />
+  </ItemGroup>
+  
   <Target Name="Format Xaml" AfterTargets="PreBuildEvent">
     <Exec Command="dotnet tool restore" />
     <Exec Command="dotnet xstyler --recursive --directory ." />
