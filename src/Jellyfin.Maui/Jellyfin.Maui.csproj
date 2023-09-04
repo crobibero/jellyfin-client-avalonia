@@ -59,9 +59,9 @@
     <PackageReference Include="Serilog.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="UraniumUI" Version="2.5.4" />
-    <PackageReference Include="UraniumUI.Icons.MaterialIcons" Version="2.5.4" />
-    <PackageReference Include="UraniumUI.Material" Version="2.5.4" />
+    <PackageReference Include="UraniumUI" Version="2.5.5" />
+    <PackageReference Include="UraniumUI.Icons.MaterialIcons" Version="2.5.5" />
+    <PackageReference Include="UraniumUI.Material" Version="2.5.5" />
   </ItemGroup>
 
   <!-- MacCatalyst Dependencies -->
