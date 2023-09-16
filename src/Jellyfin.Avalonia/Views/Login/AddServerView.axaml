@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:login="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
+             xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+             x:Class="Jellyfin.Avalonia.Views.Login.AddServerView"
+             x:DataType="login:AddServerViewModel">
+
+    <StackPanel Orientation="Vertical">
+        <TextBlock HorizontalAlignment="Stretch"
+                   Text="{x:Static strings:Strings.Login_ServerUrl}" />
+        <TextBox HorizontalAlignment="Stretch"
+                 Text="{Binding ServerUrl}" />
+        <Button HorizontalAlignment="Stretch"
+                Content="{x:Static strings:Strings.Add}"
+                Command="{Binding AddServerCommand}" />
+    </StackPanel>
+</UserControl>

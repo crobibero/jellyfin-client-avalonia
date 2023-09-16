@@ -1,0 +1,29 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:models="clr-namespace:Jellyfin.Mvvm.Models;assembly=Jellyfin.Mvvm"
+                    xmlns:login="clr-namespace:Jellyfin.Avalonia.Views.Login">
+
+    <DataTemplate x:DataType="models:UserStateModel" x:Key="UserSelectDataTemplate">
+        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" x:Name="UserSelectTemplate">
+            <Interaction.Behaviors>
+                <EventTriggerBehavior EventName="Tapped" SourceObject="{Binding #UserSelectTemplate}">
+                    <InvokeCommandAction Command="{Binding  $parent[login:SelectUserView].ViewModel.SelectUserCommand}"
+                                         CommandParameter="{Binding .}"/>
+                </EventTriggerBehavior>
+            </Interaction.Behaviors>
+
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Text="{Binding Name, Mode=OneTime}" />
+            <Button Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="1"
+                    Background="Transparent"
+                    Command="{Binding $parent[login:SelectUserView].ViewModel.DeleteUserCommand}"
+                    CommandParameter="{Binding .}"
+                    VerticalAlignment="Top">
+                DELETE todo icon
+            </Button>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

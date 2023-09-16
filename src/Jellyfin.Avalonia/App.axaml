@@ -1,0 +1,44 @@
+﻿<Application x:Class="Jellyfin.Avalonia.App"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dataTemplateSelectors="clr-namespace:Jellyfin.Avalonia.DataTemplateSelectors"
+             xmlns:converters="clr-namespace:Jellyfin.Avalonia.Converters"
+             xmlns:sdk="clr-namespace:Jellyfin.Sdk;assembly=Jellyfin.Sdk"
+             xmlns:markupExtensions="clr-namespace:Jellyfin.Avalonia.MarkupExtensions">
+    <Application.Styles>
+        <!--<styling:FluentAvaloniaTheme PreferUserAccentColor="True" PreferSystemTheme="True" />-->
+        <SimpleTheme />
+        <StyleInclude Source="/Resources/Styles/Styles.axaml" />
+    </Application.Styles>
+    <Application.Resources>
+        <ResourceDictionary>
+            <!-- Merge all templates -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Resources/Templates/HomeRowDataTemplate.axaml" />
+                <ResourceInclude Source="/Resources/Templates/PosterCardDataTemplate.axaml" />
+                <ResourceInclude Source="/Resources/Templates/ServerSelectTemplate.axaml" />
+                <ResourceInclude Source="/Resources/Templates/UserSelectTemplate.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Add DataTemplates as static resource -->
+            <StaticResource x:Key="ServerSelectTemplate" ResourceKey="ServerSelectDataTemplate" />
+            <StaticResource x:Key="UserSelectTemplate" ResourceKey="UserSelectDataTemplate" />
+            <StaticResource x:Key="PosterCardTemplate" ResourceKey="PosterCardDataTemplate" />
+            <dataTemplateSelectors:HomeRowTemplateSelector x:Key="HomeRowTemplateSelector"
+                                                           LibraryHomeRowTemplate="{StaticResource HomeRowDataTemplate}"/>
+
+            <!-- Converters -->
+            <converters:PrimaryImageSourceConverter x:Key="PrimaryImageSourceConverter"
+                                                    x:DataType="sdk:BaseItemDto"/>
+            <converters:BaseItemDtoCardTitleConverter x:Key="BaseItemDtoCardTitleConverter" />
+            <converters:BaseItemDtoCardDescriptionConverter x:Key="BaseItemDtoCardDescriptionConverter" />
+
+            <converters:IsListNullOrEmptyConverter x:Key="IsListNullOrEmptyConverter" />
+            <converters:IsListNotNullOrEmptyConverter x:Key="IsListNotNullOrEmptyConverter" />
+            <converters:IsStringNullOrEmptyConverterConverter x:Key="IsStringNullOrEmptyConverter" />
+            <converters:IsStringNotNullOrEmptyConverter x:Key="IsStringNotNullOrEmptyConverter" />
+            <converters:IsNullConverter x:Key="IsNullConverter"/>
+            <converters:IsNotNullConverter x:Key="IsNotNullConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

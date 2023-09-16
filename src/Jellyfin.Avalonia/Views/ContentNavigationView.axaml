@@ -1,0 +1,9 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Jellyfin.Avalonia.ViewModels"
+             x:Class="Jellyfin.Avalonia.Views.ContentNavigationView"
+             x:DataType="vm:ContentNavigationViewModel">
+
+    <TransitioningContentControl Content="{Binding CurrentPage}" />
+</UserControl>
+

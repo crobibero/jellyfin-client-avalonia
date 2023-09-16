@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:login="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
+             xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+             x:Class="Jellyfin.Avalonia.Views.Login.SelectUserView"
+             x:DataType="login:SelectUserViewModel">
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,*">
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   HorizontalAlignment="Left"
+                   Text="{x:Static strings:Strings.Login_ExistingUsers}" />
+
+        <Button Grid.Row="0"
+                Grid.Column="1"
+                Command="{Binding AddUserCommand}"
+                HorizontalAlignment="Right"
+                Content="{x:Static strings:Strings.Login_AddUser}" />
+
+        <ScrollViewer Grid.Row="1"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch">
+            <WrapPanel Orientation="Horizontal">
+                <ItemsRepeater ItemsSource="{Binding Users, Mode=OneWay}"
+                               ItemTemplate="{StaticResource UserSelectTemplate}" />
+            </WrapPanel>
+        </ScrollViewer>
+
+    </Grid>
+</UserControl>
