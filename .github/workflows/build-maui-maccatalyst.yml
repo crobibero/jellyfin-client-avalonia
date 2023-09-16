@@ -1,4 +1,4 @@
-name: Build MacCatalyst
+name: Build Maui MacCatalyst
 
 on:
   push:
@@ -51,5 +51,5 @@ jobs:
       - name: Upload MacCatalyst build artifacts
         uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
         with:
-          name: maccatalyst-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
-          path: ./src/artifacts/**/*.pkg
+          name: maccatalyst-maui-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
+          path: ${{ github.workspace}}/src/artifacts/**/*.pkg

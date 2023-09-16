@@ -1,4 +1,4 @@
-name: Build Windows
+name: Build Maui Windows
 
 on:
   push:
@@ -64,6 +64,5 @@ jobs:
 
       - uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
         with:
-          name: windows-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
-          path: |             
-            .\src\artifacts\Jellyfin.Maui*.msix
+          name: windows-maui-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
+          path: ${{ github.workspace}}\src\artifacts\Jellyfin.Maui*.msix

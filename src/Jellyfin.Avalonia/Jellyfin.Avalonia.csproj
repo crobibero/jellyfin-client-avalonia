@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
+        <RuntimeIdentifiers>win-x64;osx-x64</RuntimeIdentifiers>
         <TargetFramework>net7.0</TargetFramework>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -41,7 +42,7 @@
   <ItemGroup>
     <AvaloniaResource Include="Resources\Assets\**" />
   </ItemGroup>
-  
+
   <Target Name="Format Xaml" AfterTargets="PreBuildEvent">
     <Exec Command="dotnet tool restore" />
     <Exec Command="dotnet xstyler --recursive --directory ." />
