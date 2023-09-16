@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <RuntimeIdentifiers>win-x64;osx-x64</RuntimeIdentifiers>
+        <RuntimeIdentifiers>win-x64;osx-x64;linux-x64</RuntimeIdentifiers>
         <TargetFramework>net7.0</TargetFramework>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
