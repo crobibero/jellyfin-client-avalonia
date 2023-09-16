@@ -197,10 +197,6 @@ public static class MauiProgram
             .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
             .AddPolicyHandler(retryPolicy);
 
-        services.AddHttpClient<IImageByNameClient, ImageByNameClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
         services.AddHttpClient<IInstantMixClient, InstantMixClient>()
             .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
             .AddPolicyHandler(retryPolicy);
@@ -246,10 +242,6 @@ public static class MauiProgram
             .AddPolicyHandler(retryPolicy);
 
         services.AddHttpClient<IMusicGenresClient, MusicGenresClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<INotificationsClient, NotificationsClient>()
             .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
             .AddPolicyHandler(retryPolicy);
 
