@@ -44,7 +44,7 @@ jobs:
         working-directory: .\src
         shell: pwsh
         run: |
-          dotnet publish Jellyfin.Avalonia -c Release -r win-x64 --output artifacts
+          dotnet publish Jellyfin.Avalonia -c Release -r win-x64 --output artifacts\Jellyfin.Avalonia
 
      
       - uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
