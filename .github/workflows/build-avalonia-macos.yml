@@ -20,7 +20,7 @@ env:
   POWERSHELL_TELEMETRY_OPTOUT: true
 
 jobs:
-  maui-windows:
+  avalonia-macos:
     runs-on: macos-13   
     steps:
       - uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
@@ -47,7 +47,7 @@ jobs:
         working-directory: ./src
         shell: pwsh
         run: |
-          dotnet publish Jellyfin.Avalonia -c Release -r osx-x64 --output artifacts/Jellyfin.Avalonia
+          dotnet publish Jellyfin.Avalonia -c Release -r osx-x64 --self-contained --output artifacts/Jellyfin.Avalonia
 
      
       - uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
