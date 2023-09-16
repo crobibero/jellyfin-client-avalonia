@@ -49,7 +49,7 @@ jobs:
           dotnet publish Jellyfin.Maui -f net7.0-maccatalyst -c Release -p:BuildIpa=True -o ./artifacts
 
       - name: Upload MacCatalyst build artifacts
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
         with:
           name: maccatalyst-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
           path: ./src/artifacts/**/*.pkg
