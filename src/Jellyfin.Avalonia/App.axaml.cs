@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Jellyfin.Avalonia.Services;
+using Jellyfin.Avalonia.Views;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Jellyfin.Avalonia;
@@ -37,8 +37,6 @@ public class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
-
-        DataTemplates.Add(ServiceProvider.GetRequiredService<ViewLocator>());
     }
 
     /// <inheritdoc />
@@ -50,7 +48,7 @@ public class App : Application
                 desktop.MainWindow = ServiceProvider.GetRequiredService<MainWindow>();
                 break;
             case ISingleViewApplicationLifetime singeView:
-                singeView.MainView = ServiceProvider.GetRequiredService<MainWindow>();
+                singeView.MainView = ServiceProvider.GetRequiredService<MainView>();
                 break;
             default:
                 throw new NotImplementedException();

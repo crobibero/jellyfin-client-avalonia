@@ -1,11 +1,10 @@
 ﻿<Window x:Class="Jellyfin.Avalonia.MainWindow"
         xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:viewModels="clr-namespace:Jellyfin.Avalonia.ViewModels"
+        xmlns:views="clr-namespace:Jellyfin.Avalonia.Views"
         Title="Jellyfin"
-        x:DataType="viewModels:MainWindowViewModel"
         Icon="/Resources/Assets/logo.png">
 
-    <TransitioningContentControl Content="{Binding CurrentPage}" />
+    <views:MainView />
 
 </Window>

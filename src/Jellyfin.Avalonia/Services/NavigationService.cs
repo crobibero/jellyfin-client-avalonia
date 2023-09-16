@@ -1,9 +1,7 @@
-using Jellyfin.Avalonia.ViewModels;
+using AsyncAwaitBestPractices;
+using AvaloniaInside.Shell;
 using Jellyfin.Mvvm.Services;
-using Jellyfin.Mvvm.ViewModels;
-using Jellyfin.Mvvm.ViewModels.Login;
 using Jellyfin.Sdk;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Jellyfin.Avalonia.Services;
 
@@ -12,89 +10,41 @@ namespace Jellyfin.Avalonia.Services;
 /// </summary>
 public class NavigationService : INavigationService
 {
-    private readonly IServiceProvider _serviceProvider;
-    private MainWindowViewModel _mainWindowViewModel = null!;
-    private ContentNavigationViewModel? _contentNavigationViewModel;
+    private readonly INavigator _navigator;
+    private readonly IApplicationService _applicationService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NavigationService"/> class.
     /// </summary>
-    /// <param name="serviceProvider">Instance of the <see cref="IServiceProvider"/> interface.</param>
-    public NavigationService(IServiceProvider serviceProvider)
+    /// <param name="navigator">Instance of the <see cref="INavigator"/> interface.</param>
+    /// <param name="applicationService">Instance of the <see cref="IApplicationService"/> interface.</param>
+    public NavigationService(INavigator navigator, IApplicationService applicationService)
     {
-        _serviceProvider = serviceProvider;
+        _navigator = navigator;
+        _applicationService = applicationService;
     }
-
-    /// <summary>
-    /// Initialize the navigation service.
-    /// </summary>
-    /// <param name="mainWindowViewModel">The main window view model.</param>
-    public void Initialize(MainWindowViewModel mainWindowViewModel)
-        => _mainWindowViewModel = mainWindowViewModel;
 
     /// <inheritdoc />
     public void NavigateToServerSelectPage()
-    {
-        if (_mainWindowViewModel.CurrentPage is not ServerSelectViewModel)
-        {
-            _mainWindowViewModel.CurrentPage = _serviceProvider.GetRequiredService<ServerSelectViewModel>();
-        }
-    }
+        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/login-server").SafeFireAndForget()).SafeFireAndForget();
 
     /// <inheritdoc />
     public void NavigateToAddServerPage()
-    {
-        if (_mainWindowViewModel.CurrentPage is not AddServerViewModel)
-        {
-            _mainWindowViewModel.CurrentPage = _serviceProvider.GetRequiredService<AddServerViewModel>();
-        }
-    }
+        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/login-server-add").SafeFireAndForget()).SafeFireAndForget();
 
     /// <inheritdoc />
     public void NavigateToUserSelectPage()
-    {
-        if (_mainWindowViewModel.CurrentPage is not SelectUserViewModel)
-        {
-            _mainWindowViewModel.CurrentPage = _serviceProvider.GetRequiredService<SelectUserViewModel>();
-        }
-    }
+        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/login-user").SafeFireAndForget()).SafeFireAndForget();
 
     /// <inheritdoc />
     public void NavigateToLoginPage()
-    {
-        if (_mainWindowViewModel.CurrentPage is not LoginViewModel)
-        {
-            _mainWindowViewModel.CurrentPage = _serviceProvider.GetRequiredService<LoginViewModel>();
-        }
-    }
+        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/login-user-add").SafeFireAndForget()).SafeFireAndForget();
 
     /// <inheritdoc />
     public void NavigateHome()
-    {
-        if (_mainWindowViewModel.CurrentPage is not ContentNavigationViewModel
-            || _contentNavigationViewModel is null)
-        {
-            _contentNavigationViewModel ??= _serviceProvider.GetRequiredService<ContentNavigationViewModel>();
-            _mainWindowViewModel.CurrentPage = _contentNavigationViewModel;
-        }
-
-        _contentNavigationViewModel.CurrentPage = _serviceProvider.GetRequiredService<HomeViewModel>();
-    }
+        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/main").SafeFireAndForget()).SafeFireAndForget();
 
     /// <inheritdoc />
     public void NavigateToItemView(BaseItemDto item)
-    {
-        if (_mainWindowViewModel.CurrentPage is not ContentNavigationViewModel
-            || _contentNavigationViewModel is null)
-        {
-            NavigateHome();
-            return;
-        }
-
-        ArgumentNullException.ThrowIfNull(item);
-
-        var itemViewModel = _serviceProvider.GetRequiredService<ItemViewModel>();
-        itemViewModel.Initialize(item.Id);
-        _contentNavigationViewModel.CurrentPage = itemViewModel;
-    }
+        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/item", item.Id).SafeFireAndForget()).SafeFireAndForget();
 }

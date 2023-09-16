@@ -1,41 +1,62 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
+using Avalonia.Interactivity;
+using AvaloniaInside.Shell;
 using Jellyfin.Mvvm.ViewModels.Facades;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Jellyfin.Avalonia.Views.Facades;
 
 /// <summary>
 /// The base user control.
 /// </summary>
-/// <typeparam name="TViewModel">The type of view model.</typeparam>
-public class BaseUserView<TViewModel> : UserControl
-    where TViewModel : BaseViewModel
+public class BaseUserView : UserControl, INavigationLifecycle
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="BaseUserView{TViewModel}"/> class.
+    /// Initializes a new instance of the <see cref="BaseUserView"/> class.
     /// </summary>
-    protected BaseUserView()
+    /// <param name="viewModel">Instance of the <see cref="BaseViewModel"/>.</param>
+    protected BaseUserView(BaseViewModel viewModel)
     {
-        DataContext = ViewModel = ServiceProvider.GetRequiredService<TViewModel>();
+        BaseViewModel = viewModel;
     }
 
     /// <summary>
-    /// Gets the view model.
+    /// Gets the base view model.
     /// </summary>
-    public TViewModel ViewModel { get; }
+    public BaseViewModel BaseViewModel { get; }
 
     /// <summary>
     /// Gets the service provider.
     /// </summary>
-    protected IServiceProvider ServiceProvider => App.Current.ServiceProvider;
+    protected static IServiceProvider ServiceProvider => App.Current.ServiceProvider;
 
     /// <inheritdoc />
-    public override async void EndInit()
+    protected override async void OnLoaded(RoutedEventArgs e)
     {
-        ViewModel.Loading = true;
-        await ViewModel.InitializeAsync().ConfigureAwait(true);
-        ViewModel.Loading = false;
-
-        base.EndInit();
+        BaseViewModel.Loading = true;
+        await BaseViewModel.InitializeAsync().ConfigureAwait(true);
+        BaseViewModel.Loading = false;
+        base.OnLoaded(e);
     }
+
+    /* TODO inherit from Page when Shell library updates */
+
+    /// <inheritdoc />
+    public virtual Task InitialiseAsync(CancellationToken cancellationToken)
+        => Task.CompletedTask;
+
+    /// <inheritdoc />
+    public virtual Task AppearAsync(CancellationToken cancellationToken)
+        => Task.CompletedTask;
+
+    /// <inheritdoc />
+    public virtual Task DisappearAsync(CancellationToken cancellationToken)
+        => Task.CompletedTask;
+
+    /// <inheritdoc />
+    public virtual Task ArgumentAsync(object args, CancellationToken cancellationToken)
+        => Task.CompletedTask;
+
+    /// <inheritdoc />
+    public virtual Task TerminateAsync(CancellationToken cancellationToken)
+        => Task.CompletedTask;
 }

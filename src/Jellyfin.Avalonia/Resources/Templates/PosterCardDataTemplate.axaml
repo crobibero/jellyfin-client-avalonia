@@ -3,20 +3,19 @@
                     xmlns:sdk="clr-namespace:Jellyfin.Sdk;assembly=Jellyfin.Sdk"
                     xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
                     xmlns:markupExtensions="clr-namespace:Jellyfin.Avalonia.MarkupExtensions"
-                    xmlns:views="clr-namespace:Jellyfin.Avalonia.Views">
+                    xmlns:facades="clr-namespace:Jellyfin.Avalonia.Views.Facades">
     <DataTemplate x:Key="PosterCardDataTemplate"
                   x:DataType="sdk:BaseItemDto">
         <Border x:Name="PosterCardTemplate">
             <Interaction.Behaviors>
-                <!-- TODO
                 <EventTriggerBehavior EventName="Tapped"
                                       SourceObject="{Binding #PosterCardTemplate}">
-                    <InvokeCommandAction Command="{Binding $parent[views:HomeView].ViewModel.NavigateToItemCommand}"
+                    <InvokeCommandAction Command="{Binding $parent[facades:BaseUserView].BaseViewModel.NavigateToItemCommand}"
                                          CommandParameter="{Binding .}" />
                 </EventTriggerBehavior>
-                -->
             </Interaction.Behaviors>
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical"
+                        Classes="poster-card">
                 <Image asyncImageLoader:ImageLoader.Source="{Binding .,
                     Converter={StaticResource PrimaryImageSourceConverter},
                     ConverterParameter={markupExtensions:Int32 300}}" />

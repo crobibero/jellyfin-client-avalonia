@@ -4,11 +4,14 @@
              xmlns:dataTemplateSelectors="clr-namespace:Jellyfin.Avalonia.DataTemplateSelectors"
              xmlns:converters="clr-namespace:Jellyfin.Avalonia.Converters"
              xmlns:sdk="clr-namespace:Jellyfin.Sdk;assembly=Jellyfin.Sdk"
-             xmlns:markupExtensions="clr-namespace:Jellyfin.Avalonia.MarkupExtensions">
+             xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             RequestedThemeVariant="Dark">
     <Application.Styles>
-        <!--<styling:FluentAvaloniaTheme PreferUserAccentColor="True" PreferSystemTheme="True" />-->
-        <SimpleTheme />
+        <themes:MaterialTheme BaseTheme="Dark" PrimaryColor="Purple" SecondaryColor="LightBlue" />
+        <StyleInclude Source="avares://AvaloniaInside.Shell/Default.axaml"></StyleInclude>
         <StyleInclude Source="/Resources/Styles/Styles.axaml" />
+        <icons:MaterialIconStyles />
     </Application.Styles>
     <Application.Resources>
         <ResourceDictionary>

@@ -2,6 +2,8 @@
 using System.Net;
 using System.Text;
 using Avalonia;
+using AvaloniaInside.Shell;
+using AvaloniaInside.Shell.Presenters;
 using Jellyfin.Avalonia.Services;
 using Jellyfin.Avalonia.ViewModels;
 using Jellyfin.Avalonia.Views;
@@ -14,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Extensions.Http;
 using Serilog;
+using Splat;
 
 namespace Jellyfin.Avalonia;
 
@@ -63,12 +66,39 @@ public static class Program
         var services = new ServiceCollection();
 
         BuildLogger();
+        services.AddNavigation();
         services.AddSdkClients();
         services.AddServices();
         services.AddViewsAndModels();
         services.AddLogging(c => c.AddSerilog());
 
         return services.BuildServiceProvider();
+    }
+
+    private static void AddNavigation(this IServiceCollection services)
+    {
+        services.AddSingleton<INavigationRegistrar, NavigationRegistrar>();
+        Locator.CurrentMutable.Register(() => App.Current.ServiceProvider.GetRequiredService<INavigationRegistrar>());
+
+        services.AddSingleton<IPresenterProvider, PresenterProvider>();
+        Locator.CurrentMutable.Register(() => App.Current.ServiceProvider.GetRequiredService<IPresenterProvider>());
+
+        services.AddSingleton<INavigationViewLocator, DefaultNavigationViewLocator>();
+        Locator.CurrentMutable.Register(() => App.Current.ServiceProvider.GetRequiredService<INavigationViewLocator>());
+
+        services.AddSingleton<INavigationUpdateStrategy>(provider => new DefaultNavigationUpdateStrategy(provider.GetRequiredService<IPresenterProvider>()));
+        Locator.CurrentMutable.Register(() => App.Current.ServiceProvider.GetRequiredService<INavigationUpdateStrategy>());
+
+        services.AddSingleton<INavigator>(provider =>
+        {
+            var navigationRegistrar = provider.GetRequiredService<INavigationRegistrar>();
+            return new Navigator(
+                navigationRegistrar,
+                new RelativeNavigateStrategy(navigationRegistrar),
+                provider.GetRequiredService<INavigationUpdateStrategy>(),
+                provider.GetRequiredService<INavigationViewLocator>());
+        });
+        Locator.CurrentMutable.Register(() => App.Current.ServiceProvider.GetRequiredService<INavigator>());
     }
 
     private static void AddSdkClients(this IServiceCollection services)
@@ -318,7 +348,6 @@ public static class Program
     private static void AddServices(this IServiceCollection services)
     {
         /* Avalonia Services */
-        services.AddSingleton<ViewLocator>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IApplicationService, ApplicationService>();
         services.AddSingleton<ISettingsService, SettingsService>();
@@ -335,10 +364,9 @@ public static class Program
     private static void AddViewsAndModels(this IServiceCollection services)
     {
         services.AddSingleton<MainWindow>();
-        services.AddSingleton<MainWindowViewModel>();
 
-        services.AddTransient<ContentNavigationView>();
-        services.AddTransient<ContentNavigationViewModel>();
+        services.AddTransient<MainView>();
+        services.AddTransient<MainViewModel>();
 
         services.AddTransient<LoadingView>();
         services.AddTransient<LoadingViewModel>();
@@ -360,6 +388,7 @@ public static class Program
         services.AddTransient<HomeView>();
         services.AddTransient<HomeViewModel>();
 
+        services.AddTransient<ItemView>();
         services.AddTransient<ItemViewModel>();
 
         services.AddTransient<LibraryViewModel>();

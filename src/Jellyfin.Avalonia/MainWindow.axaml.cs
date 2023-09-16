@@ -1,7 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Jellyfin.Avalonia.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Jellyfin.Avalonia;
 
@@ -15,7 +13,6 @@ public partial class MainWindow : Window
     /// </summary>
     public MainWindow()
     {
-        DataContext = App.Current.ServiceProvider.GetRequiredService<MainWindowViewModel>();
         AvaloniaXamlLoader.Load(this);
     }
 }

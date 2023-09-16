@@ -30,7 +30,7 @@ public abstract partial class BaseItemViewModel : BaseViewModel
     /// Initialize the view model's item id.
     /// </summary>
     /// <param name="itemId">The item id.</param>
-    public void Initialize(Guid itemId)
+    public void InitializeItemId(Guid itemId)
     {
         ItemId = itemId;
     }

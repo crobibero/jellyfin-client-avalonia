@@ -1,6 +1,16 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="Jellyfin.Avalonia.Views.LoadingView">
-    Loading View
+             xmlns:viewModels="clr-namespace:Jellyfin.Avalonia.ViewModels"
+             x:Class="Jellyfin.Avalonia.Views.LoadingView"
+             x:DataType="viewModels:LoadingViewModel">
+    <Grid HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
+        <ProgressBar Classes="circular"
+                     IsIndeterminate="True"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"
+                     MaxHeight="100"
+                     MaxWidth="100"/>
+    </Grid>
 </UserControl>
 
