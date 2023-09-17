@@ -2,7 +2,6 @@
 using System.Net;
 using System.Text;
 using Avalonia;
-using Avalonia.ReactiveUI;
 using AvaloniaInside.Shell;
 using AvaloniaInside.Shell.Presenters;
 using Jellyfin.Avalonia.Services;
@@ -16,7 +15,6 @@ using Jellyfin.Sdk;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Extensions.Http;
-using ReactiveUI;
 using Serilog;
 using Splat;
 
@@ -57,8 +55,6 @@ public static class Program
     /// <returns>The app builder.</returns>
     private static AppBuilder BuildAvaloniaApp()
     {
-        // Allow RxApp to use the Avalonia scheduler.
-        RxApp.MainThreadScheduler = AvaloniaScheduler.Instance;
         var serviceProvider = BuildServiceProvider();
         return AppBuilder
             .Configure(() => new App(serviceProvider))

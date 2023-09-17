@@ -1,8 +1,12 @@
+using AsyncImageLoader;
+using AsyncImageLoader.Loaders;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.ReactiveUI;
 using Jellyfin.Avalonia.Views;
 using Microsoft.Extensions.DependencyInjection;
+using ReactiveUI;
 
 namespace Jellyfin.Avalonia;
 
@@ -36,6 +40,12 @@ public class App : Application
     /// </summary>
     public override void Initialize()
     {
+        // Allow RxApp to use the Avalonia scheduler.
+        RxApp.MainThreadScheduler = AvaloniaScheduler.Instance;
+
+        // Have the image loader to use the configured HttpClient.
+        ImageLoader.AsyncImageLoader = new RamCachedWebImageLoader(ServiceProvider.GetRequiredService<HttpClient>(), false);
+
         AvaloniaXamlLoader.Load(this);
     }
 
