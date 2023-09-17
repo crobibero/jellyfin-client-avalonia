@@ -45,6 +45,10 @@ public class NavigationService : INavigationService
         => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/main").SafeFireAndForget()).SafeFireAndForget();
 
     /// <inheritdoc />
+    public void NavigateRoot()
+        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/").SafeFireAndForget()).SafeFireAndForget();
+
+    /// <inheritdoc />
     public void NavigateToItemView(BaseItemDto item)
         => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/item", item.Id).SafeFireAndForget()).SafeFireAndForget();
 }
