@@ -89,6 +89,10 @@ public partial class AddServerViewModel : BaseViewModel
 
             _navigationService.NavigateToServerSelectPage();
         }
+        catch (InvalidOperationException)
+        {
+            // TODO
+        }
         catch (SystemException)
         {
             // TODO

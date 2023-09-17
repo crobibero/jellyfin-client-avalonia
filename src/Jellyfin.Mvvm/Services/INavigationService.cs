@@ -31,6 +31,11 @@ public interface INavigationService
     void NavigateHome();
 
     /// <summary>
+    /// Navigate to the root view.
+    /// </summary>
+    void NavigateRoot();
+
+    /// <summary>
     /// Navigate to the item's view.
     /// </summary>
     /// <param name="item">The item.</param>

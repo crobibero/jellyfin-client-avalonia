@@ -94,7 +94,7 @@ public partial class LoginViewModel : BaseViewModel
                 .ConfigureAwait(false);
             if (status)
             {
-                _navigationService.NavigateHome();
+                _navigationService.NavigateRoot();
                 return;
             }
         }
@@ -150,7 +150,7 @@ public partial class LoginViewModel : BaseViewModel
                         .ConfigureAwait(false);
                 }
 
-                _navigationService.NavigateHome();
+                _navigationService.NavigateRoot();
             }
             else
             {
@@ -209,7 +209,7 @@ public partial class LoginViewModel : BaseViewModel
                             .ConfigureAwait(false);
                     }
 
-                    _navigationService.NavigateHome();
+                    _navigationService.NavigateRoot();
                 }
                 else
                 {

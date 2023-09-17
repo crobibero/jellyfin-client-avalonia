@@ -100,6 +100,13 @@ public class NavigationService : INavigationService
     }
 
     /// <inheritdoc />
+    public void NavigateRoot()
+    {
+        _loginNavigationPage = null;
+        _application.MainPage = InternalServiceProvider.GetService<LoadingPage>();
+    }
+
+    /// <inheritdoc />
     public void NavigateToItemView(BaseItemDto item)
     {
         ArgumentNullException.ThrowIfNull(item);

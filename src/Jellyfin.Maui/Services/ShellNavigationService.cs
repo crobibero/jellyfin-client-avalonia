@@ -98,6 +98,16 @@ public class ShellNavigationService : INavigationService
     }
 
     /// <inheritdoc />
+    public void NavigateRoot()
+    {
+        _application.Dispatcher.Dispatch(() =>
+        {
+            _loginNavigationPage = null;
+            _application.MainPage = InternalServiceProvider.GetService<LoadingPage>();
+        });
+    }
+
+    /// <inheritdoc />
     public void NavigateToItemView(BaseItemDto item)
     {
         ArgumentNullException.ThrowIfNull(item);
