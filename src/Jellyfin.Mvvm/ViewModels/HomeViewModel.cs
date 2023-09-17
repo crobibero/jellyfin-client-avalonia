@@ -37,7 +37,7 @@ public partial class HomeViewModel : BaseViewModel
     }
 
     /// <inheritdoc />
-    public override async ValueTask InitializeAsync()
+    protected override async ValueTask InitializeInternalAsync()
     {
         // TODO partial update
         var now = DateTime.UtcNow;

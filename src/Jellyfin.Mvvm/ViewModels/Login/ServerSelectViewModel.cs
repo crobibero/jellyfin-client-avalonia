@@ -41,7 +41,7 @@ public partial class ServerSelectViewModel : BaseViewModel
     public ObservableRangeCollection<ServerStateModel> Servers { get; } = new();
 
     /// <inheritdoc />
-    public override async ValueTask InitializeAsync()
+    protected override async ValueTask InitializeInternalAsync()
     {
         var state = await _stateStorageService.GetStoredStateAsync().ConfigureAwait(true);
         Servers.ReplaceRange(state.Servers);

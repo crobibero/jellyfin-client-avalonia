@@ -26,12 +26,17 @@ public abstract partial class BaseItemViewModel : BaseViewModel
     /// </summary>
     protected Guid ItemId { get; private set; }
 
+    /// <inheritdoc />
+    protected override bool IsReady => !ItemId.Equals(default);
+
     /// <summary>
     /// Initialize the view model's item id.
     /// </summary>
     /// <param name="itemId">The item id.</param>
-    public void InitializeItemId(Guid itemId)
+    /// <returns>The task.</returns>
+    public async ValueTask InitializeAsync(Guid itemId)
     {
         ItemId = itemId;
+        await InitializeAsync().ConfigureAwait(true);
     }
 }

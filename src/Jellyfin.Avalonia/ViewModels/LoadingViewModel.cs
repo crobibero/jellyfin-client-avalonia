@@ -36,7 +36,7 @@ public class LoadingViewModel : BaseViewModel
     }
 
     /// <inheritdoc />
-    public override async ValueTask InitializeAsync()
+    protected override async ValueTask InitializeInternalAsync()
     {
         await _sdkService.InitializeAsync().ConfigureAwait(true);
         await _stateService.InitializeAsync().ConfigureAwait(true);

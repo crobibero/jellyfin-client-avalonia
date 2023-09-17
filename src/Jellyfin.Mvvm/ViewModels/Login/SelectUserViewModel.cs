@@ -41,7 +41,7 @@ public partial class SelectUserViewModel : BaseViewModel
     public ObservableRangeCollection<UserStateModel> Users { get; } = new();
 
     /// <inheritdoc />
-    public override async ValueTask InitializeAsync()
+    protected override async ValueTask InitializeInternalAsync()
     {
         var state = await _stateStorageService.GetStoredStateAsync().ConfigureAwait(true);
         var serverState = _stateService.GetServerState();

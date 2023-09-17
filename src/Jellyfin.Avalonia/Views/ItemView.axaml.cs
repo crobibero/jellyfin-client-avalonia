@@ -16,13 +16,13 @@ public partial class ItemView : BaseUserView<ItemViewModel>
         => AvaloniaXamlLoader.Load(this);
 
     /// <inheritdoc />
-    public override Task ArgumentAsync(object args, CancellationToken cancellationToken)
+    public override async Task ArgumentAsync(object args, CancellationToken cancellationToken)
     {
         if (args is Guid itemId)
         {
-            ViewModel.InitializeItemId(itemId);
+            await ViewModel.InitializeAsync(itemId).ConfigureAwait(true);
         }
 
-        return base.ArgumentAsync(args, cancellationToken);
+        await base.ArgumentAsync(args, cancellationToken).ConfigureAwait(true);
     }
 }

@@ -67,7 +67,7 @@ public partial class ItemViewModel : BaseItemViewModel
     }
 
     /// <inheritdoc/>
-    public override async ValueTask InitializeAsync()
+    protected override async ValueTask InitializeInternalAsync()
     {
         Item = await _libraryService.GetItemAsync(ItemId)
            .ConfigureAwait(true);

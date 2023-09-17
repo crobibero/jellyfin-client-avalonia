@@ -73,7 +73,7 @@ public partial class LoginViewModel : BaseViewModel
     }
 
     /// <inheritdoc />
-    public override async ValueTask InitializeAsync()
+    protected override async ValueTask InitializeInternalAsync()
     {
         var server = _stateService.GetServerState();
         if (server is null)

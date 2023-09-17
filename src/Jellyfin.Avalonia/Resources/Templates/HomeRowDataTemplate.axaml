@@ -6,7 +6,8 @@
               IsVisible="{Binding Items, Converter={StaticResource IsListNotNullOrEmptyConverter}}">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="{Binding Name, Mode=OneWay}"/>
-                <ScrollViewer>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Disabled">
                     <ItemsRepeater ItemsSource="{Binding Items, Mode=OneWay}"
                                    ItemTemplate="{StaticResource PosterCardTemplate}">
                         <ItemsRepeater.Layout>

@@ -72,7 +72,7 @@ public partial class LibraryViewModel : BaseItemViewModel
     public ObservableRangeCollection<BaseItemDto> LibraryItemsCollection { get; } = new();
 
     /// <inheritdoc />
-    public override ValueTask InitializeAsync() => InitializeItemsAsync();
+    protected override ValueTask InitializeInternalAsync() => InitializeItemsAsync();
 
     private async ValueTask InitializeItemsAsync()
     {

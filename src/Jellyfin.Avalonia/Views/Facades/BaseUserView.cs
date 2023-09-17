@@ -30,9 +30,7 @@ public class BaseUserView : Page
     /// <inheritdoc />
     public override async Task AppearAsync(CancellationToken cancellationToken)
     {
-        BaseViewModel.Loading = true;
         await BaseViewModel.InitializeAsync().ConfigureAwait(true);
-        BaseViewModel.Loading = false;
         await base.AppearAsync(cancellationToken).ConfigureAwait(true);
     }
 }

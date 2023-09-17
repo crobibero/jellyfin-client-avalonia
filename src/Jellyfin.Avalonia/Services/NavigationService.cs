@@ -26,29 +26,36 @@ public class NavigationService : INavigationService
 
     /// <inheritdoc />
     public void NavigateToServerSelectPage()
-        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/login-server").SafeFireAndForget()).SafeFireAndForget();
+        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/login-server")).SafeFireAndForget();
 
     /// <inheritdoc />
     public void NavigateToAddServerPage()
-        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/login-server-add").SafeFireAndForget()).SafeFireAndForget();
+        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/login-server-add")).SafeFireAndForget();
 
     /// <inheritdoc />
     public void NavigateToUserSelectPage()
-        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/login-user").SafeFireAndForget()).SafeFireAndForget();
+        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/login-user")).SafeFireAndForget();
 
     /// <inheritdoc />
     public void NavigateToLoginPage()
-        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/login-user-add").SafeFireAndForget()).SafeFireAndForget();
+        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/login-user-add")).SafeFireAndForget();
 
     /// <inheritdoc />
     public void NavigateHome()
-        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/main").SafeFireAndForget()).SafeFireAndForget();
+        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/main")).SafeFireAndForget();
 
     /// <inheritdoc />
     public void NavigateRoot()
-        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/").SafeFireAndForget()).SafeFireAndForget();
+        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/loading")).SafeFireAndForget();
 
     /// <inheritdoc />
     public void NavigateToItemView(BaseItemDto item)
-        => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/item", item.Id).SafeFireAndForget()).SafeFireAndForget();
+    {
+        string route = item.Type switch
+        {
+            _ => "/item"
+        };
+
+        _applicationService.DispatchAsync(() => _navigator.NavigateAsync(route, item.Id)).SafeFireAndForget();
+    }
 }

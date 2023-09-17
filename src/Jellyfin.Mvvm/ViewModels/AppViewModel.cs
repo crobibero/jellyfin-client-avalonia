@@ -28,7 +28,7 @@ public partial class AppViewModel : BaseViewModel
     }
 
     /// <inheritdoc/>
-    public override ValueTask InitializeAsync()
+    protected override ValueTask InitializeInternalAsync()
     {
         return ValueTask.CompletedTask;
     }

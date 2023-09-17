@@ -19,7 +19,7 @@ public class MainViewModel : BaseViewModel
     }
 
     /// <inheritdoc />
-    public override ValueTask InitializeAsync()
+    protected override ValueTask InitializeInternalAsync()
     {
         return ValueTask.CompletedTask;
     }

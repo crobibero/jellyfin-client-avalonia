@@ -39,7 +39,7 @@ public abstract class BaseContentIdPage<TViewModel> : BaseContentPage<TViewModel
 
             if (Guid.TryParse(value, out var itemId))
             {
-                ViewModel.InitializeItemId(itemId);
+                ViewModel.InitializeAsync(itemId).SafeFireAndForget();
             }
         }
     }
@@ -50,6 +50,6 @@ public abstract class BaseContentIdPage<TViewModel> : BaseContentPage<TViewModel
     /// <param name="itemId">The item id.</param>
     public void Initialize(Guid itemId)
     {
-        ViewModel.InitializeItemId(itemId);
+        ViewModel.InitializeAsync(itemId).SafeFireAndForget();
     }
 }

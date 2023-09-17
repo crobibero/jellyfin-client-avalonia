@@ -32,15 +32,30 @@ public abstract partial class BaseViewModel : ObservableObject
     protected IApplicationService ApplicationService { get; }
 
     /// <summary>
-    /// Gets or sets the selected BaseItemDto.
+    /// Gets a value indicating whether thew view model is ready for initialization.
     /// </summary>
-    public BaseItemDto? SelectedItem { get; set; }
+    protected virtual bool IsReady => true;
 
     /// <summary>
     /// Initialize the view model.
     /// </summary>
     /// <returns>The task.</returns>
-    public abstract ValueTask InitializeAsync();
+    public async ValueTask InitializeAsync()
+    {
+        if (!IsReady)
+        {
+            return;
+        }
+
+        await InitializeInternalAsync().ConfigureAwait(true);
+        Loading = false;
+    }
+
+    /// <summary>
+    /// Internal initialization.
+    /// </summary>
+    /// <returns>The task.</returns>
+    protected abstract ValueTask InitializeInternalAsync();
 
     /// <summary>
     /// Ensure Observable Collection is thread-safe.
