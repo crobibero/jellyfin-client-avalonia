@@ -10,7 +10,7 @@ public interface ISettingsService
     /// </summary>
     /// <returns>Value.</returns>
     /// <param name="key">Key for settings.</param>
-    Task<string> GetAsync(string key);
+    Task<string?> GetAsync(string key);
 
     /// <summary>
     /// Removes a desired key from the settings.

@@ -29,7 +29,7 @@ jobs:
         with:
           dotnet-version: |
             6.0.x
-            7.0.x
+            8.0.x
 
       - name: Generate version number using date and run number
         id: version-creator
@@ -48,7 +48,7 @@ jobs:
       - name: Build
         working-directory: ./src
         run: |
-          dotnet publish Jellyfin.Maui -f net7.0-maccatalyst -c Release -p:BuildIpa=True -o ./artifacts
+          dotnet publish Jellyfin.Maui -f net8.0-maccatalyst -c Release -p:BuildIpa=True -o ./artifacts
 
       - name: Upload MacCatalyst build artifacts
         uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
