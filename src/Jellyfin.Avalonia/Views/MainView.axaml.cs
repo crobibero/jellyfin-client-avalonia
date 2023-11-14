@@ -31,4 +31,3 @@ public partial class MainView : BaseUserView<MainViewModel>
         base.OnLoaded(e);
     }
 }
-

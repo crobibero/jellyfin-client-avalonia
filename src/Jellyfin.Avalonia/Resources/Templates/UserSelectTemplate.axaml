@@ -1,14 +1,18 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:models="clr-namespace:Jellyfin.Mvvm.Models;assembly=Jellyfin.Mvvm"
-                    xmlns:login="clr-namespace:Jellyfin.Avalonia.Views.Login">
+                    xmlns:login="clr-namespace:Jellyfin.Avalonia.Views.Login"
+                    xmlns:models="clr-namespace:Jellyfin.Mvvm.Models;assembly=Jellyfin.Mvvm">
 
-    <DataTemplate x:DataType="models:UserStateModel" x:Key="UserSelectDataTemplate">
-        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" x:Name="UserSelectTemplate">
+    <DataTemplate x:Key="UserSelectDataTemplate"
+                  x:DataType="models:UserStateModel">
+        <Grid x:Name="UserSelectTemplate"
+              ColumnDefinitions="*,Auto"
+              RowDefinitions="Auto,Auto">
             <Interaction.Behaviors>
-                <EventTriggerBehavior EventName="Tapped" SourceObject="{Binding #UserSelectTemplate}">
-                    <InvokeCommandAction Command="{Binding  $parent[login:SelectUserView].ViewModel.SelectUserCommand}"
-                                         CommandParameter="{Binding .}"/>
+                <EventTriggerBehavior EventName="Tapped"
+                                      SourceObject="{Binding #UserSelectTemplate}">
+                    <InvokeCommandAction Command="{Binding $parent[login:SelectUserView].ViewModel.SelectUserCommand}"
+                                         CommandParameter="{Binding .}" />
                 </EventTriggerBehavior>
             </Interaction.Behaviors>
 
@@ -18,10 +22,10 @@
             <Button Grid.Row="0"
                     Grid.RowSpan="2"
                     Grid.Column="1"
+                    VerticalAlignment="Top"
                     Background="Transparent"
                     Command="{Binding $parent[login:SelectUserView].ViewModel.DeleteUserCommand}"
-                    CommandParameter="{Binding .}"
-                    VerticalAlignment="Top">
+                    CommandParameter="{Binding .}">
                 DELETE todo icon
             </Button>
         </Grid>

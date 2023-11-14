@@ -1,31 +1,32 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Jellyfin.Avalonia.Views.Login.LoginView"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
-             xmlns:login="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             x:Class="Jellyfin.Avalonia.Views.Login.LoginView"
+             xmlns:login="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
+             xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
              x:DataType="login:LoginViewModel">
 
     <ScrollViewer>
         <StackPanel Orientation="Vertical">
             <TextBlock Text="{Binding ServerName}" />
 
-            <!-- Username entry -->
+            <!--  Username entry  -->
             <Grid ColumnDefinitions="Auto,*"
                   RowDefinitions="Auto,*">
                 <TextBlock Grid.Row="0"
+                           Grid.Column="0"
                            Grid.ColumnSpan="2"
                            Text="{x:Static strings:Strings.Login_Username}" />
                 <icons:MaterialIcon Grid.Row="1"
                                     Grid.Column="0"
-                                    Kind="User"
-                                    VerticalAlignment="Center" />
+                                    VerticalAlignment="Center"
+                                    Kind="User" />
                 <TextBox Grid.Row="1"
                          Grid.Column="1"
                          Text="{Binding Username}" />
             </Grid>
 
-            <!-- Password entry -->
+            <!--  Password entry  -->
             <Grid ColumnDefinitions="Auto,*"
                   RowDefinitions="Auto,*">
                 <TextBlock Grid.Row="0"
@@ -33,25 +34,25 @@
                            Text="{x:Static strings:Strings.Login_Password}" />
                 <icons:MaterialIcon Grid.Row="1"
                                     Grid.Column="0"
-                                    Kind="Password"
-                                    VerticalAlignment="Center" />
+                                    VerticalAlignment="Center"
+                                    Kind="Password" />
                 <TextBox Grid.Row="1"
                          Grid.Column="1"
-                         Text="{Binding Password}"
-                         PasswordChar="*"/>
+                         PasswordChar="*"
+                         Text="{Binding Password}" />
             </Grid>
 
             <CheckBox Content="{x:Static strings:Strings.Login_RememberMe}" />
             <Button Command="{Binding LoginCommand}"
-                    Content="{x:Static strings:Strings.Login_LoginButton}"/>
+                    Content="{x:Static strings:Strings.Login_LoginButton}" />
 
-            <StackPanel Orientation="Vertical"
-                        IsVisible="{Binding QuickConnectAvailable}">
-                <Button Content="{x:Static strings:Strings.Login_QuickConnectButton}"
-                        Command="{Binding LoginWithQuickConnectCommand}" />
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            IsVisible="{Binding QuickConnectCode, Converter={x:Static StringConverters.IsNotNullOrEmpty}, Mode=OneWay}">
+            <StackPanel IsVisible="{Binding QuickConnectAvailable}"
+                        Orientation="Vertical">
+                <Button Command="{Binding LoginWithQuickConnectCommand}"
+                        Content="{x:Static strings:Strings.Login_QuickConnectButton}" />
+                <StackPanel HorizontalAlignment="Center"
+                            IsVisible="{Binding QuickConnectCode, Converter={x:Static StringConverters.IsNotNullOrEmpty}, Mode=OneWay}"
+                            Orientation="Horizontal">
                     <TextBlock Text="{x:Static strings:Strings.Login_QuickConnectCode}" />
                     <TextBlock Text="{Binding QuickConnectCode, Mode=OneWay}" />
                 </StackPanel>
