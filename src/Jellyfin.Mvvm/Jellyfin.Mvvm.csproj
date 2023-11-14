@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.6" />
+    <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="7.0.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="Jellyfin.Sdk" Version="2023.6.10-unstable.202306100047" />
     <PackageReference Include="M.BindableProperty.Generator" Version="0.11.1" />
