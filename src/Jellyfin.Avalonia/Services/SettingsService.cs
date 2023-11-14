@@ -10,12 +10,12 @@ public class SettingsService : ISettingsService
     private readonly string _basePath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "jellyfin.avalonia", "settings");
 
     /// <inheritdoc />
-    public async Task<string> GetAsync(string key)
+    public async Task<string?> GetAsync(string key)
     {
         var filePath = GetFilePath(key);
         if (!File.Exists(filePath))
         {
-            return string.Empty;
+            return null;
         }
 
         return await File.ReadAllTextAsync(filePath).ConfigureAwait(false);

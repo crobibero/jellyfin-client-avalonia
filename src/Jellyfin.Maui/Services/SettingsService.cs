@@ -14,7 +14,7 @@ public class SettingsService : ISettingsService
     public SettingsService(ISecureStorage secureStorage) => _secureStorage = secureStorage;
 
     /// <inheritdoc/>
-    public Task<string> GetAsync(string key) => _secureStorage.GetAsync(key);
+    public Task<string?> GetAsync(string key) => _secureStorage.GetAsync(key);
 
     /// <inheritdoc/>
     public void Remove(string key) => _secureStorage.Remove(key);
