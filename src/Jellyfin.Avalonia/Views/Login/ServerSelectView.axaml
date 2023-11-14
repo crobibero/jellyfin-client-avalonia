@@ -1,8 +1,8 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Jellyfin.Avalonia.Views.Login.ServerSelectView"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
              xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
-             x:Class="Jellyfin.Avalonia.Views.Login.ServerSelectView"
+             xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
              x:DataType="vm:ServerSelectViewModel">
     <Grid ColumnDefinitions="*,*"
           RowDefinitions="Auto,*">
@@ -20,9 +20,8 @@
         <ScrollViewer Grid.Row="1"
                       Grid.Column="0"
                       Grid.ColumnSpan="2">
-            <ItemsRepeater ItemsSource="{Binding Servers, Mode=OneWay}"
-                           ItemTemplate="{StaticResource ServerSelectTemplate}">
-            </ItemsRepeater>
+            <ItemsRepeater ItemTemplate="{StaticResource ServerSelectTemplate}"
+                           ItemsSource="{Binding Servers, Mode=OneWay}" />
         </ScrollViewer>
     </Grid>
 </UserControl>

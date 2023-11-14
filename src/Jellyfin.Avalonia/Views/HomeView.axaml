@@ -1,11 +1,11 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Jellyfin.Avalonia.Views.HomeView"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModels="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
-             x:Class="Jellyfin.Avalonia.Views.HomeView"
              x:DataType="viewModels:HomeViewModel">
     <ScrollViewer>
-        <ItemsRepeater ItemsSource="{Binding HomeRowCollection, Mode=OneWay}"
-                       ItemTemplate="{StaticResource HomeRowTemplateSelector}"/>
+        <ItemsRepeater ItemTemplate="{StaticResource HomeRowTemplateSelector}"
+                       ItemsSource="{Binding HomeRowCollection, Mode=OneWay}" />
     </ScrollViewer>
 </UserControl>
 

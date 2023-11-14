@@ -1,27 +1,31 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl x:Class="Jellyfin.Avalonia.Views.MainView"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:views="clr-namespace:Jellyfin.Avalonia.Views"
              xmlns:login="clr-namespace:Jellyfin.Avalonia.Views.Login"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Jellyfin.Avalonia.Views.MainView">
+             xmlns:views="clr-namespace:Jellyfin.Avalonia.Views">
     <ShellView HorizontalAlignment="Stretch"
                VerticalAlignment="Stretch"
                DefaultRoute="/loading">
 
-        <!-- Loading -->
-        <Route Path="loading" Page="views:LoadingView" />
+        <!--  Loading  -->
+        <Route Page="views:LoadingView"
+               Path="loading" />
 
-        <!-- Login -->
-        <Route Path="login-server-add" Page="login:AddServerView" />
-        <Route Path="login-user-add" Page="login:LoginView" />
-        <Route Path="login-user" Page="login:SelectUserView" />
-        <Route Path="login-server" Page="login:ServerSelectView" />
+        <!--  Login  -->
+        <Route Page="login:AddServerView"
+               Path="login-server-add" />
+        <Route Page="login:LoginView"
+               Path="login-user-add" />
+        <Route Page="login:SelectUserView"
+               Path="login-user" />
+        <Route Page="login:ServerSelectView"
+               Path="login-server" />
 
-        <!-- Main content -->
-        <Route Path="main" Page="views:HomeView" />
-        <Route Path="item" Page="views:ItemView" />
+        <!--  Main content  -->
+        <Route Page="views:HomeView"
+               Path="main" />
+        <Route Page="views:ItemView"
+               Path="item" />
     </ShellView>
 </UserControl>
 

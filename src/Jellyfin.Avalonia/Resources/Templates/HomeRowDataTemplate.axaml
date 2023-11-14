@@ -1,15 +1,16 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:models="clr-namespace:Jellyfin.Mvvm.Models;assembly=Jellyfin.Mvvm">
-    <DataTemplate x:DataType="models:HomeRowModel" x:Key="HomeRowDataTemplate">
+    <DataTemplate x:Key="HomeRowDataTemplate"
+                  x:DataType="models:HomeRowModel">
         <Grid x:Name="HomeRowTemplate"
               IsVisible="{Binding Items, Converter={StaticResource IsListNotNullOrEmptyConverter}}">
             <StackPanel Orientation="Vertical">
-                <TextBlock Text="{Binding Name, Mode=OneWay}"/>
+                <TextBlock Text="{Binding Name, Mode=OneWay}" />
                 <ScrollViewer HorizontalScrollBarVisibility="Auto"
                               VerticalScrollBarVisibility="Disabled">
-                    <ItemsRepeater ItemsSource="{Binding Items, Mode=OneWay}"
-                                   ItemTemplate="{StaticResource PosterCardTemplate}">
+                    <ItemsRepeater ItemTemplate="{StaticResource PosterCardTemplate}"
+                                   ItemsSource="{Binding Items, Mode=OneWay}">
                         <ItemsRepeater.Layout>
                             <StackLayout Orientation="Horizontal" />
                         </ItemsRepeater.Layout>

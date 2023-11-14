@@ -1,9 +1,9 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Jellyfin.Avalonia.Views.Login.AddServerView"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:login="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
              xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
-             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             x:Class="Jellyfin.Avalonia.Views.Login.AddServerView"
              x:DataType="login:AddServerViewModel">
 
     <ScrollViewer>
@@ -11,19 +11,20 @@
             <Grid ColumnDefinitions="Auto,*"
                   RowDefinitions="Auto,*">
                 <TextBlock Grid.Row="0"
+                           Grid.Column="0"
                            Grid.ColumnSpan="2"
                            Text="{x:Static strings:Strings.Login_ServerUrl}" />
                 <icons:MaterialIcon Grid.Row="1"
                                     Grid.Column="0"
-                                    Kind="Link"
-                                    VerticalAlignment="Center" />
+                                    VerticalAlignment="Center"
+                                    Kind="Link" />
                 <TextBox Grid.Row="1"
                          Grid.Column="1"
                          Text="{Binding ServerUrl}" />
             </Grid>
 
-            <Button Content="{x:Static strings:Strings.Add}"
-                    Command="{Binding AddServerCommand}" />
+            <Button Command="{Binding AddServerCommand}"
+                    Content="{x:Static strings:Strings.Add}" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>
