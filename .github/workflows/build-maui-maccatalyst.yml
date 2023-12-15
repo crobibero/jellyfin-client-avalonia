@@ -51,7 +51,7 @@ jobs:
           dotnet publish Jellyfin.Maui -f net8.0-maccatalyst -c Release -p:BuildIpa=True -o ./artifacts
 
       - name: Upload MacCatalyst build artifacts
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3
+        uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4
         with:
           name: maccatalyst-maui-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
           path: ${{ github.workspace}}/src/artifacts/**/*.pkg
