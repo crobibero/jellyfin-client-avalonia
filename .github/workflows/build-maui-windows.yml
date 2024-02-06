@@ -64,7 +64,7 @@ jobs:
           Set-Content $pfx -Value $buffer -AsByteStream;
           &'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\SignTool' sign /a /fd SHA256 /f $pfx /p $password /td SHA256 /tr http://timestamp.digicert.com '.\src\artifacts\Jellyfin.Maui*.msix'
 
-      - uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4
+      - uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4
         with:
           name: windows-maui-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
           path: ${{ github.workspace}}\src\artifacts\Jellyfin.Maui*.msix
