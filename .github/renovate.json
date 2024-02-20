@@ -30,7 +30,7 @@
       "description": "Avalonia",
       "groupName": "Avalonia",
       "matchPackagePrefixes": [
-        "Avalonia."
+        "Avalonia"
       ]
     }
   ]
