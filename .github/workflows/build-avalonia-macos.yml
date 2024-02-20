@@ -50,7 +50,7 @@ jobs:
           dotnet publish Jellyfin.Avalonia -c Release -r osx-x64 --self-contained --output artifacts/Jellyfin.Avalonia
 
      
-      - uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4
+      - uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4
         with:
           name: macos-avalonia-v${{ steps.version-creator.outputs.APP_VERSION }}-artifacts
           path: ${{ github.workspace}}/src/artifacts            
