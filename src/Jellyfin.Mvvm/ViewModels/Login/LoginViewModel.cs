@@ -142,10 +142,10 @@ public partial class LoginViewModel : BaseViewModel
                     var user = _stateService.GetCurrentUser();
                     await _stateStorageService.AddUserAsync(new UserStateModel
                         {
-                            Id = user.Id,
+                            Id = user.Id!.Value,
                             ServerId = ServerId,
-                            Name = user.Name,
-                            Token = _stateService.GetToken()
+                            Name = user.Name!,
+                            Token = _stateService.GetToken()!
                         })
                         .ConfigureAwait(false);
                 }
@@ -201,10 +201,10 @@ public partial class LoginViewModel : BaseViewModel
                         var user = _stateService.GetCurrentUser();
                         await _stateStorageService.AddUserAsync(new UserStateModel
                             {
-                                Id = user.Id,
+                                Id = user.Id!.Value,
                                 ServerId = ServerId,
-                                Name = user.Name,
-                                Token = _stateService.GetToken()
+                                Name = user.Name!,
+                                Token = _stateService.GetToken()!
                             })
                             .ConfigureAwait(false);
                     }

@@ -1,5 +1,6 @@
 using Jellyfin.Mvvm.Models;
 
+
 namespace Jellyfin.Mvvm.Services;
 
 /// <summary>
@@ -72,7 +73,7 @@ public interface IStateService
     /// Gets the current token.
     /// </summary>
     /// <returns>The current token.</returns>
-    string GetToken();
+    string? GetToken();
 
     /// <summary>
     /// Clears the current state.

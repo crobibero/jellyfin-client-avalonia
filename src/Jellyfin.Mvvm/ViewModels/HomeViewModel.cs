@@ -4,6 +4,7 @@ using Jellyfin.Mvvm.Models;
 using Jellyfin.Mvvm.Services;
 using Jellyfin.Mvvm.ViewModels.Facades;
 
+
 namespace Jellyfin.Mvvm.ViewModels;
 
 /// <summary>
@@ -56,25 +57,40 @@ public partial class HomeViewModel : BaseViewModel
         var libraryViews = new List<Guid>();
         var excludedViews = new List<Guid>();
         var libraries = await _libraryService.GetLibrariesAsync().ConfigureAwait(false);
-        foreach (var view in userConfig.LatestItemsExcludes)
+        if (userConfig?.LatestItemsExcludes is not null)
         {
-            excludedViews.Add(view);
+            foreach (var view in userConfig.LatestItemsExcludes)
+            {
+                if (view is not null)
+                {
+                    excludedViews.Add(view.Value);
+                }
+            }
         }
 
-        foreach (var view in userConfig.OrderedViews)
+        if (userConfig?.OrderedViews is not null)
         {
-            if (!excludedViews.Contains(view))
+            foreach (var view in userConfig.OrderedViews)
             {
-                libraryViews.Add(view);
+                if (view is not null)
+                {
+                    if (!excludedViews.Contains(view.Value))
+                    {
+                        libraryViews.Add(view.Value);
+                    }
+                }
             }
         }
 
         var homeRows = new List<HomeRowModel>();
-        foreach (var homeSection in displayPreferences.HomeSections)
+
+        if (displayPreferences is not null)
         {
-            switch (homeSection)
+            foreach (var homeSection in displayPreferences.HomeSections)
             {
-                case DisplayPreferencesModel.HomeSection.LibraryTiles:
+                switch (homeSection)
+                {
+                    case DisplayPreferencesModel.HomeSection.LibraryTiles:
                     {
                         var row = new HomeRowModel("Libraries");
                         row.Items = libraries;
@@ -82,7 +98,7 @@ public partial class HomeViewModel : BaseViewModel
                         break;
                     }
 
-                case DisplayPreferencesModel.HomeSection.Resume:
+                    case DisplayPreferencesModel.HomeSection.Resume:
                     {
                         var row = new HomeRowModel("Continue Watching");
                         homeRows.Add(row);
@@ -90,7 +106,7 @@ public partial class HomeViewModel : BaseViewModel
                         break;
                     }
 
-                case DisplayPreferencesModel.HomeSection.NextUp:
+                    case DisplayPreferencesModel.HomeSection.NextUp:
                     {
                         var row = new HomeRowModel("Next Up");
                         homeRows.Add(row);
@@ -98,7 +114,7 @@ public partial class HomeViewModel : BaseViewModel
                         break;
                     }
 
-                case DisplayPreferencesModel.HomeSection.LatestMedia:
+                    case DisplayPreferencesModel.HomeSection.LatestMedia:
                     {
                         foreach (var view in libraryViews)
                         {
@@ -116,9 +132,10 @@ public partial class HomeViewModel : BaseViewModel
                         break;
                     }
 
-                case DisplayPreferencesModel.HomeSection.None:
-                default:
-                    break;
+                    case DisplayPreferencesModel.HomeSection.None:
+                    default:
+                        break;
+                }
             }
         }
 

@@ -4,8 +4,8 @@
              xmlns:converters="clr-namespace:Jellyfin.Avalonia.Converters"
              xmlns:dataTemplateSelectors="clr-namespace:Jellyfin.Avalonia.DataTemplateSelectors"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:sdk="clr-namespace:Jellyfin.Sdk;assembly=Jellyfin.Sdk"
              xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
+             xmlns:sdk="clr-namespace:Jellyfin.Sdk.Generated.Models;assembly=Jellyfin.Sdk"
              RequestedThemeVariant="Dark">
     <Application.Styles>
         <themes:MaterialTheme BaseTheme="Dark"

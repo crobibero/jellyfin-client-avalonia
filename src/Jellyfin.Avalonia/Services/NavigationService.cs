@@ -1,7 +1,7 @@
 using AsyncAwaitBestPractices;
 using AvaloniaInside.Shell;
 using Jellyfin.Mvvm.Services;
-using Jellyfin.Sdk;
+using Jellyfin.Sdk.Generated.Models;
 
 namespace Jellyfin.Avalonia.Services;
 
@@ -49,8 +49,13 @@ public class NavigationService : INavigationService
         => _applicationService.DispatchAsync(() => _navigator.NavigateAsync("/loading")).SafeFireAndForget();
 
     /// <inheritdoc />
-    public void NavigateToItemView(BaseItemDto item)
+    public void NavigateToItemView(BaseItemDto? item)
     {
+        if (item is null)
+        {
+            return;
+        }
+
         string route = item.Type switch
         {
             _ => "/item"

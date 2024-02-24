@@ -1,4 +1,4 @@
-using Jellyfin.Sdk;
+using Jellyfin.Sdk.Generated.Models;
 
 namespace Jellyfin.Avalonia.Converters;
 

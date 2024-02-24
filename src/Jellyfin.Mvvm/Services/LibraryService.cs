@@ -1,91 +1,77 @@
 using Jellyfin.Mvvm.Models;
 
+
 namespace Jellyfin.Mvvm.Services;
 
 /// <inheritdoc />
 public class LibraryService : ILibraryService
 {
-    private readonly IItemsClient _itemsClient;
-    private readonly ITvShowsClient _tvShowsClient;
-    private readonly IUserLibraryClient _userLibraryClient;
-    private readonly IUserViewsClient _userViewsClient;
-    private readonly IDisplayPreferencesClient _displayPreferencesClient;
+    private readonly JellyfinApiClient _jellyfinApiClient;
 
     private readonly Guid _userId;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LibraryService"/> class.
     /// </summary>
-    /// <param name="itemsClient">Instance of the <see cref="IItemsClient"/> interface.</param>
     /// <param name="stateService">Instance of the <see cref="IStateService"/> interface.</param>
-    /// <param name="tvShowsClient">Instance of the <see cref="ITvShowsClient"/> interface.</param>
-    /// <param name="userLibraryClient">Instance of the <see cref="IUserLibraryClient"/> interface.</param>
-    /// <param name="userViewsClient">Instance of the <see cref="IUserViewsClient"/> interface.</param>
-    /// <param name="displayPreferencesClient">Instance of the <see cref="IDisplayPreferencesClient"/> interface.</param>
+    /// <param name="jellyfinApiClient">The Jellyfin api client.</param>
     public LibraryService(
-        IItemsClient itemsClient,
         IStateService stateService,
-        ITvShowsClient tvShowsClient,
-        IUserLibraryClient userLibraryClient,
-        IUserViewsClient userViewsClient,
-        IDisplayPreferencesClient displayPreferencesClient)
+        JellyfinApiClient jellyfinApiClient)
     {
-        _itemsClient = itemsClient;
-        _tvShowsClient = tvShowsClient;
-        _userLibraryClient = userLibraryClient;
-        _userViewsClient = userViewsClient;
-        _displayPreferencesClient = displayPreferencesClient;
-
-        _userId = stateService.GetCurrentUser().Id;
+        _jellyfinApiClient = jellyfinApiClient;
+        _userId = stateService.GetCurrentUser().Id ?? throw new InvalidOperationException();
     }
 
     /// <inheritdoc />
     public async ValueTask<IReadOnlyList<BaseItemDto>> GetLibrariesAsync(CancellationToken cancellationToken)
     {
-        var views = await _userViewsClient.GetUserViewsAsync(_userId, cancellationToken: cancellationToken)
+        var views = await _jellyfinApiClient.Users[_userId].Views.GetAsync(cancellationToken: cancellationToken)
             .ConfigureAwait(false);
-        return views is null ? Array.Empty<BaseItemDto>() : views.Items;
+        return views?.Items is null ? Array.Empty<BaseItemDto>() : views.Items;
     }
 
     /// <inheritdoc />
     public async ValueTask<BaseItemDto?> GetLibraryAsync(Guid id, CancellationToken cancellationToken)
     {
-        var result = await _itemsClient.GetItemsAsync(
-                userId: _userId,
-                ids: new[] { id },
-                cancellationToken: cancellationToken)
+        var result = await _jellyfinApiClient.Users[_userId].Items.GetAsync(
+            c => c.QueryParameters.Ids = [id], cancellationToken: cancellationToken)
             .ConfigureAwait(false);
+        if (result?.Items is null)
+        {
+            return null;
+        }
+
         return result.Items.Count == 0 ? null : result.Items[0];
     }
 
     /// <inheritdoc />
     public async ValueTask<BaseItemDto?> GetItemAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _userLibraryClient.GetItemAsync(
-                _userId,
-                id,
-                cancellationToken: cancellationToken)
+        return await _jellyfinApiClient.Users[_userId].Items[id].GetAsync(cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
     /// <inheritdoc />
-    public async ValueTask<BaseItemDtoQueryResult> GetLibraryItemsAsync(
+    public async ValueTask<BaseItemDtoQueryResult?> GetLibraryItemsAsync(
         BaseItemDto library,
         int limit,
         int startIndex,
         CancellationToken cancellationToken)
     {
-        return await _itemsClient.GetItemsAsync(
-                userId: _userId,
-                recursive: true,
-                sortOrder: new[] { SortOrder.Ascending },
-                parentId: library.Id,
-                includeItemTypes: new[] { GetViewType(library.CollectionType) },
-                sortBy: new[] { "SortName" },
-                imageTypeLimit: 1,
-                enableImageTypes: new[] { ImageType.Primary, ImageType.Banner, ImageType.Thumb },
-                limit: limit,
-                startIndex: startIndex,
+        return await _jellyfinApiClient.Users[_userId].Items.GetAsync(
+                c =>
+                {
+                    c.QueryParameters.Recursive = true;
+                    c.QueryParameters.SortOrder = [SortOrder.Ascending.ToString()];
+                    c.QueryParameters.ParentId = library.Id;
+                    c.QueryParameters.IncludeItemTypes = [GetViewType(library.CollectionType)];
+                    c.QueryParameters.SortBy = ["SortName"];
+                    c.QueryParameters.ImageTypeLimit = 1;
+                    c.QueryParameters.EnableImageTypes = [ImageType.Primary.ToString(), ImageType.Banner.ToString(), ImageType.Thumb.ToString()];
+                    c.QueryParameters.Limit = limit;
+                    c.QueryParameters.StartIndex = startIndex;
+                },
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
@@ -93,101 +79,128 @@ public class LibraryService : ILibraryService
     /// <inheritdoc />
     public async ValueTask<IReadOnlyList<BaseItemDto>> GetNextUpAsync(CancellationToken cancellationToken)
     {
-        var result = await _tvShowsClient.GetNextUpAsync(
-                    userId: _userId,
-                    limit: 24,
-                    fields: new[] { ItemFields.PrimaryImageAspectRatio },
-                    imageTypeLimit: 1,
-                    enableImageTypes: new[] { ImageType.Primary, ImageType.Backdrop, ImageType.Thumb },
-                    enableTotalRecordCount: false,
-                    disableFirstEpisode: false,
-                    cancellationToken: cancellationToken)
-                .ConfigureAwait(false);
+        var result = await _jellyfinApiClient.Shows.NextUp.GetAsync(
+                c =>
+                {
+                    c.QueryParameters.UserId = _userId;
+                    c.QueryParameters.Limit = 24;
+                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio.ToString()];
+                    c.QueryParameters.ImageTypeLimit = 1;
+                    c.QueryParameters.EnableImageTypes = [ImageType.Primary.ToString(), ImageType.Banner.ToString(), ImageType.Thumb.ToString()];
+                    c.QueryParameters.EnableTotalRecordCount = false;
+                    c.QueryParameters.DisableFirstEpisode = true;
+                },
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
 
-        return result.Items;
+        return result?.Items ?? [];
     }
 
     /// <inheritdoc />
     public async ValueTask<IReadOnlyList<BaseItemDto>> GetContinueWatchingAsync(CancellationToken cancellationToken)
     {
-        var result = await _itemsClient.GetResumeItemsAsync(
-                userId: _userId,
-                limit: 24,
-                fields: new[] { ItemFields.PrimaryImageAspectRatio },
-                imageTypeLimit: 1,
-                enableImageTypes: new[] { ImageType.Primary, ImageType.Backdrop, ImageType.Thumb },
-                enableTotalRecordCount: false,
-                mediaTypes: new[] { "Video" },
+        var result = await _jellyfinApiClient.Users[_userId].Items.Resume.GetAsync(
+                c =>
+                {
+                    c.QueryParameters.Limit = 24;
+                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio.ToString()];
+                    c.QueryParameters.ImageTypeLimit = 1;
+                    c.QueryParameters.EnableImageTypes = [ImageType.Primary.ToString(), ImageType.Backdrop.ToString(), ImageType.Thumb.ToString()];
+                    c.QueryParameters.EnableTotalRecordCount = false;
+                    c.QueryParameters.MediaTypes = ["Video"];
+                },
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
 
-        return result.Items;
+        return result?.Items ?? [];
     }
 
     /// <inheritdoc />
     public async ValueTask<IReadOnlyList<BaseItemDto>> GetRecentlyAddedAsync(Guid libraryId, CancellationToken cancellationToken)
     {
-        return await _userLibraryClient.GetLatestMediaAsync(
-                userId: _userId,
-                limit: 24,
-                fields: new[] { ItemFields.PrimaryImageAspectRatio },
-                imageTypeLimit: 1,
-                enableImageTypes: new[] { ImageType.Primary, ImageType.Backdrop, ImageType.Thumb },
-                parentId: libraryId,
+        var items = await _jellyfinApiClient.Users[_userId].Items.Latest.GetAsync(
+                c =>
+                {
+                    c.QueryParameters.Limit = 24;
+                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio.ToString()];
+                    c.QueryParameters.ImageTypeLimit = 1;
+                    c.QueryParameters.EnableImageTypes = [ImageType.Primary.ToString(), ImageType.Backdrop.ToString(), ImageType.Thumb.ToString()];
+                    c.QueryParameters.ParentId = libraryId;
+                },
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        return items ?? [];
+    }
+
+    /// <inheritdoc />
+    public async ValueTask<BaseItemDtoQueryResult?> GetSeasonsAsync(Guid seriesId, CancellationToken cancellationToken)
+    {
+        return await _jellyfinApiClient.Shows[seriesId].Seasons.GetAsync(
+                c =>
+                {
+                    c.QueryParameters.UserId = _userId;
+                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio.ToString()];
+                    c.QueryParameters.ImageTypeLimit = 1;
+                    c.QueryParameters.EnableImageTypes = [ImageType.Primary.ToString(), ImageType.Backdrop.ToString(), ImageType.Thumb.ToString()];
+                },
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
     /// <inheritdoc />
-    public async ValueTask<BaseItemDtoQueryResult> GetSeasonsAsync(Guid seriesId, CancellationToken cancellationToken)
+    public async ValueTask<BaseItemDtoQueryResult?> GetNextUpAsync(Guid seriesId, CancellationToken cancellationToken)
     {
-        return await _tvShowsClient.GetSeasonsAsync(
-                seriesId,
-                _userId,
-                new[] { ItemFields.PrimaryImageAspectRatio },
-                imageTypeLimit: 1,
-                enableImageTypes: new[] { ImageType.Primary, ImageType.Backdrop, ImageType.Thumb },
-                cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
-    }
-
-    /// <inheritdoc />
-    public async ValueTask<BaseItemDtoQueryResult> GetNextUpAsync(Guid seriesId, CancellationToken cancellationToken)
-    {
-        return await _tvShowsClient.GetNextUpAsync(
-                _userId,
-                parentId: seriesId,
-                fields: new[] { ItemFields.PrimaryImageAspectRatio },
-                imageTypeLimit: 1,
-                enableImageTypes: new[] { ImageType.Primary, ImageType.Backdrop, ImageType.Thumb },
+        return await _jellyfinApiClient.Shows.NextUp.GetAsync(
+                c =>
+                {
+                    c.QueryParameters.UserId = _userId;
+                    c.QueryParameters.ParentId = seriesId;
+                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio.ToString()];
+                    c.QueryParameters.ImageTypeLimit = 1;
+                    c.QueryParameters.EnableImageTypes = [ImageType.Primary.ToString(), ImageType.Backdrop.ToString(), ImageType.Thumb.ToString()];
+                },
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public async ValueTask<BaseItemDtoQueryResult> GetEpisodesAsync(Guid seriesId, Guid seasonId, CancellationToken cancellationToken)
+    public async ValueTask<BaseItemDtoQueryResult?> GetEpisodesAsync(Guid seriesId, Guid seasonId, CancellationToken cancellationToken)
     {
-        return await _tvShowsClient.GetEpisodesAsync(
-                seriesId,
-                _userId,
-                new[] { ItemFields.PrimaryImageAspectRatio },
-                seasonId: seasonId,
-                imageTypeLimit: 1,
-                enableImageTypes: new[] { ImageType.Primary, ImageType.Backdrop, ImageType.Thumb },
+        return await _jellyfinApiClient.Shows[seriesId].Episodes.GetAsync(
+                c =>
+                {
+                    c.QueryParameters.UserId = _userId;
+                    c.QueryParameters.SeasonId = seasonId;
+                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio.ToString()];
+                    c.QueryParameters.ImageTypeLimit = 1;
+                    c.QueryParameters.EnableImageTypes = [ImageType.Primary.ToString(), ImageType.Backdrop.ToString(), ImageType.Thumb.ToString()];
+                },
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public async ValueTask<DisplayPreferencesModel> GetDisplayPreferencesAsync(CancellationToken cancellationToken)
+    public async ValueTask<DisplayPreferencesModel?> GetDisplayPreferencesAsync(CancellationToken cancellationToken)
     {
-        var displayPreferences = await _displayPreferencesClient.GetDisplayPreferencesAsync("usersettings", _userId, "emby", cancellationToken)
+        var displayPreferences = await _jellyfinApiClient.DisplayPreferences["usersettings"].GetAsync(
+                c =>
+                {
+                    c.QueryParameters.UserId = _userId;
+                    c.QueryParameters.Client = "emby";
+                },
+                cancellationToken: cancellationToken)
             .ConfigureAwait(false);
+
+        if (displayPreferences?.CustomPrefs is null)
+        {
+            return null;
+        }
 
         var homeSections = new List<DisplayPreferencesModel.HomeSection>();
-        foreach (var customPreference in displayPreferences.CustomPrefs)
+        foreach (var customPreference in displayPreferences.CustomPrefs.AdditionalData)
         {
-            var section = GetHomeSection(customPreference.Key, customPreference.Value);
+            var section = GetHomeSection(customPreference.Key, customPreference.Value.ToString()!);
             if (section is not null)
             {
                 homeSections.Add(section.Value);
@@ -197,15 +210,29 @@ public class LibraryService : ILibraryService
         return new DisplayPreferencesModel(homeSections);
     }
 
-    private static BaseItemKind GetViewType(string collectionType)
+    /* TODO
+    private static BaseItemKind GetViewType(BaseItemDto_CollectionType? collectionType)
     {
         return collectionType switch
         {
-            "tvshows" => BaseItemKind.Series,
-            "movies" => BaseItemKind.Movie,
-            "books" => BaseItemKind.Book,
-            "music" => BaseItemKind.Audio,
+            BaseItemDto_CollectionType.Tvshows => BaseItemKind.Series,
+            BaseItemDto_CollectionType.Movies => BaseItemKind.Movie,
+            BaseItemDto_CollectionType.Books => BaseItemKind.Book,
+            BaseItemDto_CollectionType.Music => BaseItemKind.Audio,
             _ => BaseItemKind.Folder
+        };
+    }
+    */
+
+    private static string GetViewType(BaseItemDto_CollectionType? collectionType)
+    {
+        return collectionType switch
+        {
+            BaseItemDto_CollectionType.Tvshows => "Series",
+            BaseItemDto_CollectionType.Movies => "Movie",
+            BaseItemDto_CollectionType.Books => "Book",
+            BaseItemDto_CollectionType.Music => "Audio",
+            _ => "Folder"
         };
     }
 
