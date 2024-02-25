@@ -1,6 +1,5 @@
 using Jellyfin.Mvvm.Models;
 
-
 namespace Jellyfin.Mvvm.Services;
 
 /// <inheritdoc />

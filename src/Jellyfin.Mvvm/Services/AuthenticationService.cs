@@ -1,5 +1,3 @@
-
-
 namespace Jellyfin.Mvvm.Services;
 
 /// <inheritdoc />
@@ -92,7 +90,6 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-
             var result = await _jellyfinApiClient.QuickConnect.Connect.GetAsync(
                     c => c.QueryParameters.Secret = _quickConnectSecret,
                     cancellationToken: cancellationToken)

@@ -4,7 +4,6 @@ using Jellyfin.Mvvm.Models;
 using Jellyfin.Mvvm.Services;
 using Jellyfin.Mvvm.ViewModels.Facades;
 
-
 namespace Jellyfin.Mvvm.ViewModels;
 
 /// <summary>

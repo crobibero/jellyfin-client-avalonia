@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jellyfin.Maui", "Jellyfin.Maui\Jellyfin.Maui.csproj", "{90B62CFA-A001-450D-A709-E145C71244F1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellyfin.Mvvm", "Jellyfin.Mvvm\Jellyfin.Mvvm.csproj", "{FEA8682F-0BA5-49DD-8A48-A71D67E41B22}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellyfin.Avalonia", "Jellyfin.Avalonia\Jellyfin.Avalonia.csproj", "{A9A32E5D-8547-48FC-A8CD-2744B5115779}"
@@ -17,18 +15,6 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{90B62CFA-A001-450D-A709-E145C71244F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{90B62CFA-A001-450D-A709-E145C71244F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{90B62CFA-A001-450D-A709-E145C71244F1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{90B62CFA-A001-450D-A709-E145C71244F1}.Debug|x64.ActiveCfg = Debug|x64
-		{90B62CFA-A001-450D-A709-E145C71244F1}.Debug|x64.Build.0 = Debug|x64
-		{90B62CFA-A001-450D-A709-E145C71244F1}.Debug|x64.Deploy.0 = Debug|x64
-		{90B62CFA-A001-450D-A709-E145C71244F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{90B62CFA-A001-450D-A709-E145C71244F1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{90B62CFA-A001-450D-A709-E145C71244F1}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{90B62CFA-A001-450D-A709-E145C71244F1}.Release|x64.ActiveCfg = Release|x64
-		{90B62CFA-A001-450D-A709-E145C71244F1}.Release|x64.Build.0 = Release|x64
-		{90B62CFA-A001-450D-A709-E145C71244F1}.Release|x64.Deploy.0 = Release|x64
 		{FEA8682F-0BA5-49DD-8A48-A71D67E41B22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FEA8682F-0BA5-49DD-8A48-A71D67E41B22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEA8682F-0BA5-49DD-8A48-A71D67E41B22}.Debug|x64.ActiveCfg = Debug|Any CPU

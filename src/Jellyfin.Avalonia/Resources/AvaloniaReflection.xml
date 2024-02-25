@@ -1,0 +1,6 @@
+<linker>
+  <!-- App -->
+  <assembly fullname="Jellyfin.Avalonia" preserve="All" />
+  <!-- Avalonia Themes -->
+  <assembly fullname="Material.Avalonia" preserve="All" />
+</linker>

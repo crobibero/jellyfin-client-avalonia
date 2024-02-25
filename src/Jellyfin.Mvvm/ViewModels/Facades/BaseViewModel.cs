@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Mvvm.Services;
 
-
 namespace Jellyfin.Mvvm.ViewModels.Facades;
 
 /// <summary>

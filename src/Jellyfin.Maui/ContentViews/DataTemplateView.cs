@@ -1,4 +1,5 @@
-using Maui.BindableProperty.Generator.Core;
+using Maui.BindableProperty.Generator.Core;1>AutoBindableAttribute.cs(1,1): Warning SA1517 : Code should not contain blank lines at start of file (https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1517.md)
+
 using UraniumUI.Views;
 
 namespace Jellyfin.Maui.ContentViews;

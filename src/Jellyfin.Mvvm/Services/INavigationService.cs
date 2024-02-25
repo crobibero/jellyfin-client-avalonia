@@ -1,5 +1,3 @@
-
-
 namespace Jellyfin.Mvvm.Services;
 
 /// <summary>

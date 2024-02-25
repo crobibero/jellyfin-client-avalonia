@@ -1,6 +1,4 @@
-﻿
-
-namespace Jellyfin.Mvvm.Models;
+﻿namespace Jellyfin.Mvvm.Models;
 
 /// <summary>
 /// Recently added model.

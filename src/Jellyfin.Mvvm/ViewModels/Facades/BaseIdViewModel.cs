@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Jellyfin.Mvvm.Services;
 
-
 namespace Jellyfin.Mvvm.ViewModels.Facades;
 
 /// <summary>
