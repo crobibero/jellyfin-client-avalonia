@@ -111,14 +111,13 @@ public static class Program
             .HandleTransientHttpError()
             .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(retryAttempt));
 
+        var version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.1";
         // Register sdk services
         services.AddHttpClient("Default", c =>
             {
-                c.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Jellyfin.Avalonia", "0.0.1"));
-                c.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json, 1.0));
-                c.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("*/*", 0.8));
+                c.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Jellyfin-Avalonia", version));
+                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json, 1.0));
+                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*", 0.8));
             })
             .ConfigurePrimaryHttpMessageHandler(_ => new SocketsHttpHandler
             {

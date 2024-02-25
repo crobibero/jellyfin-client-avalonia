@@ -53,7 +53,7 @@
   </ItemGroup>
   <!-- End Trimming and AOT -->
 
-  <Target Name="Format Xaml" AfterTargets="PreBuildEvent">
+  <Target Name="Format Xaml" AfterTargets="PreBuildEvent" Condition="'$(CI)' != 'true'">
     <Exec Command="dotnet tool restore"/>
     <Exec Command="dotnet xstyler --recursive --directory ."/>
   </Target>

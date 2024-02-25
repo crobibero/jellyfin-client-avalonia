@@ -20,13 +20,6 @@
       ]
     },
     {
-      "description": "UraniumUI",
-      "groupName": "UraniumUI",
-      "matchPackagePrefixes": [
-        "UraniumUI"
-      ]
-    },
-    {
       "description": "Avalonia",
       "groupName": "Avalonia",
       "matchPackagePrefixes": [
