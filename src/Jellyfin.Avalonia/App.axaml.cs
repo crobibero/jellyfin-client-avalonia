@@ -28,7 +28,7 @@ public class App : Application
     /// <summary>
     /// Gets the current application.
     /// </summary>
-    public static new App Current { get; private set; } = null!;
+    public static new App Current { get; private set; } = default!;
 
     /// <summary>
     /// Gets the current service provided.
@@ -44,7 +44,9 @@ public class App : Application
         RxApp.MainThreadScheduler = AvaloniaScheduler.Instance;
 
         // Have the image loader to use the configured HttpClient.
-        ImageLoader.AsyncImageLoader = new RamCachedWebImageLoader(ServiceProvider.GetRequiredService<HttpClient>(), false);
+        ImageLoader.AsyncImageLoader = new RamCachedWebImageLoader(
+            ServiceProvider.GetRequiredService<IHttpClientFactory>().CreateClient(AppConstants.HttpClient),
+            false);
 
         AvaloniaXamlLoader.Load(this);
     }

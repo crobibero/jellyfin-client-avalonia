@@ -62,12 +62,12 @@ public class LibraryService : ILibraryService
                 c =>
                 {
                     c.QueryParameters.Recursive = true;
-                    c.QueryParameters.SortOrder = [SortOrder.Ascending.ToString()];
+                    c.QueryParameters.SortOrder = [SortOrder.Ascending];
                     c.QueryParameters.ParentId = library.Id;
                     c.QueryParameters.IncludeItemTypes = [GetViewType(library.CollectionType)];
-                    c.QueryParameters.SortBy = ["SortName"];
+                    c.QueryParameters.SortBy = [ItemSortBy.SortName];
                     c.QueryParameters.ImageTypeLimit = 1;
-                    c.QueryParameters.EnableImageTypes = [ImageType.Primary.ToString(), ImageType.Banner.ToString(), ImageType.Thumb.ToString()];
+                    c.QueryParameters.EnableImageTypes = [ImageType.Primary, ImageType.Banner, ImageType.Thumb];
                     c.QueryParameters.Limit = limit;
                     c.QueryParameters.StartIndex = startIndex;
                 },
@@ -83,9 +83,9 @@ public class LibraryService : ILibraryService
                 {
                     c.QueryParameters.UserId = _userId;
                     c.QueryParameters.Limit = 24;
-                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio.ToString()];
+                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio];
                     c.QueryParameters.ImageTypeLimit = 1;
-                    c.QueryParameters.EnableImageTypes = [ImageType.Primary.ToString(), ImageType.Banner.ToString(), ImageType.Thumb.ToString()];
+                    c.QueryParameters.EnableImageTypes = [ImageType.Primary, ImageType.Banner, ImageType.Thumb];
                     c.QueryParameters.EnableTotalRecordCount = false;
                     c.QueryParameters.DisableFirstEpisode = true;
                 },
@@ -102,11 +102,11 @@ public class LibraryService : ILibraryService
                 c =>
                 {
                     c.QueryParameters.Limit = 24;
-                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio.ToString()];
+                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio];
                     c.QueryParameters.ImageTypeLimit = 1;
-                    c.QueryParameters.EnableImageTypes = [ImageType.Primary.ToString(), ImageType.Backdrop.ToString(), ImageType.Thumb.ToString()];
+                    c.QueryParameters.EnableImageTypes = [ImageType.Primary, ImageType.Backdrop, ImageType.Thumb];
                     c.QueryParameters.EnableTotalRecordCount = false;
-                    c.QueryParameters.MediaTypes = ["Video"];
+                    c.QueryParameters.MediaTypes = [MediaType.Video];
                 },
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
@@ -121,9 +121,9 @@ public class LibraryService : ILibraryService
                 c =>
                 {
                     c.QueryParameters.Limit = 24;
-                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio.ToString()];
+                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio];
                     c.QueryParameters.ImageTypeLimit = 1;
-                    c.QueryParameters.EnableImageTypes = [ImageType.Primary.ToString(), ImageType.Backdrop.ToString(), ImageType.Thumb.ToString()];
+                    c.QueryParameters.EnableImageTypes = [ImageType.Primary, ImageType.Backdrop, ImageType.Thumb];
                     c.QueryParameters.ParentId = libraryId;
                 },
                 cancellationToken: cancellationToken)
@@ -139,9 +139,9 @@ public class LibraryService : ILibraryService
                 c =>
                 {
                     c.QueryParameters.UserId = _userId;
-                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio.ToString()];
+                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio];
                     c.QueryParameters.ImageTypeLimit = 1;
-                    c.QueryParameters.EnableImageTypes = [ImageType.Primary.ToString(), ImageType.Backdrop.ToString(), ImageType.Thumb.ToString()];
+                    c.QueryParameters.EnableImageTypes = [ImageType.Primary, ImageType.Backdrop, ImageType.Thumb];
                 },
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
@@ -155,9 +155,9 @@ public class LibraryService : ILibraryService
                 {
                     c.QueryParameters.UserId = _userId;
                     c.QueryParameters.ParentId = seriesId;
-                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio.ToString()];
+                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio];
                     c.QueryParameters.ImageTypeLimit = 1;
-                    c.QueryParameters.EnableImageTypes = [ImageType.Primary.ToString(), ImageType.Backdrop.ToString(), ImageType.Thumb.ToString()];
+                    c.QueryParameters.EnableImageTypes = [ImageType.Primary, ImageType.Backdrop, ImageType.Thumb];
                 },
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
@@ -171,9 +171,9 @@ public class LibraryService : ILibraryService
                 {
                     c.QueryParameters.UserId = _userId;
                     c.QueryParameters.SeasonId = seasonId;
-                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio.ToString()];
+                    c.QueryParameters.Fields = [ItemFields.PrimaryImageAspectRatio];
                     c.QueryParameters.ImageTypeLimit = 1;
-                    c.QueryParameters.EnableImageTypes = [ImageType.Primary.ToString(), ImageType.Backdrop.ToString(), ImageType.Thumb.ToString()];
+                    c.QueryParameters.EnableImageTypes = [ImageType.Primary, ImageType.Backdrop, ImageType.Thumb];
                 },
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
@@ -223,15 +223,15 @@ public class LibraryService : ILibraryService
     }
     */
 
-    private static string GetViewType(BaseItemDto_CollectionType? collectionType)
+    private static BaseItemKind GetViewType(BaseItemDto_CollectionType? collectionType)
     {
         return collectionType switch
         {
-            BaseItemDto_CollectionType.Tvshows => "Series",
-            BaseItemDto_CollectionType.Movies => "Movie",
-            BaseItemDto_CollectionType.Books => "Book",
-            BaseItemDto_CollectionType.Music => "Audio",
-            _ => "Folder"
+            BaseItemDto_CollectionType.Tvshows => BaseItemKind.Series,
+            BaseItemDto_CollectionType.Movies => BaseItemKind.Movie,
+            BaseItemDto_CollectionType.Books => BaseItemKind.Book,
+            BaseItemDto_CollectionType.Music => BaseItemKind.Audio,
+            _ => BaseItemKind.Folder
         };
     }
 

@@ -1,4 +1,3 @@
-using Avalonia.Markup.Xaml;
 using Jellyfin.Avalonia.Views.Facades;
 using Jellyfin.Mvvm.ViewModels.Login;
 
@@ -13,5 +12,5 @@ public partial class LoginView : BaseUserView<LoginViewModel>
     /// Initializes a new instance of the <see cref="LoginView"/> class.
     /// </summary>
     public LoginView()
-        => AvaloniaXamlLoader.Load(this);
+        => InitializeComponent();
 }

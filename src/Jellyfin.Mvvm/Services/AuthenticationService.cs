@@ -35,7 +35,6 @@ public class AuthenticationService : IAuthenticationService
     {
         // Set baseurl.
         _jellyfinSdkSettings.SetServerUrl(host);
-        _jellyfinApiClient.Update();
 
         // Unset access token.
         _jellyfinSdkSettings.SetAccessToken(null);
@@ -143,7 +142,6 @@ public class AuthenticationService : IAuthenticationService
     public void Logout()
     {
         _jellyfinSdkSettings.SetServerUrl(null);
-        _jellyfinApiClient.Update();
         _jellyfinSdkSettings.SetAccessToken(null);
         _stateService.ClearState();
     }
@@ -153,7 +151,6 @@ public class AuthenticationService : IAuthenticationService
     {
         _stateService.SetHost(host);
         _jellyfinSdkSettings.SetServerUrl(host);
-        _jellyfinApiClient.Update();
         _jellyfinSdkSettings.SetAccessToken(accessToken);
         return IsAuthenticatedAsync(cancellationToken);
     }

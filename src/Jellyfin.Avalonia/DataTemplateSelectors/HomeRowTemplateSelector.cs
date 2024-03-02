@@ -13,14 +13,14 @@ public class HomeRowTemplateSelector : IDataTemplate
     /// <summary>
     /// Gets or sets the library home row template.
     /// </summary>
-    public DataTemplate? LibraryHomeRowTemplate { get; set; }
+    public DataTemplate LibraryHomeRowTemplate { get; set; } = default!;
 
     /// <inheritdoc />
     public Control? Build(object? param)
     {
         if (param is HomeRowModel homeRowModel)
         {
-            return LibraryHomeRowTemplate!.Build(homeRowModel);
+            return LibraryHomeRowTemplate.Build(homeRowModel);
         }
 
         return null;

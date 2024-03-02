@@ -107,15 +107,10 @@ public static class Program
 
     private static void AddSdkClients(this IServiceCollection services)
     {
-        var retryPolicy = HttpPolicyExtensions
-            .HandleTransientHttpError()
-            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(retryAttempt));
-
-        var version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.1";
         // Register sdk services
-        services.AddHttpClient("Default", c =>
+        services.AddHttpClient(AppConstants.HttpClient, c =>
             {
-                c.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Jellyfin-Avalonia", version));
+                c.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(AppConstants.Name, AppConstants.Version));
                 c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json, 1.0));
                 c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*", 0.8));
             })
@@ -124,14 +119,16 @@ public static class Program
                 AutomaticDecompression = DecompressionMethods.All,
                 RequestHeaderEncodingSelector = (_, _) => Encoding.UTF8
             })
-            .AddPolicyHandler(retryPolicy);
+            .AddPolicyHandler(HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(retryAttempt)));
 
         services.AddSingleton<JellyfinSdkSettings>();
         services.AddSingleton<IAuthenticationProvider, JellyfinAuthenticationProvider>();
         services.AddScoped<IRequestAdapter, JellyfinRequestAdapter>(s => new JellyfinRequestAdapter(
             s.GetRequiredService<IAuthenticationProvider>(),
             s.GetRequiredService<JellyfinSdkSettings>(),
-            s.GetRequiredService<IHttpClientFactory>().CreateClient("Default")));
+            s.GetRequiredService<IHttpClientFactory>().CreateClient(AppConstants.HttpClient)));
         services.AddScoped<JellyfinApiClient>();
     }
 
@@ -186,14 +183,14 @@ public static class Program
 
     private static void BuildLogger()
     {
-        var outputPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "jellyfin.avalonia", "logs");
+        var outputPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppConstants.Name.ToLowerInvariant(), "logs");
         const string OutputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}] [{Level:u3}] {SourceContext}: {Message}{NewLine}{Exception}";
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Debug(
                 outputTemplate: OutputTemplate,
                 formatProvider: CultureInfo.InvariantCulture)
             .WriteTo.File(
-                path: Path.Combine(outputPath, "Jellyfin.Avalonia..log"),
+                path: Path.Combine(outputPath, $"{AppConstants.Name}..log"),
                 outputTemplate: OutputTemplate,
                 formatProvider: CultureInfo.InvariantCulture,
                 encoding: Encoding.UTF8,

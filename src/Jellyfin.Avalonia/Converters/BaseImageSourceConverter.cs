@@ -46,11 +46,11 @@ public class BaseImageSourceConverter : BaseConverterOneWay<BaseItemDto?, string
             itemId = value.SeriesId ?? itemId;
         }
 
-        var requestInfo = _jellyfinApiClient.Items[itemId].Images[_imageType.ToString()].ToGetRequestInformation(c =>
+        var requestInfo = _jellyfinApiClient.Items[itemId].Images[imageTypeStr].ToGetRequestInformation(c =>
         {
             c.QueryParameters.MaxHeight = parameter;
         });
 
-        return requestInfo.URI.ToString();
+        return _jellyfinApiClient.BuildUri(requestInfo).ToString();
     }
 }

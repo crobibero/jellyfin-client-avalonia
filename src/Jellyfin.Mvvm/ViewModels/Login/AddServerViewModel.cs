@@ -63,7 +63,6 @@ public partial class AddServerViewModel : BaseViewModel
         try
         {
             _jellyfinSdkSettings.SetServerUrl(ServerUrl);
-            _jellyfinApiClient.Update();
             _jellyfinSdkSettings.SetAccessToken(null);
 
             /*

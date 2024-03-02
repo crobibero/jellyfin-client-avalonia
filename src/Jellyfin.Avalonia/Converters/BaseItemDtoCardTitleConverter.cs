@@ -20,7 +20,7 @@ public class BaseItemDtoCardTitleConverter : BaseConverterOneWay<BaseItemDto?, s
         {
             BaseItemDto_Type.Episode => value.SeriesName,
             BaseItemDto_Type.Season => value.SeriesName,
-            _ => value?.Name?.ToString(culture) ?? string.Empty
+            _ => value.Name?.ToString(culture) ?? string.Empty
         };
     }
 }
