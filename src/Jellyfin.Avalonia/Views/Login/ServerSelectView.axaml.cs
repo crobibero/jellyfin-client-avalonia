@@ -1,4 +1,3 @@
-using Avalonia.Markup.Xaml;
 using Jellyfin.Avalonia.Views.Facades;
 using Jellyfin.Mvvm.ViewModels.Login;
 
@@ -13,5 +12,5 @@ public partial class ServerSelectView : BaseUserView<ServerSelectViewModel>
     /// Initializes a new instance of the <see cref="ServerSelectView"/> class.
     /// </summary>
     public ServerSelectView()
-        => AvaloniaXamlLoader.Load(this);
+        => InitializeComponent();
 }

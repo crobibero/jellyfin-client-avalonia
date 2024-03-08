@@ -1,39 +1,29 @@
-using SystemException = Jellyfin.Sdk.SystemException;
-
 namespace Jellyfin.Mvvm.Services;
 
 /// <inheritdoc />
 public class AuthenticationService : IAuthenticationService
 {
-    private readonly IUserClient _userClient;
-    private readonly ISystemClient _systemClient;
-    private readonly IQuickConnectClient _quickConnectClient;
+    private readonly JellyfinApiClient _jellyfinApiClient;
 
     private readonly IStateService _stateService;
-    private readonly SdkClientSettings _sdkClientSettings;
+    private readonly JellyfinSdkSettings _jellyfinSdkSettings;
 
     private string? _quickConnectSecret;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AuthenticationService"/> class.
     /// </summary>
-    /// <param name="userClient">Instance of the <see cref="IUserClient"/> interface.</param>
-    /// <param name="systemClient">Instance of the <see cref="ISystemClient"/> interface.</param>
     /// <param name="stateService">Instance of the <see cref="IStateService"/> interface.</param>
-    /// <param name="sdkClientSettings">Instance of the <see cref="SdkClientSettings"/>.</param>
-    /// <param name="quickConnectClient">Instance of the <see cref="IQuickConnectClient"/> interface.</param>
+    /// <param name="jellyfinApiClient">The Jellyfin api client.</param>
+    /// <param name="jellyfinSdkSettings">The Jellyfin sdk settings.</param>
     public AuthenticationService(
-        IUserClient userClient,
-        ISystemClient systemClient,
         IStateService stateService,
-        SdkClientSettings sdkClientSettings,
-        IQuickConnectClient quickConnectClient)
+        JellyfinApiClient jellyfinApiClient,
+        JellyfinSdkSettings jellyfinSdkSettings)
     {
-        _userClient = userClient;
-        _systemClient = systemClient;
         _stateService = stateService;
-        _sdkClientSettings = sdkClientSettings;
-        _quickConnectClient = quickConnectClient;
+        _jellyfinApiClient = jellyfinApiClient;
+        _jellyfinSdkSettings = jellyfinSdkSettings;
     }
 
     /// <inheritdoc />
@@ -44,31 +34,36 @@ public class AuthenticationService : IAuthenticationService
         CancellationToken cancellationToken = default)
     {
         // Set baseurl.
-        _sdkClientSettings.BaseUrl = host;
+        _jellyfinSdkSettings.SetServerUrl(host);
 
         // Unset access token.
-        _sdkClientSettings.AccessToken = null;
+        _jellyfinSdkSettings.SetAccessToken(null);
 
         try
         {
-            _ = await _systemClient.GetPublicSystemInfoAsync(cancellationToken).ConfigureAwait(false);
+            _ = await _jellyfinApiClient.System.Info.Public.GetAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
         }
-        catch (SystemException)
+        catch (Exception)
         {
             return (false, "Unable to connect to server");
         }
 
         try
         {
-            var authResult = await _userClient.AuthenticateUserByNameAsync(
+            var authResult = await _jellyfinApiClient.Users.AuthenticateByName.PostAsync(
                     new AuthenticateUserByName { Username = username, Pw = password },
-                    cancellationToken)
+                    cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
+
+            if (authResult is null)
+            {
+                return (false, "Unknown error");
+            }
 
             _stateService.SetAuthenticationResponse(host, authResult);
             return (true, null);
         }
-        catch (UserException)
+        catch (Exception)
         {
             return (false, "Invalid username or password");
         }
@@ -79,11 +74,11 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-            var response = await _quickConnectClient.InitiateQuickConnectAsync(cancellationToken).ConfigureAwait(false);
+            var response = await _jellyfinApiClient.QuickConnect.Initiate.PostAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
             _quickConnectSecret = response?.Secret;
             return response?.Code;
         }
-        catch (QuickConnectException)
+        catch (Exception)
         {
             return null;
         }
@@ -94,10 +89,14 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-            var result = await _quickConnectClient.GetQuickConnectStateAsync(_quickConnectSecret, cancellationToken).ConfigureAwait(false);
+            var result = await _jellyfinApiClient.QuickConnect.Connect.GetAsync(
+                    c => c.QueryParameters.Secret = _quickConnectSecret,
+                    cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+
             return result?.Authenticated;
         }
-        catch (QuickConnectException)
+        catch (Exception)
         {
             return null;
         }
@@ -108,9 +107,9 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-            var response = await _userClient.AuthenticateWithQuickConnectAsync(
-                new QuickConnectDto { Secret = _quickConnectSecret },
-                cancellationToken)
+            var response = await _jellyfinApiClient.Users.AuthenticateWithQuickConnect.PostAsync(
+                    new QuickConnectDto { Secret = _quickConnectSecret },
+                    cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
             if (response is null)
             {
@@ -120,7 +119,7 @@ public class AuthenticationService : IAuthenticationService
             _stateService.SetAuthenticationResponse(_stateService.GetHost(), response);
             return (true, null);
         }
-        catch (UserException)
+        catch (Exception)
         {
             return (false, null);
         }
@@ -131,9 +130,9 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-            return await _quickConnectClient.GetQuickConnectEnabledAsync(cancellationToken).ConfigureAwait(false);
+            return await _jellyfinApiClient.QuickConnect.Enabled.GetAsync(cancellationToken: cancellationToken).ConfigureAwait(false) ?? false;
         }
-        catch (QuickConnectException)
+        catch (Exception)
         {
             return false;
         }
@@ -142,8 +141,8 @@ public class AuthenticationService : IAuthenticationService
     /// <inheritdoc />
     public void Logout()
     {
-        _sdkClientSettings.BaseUrl = null;
-        _sdkClientSettings.AccessToken = null;
+        _jellyfinSdkSettings.SetServerUrl(null);
+        _jellyfinSdkSettings.SetAccessToken(null);
         _stateService.ClearState();
     }
 
@@ -151,30 +150,36 @@ public class AuthenticationService : IAuthenticationService
     public ValueTask<bool> IsAuthenticatedAsync(string host, string accessToken, CancellationToken cancellationToken = default)
     {
         _stateService.SetHost(host);
-        _sdkClientSettings.BaseUrl = host;
-        _sdkClientSettings.AccessToken = accessToken;
+        _jellyfinSdkSettings.SetServerUrl(host);
+        _jellyfinSdkSettings.SetAccessToken(accessToken);
         return IsAuthenticatedAsync(cancellationToken);
     }
 
     /// <inheritdoc />
     public async ValueTask<bool> IsAuthenticatedAsync(CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrEmpty(_sdkClientSettings.BaseUrl))
+        if (string.IsNullOrEmpty(_jellyfinSdkSettings.ServerUrl))
         {
-            _sdkClientSettings.AccessToken = null;
+            _jellyfinSdkSettings.SetAccessToken(null);
             return false;
         }
 
         try
         {
-            var user = await _userClient.GetCurrentUserAsync(cancellationToken)
+            var user = await _jellyfinApiClient.Users.Me.GetAsync(cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
+
+            if (user is null)
+            {
+                return false;
+            }
+
             _stateService.SetUser(user);
             return true;
         }
         catch (Exception)
         {
-            _sdkClientSettings.AccessToken = null;
+            _jellyfinSdkSettings.SetAccessToken(null);
             return false;
         }
     }

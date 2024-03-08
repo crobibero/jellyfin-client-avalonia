@@ -1,5 +1,4 @@
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
 namespace Jellyfin.Avalonia;
 
@@ -12,7 +11,5 @@ public partial class MainWindow : Window
     /// Initializes a new instance of the <see cref="MainWindow"/> class.
     /// </summary>
     public MainWindow()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
+        => InitializeComponent();
 }

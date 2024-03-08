@@ -81,14 +81,14 @@ public partial class ItemViewModel : BaseItemViewModel
 
         switch (Item.Type)
         {
-            case BaseItemKind.Series:
+            case BaseItemDto_Type.Series:
                 PopulateSeriesViewAsync().SafeFireAndForget();
                 break;
-            case BaseItemKind.Season:
+            case BaseItemDto_Type.Season:
                 PopulateCurrentShowAsync().SafeFireAndForget();
                 PopulateSeasonEpisodesAsync().SafeFireAndForget();
                 break;
-            case BaseItemKind.Episode:
+            case BaseItemDto_Type.Episode:
                 PopulateCurrentShowAsync().SafeFireAndForget();
                 PopulateCurrentSeasonAsync().SafeFireAndForget();
                 break;
@@ -119,15 +119,15 @@ public partial class ItemViewModel : BaseItemViewModel
 
         Title = Item!.Type switch
         {
-            BaseItemKind.Episode => Item.SeriesName,
-            BaseItemKind.Season => Item.SeriesName,
+            BaseItemDto_Type.Episode => Item.SeriesName,
+            BaseItemDto_Type.Season => Item.SeriesName,
             _ => Item.Name
         };
 
         SubTitle = Item.Type switch
         {
-            BaseItemKind.Episode => $"S{Item.ParentIndexNumber} E{Item.IndexNumber} {Item.Name}",
-            BaseItemKind.Season => Item.SeasonName,
+            BaseItemDto_Type.Episode => $"S{Item.ParentIndexNumber} E{Item.IndexNumber} {Item.Name}",
+            BaseItemDto_Type.Season => Item.SeasonName,
             _ => Item.ProductionYear?.ToString(CultureInfo.InvariantCulture) ?? string.Empty
         };
 
@@ -136,11 +136,16 @@ public partial class ItemViewModel : BaseItemViewModel
 
     private async ValueTask PopulateSeriesViewAsync()
     {
-        var seasonResult = await _libraryService.GetSeasonsAsync(Item!.Id).ConfigureAwait(false);
-        Seasons = seasonResult.Items;
+        if (Item?.Id is null)
+        {
+            return;
+        }
 
-        var nextUpResult = await _libraryService.GetNextUpAsync(Item.Id).ConfigureAwait(false);
-        if (nextUpResult.Items.Count > 0)
+        var seasonResult = await _libraryService.GetSeasonsAsync(Item.Id.Value).ConfigureAwait(false);
+        Seasons = seasonResult?.Items;
+
+        var nextUpResult = await _libraryService.GetNextUpAsync(Item.Id.Value).ConfigureAwait(false);
+        if (nextUpResult?.Items?.Count > 0)
         {
             NextUpItem = nextUpResult.Items[0];
         }
@@ -148,13 +153,13 @@ public partial class ItemViewModel : BaseItemViewModel
 
     private async ValueTask PopulateSeasonEpisodesAsync()
     {
-        if (Item?.SeriesId is null)
+        if (Item?.SeriesId is null || Item.Id is null)
         {
             return;
         }
 
-        var episodeResult = await _libraryService.GetEpisodesAsync(Item.SeriesId.Value, Item.Id).ConfigureAwait(false);
-        Episodes = episodeResult.Items;
+        var episodeResult = await _libraryService.GetEpisodesAsync(Item.SeriesId.Value, Item.Id.Value).ConfigureAwait(false);
+        Episodes = episodeResult?.Items;
     }
 
     private async ValueTask PopulateCurrentSeasonAsync()

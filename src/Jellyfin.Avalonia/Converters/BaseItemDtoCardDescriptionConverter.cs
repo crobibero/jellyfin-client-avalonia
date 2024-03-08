@@ -1,5 +1,5 @@
 using System.Globalization;
-using Jellyfin.Sdk;
+using Jellyfin.Sdk.Generated.Models;
 
 namespace Jellyfin.Avalonia.Converters;
 
@@ -18,8 +18,8 @@ public class BaseItemDtoCardDescriptionConverter : BaseConverterOneWay<BaseItemD
 
         return value.Type switch
         {
-            BaseItemKind.Episode => $"S{value.ParentIndexNumber} E{value.IndexNumber} {value.Name}",
-            BaseItemKind.Season => value.SeasonName,
+            BaseItemDto_Type.Episode => $"S{value.ParentIndexNumber:00} E{value.IndexNumber:00} {value.Name}",
+            BaseItemDto_Type.Season => value.SeasonName,
             _ => value.ProductionYear?.ToString(culture) ?? string.Empty
         };
     }

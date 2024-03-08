@@ -1,5 +1,4 @@
 ﻿using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Jellyfin.Avalonia.ViewModels;
 using Jellyfin.Avalonia.Views.Facades;
 
@@ -16,7 +15,7 @@ public partial class MainView : BaseUserView<MainViewModel>
     public MainView()
     {
         Current = this;
-        AvaloniaXamlLoader.Load(this);
+        InitializeComponent();
     }
 
     /// <summary>

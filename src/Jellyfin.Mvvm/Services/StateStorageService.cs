@@ -38,8 +38,11 @@ public class StateStorageService : IStateStorageService
                 return new StateContainerModel();
             }
 
-            _stateCache = JsonSerializer.Deserialize<StateContainerModel>(storedState)
-                                 ?? new StateContainerModel();
+            _stateCache = JsonSerializer.Deserialize(storedState, JsonOptions.Context.StateContainerModel);
+            if (_stateCache is null)
+            {
+                return new StateContainerModel();
+            }
 
             // Remove invalid users and servers.
             _stateCache.Users.Remove(null!);
@@ -63,7 +66,7 @@ public class StateStorageService : IStateStorageService
         }
         else
         {
-            var stateString = JsonSerializer.Serialize(stateModel);
+            var stateString = JsonSerializer.Serialize(stateModel, JsonOptions.Context.StateContainerModel);
             await SetAsync(StateKey, stateString).ConfigureAwait(false);
         }
     }

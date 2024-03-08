@@ -1,4 +1,3 @@
-using Avalonia.Markup.Xaml;
 using Jellyfin.Avalonia.Views.Facades;
 using Jellyfin.Mvvm.ViewModels.Login;
 
@@ -13,5 +12,5 @@ public partial class AddServerView : BaseUserView<AddServerViewModel>
     /// Initializes a new instance of the <see cref="AddServerView"/> class.
     /// </summary>
     public AddServerView()
-        => AvaloniaXamlLoader.Load(this);
+        => InitializeComponent();
 }

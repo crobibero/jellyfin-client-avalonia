@@ -1,4 +1,3 @@
-using Avalonia.Markup.Xaml;
 using Jellyfin.Avalonia.Views.Facades;
 using Jellyfin.Mvvm.ViewModels;
 
@@ -13,5 +12,5 @@ public partial class HomeView : BaseUserView<HomeViewModel>
     /// Initializes a new instance of the <see cref="HomeView"/> class.
     /// </summary>
     public HomeView()
-        => AvaloniaXamlLoader.Load(this);
+        => InitializeComponent();
 }

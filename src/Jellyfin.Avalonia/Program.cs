@@ -1,5 +1,7 @@
 ﻿using System.Globalization;
 using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Text;
 using Avalonia;
 using AvaloniaInside.Shell;
@@ -13,6 +15,8 @@ using Jellyfin.Mvvm.ViewModels;
 using Jellyfin.Mvvm.ViewModels.Login;
 using Jellyfin.Sdk;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Kiota.Abstractions;
+using Microsoft.Kiota.Abstractions.Authentication;
 using Polly;
 using Polly.Extensions.Http;
 using Serilog;
@@ -103,246 +107,29 @@ public static class Program
 
     private static void AddSdkClients(this IServiceCollection services)
     {
-        static HttpMessageHandler DefaultHttpClientHandlerDelegate(IServiceProvider serviceProvider)
-        {
-            return new SocketsHttpHandler
+        // Register sdk services
+        services.AddHttpClient(AppConstants.HttpClient, c =>
+            {
+                c.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(AppConstants.Name, AppConstants.Version));
+                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json, 1.0));
+                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*", 0.8));
+            })
+            .ConfigurePrimaryHttpMessageHandler(_ => new SocketsHttpHandler
             {
                 AutomaticDecompression = DecompressionMethods.All,
                 RequestHeaderEncodingSelector = (_, _) => Encoding.UTF8
-            };
-        }
+            })
+            .AddPolicyHandler(HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(retryAttempt)));
 
-        var retryPolicy = HttpPolicyExtensions
-            .HandleTransientHttpError()
-            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(retryAttempt));
-
-        // Register sdk services
-        services.AddSingleton<SdkClientSettings>();
-
-        // TODO remove unused clients.
-        services.AddHttpClient<IApiKeyClient, ApiKeyClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IArtistsClient, ArtistsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IAudioClient, AudioClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IBrandingClient, BrandingClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IChannelsClient, ChannelsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<ICollectionClient, CollectionClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IConfigurationClient, ConfigurationClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IDashboardClient, DashboardClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IDevicesClient, DevicesClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IDisplayPreferencesClient, DisplayPreferencesClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IDlnaClient, DlnaClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IDlnaServerClient, DlnaServerClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IDynamicHlsClient, DynamicHlsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IEnvironmentClient, EnvironmentClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IFilterClient, FilterClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IGenresClient, GenresClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IHlsSegmentClient, HlsSegmentClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IImageClient, ImageClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IInstantMixClient, InstantMixClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IItemLookupClient, ItemLookupClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IItemRefreshClient, ItemRefreshClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IItemsClient, ItemsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<ILibraryClient, LibraryClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IItemUpdateClient, ItemUpdateClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<ILibraryStructureClient, LibraryStructureClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<ILiveTvClient, LiveTvClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<ILocalizationClient, LocalizationClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IMediaInfoClient, MediaInfoClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IMoviesClient, MoviesClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IMusicGenresClient, MusicGenresClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IPackageClient, PackageClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IPersonsClient, PersonsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IPlaylistsClient, PlaylistsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IPlaystateClient, PlaystateClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IPluginsClient, PluginsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IQuickConnectClient, QuickConnectClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IRemoteImageClient, RemoteImageClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IScheduledTasksClient, ScheduledTasksClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<ISearchClient, SearchClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<ISessionClient, SessionClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IStartupClient, StartupClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IStudiosClient, StudiosClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<ISubtitleClient, SubtitleClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<ISuggestionsClient, SuggestionsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<ISyncPlayClient, SyncPlayClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<ISystemClient, SystemClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<ITimeSyncClient, TimeSyncClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<ITrailersClient, TrailersClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<ITvShowsClient, TvShowsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IUniversalAudioClient, UniversalAudioClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IUserClient, UserClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IUserLibraryClient, UserLibraryClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IUserViewsClient, UserViewsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IVideoAttachmentsClient, VideoAttachmentsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IVideosClient, VideosClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
-
-        services.AddHttpClient<IYearsClient, YearsClient>()
-            .ConfigurePrimaryHttpMessageHandler(DefaultHttpClientHandlerDelegate)
-            .AddPolicyHandler(retryPolicy);
+        services.AddSingleton<JellyfinSdkSettings>();
+        services.AddSingleton<IAuthenticationProvider, JellyfinAuthenticationProvider>();
+        services.AddScoped<IRequestAdapter, JellyfinRequestAdapter>(s => new JellyfinRequestAdapter(
+            s.GetRequiredService<IAuthenticationProvider>(),
+            s.GetRequiredService<JellyfinSdkSettings>(),
+            s.GetRequiredService<IHttpClientFactory>().CreateClient(AppConstants.HttpClient)));
+        services.AddScoped<JellyfinApiClient>();
     }
 
     private static void AddServices(this IServiceCollection services)
@@ -396,14 +183,14 @@ public static class Program
 
     private static void BuildLogger()
     {
-        var outputPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "jellyfin.avalonia", "logs");
+        var outputPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppConstants.Name.ToLowerInvariant(), "logs");
         const string OutputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}] [{Level:u3}] {SourceContext}: {Message}{NewLine}{Exception}";
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Debug(
                 outputTemplate: OutputTemplate,
                 formatProvider: CultureInfo.InvariantCulture)
             .WriteTo.File(
-                path: Path.Combine(outputPath, "Jellyfin.Avalonia..log"),
+                path: Path.Combine(outputPath, $"{AppConstants.Name}..log"),
                 outputTemplate: OutputTemplate,
                 formatProvider: CultureInfo.InvariantCulture,
                 encoding: Encoding.UTF8,

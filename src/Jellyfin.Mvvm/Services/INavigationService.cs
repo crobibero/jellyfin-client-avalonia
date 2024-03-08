@@ -39,5 +39,5 @@ public interface INavigationService
     /// Navigate to the item's view.
     /// </summary>
     /// <param name="item">The item.</param>
-    void NavigateToItemView(BaseItemDto item);
+    void NavigateToItemView(BaseItemDto? item);
 }

@@ -6,22 +6,22 @@ namespace Jellyfin.Mvvm.Services;
 public class StateService : IStateService
 {
     private readonly CurrentStateModel _state;
-    private readonly SdkClientSettings _sdkClientSettings;
+    private readonly JellyfinSdkSettings _jellyfinSdkSettings;
     private readonly IStateStorageService _stateStorageService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StateService"/> class.
     /// </summary>
-    /// <param name="sdkClientSettings">Instance of the <see cref="SdkClientSettings"/>.</param>
+    /// <param name="jellyfinSdkSettings">Instance of the <see cref="JellyfinSdkSettings"/>.</param>
     /// <param name="stateStorageService">Instance of the <see cref="IStateStorageService"/> interface.</param>
-    public StateService(SdkClientSettings sdkClientSettings, IStateStorageService stateStorageService)
+    public StateService(JellyfinSdkSettings jellyfinSdkSettings, IStateStorageService stateStorageService)
     {
-        _sdkClientSettings = sdkClientSettings;
+        _jellyfinSdkSettings = jellyfinSdkSettings;
         _stateStorageService = stateStorageService;
 
         _state = new CurrentStateModel();
-        _sdkClientSettings.BaseUrl = _state.Host;
-        _sdkClientSettings.AccessToken = _state.Token;
+        _jellyfinSdkSettings.SetServerUrl(_state.Host);
+        _jellyfinSdkSettings.SetAccessToken(_state.Token);
     }
 
     /// <inheritdoc/>
@@ -52,8 +52,8 @@ public class StateService : IStateService
         SetServerState(selectedServer);
         SetUserState(selectedUser);
 
-        _sdkClientSettings.AccessToken = selectedUser.Token;
-        _sdkClientSettings.BaseUrl = selectedServer.Url;
+        _jellyfinSdkSettings.SetServerUrl(selectedServer.Url);
+        _jellyfinSdkSettings.SetAccessToken(selectedUser.Token);
     }
 
     /// <inheritdoc />
@@ -61,8 +61,8 @@ public class StateService : IStateService
         string host,
         AuthenticationResult authenticationResult)
     {
-        _sdkClientSettings.BaseUrl = host;
-        _sdkClientSettings.AccessToken = authenticationResult.AccessToken;
+        _jellyfinSdkSettings.SetServerUrl(host);
+        _jellyfinSdkSettings.SetAccessToken(authenticationResult.AccessToken);
         _state.Host = host.TrimEnd('/');
         _state.UserDto = authenticationResult.User;
         _state.Token = authenticationResult.AccessToken;
@@ -86,7 +86,7 @@ public class StateService : IStateService
     {
         _state.ServerState = serverStateModel;
         _state.Host = serverStateModel.Url;
-        _sdkClientSettings.BaseUrl = serverStateModel.Url;
+        _jellyfinSdkSettings.SetServerUrl(serverStateModel.Url);
         CurrentStateModel.StaticHost = serverStateModel.Url;
     }
 
@@ -115,10 +115,8 @@ public class StateService : IStateService
     }
 
     /// <inheritdoc />
-    public string GetToken()
-    {
-        return _sdkClientSettings.AccessToken;
-    }
+    public string? GetToken()
+        => _jellyfinSdkSettings.AccessToken;
 
     /// <inheritdoc />
     public void ClearState()

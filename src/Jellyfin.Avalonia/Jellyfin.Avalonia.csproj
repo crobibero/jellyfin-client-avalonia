@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <OutputType>WinExe</OutputType>
-        <RuntimeIdentifiers>win-x64;osx-x64;linux-x64</RuntimeIdentifiers>
-        <TargetFramework>net8.0</TargetFramework>
-        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-        <ApplicationManifest>app.manifest</ApplicationManifest>
-        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <RuntimeIdentifiers>win-x64;osx-x64;linux-x64</RuntimeIdentifiers>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.2.1" />
@@ -31,15 +31,30 @@
     </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Jellyfin.Mvvm\Jellyfin.Mvvm.csproj" />
+    <ProjectReference Include="..\Jellyfin.Mvvm\Jellyfin.Mvvm.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="Resources\Assets\**" />
+    <AvaloniaResource Include="Resources\Assets\**"/>
   </ItemGroup>
 
-  <Target Name="Format Xaml" AfterTargets="PreBuildEvent">
-    <Exec Command="dotnet tool restore" />
-    <Exec Command="dotnet xstyler --recursive --directory ." />
+  <!-- Trimming and AOT -->
+  <PropertyGroup>
+    <TrimMode>copyused</TrimMode>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <PublishAot>true</PublishAot>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <StripSymbols>true</StripSymbols>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <TrimmerRootDescriptor Include="Resources\AvaloniaReflection.xml" />
+  </ItemGroup>
+  <!-- End Trimming and AOT -->
+
+  <Target Name="Format Xaml" AfterTargets="PreBuildEvent" Condition="'$(CI)' != 'true'">
+    <Exec Command="dotnet tool restore"/>
+    <Exec Command="dotnet xstyler --recursive --directory ."/>
   </Target>
 </Project>

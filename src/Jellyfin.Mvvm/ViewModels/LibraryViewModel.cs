@@ -54,7 +54,7 @@ public partial class LibraryViewModel : BaseItemViewModel
     /// <summary>
     /// Gets the next index.
     /// </summary>
-    public int NextIndex => Math.Min((int)(TotalCount / PageSize), PageIndex + 1);
+    public int NextIndex => Math.Min(TotalCount / PageSize, PageIndex + 1);
 
     /// <summary>
     /// Gets a value indicating whether there is a page before the current page.
@@ -89,8 +89,12 @@ public partial class LibraryViewModel : BaseItemViewModel
                 PageSize,
                 PageSize * PageIndex)
             .ConfigureAwait(true);
+        if (queryResult?.Items is null)
+        {
+            return;
+        }
 
-        TotalCount = queryResult.TotalRecordCount;
+        TotalCount = queryResult.TotalRecordCount ?? 0;
 
         // prevents unnecessary refresh (back navigation)
         if (!LibraryItemsCollection.Select(x => x.Id).SequenceEqual(queryResult.Items.Select(x => x.Id)))

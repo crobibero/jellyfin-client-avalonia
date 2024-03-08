@@ -72,7 +72,7 @@ public interface IStateService
     /// Gets the current token.
     /// </summary>
     /// <returns>The current token.</returns>
-    string GetToken();
+    string? GetToken();
 
     /// <summary>
     /// Clears the current state.

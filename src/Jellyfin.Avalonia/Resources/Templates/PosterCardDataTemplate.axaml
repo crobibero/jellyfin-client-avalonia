@@ -3,9 +3,9 @@
                     xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
                     xmlns:facades="clr-namespace:Jellyfin.Avalonia.Views.Facades"
                     xmlns:markupExtensions="clr-namespace:Jellyfin.Avalonia.MarkupExtensions"
-                    xmlns:sdk="clr-namespace:Jellyfin.Sdk;assembly=Jellyfin.Sdk">
+                    xmlns:sdk="clr-namespace:Jellyfin.Sdk.Generated.Models;assembly=Jellyfin.Sdk">
     <DataTemplate x:Key="PosterCardDataTemplate"
-                  x:DataType="sdk:BaseItemDto">
+              x:DataType="sdk:BaseItemDto">
         <Border x:Name="PosterCardTemplate">
             <Interaction.Behaviors>
                 <EventTriggerBehavior EventName="Tapped"

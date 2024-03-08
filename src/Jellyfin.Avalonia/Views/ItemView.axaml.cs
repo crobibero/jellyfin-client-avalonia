@@ -1,5 +1,4 @@
-﻿using Avalonia.Markup.Xaml;
-using Jellyfin.Avalonia.Views.Facades;
+﻿using Jellyfin.Avalonia.Views.Facades;
 using Jellyfin.Mvvm.ViewModels;
 
 namespace Jellyfin.Avalonia.Views;
@@ -13,7 +12,7 @@ public partial class ItemView : BaseUserView<ItemViewModel>
     /// Initializes a new instance of the <see cref="ItemView"/> class.
     /// </summary>
     public ItemView()
-        => AvaloniaXamlLoader.Load(this);
+        => InitializeComponent();
 
     /// <inheritdoc />
     public override async Task ArgumentAsync(object args, CancellationToken cancellationToken)

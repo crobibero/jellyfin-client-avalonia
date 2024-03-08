@@ -9,31 +9,30 @@ namespace Jellyfin.Avalonia.Services;
 /// </summary>
 public class SdkService : ISdkService
 {
-    private readonly SdkClientSettings _sdkClientSettings;
+    private readonly JellyfinSdkSettings _jellyfinSdkSettings;
     private readonly IStateStorageService _stateStorageService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SdkService"/> class.
     /// </summary>
-    /// <param name="sdkClientSettings">Instance of the <see cref="SdkClientSettings"/>.</param>
+    /// <param name="jellyfinSdkSettings">Instance of the <see cref="JellyfinSdkSettings"/>.</param>
     /// <param name="stateStorageService">Instance of the <see cref="IStateStorageService"/> interface.</param>
-    public SdkService(SdkClientSettings sdkClientSettings, IStateStorageService stateStorageService)
+    public SdkService(JellyfinSdkSettings jellyfinSdkSettings, IStateStorageService stateStorageService)
     {
-        _sdkClientSettings = sdkClientSettings;
+        _jellyfinSdkSettings = jellyfinSdkSettings;
         _stateStorageService = stateStorageService;
     }
 
     /// <inheritdoc />
     public async ValueTask InitializeAsync()
     {
-        var version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.1";
         var deviceId = await _stateStorageService.GetDeviceIdAsync().ConfigureAwait(false);
-        var clientName = $"Jellyfin Avalonia ({RuntimeInformation.OSDescription})";
+        var clientName = $"{AppConstants.Name} ({RuntimeInformation.OSDescription})";
         var deviceName = Environment.MachineName;
 
-        _sdkClientSettings.InitializeClientSettings(
+        _jellyfinSdkSettings.Initialize(
             clientName,
-            version,
+            AppConstants.Version,
             deviceName,
             deviceId);
     }
