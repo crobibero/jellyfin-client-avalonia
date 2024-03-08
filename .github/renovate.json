@@ -3,6 +3,9 @@
   "extends": [
     "github>jellyfin/.github//renovate-presets/dotnet"
   ],
+  "ignorePaths": [
+    "src/global.json"
+  ],
   "packageRules": [
     {
       "description": "Group Microsoft dependencies",
