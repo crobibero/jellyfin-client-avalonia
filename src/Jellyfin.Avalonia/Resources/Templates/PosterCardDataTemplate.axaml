@@ -1,11 +1,11 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
                     xmlns:facades="clr-namespace:Jellyfin.Avalonia.Views.Facades"
                     xmlns:markupExtensions="clr-namespace:Jellyfin.Avalonia.MarkupExtensions"
                     xmlns:sdk="clr-namespace:Jellyfin.Sdk.Generated.Models;assembly=Jellyfin.Sdk">
     <DataTemplate x:Key="PosterCardDataTemplate"
-              x:DataType="sdk:BaseItemDto">
+                  x:DataType="sdk:BaseItemDto">
         <Border x:Name="PosterCardTemplate">
             <Interaction.Behaviors>
                 <EventTriggerBehavior EventName="Tapped"
