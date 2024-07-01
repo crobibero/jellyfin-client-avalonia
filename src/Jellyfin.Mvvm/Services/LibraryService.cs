@@ -25,7 +25,7 @@ public class LibraryService : ILibraryService
     /// <inheritdoc />
     public async ValueTask<IReadOnlyList<BaseItemDto>> GetLibrariesAsync(CancellationToken cancellationToken)
     {
-        var views = await _jellyfinApiClient.Users[_userId].Views.GetAsync(cancellationToken: cancellationToken)
+        var views = await _jellyfinApiClient.UserViews.GetAsync(cancellationToken: cancellationToken)
             .ConfigureAwait(false);
         return views?.Items is null ? Array.Empty<BaseItemDto>() : views.Items;
     }
@@ -33,7 +33,7 @@ public class LibraryService : ILibraryService
     /// <inheritdoc />
     public async ValueTask<BaseItemDto?> GetLibraryAsync(Guid id, CancellationToken cancellationToken)
     {
-        var result = await _jellyfinApiClient.Users[_userId].Items.GetAsync(
+        var result = await _jellyfinApiClient.Items.GetAsync(
             c => c.QueryParameters.Ids = [id], cancellationToken: cancellationToken)
             .ConfigureAwait(false);
         if (result?.Items is null)
@@ -47,7 +47,7 @@ public class LibraryService : ILibraryService
     /// <inheritdoc />
     public async ValueTask<BaseItemDto?> GetItemAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _jellyfinApiClient.Users[_userId].Items[id].GetAsync(cancellationToken: cancellationToken)
+        return await _jellyfinApiClient.Items[id].GetAsync(cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
@@ -58,7 +58,7 @@ public class LibraryService : ILibraryService
         int startIndex,
         CancellationToken cancellationToken)
     {
-        return await _jellyfinApiClient.Users[_userId].Items.GetAsync(
+        return await _jellyfinApiClient.Items.GetAsync(
                 c =>
                 {
                     c.QueryParameters.Recursive = true;
@@ -98,7 +98,7 @@ public class LibraryService : ILibraryService
     /// <inheritdoc />
     public async ValueTask<IReadOnlyList<BaseItemDto>> GetContinueWatchingAsync(CancellationToken cancellationToken)
     {
-        var result = await _jellyfinApiClient.Users[_userId].Items.Resume.GetAsync(
+        var result = await _jellyfinApiClient.UserItems.Resume.GetAsync(
                 c =>
                 {
                     c.QueryParameters.Limit = 24;
@@ -117,7 +117,7 @@ public class LibraryService : ILibraryService
     /// <inheritdoc />
     public async ValueTask<IReadOnlyList<BaseItemDto>> GetRecentlyAddedAsync(Guid libraryId, CancellationToken cancellationToken)
     {
-        var items = await _jellyfinApiClient.Users[_userId].Items.Latest.GetAsync(
+        var items = await _jellyfinApiClient.Items.Latest.GetAsync(
                 c =>
                 {
                     c.QueryParameters.Limit = 24;
