@@ -101,7 +101,7 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       name: ios
-      runs-on: macos-26
+      runs-on: xcode-27
       project: Jellyfin.Avalonia.iOS
       command: build
       framework: net10.0-ios
