@@ -19,10 +19,10 @@ jobs:
   test:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@6bd8b7f7774af54e05809fcc5431931b3eb1ddee # v4
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           dotnet-version: 10.0.x
 
@@ -50,10 +50,10 @@ jobs:
             rid: osx-x64
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@6bd8b7f7774af54e05809fcc5431931b3eb1ddee # v4
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           dotnet-version: 10.0.x
 
@@ -64,7 +64,7 @@ jobs:
           version="0.1.$GITHUB_RUN_NUMBER"
           dotnet publish Jellyfin.Avalonia.Desktop -c Release -r ${{ matrix.rid }} -p:Version=$version --output artifacts/jellyfin-avalonia-${{ matrix.rid }}
 
-      - uses: actions/upload-artifact@604373da6381bf24206979c74d06a550515601b9 # v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: jellyfin-avalonia-${{ matrix.rid }}
           path: src/artifacts/jellyfin-avalonia-${{ matrix.rid }}
