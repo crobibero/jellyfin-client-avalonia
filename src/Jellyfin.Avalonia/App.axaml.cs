@@ -1,71 +1,108 @@
+using AsyncAwaitBestPractices;
 using AsyncImageLoader;
-using AsyncImageLoader.Loaders;
+using AsyncImageLoader.Core.Caching;
+using AsyncImageLoader.Core.Pipeline;
+using AsyncImageLoader.Core.Transport;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avalonia.ReactiveUI;
+using Jellyfin.Avalonia.Services;
 using Jellyfin.Avalonia.Views;
+using Jellyfin.Mvvm.Services;
+using Jellyfin.Mvvm.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
-using ReactiveUI;
 
 namespace Jellyfin.Avalonia;
 
 /// <summary>
 /// Main application.
 /// </summary>
-public class App : Application
+public partial class App : Application
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="App"/> class.
-    /// </summary>
-    /// <param name="serviceProvider">Instance of the <see cref="IServiceProvider"/> interface.</param>
-    public App(IServiceProvider serviceProvider)
-    {
-        Current = this;
-        ServiceProvider = serviceProvider;
-    }
+    private static IServiceProvider? _services;
+    private MainView? _mainView;
 
     /// <summary>
-    /// Gets the current application.
+    /// Gets or sets the callback platforms use to register their services.
     /// </summary>
-    public static new App Current { get; private set; } = default!;
+    public static Action<IServiceCollection>? ConfigurePlatformServices { get; set; }
 
     /// <summary>
-    /// Gets the current service provided.
+    /// Gets the application services.
     /// </summary>
-    public IServiceProvider ServiceProvider { get; }
+    public static IServiceProvider Services => _services ?? throw new InvalidOperationException("The application is not initialized");
 
-    /// <summary>
-    /// Initialize the application.
-    /// </summary>
+    /// <inheritdoc />
     public override void Initialize()
     {
-        // Allow RxApp to use the Avalonia scheduler.
-        RxApp.MainThreadScheduler = AvaloniaScheduler.Instance;
-
-        // Have the image loader to use the configured HttpClient.
-        ImageLoader.AsyncImageLoader = new RamCachedWebImageLoader(
-            ServiceProvider.GetRequiredService<IHttpClientFactory>().CreateClient(AppConstants.HttpClient),
-            false);
-
         AvaloniaXamlLoader.Load(this);
     }
 
     /// <inheritdoc />
     public override void OnFrameworkInitializationCompleted()
     {
+        var services = new ServiceCollection();
+        services.AddLogging();
+        services.AddJellyfinApp();
+        ConfigurePlatformServices?.Invoke(services);
+        _services = services.BuildServiceProvider();
+
+        ConfigureImageLoader();
+
         switch (ApplicationLifetime)
         {
             case IClassicDesktopStyleApplicationLifetime desktop:
-                desktop.MainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+                desktop.MainWindow = new MainWindow { Content = CreateMainView() };
+                desktop.ShutdownRequested += (_, _) => (_services as IDisposable)?.Dispose();
                 break;
-            case ISingleViewApplicationLifetime singeView:
-                singeView.MainView = ServiceProvider.GetRequiredService<MainView>();
+            case IActivityApplicationLifetime activity:
+                activity.MainViewFactory = CreateMainView;
                 break;
-            default:
-                throw new NotImplementedException();
+            case ISingleViewApplicationLifetime singleView:
+                singleView.MainView = CreateMainView();
+                break;
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private static string UserImageCacheDirectory => Path.Join(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create),
+        AppConstants.Identifier,
+        "cache",
+        "users");
+
+    private static void ConfigureImageLoader()
+    {
+        var httpClient = Services.GetRequiredService<IHttpClientFactory>().CreateClient(HttpClientNames.Default);
+        ImageLoader.AsyncImageLoader = ImageLoaderPipelineBuilder
+            .RamCached(new MemoryImageCacheOptions
+            {
+                MaxItems = 300,
+                SlidingExpiration = TimeSpan.FromMinutes(5),
+            })
+            .UseTransport(new UserImageCacheTransport(new HttpImageTransport(httpClient), UserImageCacheDirectory))
+            .UseDecoder(new PooledBitmapDecoder())
+            .Build();
+    }
+
+    private MainView CreateMainView()
+    {
+        if (_mainView is not null)
+        {
+            // Activity recreation (rotation, configuration changes) reuses the existing view.
+            if (_mainView.Parent is ContentControl oldHost)
+            {
+                oldHost.Content = null;
+            }
+
+            return _mainView;
+        }
+
+        var viewModel = Services.GetRequiredService<MainViewModel>();
+        _mainView = new MainView { DataContext = viewModel };
+        viewModel.StartAsync().SafeFireAndForget();
+        return _mainView;
     }
 }

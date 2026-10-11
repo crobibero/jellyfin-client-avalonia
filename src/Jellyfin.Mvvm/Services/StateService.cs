@@ -18,41 +18,35 @@ public class StateService : IStateService
     {
         _jellyfinSdkSettings = jellyfinSdkSettings;
         _stateStorageService = stateStorageService;
-
         _state = new CurrentStateModel();
-        _jellyfinSdkSettings.SetServerUrl(_state.Host);
-        _jellyfinSdkSettings.SetAccessToken(_state.Token);
     }
+
+    /// <inheritdoc />
+    public event EventHandler? UserChanged;
+
+    /// <inheritdoc />
+    public UserDto? CurrentUser => _state.UserDto;
 
     /// <inheritdoc/>
     public async ValueTask InitializeAsync()
     {
         var storeState = await _stateStorageService.GetStoredStateAsync().ConfigureAwait(false);
 
-        if (storeState.SelectedServerId is null
-            || storeState.SelectedUserId is null)
-        {
-            return;
-        }
-
         var selectedServer = storeState.Servers.FirstOrDefault(x => x.Id == storeState.SelectedServerId);
-
         if (selectedServer is null)
         {
             return;
         }
 
-        var selectedUser = storeState.Users.FirstOrDefault(x => x.Id == storeState.SelectedUserId && x.ServerId == selectedServer.Id);
+        SetServerState(selectedServer);
 
-        if (selectedUser is null)
+        var selectedUser = storeState.Users.FirstOrDefault(x => x.Id == storeState.SelectedUserId && x.ServerId == selectedServer.Id);
+        if (selectedUser?.Token is null)
         {
             return;
         }
 
-        SetServerState(selectedServer);
         SetUserState(selectedUser);
-
-        _jellyfinSdkSettings.SetServerUrl(selectedServer.Url);
         _jellyfinSdkSettings.SetAccessToken(selectedUser.Token);
     }
 
@@ -61,18 +55,21 @@ public class StateService : IStateService
         string host,
         AuthenticationResult authenticationResult)
     {
+        ArgumentNullException.ThrowIfNull(authenticationResult);
+
         _jellyfinSdkSettings.SetServerUrl(host);
         _jellyfinSdkSettings.SetAccessToken(authenticationResult.AccessToken);
         _state.Host = host.TrimEnd('/');
-        _state.UserDto = authenticationResult.User;
         _state.Token = authenticationResult.AccessToken;
-        CurrentStateModel.StaticHost = _state.Host;
+        _state.UserDto = authenticationResult.User;
+        UserChanged?.Invoke(this, EventArgs.Empty);
     }
 
     /// <inheritdoc />
     public void SetUser(UserDto userDto)
     {
         _state.UserDto = userDto;
+        UserChanged?.Invoke(this, EventArgs.Empty);
     }
 
     /// <inheritdoc />
@@ -84,53 +81,40 @@ public class StateService : IStateService
     /// <inheritdoc />
     public void SetServerState(ServerStateModel serverStateModel)
     {
+        ArgumentNullException.ThrowIfNull(serverStateModel);
+
         _state.ServerState = serverStateModel;
-        _state.Host = serverStateModel.Url;
-        _jellyfinSdkSettings.SetServerUrl(serverStateModel.Url);
-        CurrentStateModel.StaticHost = serverStateModel.Url;
+        _state.Host = serverStateModel.Url.TrimEnd('/');
+        _jellyfinSdkSettings.SetServerUrl(_state.Host);
     }
 
     /// <inheritdoc />
-    public ServerStateModel? GetServerState()
-    {
-        return _state.ServerState;
-    }
+    public ServerStateModel? GetServerState() => _state.ServerState;
 
     /// <inheritdoc />
-    public UserStateModel? GetUserState()
-    {
-        return _state.UserState;
-    }
+    public UserStateModel? GetUserState() => _state.UserState;
 
     /// <inheritdoc />
-    public void SetUserState(UserStateModel userStateModel)
-    {
-        _state.UserState = userStateModel;
-    }
+    public void SetUserState(UserStateModel? userStateModel) => _state.UserState = userStateModel;
 
     /// <inheritdoc />
-    public string GetHost()
-    {
-        return _state.Host ?? throw new InvalidOperationException();
-    }
+    public string GetHost() => _state.Host ?? throw new InvalidOperationException("No server is selected");
 
     /// <inheritdoc />
-    public string? GetToken()
-        => _jellyfinSdkSettings.AccessToken;
+    public string? GetToken() => _jellyfinSdkSettings.AccessToken;
 
     /// <inheritdoc />
     public void ClearState()
     {
         _state.UserDto = null;
-        _state.Host = null;
         _state.Token = null;
-        CurrentStateModel.StaticHost = null;
+        _state.UserState = null;
+        UserChanged?.Invoke(this, EventArgs.Empty);
     }
 
     /// <inheritdoc/>
     public void SetHost(string host)
     {
         _state.Host = host;
-        CurrentStateModel.StaticHost = host;
     }
 }

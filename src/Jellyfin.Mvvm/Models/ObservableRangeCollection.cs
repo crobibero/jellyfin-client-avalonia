@@ -39,7 +39,7 @@ public class ObservableRangeCollection<T> : ObservableCollection<T>
             throw new ArgumentException("Mode must be either Add or Reset for AddRange.", nameof(notificationMode));
         }
 
-        ArgumentNullException.ThrowIfNull(nameof(collection));
+        ArgumentNullException.ThrowIfNull(collection);
 
         CheckReentrancy();
 
@@ -82,7 +82,7 @@ public class ObservableRangeCollection<T> : ObservableCollection<T>
             throw new ArgumentException("Mode must be either Remove or Reset for RemoveRange.", nameof(notificationMode));
         }
 
-        ArgumentNullException.ThrowIfNull(nameof(collection));
+        ArgumentNullException.ThrowIfNull(collection);
 
         CheckReentrancy();
 
@@ -136,7 +136,7 @@ public class ObservableRangeCollection<T> : ObservableCollection<T>
     /// <param name="collection">The collection to replace with.</param>
     public void ReplaceRange(IEnumerable<T> collection)
     {
-        ArgumentNullException.ThrowIfNull(nameof(collection));
+        ArgumentNullException.ThrowIfNull(collection);
 
         CheckReentrancy();
 

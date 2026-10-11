@@ -1,3 +1,5 @@
+using Jellyfin.Mvvm.Models;
+
 namespace Jellyfin.Mvvm.Services;
 
 /// <summary>
@@ -5,6 +7,21 @@ namespace Jellyfin.Mvvm.Services;
 /// </summary>
 public interface IAuthenticationService
 {
+    /// <summary>
+    /// Resolve a user entered address to a server, trying common schemes and ports.
+    /// </summary>
+    /// <param name="address">The address.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The server, or <c>null</c> when no server responded.</returns>
+    ValueTask<ServerInfoModel?> ResolveServerAsync(string address, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets the public users of the current server.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The public users.</returns>
+    ValueTask<IReadOnlyList<UserDto>> GetPublicUsersAsync(CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Authenticate against the host using the provided credentials.
     /// </summary>
@@ -48,9 +65,11 @@ public interface IAuthenticationService
     ValueTask<bool> IsQuickConnectEnabledAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Log out of current session.
+    /// Log out of the current session.
     /// </summary>
-    void Logout();
+    /// <param name="revokeToken">Whether to revoke the access token on the server.</param>
+    /// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
+    ValueTask LogoutAsync(bool revokeToken = false);
 
     /// <summary>
     /// Test whether the client is currently authenticated.

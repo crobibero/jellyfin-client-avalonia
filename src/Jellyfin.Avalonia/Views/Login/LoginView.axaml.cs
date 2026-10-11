@@ -1,12 +1,11 @@
-using Jellyfin.Avalonia.Views.Facades;
-using Jellyfin.Mvvm.ViewModels.Login;
+using Jellyfin.Avalonia.Controls;
 
 namespace Jellyfin.Avalonia.Views.Login;
 
 /// <summary>
-/// Login view.
+/// The view for <see cref="Jellyfin.Mvvm.ViewModels.Login.LoginViewModel"/>.
 /// </summary>
-public partial class LoginView : BaseUserView<LoginViewModel>
+public partial class LoginView : PageView
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="LoginView"/> class.

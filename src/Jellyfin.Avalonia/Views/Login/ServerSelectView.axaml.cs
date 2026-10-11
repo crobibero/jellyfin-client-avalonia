@@ -1,12 +1,11 @@
-using Jellyfin.Avalonia.Views.Facades;
-using Jellyfin.Mvvm.ViewModels.Login;
+using Jellyfin.Avalonia.Controls;
 
 namespace Jellyfin.Avalonia.Views.Login;
 
 /// <summary>
-/// Server select view.
+/// The view for <see cref="Jellyfin.Mvvm.ViewModels.Login.ServerSelectViewModel"/>.
 /// </summary>
-public partial class ServerSelectView : BaseUserView<ServerSelectViewModel>
+public partial class ServerSelectView : PageView
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ServerSelectView"/> class.

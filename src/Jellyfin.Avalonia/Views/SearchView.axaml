@@ -1,0 +1,42 @@
+<controls:PageView x:Class="Jellyfin.Avalonia.Views.SearchView"
+                   xmlns="https://github.com/avaloniaui"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
+                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+                   xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
+                   x:DataType="vm:SearchViewModel">
+    <Grid RowDefinitions="Auto,*">
+        <TextBox Grid.Row="0"
+                 MaxWidth="720"
+                 Margin="48,8,48,16"
+                 controls:PageView.IsInitialFocus="True"
+                 Text="{Binding SearchText}"
+                 PlaceholderText="{x:Static strings:Strings.Search_Hint}">
+            <TextBox.InnerLeftContent>
+                <mi:MaterialIcon Width="24"
+                                 Height="24"
+                                 Margin="16,0,0,0"
+                                 Kind="Magnify" />
+            </TextBox.InnerLeftContent>
+        </TextBox>
+
+        <ScrollViewer Grid.Row="1"
+                      HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl Margin="0,0,0,48"
+                          ItemTemplate="{StaticResource CardRowTemplate}"
+                          ItemsSource="{Binding Rows}" />
+        </ScrollViewer>
+
+        <ProgressBar Grid.Row="1"
+                     Width="240"
+                     VerticalAlignment="Top"
+                     IsIndeterminate="True"
+                     IsVisible="{Binding IsSearching}" />
+        <TextBlock Grid.Row="1"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Classes="caption"
+                   Text="{Binding EmptyMessage}" />
+    </Grid>
+</controls:PageView>

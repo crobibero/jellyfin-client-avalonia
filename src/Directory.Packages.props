@@ -1,0 +1,63 @@
+<Project>
+    <PropertyGroup>
+        <AvaloniaVersion>12.1.4</AvaloniaVersion>
+        <MicrosoftExtensionsVersion>10.0.12</MicrosoftExtensionsVersion>
+        <LibVlcSharpVersion>3.10.1</LibVlcSharpVersion>
+    </PropertyGroup>
+
+    <!-- Analyzers -->
+    <ItemGroup>
+        <PackageVersion Include="SerilogAnalyzer" Version="0.15.0" />
+        <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
+        <PackageVersion Include="SmartAnalyzers.MultithreadingAnalyzer" Version="1.1.31" />
+    </ItemGroup>
+
+    <!-- Core -->
+    <ItemGroup>
+        <PackageVersion Include="AsyncAwaitBestPractices" Version="10.0.0" />
+        <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+        <PackageVersion Include="Jellyfin.Sdk" Version="2026.10.10" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="$(MicrosoftExtensionsVersion)" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(MicrosoftExtensionsVersion)" />
+        <PackageVersion Include="Microsoft.Extensions.Http" Version="$(MicrosoftExtensionsVersion)" />
+        <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.10.0" />
+        <PackageVersion Include="Microsoft.Extensions.Logging" Version="$(MicrosoftExtensionsVersion)" />
+        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="$(MicrosoftExtensionsVersion)" />
+        <PackageVersion Include="Serilog" Version="4.4.0" />
+        <PackageVersion Include="Serilog.Extensions.Logging" Version="10.0.0" />
+        <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
+        <PackageVersion Include="Serilog.Sinks.Debug" Version="3.0.0" />
+        <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
+    </ItemGroup>
+
+    <!-- Avalonia -->
+    <ItemGroup>
+        <PackageVersion Include="Avalonia" Version="$(AvaloniaVersion)" />
+        <PackageVersion Include="Avalonia.Android" Version="$(AvaloniaVersion)" />
+        <PackageVersion Include="Avalonia.Browser" Version="$(AvaloniaVersion)" />
+        <PackageVersion Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
+        <PackageVersion Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
+        <PackageVersion Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
+        <PackageVersion Include="Avalonia.Controls.ItemsRepeater" Version="12.0.0" />
+        <PackageVersion Include="AsyncImageLoader.Avalonia" Version="4.0.0" />
+        <PackageVersion Include="Material.Icons.Avalonia" Version="3.0.2" />
+        <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.2.0.3" />
+    </ItemGroup>
+
+    <!-- Playback -->
+    <ItemGroup>
+        <PackageVersion Include="LibVLCSharp" Version="$(LibVlcSharpVersion)" />
+        <PackageVersion Include="VideoLAN.LibVLC.Android" Version="3.6.5" />
+        <PackageVersion Include="VideoLAN.LibVLC.iOS" Version="3.6.1" />
+        <PackageVersion Include="VideoLAN.LibVLC.Mac" Version="3.1.3.1" />
+        <PackageVersion Include="VideoLAN.LibVLC.tvOS" Version="3.3.17" />
+        <PackageVersion Include="VideoLAN.LibVLC.Windows" Version="3.0.24" />
+    </ItemGroup>
+
+    <!-- Tests -->
+    <ItemGroup>
+        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+        <PackageVersion Include="xunit.v3" Version="4.0.2" />
+        <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
+    </ItemGroup>
+</Project>

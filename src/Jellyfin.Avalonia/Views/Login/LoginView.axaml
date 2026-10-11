@@ -1,63 +1,120 @@
-<UserControl x:Class="Jellyfin.Avalonia.Views.Login.LoginView"
-             xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:login="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
-             xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
-             x:DataType="login:LoginViewModel">
-
+<controls:PageView x:Class="Jellyfin.Avalonia.Views.Login.LoginView"
+                   xmlns="https://github.com/avaloniaui"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
+                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+                   xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
+                   x:DataType="vm:LoginViewModel"
+                   Background="{DynamicResource StartupBackgroundBrush}">
     <ScrollViewer>
-        <StackPanel Orientation="Vertical">
-            <TextBlock Text="{Binding ServerName}" />
+        <StackPanel MaxWidth="480"
+                    Margin="24,48"
+                    VerticalAlignment="Center"
+                    Spacing="16">
+            <Image Height="56"
+                   HorizontalAlignment="Center"
+                   Source="{StaticResource JellyfinLogoImage}" />
+            <TextBlock HorizontalAlignment="Center"
+                       Classes="h2"
+                       Text="{Binding Title}"
+                       TextAlignment="Center"
+                       TextWrapping="Wrap" />
 
-            <!--  Username entry  -->
-            <Grid ColumnDefinitions="Auto,*"
-                  RowDefinitions="Auto,*">
-                <TextBlock Grid.Row="0"
-                           Grid.Column="0"
-                           Grid.ColumnSpan="2"
-                           Text="{x:Static strings:Strings.Login_Username}" />
-                <icons:MaterialIcon Grid.Row="1"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Kind="User" />
-                <TextBox Grid.Row="1"
-                         Grid.Column="1"
-                         Text="{Binding Username}" />
-            </Grid>
+            <StackPanel IsVisible="{Binding !IsQuickConnectActive}"
+                        Spacing="16">
+                <TextBox Name="UsernameBox"
+                         controls:PageView.IsInitialFocus="True"
+                         Text="{Binding Username}"
+                         PlaceholderText="{x:Static strings:Strings.Login_Username}">
+                    <TextBox.InnerLeftContent>
+                        <mi:MaterialIcon Width="22"
+                                         Height="22"
+                                         Margin="16,0,0,0"
+                                         Kind="AccountOutline" />
+                    </TextBox.InnerLeftContent>
+                </TextBox>
+                <TextBox Name="PasswordBox"
+                         PasswordChar="•"
+                         RevealPassword="{Binding #RevealToggle.IsChecked}"
+                         Text="{Binding Password}"
+                         PlaceholderText="{x:Static strings:Strings.Login_Password}">
+                    <TextBox.InnerLeftContent>
+                        <mi:MaterialIcon Width="22"
+                                         Height="22"
+                                         Margin="16,0,0,0"
+                                         Kind="LockOutline" />
+                    </TextBox.InnerLeftContent>
+                    <TextBox.InnerRightContent>
+                        <ToggleButton Name="RevealToggle"
+                                      Margin="0,0,8,0"
+                                      Background="Transparent"
+                                      BorderThickness="0">
+                            <mi:MaterialIcon Width="20"
+                                             Height="20"
+                                             Kind="EyeOutline" />
+                        </ToggleButton>
+                    </TextBox.InnerRightContent>
+                    <TextBox.KeyBindings>
+                        <KeyBinding Command="{Binding LoginCommand}"
+                                    Gesture="Enter" />
+                    </TextBox.KeyBindings>
+                </TextBox>
 
-            <!--  Password entry  -->
-            <Grid ColumnDefinitions="Auto,*"
-                  RowDefinitions="Auto,*">
-                <TextBlock Grid.Row="0"
-                           Grid.ColumnSpan="2"
-                           Text="{x:Static strings:Strings.Login_Password}" />
-                <icons:MaterialIcon Grid.Row="1"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Kind="Password" />
-                <TextBox Grid.Row="1"
-                         Grid.Column="1"
-                         PasswordChar="*"
-                         Text="{Binding Password}" />
-            </Grid>
+                <CheckBox Content="{x:Static strings:Strings.Login_RememberMe}"
+                          IsChecked="{Binding RememberMe}" />
 
-            <CheckBox Content="{x:Static strings:Strings.Login_RememberMe}" />
-            <Button Command="{Binding LoginCommand}"
-                    Content="{x:Static strings:Strings.Login_LoginButton}" />
+                <TextBlock Classes="error"
+                           IsVisible="{Binding HasError}"
+                           Text="{Binding ErrorMessage}" />
 
-            <StackPanel IsVisible="{Binding QuickConnectAvailable}"
-                        Orientation="Vertical">
-                <Button Command="{Binding LoginWithQuickConnectCommand}"
-                        Content="{x:Static strings:Strings.Login_QuickConnectButton}" />
-                <StackPanel HorizontalAlignment="Center"
-                            IsVisible="{Binding QuickConnectCode, Converter={x:Static StringConverters.IsNotNullOrEmpty}, Mode=OneWay}"
-                            Orientation="Horizontal">
-                    <TextBlock Text="{x:Static strings:Strings.Login_QuickConnectCode}" />
-                    <TextBlock Text="{Binding QuickConnectCode, Mode=OneWay}" />
-                </StackPanel>
+                <ProgressBar IsIndeterminate="True"
+                             IsVisible="{Binding IsSigningIn}" />
+
+                <Button HorizontalAlignment="Stretch"
+                        Classes="accent"
+                        Command="{Binding LoginCommand}"
+                        Content="{x:Static strings:Strings.Login_LoginButton}"
+                        IsEnabled="{Binding !IsSigningIn}" />
+                <Button HorizontalAlignment="Stretch"
+                        Command="{Binding LoginWithQuickConnectCommand}"
+                        IsVisible="{Binding QuickConnectAvailable}">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="8">
+                        <mi:MaterialIcon Kind="CellphoneKey" />
+                        <TextBlock Text="{x:Static strings:Strings.Login_QuickConnectButton}" />
+                    </StackPanel>
+                </Button>
+                <Button HorizontalAlignment="Stretch"
+                        Command="{Binding GoBackCommand}"
+                        Content="{x:Static strings:Strings.Back}" />
             </StackPanel>
+
+            <!--  Quick Connect pending  -->
+            <Border Classes="panel"
+                    IsVisible="{Binding IsQuickConnectActive}">
+                <StackPanel Spacing="16">
+                    <TextBlock HorizontalAlignment="Center"
+                               Classes="caption"
+                               Text="{x:Static strings:Strings.Login_QuickConnectCode}" />
+                    <TextBlock HorizontalAlignment="Center"
+                               FontFamily="Cascadia Mono,Consolas,Menlo,DejaVu Sans Mono,monospace"
+                               FontSize="{DynamicResource FontSizeDisplay}"
+                               FontWeight="Bold"
+                               LetterSpacing="8"
+                               Text="{Binding QuickConnectCode}" />
+                    <TextBlock Classes="body"
+                               Foreground="{DynamicResource OnBackgroundDimBrush}"
+                               Text="{x:Static strings:Strings.Login_QuickConnectInstructions}"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap" />
+                    <ProgressBar IsIndeterminate="True" />
+                    <Button HorizontalAlignment="Center"
+                            controls:PageView.IsInitialFocus="True"
+                            Command="{Binding CancelQuickConnectCommand}"
+                            Content="{x:Static strings:Strings.Cancel}" />
+                </StackPanel>
+            </Border>
         </StackPanel>
     </ScrollViewer>
-
-</UserControl>
+</controls:PageView>

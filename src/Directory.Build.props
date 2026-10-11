@@ -9,6 +9,19 @@
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <NeutralLanguage>en</NeutralLanguage>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    </PropertyGroup>
+
+    <!-- Shared version and target information -->
+    <PropertyGroup>
+        <JellyfinTargetFramework>net10.0</JellyfinTargetFramework>
+        <JellyfinAndroidTargetFramework>net10.0-android</JellyfinAndroidTargetFramework>
+        <JellyfinIOSTargetFramework>net10.0-ios</JellyfinIOSTargetFramework>
+        <JellyfinTvOSTargetFramework>net10.0-tvos</JellyfinTvOSTargetFramework>
+        <JellyfinBrowserTargetFramework>net10.0-browser</JellyfinBrowserTargetFramework>
+        <Version Condition="'$(Version)' == ''">0.1.0</Version>
+        <Authors>Jellyfin Contributors</Authors>
+        <Product>Jellyfin Avalonia</Product>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,9 +30,9 @@
 
     <!-- Analyzers -->
     <ItemGroup>
-        <PackageReference Include="SerilogAnalyzer" Version="0.15.0" PrivateAssets="All" />
-        <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="All" />
-        <PackageReference Include="SmartAnalyzers.MultithreadingAnalyzer" Version="1.1.31" PrivateAssets="All" />
+        <PackageReference Include="SerilogAnalyzer" PrivateAssets="All" />
+        <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" />
+        <PackageReference Include="SmartAnalyzers.MultithreadingAnalyzer" PrivateAssets="All" />
     </ItemGroup>
 
 </Project>

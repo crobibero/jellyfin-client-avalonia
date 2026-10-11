@@ -1,22 +1,172 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Styles.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <MergeResourceInclude Source="/Resources/Styles/Colors.axaml" />
-                <MergeResourceInclude Source="/Resources/Styles/FontSizes.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Styles.Resources>
-
-    <Style Selector="TextBlock">
-        <Setter Property="FontSize" Value="{StaticResource FontMedium}" />
+    <!--  Typography  -->
+    <Style Selector="TextBlock.display">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeDisplay}" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+    <Style Selector="TextBlock.h1">
+        <Setter Property="FontSize" Value="{DynamicResource FontSize3Xl}" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+    <Style Selector="TextBlock.h2">
+        <Setter Property="FontSize" Value="{DynamicResource FontSize2Xl}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="TextBlock.h3">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeXl}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="TextBlock.body">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeMd}" />
+        <Setter Property="LineHeight" Value="24" />
+    </Style>
+    <Style Selector="TextBlock.caption">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeSm}" />
+        <Setter Property="Foreground" Value="{DynamicResource OnBackgroundDimBrush}" />
+    </Style>
+    <Style Selector="TextBlock.small">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeXs}" />
+        <Setter Property="Foreground" Value="{DynamicResource OnBackgroundDimBrush}" />
+    </Style>
+    <Style Selector="TextBlock.error">
+        <Setter Property="Foreground" Value="{DynamicResource ErrorBrush}" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style Selector="SelectableTextBlock.mono">
+        <Setter Property="FontFamily" Value="Cascadia Mono,Consolas,Menlo,DejaVu Sans Mono,monospace" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeXs}" />
+        <Setter Property="Foreground" Value="{DynamicResource OnBackgroundDimBrush}" />
     </Style>
 
-    <Style Selector="StackPanel.poster-card">
-        <Setter Property="Width" Value="300" />
+    <!--  Inputs  -->
+    <Style Selector="TextBox">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeLg}" />
+        <Setter Property="Padding" Value="16,8" />
+        <Setter Property="CornerRadius" Value="{DynamicResource RadiusDefault}" />
+        <Setter Property="MinHeight" Value="48" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+    <Style Selector="ComboBox">
+        <Setter Property="CornerRadius" Value="{DynamicResource RadiusDefault}" />
+        <Setter Property="MinWidth" Value="200" />
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeMd}" />
+    </Style>
+    <Style Selector="ComboBox:focus-visible">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardFocusBorderBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+    </Style>
+    <Style Selector="ToggleSwitch:focus-visible">
+        <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
     </Style>
 
+    <!--  Item card frame, focus scales the card like the Android TV client  -->
+    <Style Selector="Border.card-frame">
+        <Setter Property="CornerRadius" Value="{DynamicResource RadiusDefault}" />
+        <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+        <Setter Property="ClipToBounds" Value="True" />
+        <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" />
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="Border.card-focus">
+        <Setter Property="CornerRadius" Value="{DynamicResource RadiusDefault}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="3" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="Button.card:focus-visible Border.card-focus">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardFocusBorderBrush}" />
+    </Style>
+    <Style Selector="Button.card:pointerover Border.card-focus">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardHoverBorderBrush}" />
+    </Style>
+    <Style Selector="Button.card:pressed Border.card-frame">
+        <Setter Property="RenderTransform" Value="scale(0.98)" />
+    </Style>
+    <Style Selector="Button.card TextBlock.card-title">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeSm}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        <Setter Property="Margin" Value="2,8,2,0" />
+    </Style>
+    <Style Selector="Button.card TextBlock.card-subtitle">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeXs}" />
+        <Setter Property="Foreground" Value="{DynamicResource OnBackgroundDimBrush}" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        <Setter Property="Margin" Value="2,2,2,0" />
+    </Style>
+    <Style Selector="Button.card:focus-visible TextBlock.card-title">
+        <Setter Property="Foreground" Value="{DynamicResource OnImageBrush}" />
+    </Style>
+
+    <!--  User avatars  -->
+    <Style Selector="Border.avatar-frame">
+        <Setter Property="CornerRadius" Value="{DynamicResource RadiusCircle}" />
+        <Setter Property="ClipToBounds" Value="True" />
+        <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+    </Style>
+    <!--  The accent fill would fringe the clipped photo edge  -->
+    <Style Selector="Border.avatar-frame.has-image">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <!--  Overlay so the ring draws above the photo  -->
+    <Style Selector="Border.avatar-focus">
+        <Setter Property="CornerRadius" Value="{DynamicResource RadiusCircle}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="3" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="Button.card:focus-visible Border.avatar-focus">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardFocusBorderBrush}" />
+    </Style>
+    <Style Selector="Button.card:pointerover Border.avatar-focus">
+        <Setter Property="BorderBrush" Value="{DynamicResource CardHoverBorderBrush}" />
+    </Style>
+
+    <!--  Info chips  -->
+    <Style Selector="Border.chip">
+        <Setter Property="CornerRadius" Value="{DynamicResource RadiusDefault}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="Border.chip TextBlock">
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeSm}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <!--  Compact layouts hide the browse header  -->
+    <Style Selector="UserControl.compact ContentControl.browse-header">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <!--  Surfaces  -->
+    <Style Selector="Border.panel">
+        <Setter Property="Background" Value="{DynamicResource PanelBrush}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource RadiusDefault}" />
+        <Setter Property="Padding" Value="24" />
+    </Style>
+
+    <!--  Progress  -->
+    <Style Selector="ProgressBar.seek">
+        <Setter Property="Foreground" Value="{DynamicResource RangeFillBrush}" />
+        <Setter Property="Background" Value="{DynamicResource ProgressTrackBrush}" />
+        <Setter Property="MinHeight" Value="4" />
+        <Setter Property="Height" Value="4" />
+        <Setter Property="CornerRadius" Value="{DynamicResource RadiusCircle}" />
+    </Style>
 </Styles>
-

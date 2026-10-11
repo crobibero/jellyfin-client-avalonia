@@ -1,0 +1,90 @@
+<controls:PageView x:Class="Jellyfin.Avalonia.Views.LibraryView"
+                   xmlns="https://github.com/avaloniaui"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
+                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+                   xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
+                   x:DataType="vm:LibraryViewModel">
+    <Grid RowDefinitions="Auto,Auto,*">
+        <ContentControl Grid.Row="0"
+                        Height="200"
+                        Classes="browse-header"
+                        Content="{Binding}"
+                        ContentTemplate="{StaticResource BrowseHeaderTemplate}" />
+
+        <!--  Title, count and sorting  -->
+        <Grid Grid.Row="1"
+              Margin="48,0,48,4"
+              ColumnDefinitions="*,Auto">
+            <StackPanel Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="16">
+                <TextBlock VerticalAlignment="Center"
+                           Classes="h2"
+                           Text="{Binding Title}" />
+                <TextBlock VerticalAlignment="Center"
+                           Classes="caption"
+                           Text="{Binding TotalCount}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        Spacing="8">
+                <ComboBox ItemsSource="{Binding FilterOptions}"
+                          SelectedItem="{Binding SelectedFilter}"
+                          ToolTip.Tip="{x:Static strings:Strings.Library_Filter}" />
+                <ComboBox ItemsSource="{Binding SortOptions}"
+                          SelectedItem="{Binding SelectedSort}"
+                          ToolTip.Tip="{x:Static strings:Strings.Library_SortBy}" />
+                <Button Classes="icon"
+                        Command="{Binding ToggleSortOrderCommand}"
+                        ToolTip.Tip="{x:Static strings:Strings.Library_Descending}">
+                    <Panel>
+                        <mi:MaterialIcon Width="22"
+                                         Height="22"
+                                         IsVisible="{Binding !SortDescending}"
+                                         Kind="SortAscending" />
+                        <mi:MaterialIcon Width="22"
+                                         Height="22"
+                                         IsVisible="{Binding SortDescending}"
+                                         Kind="SortDescending" />
+                    </Panel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <ScrollViewer Name="GridScroll"
+                      Grid.Row="2"
+                      HorizontalScrollBarVisibility="Disabled">
+            <ItemsRepeater Margin="48,16,48,48"
+                           ClipToBounds="False"
+                           ItemTemplate="{StaticResource ItemCardTemplate}"
+                           ItemsSource="{Binding Items}">
+                <ItemsRepeater.Layout>
+                    <UniformGridLayout ItemsJustification="Start"
+                                       MinColumnSpacing="16"
+                                       MinRowSpacing="16" />
+                </ItemsRepeater.Layout>
+            </ItemsRepeater>
+        </ScrollViewer>
+
+        <ProgressBar Grid.Row="2"
+                     Width="240"
+                     VerticalAlignment="Top"
+                     IsIndeterminate="True"
+                     IsVisible="{Binding Loading}" />
+        <TextBlock Grid.Row="2"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Classes="caption"
+                   IsVisible="{Binding IsEmpty}"
+                   Text="{x:Static strings:Strings.Library_Empty}" />
+        <TextBlock Grid.Row="2"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Classes="error"
+                   IsVisible="{Binding HasError}"
+                   Text="{Binding ErrorMessage}" />
+    </Grid>
+</controls:PageView>

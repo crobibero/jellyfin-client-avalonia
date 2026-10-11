@@ -21,7 +21,22 @@ public class UserStateModel
     public required string Name { get; set; }
 
     /// <summary>
-    /// Gets or sets the user token.
+    /// Gets or sets the user token, or <c>null</c> when the user isn't signed in.
     /// </summary>
-    public required string Token { get; set; }
+    public string? Token { get; set; }
+
+    /// <summary>
+    /// Gets or sets the primary image tag.
+    /// </summary>
+    public string? ImageTag { get; set; }
+
+    /// <summary>
+    /// Gets or sets the blurhash of the primary image. The server sends none for users, so the client computes it.
+    /// </summary>
+    public string? ImageBlurHash { get; set; }
+
+    /// <summary>
+    /// Gets or sets the last time the user signed in.
+    /// </summary>
+    public DateTimeOffset? LastUsed { get; set; }
 }

@@ -19,4 +19,14 @@ public class ServerStateModel
     /// Gets or sets the server url.
     /// </summary>
     public required string Url { get; set; }
+
+    /// <summary>
+    /// Gets or sets the server version.
+    /// </summary>
+    public string? Version { get; set; }
+
+    /// <summary>
+    /// Gets or sets the last time the server was used.
+    /// </summary>
+    public DateTimeOffset? LastUsed { get; set; }
 }

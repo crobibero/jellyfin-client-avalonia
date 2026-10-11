@@ -8,15 +8,15 @@ public static class AppConstants
     /// <summary>
     /// The app name.
     /// </summary>
-    public const string Name = "Jellyfin-Avalonia";
+    public const string Name = "Jellyfin Avalonia";
 
     /// <summary>
-    /// The app http client name.
+    /// The app identifier used for storage paths.
     /// </summary>
-    public const string HttpClient = "Default";
+    public const string Identifier = "jellyfin-avalonia";
 
     /// <summary>
-    /// The app version.
+    /// Gets the app version.
     /// </summary>
-    public static readonly string Version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.1";
+    public static string Version { get; } = typeof(AppConstants).Assembly.GetName().Version?.ToString(3) ?? "0.1.0";
 }

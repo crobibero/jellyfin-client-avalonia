@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item>
+    <color android:color="@color/splash_background" />
+  </item>
+  <!-- ic_splash from jellyfin-ux draws the icon in the middle 44% of its viewport -->
+  <item android:drawable="@drawable/ic_splash"
+        android:width="288dp"
+        android:height="288dp"
+        android:gravity="center" />
+</layer-list>

@@ -1,0 +1,52 @@
+<controls:PageView x:Class="Jellyfin.Avalonia.Views.DeviceProfileView"
+                   xmlns="https://github.com/avaloniaui"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
+                   xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+                   xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
+                   x:DataType="vm:DeviceProfileViewModel">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+        <StackPanel MaxWidth="1000"
+                    Margin="48,0,48,48"
+                    Spacing="16">
+            <TextBlock Classes="h1"
+                       Text="{x:Static strings:Strings.Settings_DeviceProfile}" />
+            <TextBlock Classes="caption"
+                       Text="{x:Static strings:Strings.Settings_DeviceProfileDescription}"
+                       TextWrapping="Wrap" />
+            <TextBlock Classes="h3"
+                       Text="{Binding BackendName}" />
+
+            <TextBlock Margin="0,16,0,0"
+                       Classes="h2"
+                       Text="{x:Static strings:Strings.Settings_Capabilities}" />
+            <ItemsControl ItemsSource="{Binding Capabilities}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:CapabilityEntry">
+                        <Grid Margin="0,4"
+                              ColumnDefinitions="280,*">
+                            <TextBlock Grid.Column="0"
+                                       Classes="caption"
+                                       Text="{Binding Name}" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding Value}"
+                                       TextWrapping="Wrap" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Margin="0,16,0,0"
+                       Classes="h2"
+                       Text="{x:Static strings:Strings.Settings_GeneratedProfile}" />
+            <Border Padding="16"
+                    Background="{DynamicResource CodeBackgroundBrush}"
+                    CornerRadius="{DynamicResource RadiusDefault}">
+                <SelectableTextBlock Classes="mono"
+                                     Focusable="True"
+                                     Text="{Binding ProfileJson}"
+                                     TextWrapping="Wrap" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</controls:PageView>

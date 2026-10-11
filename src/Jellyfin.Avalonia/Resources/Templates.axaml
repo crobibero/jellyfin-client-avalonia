@@ -1,0 +1,181 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+                    xmlns:behaviors="clr-namespace:Jellyfin.Avalonia.Behaviors"
+                    xmlns:conv="clr-namespace:Jellyfin.Avalonia.Converters"
+                    xmlns:facades="clr-namespace:Jellyfin.Mvvm.ViewModels.Facades;assembly=Jellyfin.Mvvm"
+                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                    xmlns:models="clr-namespace:Jellyfin.Mvvm.Models;assembly=Jellyfin.Mvvm">
+
+    <!--  An item card: artwork with state overlays and titles below  -->
+    <DataTemplate x:Key="ItemCardTemplate"
+                  x:DataType="models:ItemCardModel">
+        <Button Width="{Binding Shape, Converter={x:Static conv:JellyfinConverters.CardWidth}}"
+                behaviors:CardBehavior.IsItemCard="True"
+                Classes="card">
+            <StackPanel>
+                <Border Height="{Binding Shape, Converter={x:Static conv:JellyfinConverters.CardHeight}}"
+                        Classes="card-frame">
+                    <Panel>
+                        <TextBlock Margin="8"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="{DynamicResource FontSizeLg}"
+                                   FontWeight="SemiBold"
+                                   Foreground="{DynamicResource OnBackgroundDimBrush}"
+                                   IsVisible="{Binding !HasImage}"
+                                   Text="{Binding PlaceholderText}"
+                                   TextAlignment="Center"
+                                   TextTrimming="CharacterEllipsis"
+                                   TextWrapping="Wrap" />
+                        <Border Background="{Binding ImageBlurHash, Converter={x:Static conv:JellyfinConverters.BlurHashBrush}}"
+                                IsVisible="{Binding HasImage}"
+                                RenderOptions.BitmapInterpolationMode="HighQuality" />
+                        <Image asyncImageLoader:ImageLoader.Source="{Binding ImageUrl}"
+                               IsVisible="{Binding HasImage}"
+                               Stretch="UniformToFill" />
+
+                        <!--  State indicators  -->
+                        <mi:MaterialIcon Width="22"
+                                         Height="22"
+                                         Margin="8"
+                                         HorizontalAlignment="Left"
+                                         VerticalAlignment="Top"
+                                         Foreground="{DynamicResource FavoriteBrush}"
+                                         IsVisible="{Binding IsFavorite}"
+                                         Kind="Heart" />
+                        <Border Width="24"
+                                Height="24"
+                                Margin="8"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Background="{DynamicResource BadgeBrush}"
+                                CornerRadius="{DynamicResource RadiusCircle}"
+                                IsVisible="{Binding IsPlayed}">
+                            <mi:MaterialIcon Width="14"
+                                             Height="14"
+                                             Foreground="{DynamicResource OnBadgeBrush}"
+                                             Kind="Check" />
+                        </Border>
+                        <Border MinWidth="24"
+                                Height="24"
+                                Margin="8"
+                                Padding="8,0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Background="{DynamicResource BadgeBrush}"
+                                CornerRadius="{DynamicResource RadiusCircle}"
+                                IsVisible="{Binding HasUnplayedCount}">
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontSize="{DynamicResource FontSizeXs}"
+                                       FontWeight="Bold"
+                                       Foreground="{DynamicResource OnBadgeBrush}"
+                                       Text="{Binding UnplayedCount}" />
+                        </Border>
+                        <ProgressBar Margin="8,0,8,8"
+                                     VerticalAlignment="Bottom"
+                                     Classes="seek"
+                                     IsVisible="{Binding HasProgress}"
+                                     Maximum="1"
+                                     Minimum="0"
+                                     Value="{Binding Progress, TargetNullValue=0, FallbackValue=0}" />
+                        <Border Classes="card-focus" />
+                    </Panel>
+                </Border>
+                <TextBlock Classes="card-title"
+                           Text="{Binding Title}" />
+                <TextBlock Classes="card-subtitle"
+                           IsVisible="{Binding Subtitle, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                           Text="{Binding Subtitle}" />
+            </StackPanel>
+        </Button>
+    </DataTemplate>
+
+    <!--  A horizontally scrolling row of cards  -->
+    <DataTemplate x:Key="CardRowTemplate"
+                  x:DataType="models:HomeRowModel">
+        <StackPanel Margin="0,8,0,0"
+                    IsVisible="{Binding HasItems}">
+            <TextBlock Margin="{DynamicResource PageMargin}"
+                       Classes="h3"
+                       Text="{Binding Name}" />
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden"
+                          VerticalScrollBarVisibility="Disabled">
+                <ItemsRepeater Margin="{DynamicResource RowPadding}"
+                               ClipToBounds="False"
+                               ItemTemplate="{StaticResource ItemCardTemplate}"
+                               ItemsSource="{Binding Items}">
+                    <ItemsRepeater.Layout>
+                        <StackLayout Orientation="Horizontal"
+                                     Spacing="16" />
+                    </ItemsRepeater.Layout>
+                </ItemsRepeater>
+            </ScrollViewer>
+        </StackPanel>
+    </DataTemplate>
+
+    <!--  A metadata chip  -->
+    <DataTemplate x:Key="InfoChipTemplate"
+                  x:DataType="models:InfoChip">
+        <Border Padding="{Binding Style, Converter={x:Static conv:JellyfinConverters.ChipPadding}}"
+                Background="{Binding Style, Converter={x:Static conv:JellyfinConverters.ChipBackground}}"
+                Classes="chip">
+            <StackPanel Orientation="Horizontal"
+                        Spacing="4">
+                <mi:MaterialIcon Width="16"
+                                 Height="16"
+                                 Foreground="{Binding Icon, Converter={x:Static conv:JellyfinConverters.ChipIconBrush}}"
+                                 IsVisible="{Binding Icon, Converter={x:Static conv:JellyfinConverters.HasChipIcon}}"
+                                 Kind="{Binding Icon, Converter={x:Static conv:JellyfinConverters.ChipIcon}}" />
+                <TextBlock Foreground="{Binding Style, Converter={x:Static conv:JellyfinConverters.ChipForeground}}"
+                           Text="{Binding Text}" />
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
+    <ItemsPanelTemplate x:Key="ChipPanelTemplate">
+        <WrapPanel ItemSpacing="16"
+                   LineSpacing="8"
+                   Orientation="Horizontal" />
+    </ItemsPanelTemplate>
+
+    <!--  Details of the focused card, shown above rows and grids  -->
+    <DataTemplate x:Key="BrowseHeaderTemplate"
+                  x:DataType="facades:BrowseViewModel">
+        <StackPanel MaxWidth="960"
+                    Margin="48,4,48,8"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Spacing="8">
+            <Panel Height="72"
+                   HorizontalAlignment="Left">
+                <Image MaxWidth="420"
+                       MaxHeight="72"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Bottom"
+                       asyncImageLoader:ImageLoader.Source="{Binding FocusedLogoUrl}"
+                       IsVisible="{Binding FocusedLogoUrl, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                       Stretch="Uniform" />
+                <TextBlock VerticalAlignment="Bottom"
+                           Classes="h1"
+                           IsVisible="{Binding FocusedLogoUrl, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                           Text="{Binding FocusedTitle}"
+                           TextTrimming="CharacterEllipsis" />
+            </Panel>
+            <TextBlock Classes="h3"
+                       IsVisible="{Binding FocusedSubtitle, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                       Text="{Binding FocusedSubtitle}"
+                       TextTrimming="CharacterEllipsis" />
+            <ItemsControl ItemTemplate="{StaticResource InfoChipTemplate}"
+                          ItemsPanel="{StaticResource ChipPanelTemplate}"
+                          ItemsSource="{Binding FocusedInfo}" />
+            <TextBlock Classes="body"
+                       Foreground="{DynamicResource OnBackgroundDimBrush}"
+                       MaxLines="3"
+                       Text="{Binding FocusedOverview}"
+                       TextTrimming="CharacterEllipsis"
+                       TextWrapping="Wrap" />
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

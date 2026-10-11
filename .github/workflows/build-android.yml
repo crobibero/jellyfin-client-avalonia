@@ -1,0 +1,48 @@
+name: Build Android
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+  workflow_dispatch:
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+
+jobs:
+  android:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@6bd8b7f7774af54e05809fcc5431931b3eb1ddee # v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: microsoft
+          java-version: 21
+
+      - name: Install workload
+        run: dotnet workload install android
+
+      - name: Publish APK
+        working-directory: ./src
+        run: |
+          dotnet publish Jellyfin.Avalonia.Android -c Release -f net10.0-android \
+            -p:ApplicationVersion=$GITHUB_RUN_NUMBER -p:Version=0.1.$GITHUB_RUN_NUMBER \
+            -p:AcceptAndroidSdkLicenses=True --output artifacts/android
+
+      - uses: actions/upload-artifact@604373da6381bf24206979c74d06a550515601b9 # v4
+        with:
+          name: jellyfin-avalonia-android
+          path: src/artifacts/android/*.apk

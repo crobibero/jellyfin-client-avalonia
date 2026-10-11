@@ -1,12 +1,11 @@
-using Jellyfin.Avalonia.Views.Facades;
-using Jellyfin.Mvvm.ViewModels;
+using Jellyfin.Avalonia.Controls;
 
 namespace Jellyfin.Avalonia.Views;
 
 /// <summary>
-/// The home view.
+/// The view for <see cref="Jellyfin.Mvvm.ViewModels.HomeViewModel"/>.
 /// </summary>
-public partial class HomeView : BaseUserView<HomeViewModel>
+public partial class HomeView : PageView
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="HomeView"/> class.

@@ -1,0 +1,29 @@
+<controls:PageView x:Class="Jellyfin.Avalonia.Views.StartupView"
+                   xmlns="https://github.com/avaloniaui"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
+                   xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+                   xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
+                   x:DataType="vm:StartupViewModel"
+                   Background="{DynamicResource StartupBackgroundBrush}">
+    <StackPanel HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="32">
+        <Image Height="96"
+               Source="{StaticResource JellyfinLogoImage}" />
+        <ProgressBar Width="200"
+                     IsIndeterminate="True"
+                     IsVisible="{Binding !HasError}" />
+        <StackPanel IsVisible="{Binding HasError}"
+                    Spacing="16">
+            <TextBlock MaxWidth="480"
+                       Classes="error"
+                       Text="{Binding ErrorMessage}"
+                       TextAlignment="Center" />
+            <Button HorizontalAlignment="Center"
+                    controls:PageView.IsInitialFocus="True"
+                    Command="{Binding RetryCommand}"
+                    Content="{x:Static strings:Strings.Retry}" />
+        </StackPanel>
+    </StackPanel>
+</controls:PageView>

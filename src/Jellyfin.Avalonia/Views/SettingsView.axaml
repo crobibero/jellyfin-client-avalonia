@@ -1,0 +1,476 @@
+<controls:PageView x:Class="Jellyfin.Avalonia.Views.SettingsView"
+                   xmlns="https://github.com/avaloniaui"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
+                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+                   xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
+                   x:DataType="vm:SettingsViewModel">
+    <controls:PageView.Styles>
+        <Style Selector="Grid.setting">
+            <Setter Property="Margin" Value="0,6" />
+            <Setter Property="MinHeight" Value="44" />
+        </Style>
+    </controls:PageView.Styles>
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+        <StackPanel MaxWidth="900"
+                    Margin="48,0,48,48">
+            <TextBlock Classes="h1"
+                       Text="{x:Static strings:Strings.Settings}" />
+            <TextBlock Margin="0,24,0,8"
+                       Classes="h2"
+                       Text="{x:Static strings:Strings.Settings_Playback}" />
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_MaxBitrate}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260" controls:PageView.IsInitialFocus="True"
+                          ItemsSource="{Binding BitrateOptions}"
+                          SelectedItem="{Binding MaxBitrate}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_ResumeRewind}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding RewindOptions}"
+                          SelectedItem="{Binding ResumeRewind}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_SkipBack}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding SkipOptions}"
+                          SelectedItem="{Binding SkipBack}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_SkipForward}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding SkipOptions}"
+                          SelectedItem="{Binding SkipForward}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_NextUp}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding NextUpOptions}"
+                          SelectedItem="{Binding NextUpBehavior}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_NextUpTimeout}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding TimeoutOptions}"
+                          SelectedItem="{Binding NextUpTimeout}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_PlayerZoom}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding ZoomOptions}"
+                          SelectedItem="{Binding ZoomMode}" />
+            </Grid>
+            <TextBlock Margin="0,24,0,8"
+                       Classes="h2"
+                       Text="{x:Static strings:Strings.Settings_MediaSegments}" />
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_SegmentIntro}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding SegmentOptions}"
+                          SelectedItem="{Binding IntroAction}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_SegmentOutro}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding SegmentOptions}"
+                          SelectedItem="{Binding OutroAction}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_SegmentRecap}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding SegmentOptions}"
+                          SelectedItem="{Binding RecapAction}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_SegmentPreview}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding SegmentOptions}"
+                          SelectedItem="{Binding PreviewAction}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_SegmentCommercial}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding SegmentOptions}"
+                          SelectedItem="{Binding CommercialAction}" />
+            </Grid>
+            <TextBlock Margin="0,24,0,8"
+                       Classes="h2"
+                       Text="{x:Static strings:Strings.Settings_Audio}" />
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_AudioBehavior}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding AudioBehaviorOptions}"
+                          SelectedItem="{Binding AudioBehavior}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_AudioPassthrough}"
+                           TextWrapping="Wrap" />
+                <ToggleSwitch Grid.Column="1"
+                              IsChecked="{Binding AudioPassthrough}"
+                              OffContent=""
+                              OnContent="" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_BitstreamAc3}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding BitstreamOptions}"
+                          SelectedItem="{Binding BitstreamAc3}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_BitstreamEac3}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding BitstreamOptions}"
+                          SelectedItem="{Binding BitstreamEac3}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_BitstreamDts}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding BitstreamOptions}"
+                          SelectedItem="{Binding BitstreamDts}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_BitstreamTrueHd}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding BitstreamOptions}"
+                          SelectedItem="{Binding BitstreamTrueHd}" />
+            </Grid>
+            <TextBlock Margin="0,24,0,8"
+                       Classes="h2"
+                       Text="{x:Static strings:Strings.Settings_Video}" />
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_HardwareDecoding}"
+                           TextWrapping="Wrap" />
+                <ToggleSwitch Grid.Column="1"
+                              IsChecked="{Binding HardwareDecoding}"
+                              OffContent=""
+                              OnContent="" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_SoftwareDecoding}"
+                           TextWrapping="Wrap" />
+                <ToggleSwitch Grid.Column="1"
+                              IsChecked="{Binding SoftwareDecoding}"
+                              OffContent=""
+                              OnContent="" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_AvcLevel}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding AvcLevelOptions}"
+                          SelectedItem="{Binding AvcLevel}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_HevcLevel}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding HevcLevelOptions}"
+                          SelectedItem="{Binding HevcLevel}" />
+            </Grid>
+            <TextBlock Margin="0,4,0,4"
+                       Classes="caption"
+                       Text="{x:Static strings:Strings.Settings_HdrDescription}"
+                       TextWrapping="Wrap" />
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_Hdr10}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding HdrOptions}"
+                          SelectedItem="{Binding Hdr10Override}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_Hdr10Plus}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding HdrOptions}"
+                          SelectedItem="{Binding Hdr10PlusOverride}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_Hlg}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding HdrOptions}"
+                          SelectedItem="{Binding HlgOverride}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_DoviProfile5}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding HdrOptions}"
+                          SelectedItem="{Binding DoviProfile5Override}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_DoviProfile7}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding HdrOptions}"
+                          SelectedItem="{Binding DoviProfile7Override}" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_DoviProfile8}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding HdrOptions}"
+                          SelectedItem="{Binding DoviProfile8Override}" />
+            </Grid>
+            <TextBlock Margin="0,24,0,8"
+                       Classes="h2"
+                       Text="{x:Static strings:Strings.Settings_Subtitles}" />
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_AssDirectPlay}"
+                           TextWrapping="Wrap" />
+                <ToggleSwitch Grid.Column="1"
+                              IsChecked="{Binding AssDirectPlay}"
+                              OffContent=""
+                              OnContent="" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_PgsDirectPlay}"
+                           TextWrapping="Wrap" />
+                <ToggleSwitch Grid.Column="1"
+                              IsChecked="{Binding PgsDirectPlay}"
+                              OffContent=""
+                              OnContent="" />
+            </Grid>
+            <TextBlock Margin="0,24,0,8"
+                       Classes="h2"
+                       Text="{x:Static strings:Strings.Settings_Customization}" />
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_Backdrop}"
+                           TextWrapping="Wrap" />
+                <ToggleSwitch Grid.Column="1"
+                              IsChecked="{Binding BackdropEnabled}"
+                              OffContent=""
+                              OnContent="" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_Clock}"
+                           TextWrapping="Wrap" />
+                <ToggleSwitch Grid.Column="1"
+                              IsChecked="{Binding ClockEnabled}"
+                              OffContent=""
+                              OnContent="" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_SeriesThumbnails}"
+                           TextWrapping="Wrap" />
+                <ToggleSwitch Grid.Column="1"
+                              IsChecked="{Binding UseSeriesThumbnails}"
+                              OffContent=""
+                              OnContent="" />
+            </Grid>
+            <Grid Classes="setting"
+                  ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Classes="body"
+                           Text="{x:Static strings:Strings.Settings_WatchedIndicator}"
+                           TextWrapping="Wrap" />
+                <ComboBox Grid.Column="1"
+                          MinWidth="260"
+                          ItemsSource="{Binding WatchedOptions}"
+                          SelectedItem="{Binding WatchedIndicator}" />
+            </Grid>
+
+            <TextBlock Margin="0,24,0,8"
+                       Classes="h2"
+                       Text="{x:Static strings:Strings.Settings_Advanced}" />
+            <Button HorizontalAlignment="Left"
+                    Command="{Binding OpenDeviceProfileCommand}">
+                <StackPanel Orientation="Horizontal"
+                            Spacing="8">
+                    <mi:MaterialIcon Kind="Information" />
+                    <TextBlock Text="{x:Static strings:Strings.Settings_DeviceProfile}" />
+                </StackPanel>
+            </Button>
+
+            <TextBlock Margin="0,24,0,8"
+                       Classes="h2"
+                       Text="{x:Static strings:Strings.Settings_About}" />
+            <TextBlock Classes="caption"
+                       Text="{Binding VersionText}" />
+            <TextBlock Classes="caption"
+                       Text="{Binding BackendText}" />
+            <TextBlock Classes="caption"
+                       Text="{Binding ServerText}" />
+            <TextBlock Classes="caption"
+                       Text="{Binding UserText}" />
+        </StackPanel>
+    </ScrollViewer>
+</controls:PageView>

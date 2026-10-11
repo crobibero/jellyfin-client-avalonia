@@ -1,0 +1,289 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Resources/Styles/Tokens.axaml" />
+        <ResourceInclude Source="/Resources/Logos.axaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--
+        Semantic resources built on the jellyfin-design tokens in Tokens.axaml.
+        Views use these, never raw colors. Translucent variants set the brush opacity instead of new colors.
+    -->
+
+    <!--  Colors  -->
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource ColorBlueGray950}" />
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource ColorCyan500}" />
+    <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource ColorBlueGray900}" />
+    <SolidColorBrush x:Key="SurfaceRaisedBrush" Color="{StaticResource ColorBlueGray850}" />
+    <SolidColorBrush x:Key="PanelBrush"
+                     Opacity="0.9"
+                     Color="{StaticResource ColorBlueGray900}" />
+    <SolidColorBrush x:Key="OnBackgroundBrush" Color="{StaticResource ColorBlueGray25}" />
+    <SolidColorBrush x:Key="OnBackgroundDimBrush" Color="{StaticResource ColorBlueGray300}" />
+    <SolidColorBrush x:Key="OnBackgroundMutedBrush" Color="{StaticResource ColorBlueGray500}" />
+    <SolidColorBrush x:Key="ButtonBrush"
+                     Opacity="0.7"
+                     Color="{StaticResource ColorBlueGray600}" />
+    <SolidColorBrush x:Key="OnButtonBrush" Color="{StaticResource ColorBlueGray100}" />
+    <SolidColorBrush x:Key="ButtonFocusedBrush"
+                     Opacity="0.9"
+                     Color="{StaticResource ColorBlueGray200}" />
+    <SolidColorBrush x:Key="OnButtonFocusedBrush" Color="{StaticResource ColorBlueGray800}" />
+    <SolidColorBrush x:Key="ButtonActiveBrush"
+                     Opacity="0.3"
+                     Color="{StaticResource ColorBlueGray200}" />
+    <SolidColorBrush x:Key="ButtonDisabledBrush"
+                     Opacity="0.2"
+                     Color="{StaticResource ColorBlueGray600}" />
+    <SolidColorBrush x:Key="OnButtonDisabledBrush" Color="{StaticResource ColorBlueGray600}" />
+    <SolidColorBrush x:Key="ListButtonFocusedBrush" Color="{StaticResource ColorBlueGray800}" />
+    <SolidColorBrush x:Key="RangeBackgroundBrush" Color="{StaticResource ColorBlueGray700}" />
+    <SolidColorBrush x:Key="RangeFillBrush" Color="{StaticResource ColorCyan500}" />
+    <SolidColorBrush x:Key="RangeKnobBrush" Color="{StaticResource ColorBlueGray100}" />
+    <SolidColorBrush x:Key="BadgeBrush" Color="{StaticResource ColorCyan500}" />
+    <SolidColorBrush x:Key="OnBadgeBrush" Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="FavoriteBrush" Color="{StaticResource ColorRed500}" />
+    <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource ColorRed400}" />
+    <SolidColorBrush x:Key="CardFocusBorderBrush" Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="CardHoverBorderBrush"
+                     Opacity="0.6"
+                     Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="OnImageBrush" Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="OnImageDisabledBrush"
+                     Opacity="0.4"
+                     Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="ScrimBrush"
+                     Opacity="0.7"
+                     Color="{StaticResource ColorBlueGray950}" />
+    <SolidColorBrush x:Key="CodeBackgroundBrush"
+                     Opacity="0.4"
+                     Color="{StaticResource ColorBlueGray900}" />
+    <SolidColorBrush x:Key="ToastBrush"
+                     Opacity="0.94"
+                     Color="{StaticResource ColorBlueGray850}" />
+    <SolidColorBrush x:Key="BackdropFilterBrush"
+                     Opacity="0.8"
+                     Color="{StaticResource ColorBlueGray950}" />
+    <SolidColorBrush x:Key="ProgressTrackBrush"
+                     Opacity="0.4"
+                     Color="{StaticResource ColorBlack}" />
+    <SolidColorBrush x:Key="ChipDefaultBrush"
+                     Opacity="0.7"
+                     Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="OnChipDefaultBrush" Color="{StaticResource ColorBlack}" />
+    <SolidColorBrush x:Key="ChipGreenBrush"
+                     Opacity="0.7"
+                     Color="{StaticResource ColorGreen500}" />
+    <SolidColorBrush x:Key="ChipRedBrush"
+                     Opacity="0.7"
+                     Color="{StaticResource ColorRed500}" />
+    <SolidColorBrush x:Key="RatingStarBrush" Color="{StaticResource ColorYellow400}" />
+    <SolidColorBrush x:Key="CriticFreshBrush" Color="{StaticResource ColorRed400}" />
+    <SolidColorBrush x:Key="CriticRottenBrush" Color="{StaticResource ColorLime400}" />
+
+    <!--  The brand background of the jellyfin-ux splash screens and app icons  -->
+    <SolidColorBrush x:Key="StartupBackgroundBrush" Color="{StaticResource ColorBlue950}" />
+
+    <SolidColorBrush x:Key="PlayerScrimBrush"
+                     Opacity="0.5"
+                     Color="{StaticResource ColorBlack}" />
+
+    <!--  Fluent control overrides  -->
+    <SolidColorBrush x:Key="TextControlBackground"
+                     Opacity="0.2"
+                     Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="TextControlBackgroundPointerOver"
+                     Opacity="0.27"
+                     Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="TextControlBackgroundFocused"
+                     Opacity="0.13"
+                     Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="TextControlBorderBrush" Color="Transparent" />
+    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver"
+                     Opacity="0.4"
+                     Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="TextControlForeground" Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="TextControlForegroundFocused" Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="TextControlPlaceholderForeground" Color="{StaticResource ColorBlueGray300}" />
+    <SolidColorBrush x:Key="TextControlPlaceholderForegroundPointerOver" Color="{StaticResource ColorBlueGray300}" />
+    <SolidColorBrush x:Key="TextControlPlaceholderForegroundFocused" Color="{StaticResource ColorBlueGray400}" />
+    <SolidColorBrush x:Key="ComboBoxBackground"
+                     Opacity="0.2"
+                     Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver"
+                     Opacity="0.33"
+                     Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="ComboBoxBackgroundFocused"
+                     Opacity="0.33"
+                     Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="Transparent" />
+    <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="{StaticResource ColorBlueGray850}" />
+    <SolidColorBrush x:Key="SliderTrackFill" Color="{StaticResource ColorBlueGray700}" />
+    <SolidColorBrush x:Key="SliderTrackFillPointerOver" Color="{StaticResource ColorBlueGray700}" />
+    <SolidColorBrush x:Key="SliderTrackFillPressed" Color="{StaticResource ColorBlueGray700}" />
+    <SolidColorBrush x:Key="SliderTrackValueFill" Color="{StaticResource ColorCyan500}" />
+    <SolidColorBrush x:Key="SliderTrackValueFillPointerOver" Color="{StaticResource ColorCyan500}" />
+    <SolidColorBrush x:Key="SliderTrackValueFillPressed" Color="{StaticResource ColorCyan500}" />
+    <SolidColorBrush x:Key="SliderThumbBackground" Color="{StaticResource ColorBlueGray100}" />
+    <SolidColorBrush x:Key="SliderThumbBackgroundPointerOver" Color="{StaticResource ColorWhite}" />
+    <SolidColorBrush x:Key="SliderThumbBackgroundPressed" Color="{StaticResource ColorWhite}" />
+    <x:Double x:Key="SliderTrackThemeHeight">6</x:Double>
+    <x:Double x:Key="SliderHorizontalThumbWidth">16</x:Double>
+    <x:Double x:Key="SliderHorizontalThumbHeight">16</x:Double>
+    <SolidColorBrush x:Key="ToggleSwitchFillOn" Color="{StaticResource ColorCyan500}" />
+    <SolidColorBrush x:Key="ToggleSwitchFillOnPointerOver" Color="{StaticResource ColorCyan500}" />
+    <SolidColorBrush x:Key="ScrollBarThumbFill"
+                     Opacity="0.4"
+                     Color="{StaticResource ColorWhite}" />
+
+    <!--  Spacing, on the token space scale  -->
+    <Thickness x:Key="PageMargin">48,0,48,0</Thickness>
+    <Thickness x:Key="RowPadding">48,8,48,16</Thickness>
+    <StaticResource x:Key="PageGutter" ResourceKey="Space3Xl" />
+
+    <!--  Typography: Figtree from the tokens, falling back to Noto Sans for scripts it lacks  -->
+    <FontFamily x:Key="ContentControlThemeFontFamily">fonts:Figtree#Figtree, Noto Sans, $Default</FontFamily>
+    <!--  Extends the font size scale for hero titles on large screens  -->
+    <x:Double x:Key="FontSizeDisplay">40</x:Double>
+
+    <!--  Buttons: translucent grey pills that turn light when focused  -->
+    <ControlTheme x:Key="{x:Type Button}" TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource ButtonBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource OnButtonBrush}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="{StaticResource RadiusCircle}" />
+        <Setter Property="Padding" Value="24,8" />
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeMd}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.12" />
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.12" />
+            </Transitions>
+        </Setter>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Padding="{TemplateBinding Padding}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  Background="{TemplateBinding Background}"
+                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="{TemplateBinding BorderThickness}"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  CornerRadius="{TemplateBinding CornerRadius}"
+                                  Foreground="{TemplateBinding Foreground}"
+                                  RecognizesAccessKey="True" />
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:pointerover">
+            <Setter Property="Background" Value="{DynamicResource ButtonFocusedBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource OnButtonFocusedBrush}" />
+        </Style>
+        <Style Selector="^:focus-visible">
+            <Setter Property="Background" Value="{DynamicResource ButtonFocusedBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource OnButtonFocusedBrush}" />
+            <Setter Property="RenderTransform" Value="scale(1.05)" />
+        </Style>
+        <Style Selector="^:pressed">
+            <Setter Property="RenderTransform" Value="scale(0.97)" />
+        </Style>
+        <Style Selector="^:disabled">
+            <Setter Property="Background" Value="{DynamicResource ButtonDisabledBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource OnButtonDisabledBrush}" />
+        </Style>
+
+        <!--  Active toolbar item  -->
+        <Style Selector="^.active">
+            <Setter Property="Background" Value="{DynamicResource ButtonActiveBrush}" />
+        </Style>
+        <Style Selector="^.active:pointerover, ^.active:focus-visible">
+            <Setter Property="Background" Value="{DynamicResource ButtonFocusedBrush}" />
+        </Style>
+
+        <!--  Transparent buttons in toolbars  -->
+        <Style Selector="^.flat">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="^.flat:pointerover, ^.flat:focus-visible">
+            <Setter Property="Background" Value="{DynamicResource ButtonFocusedBrush}" />
+        </Style>
+
+        <!--  Circular icon buttons  -->
+        <Style Selector="^.icon">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Width" Value="48" />
+            <Setter Property="Height" Value="48" />
+            <Setter Property="MinHeight" Value="0" />
+        </Style>
+        <Style Selector="^.icon.small">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+        </Style>
+        <Style Selector="^.icon.large">
+            <Setter Property="Width" Value="64" />
+            <Setter Property="Height" Value="64" />
+        </Style>
+
+        <!--  Accent button  -->
+        <Style Selector="^.accent">
+            <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource OnImageBrush}" />
+        </Style>
+        <Style Selector="^.accent:pointerover, ^.accent:focus-visible">
+            <Setter Property="Background" Value="{DynamicResource ButtonFocusedBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource OnButtonFocusedBrush}" />
+        </Style>
+
+        <!--  List rows (menus, settings)  -->
+        <Style Selector="^.list">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource OnBackgroundBrush}" />
+            <Setter Property="CornerRadius" Value="{StaticResource RadiusDefault}" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="MinHeight" Value="48" />
+            <Setter Property="FontWeight" Value="Normal" />
+        </Style>
+        <Style Selector="^.list:pointerover, ^.list:focus-visible">
+            <Setter Property="Background" Value="{DynamicResource ListButtonFocusedBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource OnBackgroundBrush}" />
+            <Setter Property="RenderTransform" Value="none" />
+        </Style>
+
+        <!--  Cards: no background, the content draws its own focus frame  -->
+        <Style Selector="^.card">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="VerticalContentAlignment" Value="Top" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="FontWeight" Value="Normal" />
+        </Style>
+        <Style Selector="^.card:pointerover, ^.card:pressed">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource OnBackgroundBrush}" />
+            <Setter Property="RenderTransform" Value="none" />
+        </Style>
+        <Style Selector="^.card:focus-visible">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource OnBackgroundBrush}" />
+            <Setter Property="RenderTransform" Value="scale(1.06)" />
+            <Setter Property="ZIndex" Value="1" />
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

@@ -1,0 +1,12 @@
+{
+  "solution": {
+    "path": "Jellyfin.Avalonia.sln",
+    "projects": [
+      "Jellyfin.Mvvm\\Jellyfin.Mvvm.csproj",
+      "Jellyfin.Mvvm.Tests\\Jellyfin.Mvvm.Tests.csproj",
+      "Jellyfin.Avalonia\\Jellyfin.Avalonia.csproj",
+      "Jellyfin.Avalonia.LibVlc\\Jellyfin.Avalonia.LibVlc.csproj",
+      "Jellyfin.Avalonia.Desktop\\Jellyfin.Avalonia.Desktop.csproj"
+    ]
+  }
+}

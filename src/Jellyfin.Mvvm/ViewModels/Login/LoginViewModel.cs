@@ -1,6 +1,8 @@
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Mvvm.Models;
+using Jellyfin.Mvvm.Playback;
 using Jellyfin.Mvvm.Services;
 using Jellyfin.Mvvm.ViewModels.Facades;
 
@@ -9,22 +11,25 @@ namespace Jellyfin.Mvvm.ViewModels.Login;
 /// <summary>
 /// Login view model.
 /// </summary>
-public partial class LoginViewModel : BaseViewModel
+public sealed partial class LoginViewModel : BaseViewModel, IDisposable
 {
     private readonly IAuthenticationService _authenticationService;
-    private readonly INavigationService _navigationService;
     private readonly IStateService _stateService;
     private readonly IStateStorageService _stateStorageService;
+    private readonly PlaybackManager _playbackManager;
+    private CancellationTokenSource? _quickConnectCancellation;
 
-    // _serverUrl is set on initialization.
     [ObservableProperty]
-    private string _serverUrl = null!;
+    private string _serverUrl = string.Empty;
 
     [ObservableProperty]
     private Guid _serverId;
 
     [ObservableProperty]
-    private string _serverName = null!;
+    private string _serverName = string.Empty;
+
+    [ObservableProperty]
+    private string? _title;
 
     [ObservableProperty]
     private string? _username;
@@ -36,19 +41,14 @@ public partial class LoginViewModel : BaseViewModel
     private bool _rememberMe = true;
 
     [ObservableProperty]
-    private string? _errorMessage;
-
-    [ObservableProperty]
     private bool _quickConnectAvailable;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsQuickConnectActive))]
     private string? _quickConnectCode;
 
     [ObservableProperty]
-    private bool _checkingQuickConnectAvailability;
-
-    [ObservableProperty]
-    private bool _isValid = true;
+    private bool _isSigningIn;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LoginViewModel"/> class.
@@ -58,99 +58,86 @@ public partial class LoginViewModel : BaseViewModel
     /// <param name="applicationService">Instance of the <see cref="IApplicationService"/> interface.</param>
     /// <param name="stateService">Instance of the <see cref="IStateService"/> interface.</param>
     /// <param name="stateStorageService">Instance of the <see cref="IStateStorageService"/> interface.</param>
+    /// <param name="playbackManager">The playback manager.</param>
     public LoginViewModel(
         IAuthenticationService authenticationService,
         INavigationService navigationService,
         IApplicationService applicationService,
         IStateService stateService,
-        IStateStorageService stateStorageService)
+        IStateStorageService stateStorageService,
+        PlaybackManager playbackManager)
         : base(navigationService, applicationService)
     {
         _authenticationService = authenticationService;
-        _navigationService = navigationService;
         _stateService = stateService;
         _stateStorageService = stateStorageService;
+        _playbackManager = playbackManager;
     }
 
     /// <inheritdoc />
-    protected override async ValueTask InitializeInternalAsync()
+    public override bool ShowToolbar => false;
+
+    /// <summary>
+    /// Gets a value indicating whether a Quick Connect request is pending.
+    /// </summary>
+    public bool IsQuickConnectActive => !string.IsNullOrEmpty(QuickConnectCode);
+
+    /// <inheritdoc />
+    public override void OnNavigatedFrom()
+    {
+        _quickConnectCancellation?.Cancel();
+        QuickConnectCode = null;
+        base.OnNavigatedFrom();
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _quickConnectCancellation?.Cancel();
+        _quickConnectCancellation?.Dispose();
+    }
+
+    /// <inheritdoc />
+    protected override async ValueTask InitializeAsync(object? parameter)
     {
         var server = _stateService.GetServerState();
         if (server is null)
         {
-            _navigationService.NavigateToServerSelectPage();
+            await NavigationService.NavigateRootAsync<ServerSelectViewModel>().ConfigureAwait(true);
             return;
         }
 
         ServerId = server.Id;
         ServerUrl = server.Url;
         ServerName = server.Name;
+        Title = string.Format(CultureInfo.CurrentCulture, Strings.Strings.Login_SignInTo, server.Name);
 
-        var user = _stateService.GetUserState();
-        if (user is not null)
+        if (parameter is LoginRequest request)
         {
-            Username = user.Name;
-            var status = await _authenticationService.IsAuthenticatedAsync(ServerUrl, user.Token)
-                .ConfigureAwait(false);
-            if (status)
-            {
-                _navigationService.NavigateRoot();
-                return;
-            }
+            Username = request.Username;
         }
 
-        CheckQuickConnectAvailability().SafeFireAndForget();
-    }
-
-    private async Task CheckQuickConnectAvailability()
-    {
-        CheckingQuickConnectAvailability = true;
-#if DEBUG
-        // Mock slow network
-        await Task.Delay(2_000).ConfigureAwait(false);
-#endif
-        QuickConnectAvailable = await _authenticationService.IsQuickConnectEnabledAsync().ConfigureAwait(false);
-
-        CheckingQuickConnectAvailability = false;
+        QuickConnectAvailable = await _authenticationService.IsQuickConnectEnabledAsync().ConfigureAwait(true);
     }
 
     [RelayCommand]
     private async Task LoginAsync()
     {
-        if (!IsValid)
+        if (string.IsNullOrWhiteSpace(Username))
         {
+            ErrorMessage = Strings.Strings.Login_UsernameRequired;
             return;
         }
 
+        IsSigningIn = true;
+        ErrorMessage = null;
         try
         {
-            if (string.IsNullOrEmpty(Username))
-            {
-                ErrorMessage = "Username is required";
-                return;
-            }
-
-            var (status, errorMessage) = await _authenticationService.AuthenticateAsync(
-                    ServerUrl,
-                    Username,
-                    Password)
-                .ConfigureAwait(false);
+            var (status, errorMessage) = await _authenticationService.AuthenticateAsync(ServerUrl, Username.Trim(), Password)
+                .ConfigureAwait(true);
             if (status)
             {
-                if (RememberMe)
-                {
-                    var user = _stateService.GetCurrentUser();
-                    await _stateStorageService.AddUserAsync(new UserStateModel
-                        {
-                            Id = user.Id!.Value,
-                            ServerId = ServerId,
-                            Name = user.Name!,
-                            Token = _stateService.GetToken()!
-                        })
-                        .ConfigureAwait(false);
-                }
-
-                _navigationService.NavigateRoot();
+                await CompleteLoginAsync().ConfigureAwait(true);
             }
             else
             {
@@ -159,71 +146,93 @@ public partial class LoginViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            ErrorMessage = "An unknown error occurred.\n" + ex.Message;
+            ErrorMessage = string.Format(CultureInfo.CurrentCulture, Strings.Strings.Login_UnknownError, ex.Message);
+        }
+        finally
+        {
+            IsSigningIn = false;
         }
     }
 
     [RelayCommand]
     private async Task LoginWithQuickConnectAsync()
     {
+        _quickConnectCancellation?.Cancel();
+        _quickConnectCancellation?.Dispose();
+        _quickConnectCancellation = new CancellationTokenSource();
+        var cancellationToken = _quickConnectCancellation.Token;
+
+        ErrorMessage = null;
         try
         {
-            var code = await _authenticationService.InitializeQuickConnectAsync().ConfigureAwait(false);
+            var code = await _authenticationService.InitializeQuickConnectAsync(cancellationToken).ConfigureAwait(true);
             if (string.IsNullOrEmpty(code))
             {
-                ErrorMessage = "Unable to initialize QuickConnect";
+                ErrorMessage = Strings.Strings.Login_QuickConnectUnavailable;
                 return;
             }
-            else
-            {
-                QuickConnectCode = code;
-            }
+
+            QuickConnectCode = code;
 
             bool? authenticated;
-
             do
             {
-                // Delay for QuickConnect to be completed.
-                await Task.Delay(3_000).ConfigureAwait(false);
-                authenticated = await _authenticationService.TestQuickConnectAsync().ConfigureAwait(false);
-            } while (authenticated == false);
+                await Task.Delay(TimeSpan.FromSeconds(3), cancellationToken).ConfigureAwait(true);
+                authenticated = await _authenticationService.TestQuickConnectAsync(cancellationToken).ConfigureAwait(true);
+            }
+            while (authenticated == false);
 
             QuickConnectCode = null;
-            if (authenticated == true)
+            if (authenticated != true)
             {
-                var (status, errorMessage) = await _authenticationService.AuthenticateWithQuickConnectAsync()
-                    .ConfigureAwait(false);
+                ErrorMessage = Strings.Strings.Login_QuickConnectUnavailable;
+                return;
+            }
 
-                if (status)
-                {
-                    if (RememberMe)
-                    {
-                        var user = _stateService.GetCurrentUser();
-                        await _stateStorageService.AddUserAsync(new UserStateModel
-                            {
-                                Id = user.Id!.Value,
-                                ServerId = ServerId,
-                                Name = user.Name!,
-                                Token = _stateService.GetToken()!
-                            })
-                            .ConfigureAwait(false);
-                    }
-
-                    _navigationService.NavigateRoot();
-                }
-                else
-                {
-                    ErrorMessage = errorMessage;
-                }
+            var (status, errorMessage) = await _authenticationService.AuthenticateWithQuickConnectAsync(cancellationToken).ConfigureAwait(true);
+            if (status)
+            {
+                await CompleteLoginAsync().ConfigureAwait(true);
             }
             else
             {
-                ErrorMessage = "Unable to connect with QuickConnect";
+                ErrorMessage = errorMessage;
             }
+        }
+        catch (OperationCanceledException)
+        {
+            QuickConnectCode = null;
         }
         catch (Exception ex)
         {
-            ErrorMessage = "An unknown error occurred.\n" + ex.Message;
+            QuickConnectCode = null;
+            ErrorMessage = string.Format(CultureInfo.CurrentCulture, Strings.Strings.Login_UnknownError, ex.Message);
         }
+    }
+
+    [RelayCommand]
+    private void CancelQuickConnect()
+    {
+        _quickConnectCancellation?.Cancel();
+        QuickConnectCode = null;
+    }
+
+    private async Task CompleteLoginAsync()
+    {
+        var user = _stateService.GetCurrentUser();
+        var userState = new UserStateModel
+        {
+            Id = user.Id!.Value,
+            ServerId = ServerId,
+            Name = user.Name ?? Username ?? string.Empty,
+            Token = RememberMe ? _stateService.GetToken() : null,
+            ImageTag = user.PrimaryImageTag,
+            LastUsed = DateTimeOffset.UtcNow,
+        };
+
+        await _stateStorageService.AddUserAsync(userState).ConfigureAwait(true);
+        _stateService.SetUserState(userState);
+        _playbackManager.ReportCapabilitiesAsync().SafeFireAndForget();
+        await NavigationService.NavigateRootAsync<HomeViewModel>().ConfigureAwait(true);
     }
 }

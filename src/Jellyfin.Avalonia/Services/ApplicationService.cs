@@ -1,4 +1,5 @@
-using System.Collections;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using Jellyfin.Mvvm.Services;
 
@@ -10,19 +11,29 @@ namespace Jellyfin.Avalonia.Services;
 public class ApplicationService : IApplicationService
 {
     /// <inheritdoc />
-    public bool Dispatch(Action action)
-    {
-        Dispatcher.UIThread.Invoke(action);
-        return true;
-    }
+    public void Post(Action action) => Dispatcher.UIThread.Post(action);
 
     /// <inheritdoc />
     public async Task DispatchAsync(Action action)
-        => await Dispatcher.UIThread.InvokeAsync(action);
+    {
+        if (Dispatcher.UIThread.CheckAccess())
+        {
+            action();
+            return;
+        }
+
+        await Dispatcher.UIThread.InvokeAsync(action);
+    }
 
     /// <inheritdoc />
-    public void EnableCollectionSynchronization(IEnumerable collection, object? context, Action<IEnumerable, object, Action, bool> callback)
+    public bool IsUiThread() => Dispatcher.UIThread.CheckAccess();
+
+    /// <inheritdoc />
+    public void Exit()
     {
-        // TODO?
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            desktop.Shutdown();
+        }
     }
 }

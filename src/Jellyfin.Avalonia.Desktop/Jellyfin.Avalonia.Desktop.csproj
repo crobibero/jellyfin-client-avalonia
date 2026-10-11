@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>$(JellyfinTargetFramework)</TargetFramework>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyName>jellyfin-avalonia</AssemblyName>
+    <RootNamespace>Jellyfin.Avalonia.Desktop</RootNamespace>
+    <RuntimeIdentifiers>win-x64;win-arm64;osx-x64;osx-arm64;linux-x64;linux-arm64</RuntimeIdentifiers>
+    <ApplicationIcon Condition="Exists('icon.ico')">icon.ico</ApplicationIcon>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+
+  <!-- Publishing: self contained by default, native AOT with -p:PublishAot=true -->
+  <PropertyGroup>
+    <SelfContained Condition="'$(RuntimeIdentifier)' != ''">true</SelfContained>
+    <PublishAot Condition="'$(PublishAot)' == ''">false</PublishAot>
+    <TrimMode>partial</TrimMode>
+    <StripSymbols>true</StripSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog.Extensions.Logging" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Serilog.Sinks.File" />
+  </ItemGroup>
+
+  <!-- Native libVLC: bundled on Windows and macOS, provided by the system on Linux -->
+  <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('win')) Or ('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('Windows')))">
+    <PackageReference Include="VideoLAN.LibVLC.Windows" />
+  </ItemGroup>
+  <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('osx')) Or ('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('OSX')))">
+    <PackageReference Include="VideoLAN.LibVLC.Mac" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jellyfin.Avalonia\Jellyfin.Avalonia.csproj" />
+    <ProjectReference Include="..\Jellyfin.Avalonia.LibVlc\Jellyfin.Avalonia.LibVlc.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TrimmerRootAssembly Include="Jellyfin.Avalonia" />
+    <TrimmerRootAssembly Include="Jellyfin.Mvvm" />
+  </ItemGroup>
+</Project>
