@@ -1,43 +1,49 @@
+using System.Diagnostics.CodeAnalysis;
+using Jellyfin.Mvvm.ViewModels.Facades;
+
 namespace Jellyfin.Mvvm.Services;
 
 /// <summary>
-/// Navigation service interface.
+/// View model first navigation service.
 /// </summary>
 public interface INavigationService
 {
     /// <summary>
-    /// Navigate to the server selection page.
+    /// Raised after the current view model changed.
     /// </summary>
-    void NavigateToServerSelectPage();
+    event EventHandler? Navigated;
 
     /// <summary>
-    /// Navigate to the add server page.
+    /// Gets the current view model.
     /// </summary>
-    void NavigateToAddServerPage();
+    BaseViewModel? Current { get; }
 
     /// <summary>
-    /// Navigate to the user select page.
+    /// Gets a value indicating whether there is a page to go back to.
     /// </summary>
-    void NavigateToUserSelectPage();
+    bool CanGoBack { get; }
 
     /// <summary>
-    /// Navigate to the login page.
+    /// Navigate to a view model.
     /// </summary>
-    void NavigateToLoginPage();
+    /// <param name="parameter">The navigation parameter.</param>
+    /// <typeparam name="TViewModel">The view model type.</typeparam>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    Task NavigateAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TViewModel>(object? parameter = null)
+        where TViewModel : BaseViewModel;
 
     /// <summary>
-    /// Navigate to the main view.
+    /// Navigate to a view model and clear the back stack.
     /// </summary>
-    void NavigateHome();
+    /// <param name="parameter">The navigation parameter.</param>
+    /// <typeparam name="TViewModel">The view model type.</typeparam>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    Task NavigateRootAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TViewModel>(object? parameter = null)
+        where TViewModel : BaseViewModel;
 
     /// <summary>
-    /// Navigate to the root view.
+    /// Go back to the previous view model.
     /// </summary>
-    void NavigateRoot();
-
-    /// <summary>
-    /// Navigate to the item's view.
-    /// </summary>
-    /// <param name="item">The item.</param>
-    void NavigateToItemView(BaseItemDto? item);
+    /// <returns><c>true</c> when navigation happened.</returns>
+    Task<bool> GoBackAsync();
 }

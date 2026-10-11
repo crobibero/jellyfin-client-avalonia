@@ -35,6 +35,12 @@
     <Rule Id="SA1602" Action="None" />
     <!-- disable warning SA1633: The file header is missing or not located at the top of the file -->
     <Rule Id="SA1633" Action="None" />
+    <!-- disable warning SA1201: Elements should appear in the correct order -->
+    <Rule Id="SA1201" Action="None" />
+    <!-- disable warning SA1402: File may only contain a single type, small records live next to their consumer -->
+    <Rule Id="SA1402" Action="None" />
+    <!-- disable warning SA1601: Partial elements should be documented -->
+    <Rule Id="SA1601" Action="None" />
   </Rules>
 
   <Rules AnalyzerId="Microsoft.CodeAnalysis.NetAnalyzers" RuleNamespace="Microsoft.Design">
@@ -97,6 +103,23 @@
     <Rule Id="CA2253" Action="Info" />
     <!-- disable warning CA5394: Do not use insecure randomness -->
     <Rule Id="CA5394" Action="Info" />
+
+    <!-- disable warning CA1003: Use generic event handler instances -->
+    <Rule Id="CA1003" Action="None" />
+    <!-- disable warning CA1034: Nested types should not be visible -->
+    <Rule Id="CA1034" Action="None" />
+    <!-- disable warning CA1721: Property names should not match get methods -->
+    <Rule Id="CA1721" Action="None" />
+    <!-- disable warning CA1826: Use property instead of Linq Enumerable method -->
+    <Rule Id="CA1826" Action="None" />
+    <!-- disable warning CA1849: Call async methods when in an async method (CancellationTokenSource.Cancel) -->
+    <Rule Id="CA1849" Action="None" />
+    <!-- disable warning CA1863: Use CompositeFormat, resource strings are formatted rarely -->
+    <Rule Id="CA1863" Action="None" />
+    <!-- disable warning CA1873: Avoid potentially expensive logging -->
+    <Rule Id="CA1873" Action="None" />
+    <!-- disable warning CA2007: Do not directly await a Task, UI code needs the synchronization context -->
+    <Rule Id="CA2007" Action="None" />
 
     <!-- disable warning CA1054: Change the type of parameter url from string to System.Uri -->
     <Rule Id="CA1054" Action="None" />

@@ -1,0 +1,297 @@
+<controls:PageView x:Class="Jellyfin.Avalonia.Views.ItemDetailsView"
+                   xmlns="https://github.com/avaloniaui"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+                   xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
+                   xmlns:conv="clr-namespace:Jellyfin.Avalonia.Converters"
+                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:models="clr-namespace:Jellyfin.Mvvm.Models;assembly=Jellyfin.Mvvm"
+                   xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+                   xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
+                   x:Name="Page"
+                   x:DataType="vm:ItemDetailsViewModel">
+    <Grid>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="0,0,0,48"
+                        Spacing="8">
+                <!--  Header: details on the left, artwork on the right  -->
+                <Grid Margin="48,8,48,0"
+                      ColumnDefinitions="*,Auto">
+                    <StackPanel Grid.Column="0"
+                                MaxWidth="960"
+                                Margin="0,0,40,0"
+                                HorizontalAlignment="Left"
+                                Spacing="8">
+                        <Panel MinHeight="64">
+                            <Image MaxWidth="480"
+                                   MaxHeight="110"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom"
+                                   asyncImageLoader:ImageLoader.Source="{Binding LogoUrl}"
+                                   IsVisible="{Binding LogoUrl, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                   Stretch="Uniform" />
+                            <TextBlock VerticalAlignment="Bottom"
+                                       Classes="display"
+                                       IsVisible="{Binding LogoUrl, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                       Text="{Binding Title}"
+                                       TextWrapping="Wrap" />
+                        </Panel>
+                        <TextBlock Classes="h2"
+                                   IsVisible="{Binding Subtitle, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                   Text="{Binding Subtitle}"
+                                   TextWrapping="Wrap" />
+                        <ItemsControl ItemTemplate="{StaticResource InfoChipTemplate}"
+                                      ItemsPanel="{StaticResource ChipPanelTemplate}"
+                                      ItemsSource="{Binding Info}" />
+                        <TextBlock Classes="caption"
+                                   IsVisible="{Binding Genres, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                   Text="{Binding Genres}"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Margin="0,8,0,0"
+                                   FontSize="{DynamicResource FontSizeLg}"
+                                   FontStyle="Italic"
+                                   IsVisible="{Binding Tagline, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                   Text="{Binding Tagline}"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Classes="body"
+                                   Foreground="{DynamicResource OnBackgroundDimBrush}"
+                                   MaxLines="6"
+                                   Text="{Binding Overview}"
+                                   TextTrimming="CharacterEllipsis"
+                                   TextWrapping="Wrap" />
+                        <Grid Margin="0,4,0,0"
+                              ColumnDefinitions="Auto,*"
+                              RowDefinitions="Auto,Auto,Auto">
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="0"
+                                       Margin="0,0,16,4"
+                                       Classes="caption"
+                                       IsVisible="{Binding Directors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                       Text="{x:Static strings:Strings.Item_Director}" />
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="1"
+                                       Margin="0,0,0,4"
+                                       IsVisible="{Binding Directors, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                       Text="{Binding Directors}"
+                                       TextWrapping="Wrap" />
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="0"
+                                       Margin="0,0,16,4"
+                                       Classes="caption"
+                                       IsVisible="{Binding Writers, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                       Text="{x:Static strings:Strings.Item_Writers}" />
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="1"
+                                       Margin="0,0,0,4"
+                                       IsVisible="{Binding Writers, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                       Text="{Binding Writers}"
+                                       TextWrapping="Wrap" />
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="0"
+                                       Margin="0,0,16,4"
+                                       Classes="caption"
+                                       IsVisible="{Binding Studios, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                       Text="{x:Static strings:Strings.Item_Studios}" />
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="1"
+                                       Margin="0,0,0,4"
+                                       IsVisible="{Binding Studios, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                       Text="{Binding Studios}"
+                                       TextWrapping="Wrap" />
+                        </Grid>
+                    </StackPanel>
+
+                    <Border Name="Poster"
+                            Grid.Column="1"
+                            Width="{Binding PosterShape, Converter={x:Static conv:JellyfinConverters.DetailsPosterWidth}}"
+                            Height="{Binding PosterShape, Converter={x:Static conv:JellyfinConverters.DetailsPosterHeight}}"
+                            VerticalAlignment="Top"
+                            Background="{DynamicResource SurfaceBrush}"
+                            BoxShadow="0 8 32 0 #80000000"
+                            ClipToBounds="True"
+                            CornerRadius="{DynamicResource RadiusDefault}"
+                            IsVisible="{Binding PosterUrl, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                        <Panel Background="{Binding PosterBlurHash, Converter={x:Static conv:JellyfinConverters.BlurHashBrush}}"
+                               RenderOptions.BitmapInterpolationMode="HighQuality">
+                            <Image asyncImageLoader:ImageLoader.Source="{Binding PosterUrl}"
+                                   Stretch="UniformToFill" />
+                        </Panel>
+                    </Border>
+                </Grid>
+
+                <!--  Actions  -->
+                <WrapPanel Margin="48,16,48,4"
+                           ItemSpacing="16"
+                           LineSpacing="16">
+                    <Button controls:PageView.IsInitialFocus="True"
+                            Classes="accent"
+                            Command="{Binding PlayCommand}"
+                            IsVisible="{Binding CanResume}">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="8">
+                            <mi:MaterialIcon Width="22"
+                                             Height="22"
+                                             Kind="Play" />
+                            <TextBlock Text="{Binding ResumeText}" />
+                        </StackPanel>
+                    </Button>
+                    <Button controls:PageView.IsInitialFocus="True"
+                            Classes="accent"
+                            Command="{Binding PlayCommand}"
+                            IsVisible="{Binding ShowPlay}">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="8">
+                            <mi:MaterialIcon Width="22"
+                                             Height="22"
+                                             Kind="Play" />
+                            <TextBlock Text="{x:Static strings:Strings.Item_Play}" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding RestartCommand}"
+                            IsVisible="{Binding CanResume}">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="8">
+                            <mi:MaterialIcon Width="22"
+                                             Height="22"
+                                             Kind="Restart" />
+                            <TextBlock Text="{x:Static strings:Strings.Item_Restart}" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding ShuffleCommand}"
+                            IsVisible="{Binding CanShuffle}">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="8">
+                            <mi:MaterialIcon Width="22"
+                                             Height="22"
+                                             Kind="Shuffle" />
+                            <TextBlock Text="{x:Static strings:Strings.Item_Shuffle}" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding PlayTrailerCommand}"
+                            IsVisible="{Binding HasTrailer}">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="8">
+                            <mi:MaterialIcon Width="22"
+                                             Height="22"
+                                             Kind="MovieOpenOutline" />
+                            <TextBlock Text="{x:Static strings:Strings.Item_Trailer}" />
+                        </StackPanel>
+                    </Button>
+                    <Button Classes="icon"
+                            Command="{Binding TogglePlayedCommand}"
+                            IsVisible="{Binding CanMarkPlayed}"
+                            ToolTip.Tip="{x:Static strings:Strings.Item_Watched}">
+                        <mi:MaterialIcon Width="24"
+                                         Height="24"
+                                         Kind="{Binding IsPlayed, Converter={x:Static conv:JellyfinConverters.WatchedIcon}}" />
+                    </Button>
+                    <Button Classes="icon"
+                            Command="{Binding ToggleFavoriteCommand}"
+                            ToolTip.Tip="{x:Static strings:Strings.Item_Favorite}">
+                        <mi:MaterialIcon Width="24"
+                                         Height="24"
+                                         Kind="{Binding IsFavorite, Converter={x:Static conv:JellyfinConverters.FavoriteIcon}}" />
+                    </Button>
+                    <Button Command="{Binding GoToSeriesCommand}"
+                            IsVisible="{Binding CanGoToSeries}">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="8">
+                            <mi:MaterialIcon Width="22"
+                                             Height="22"
+                                             Kind="Television" />
+                            <TextBlock Text="{x:Static strings:Strings.Item_GoToSeries}" />
+                        </StackPanel>
+                    </Button>
+                </WrapPanel>
+
+                <!--  Version and track selection  -->
+                <WrapPanel Margin="48,8,48,0"
+                           IsVisible="{Binding HasStreamSelection}"
+                           ItemSpacing="24"
+                           LineSpacing="16">
+                    <StackPanel IsVisible="{Binding HasVersionChoice}"
+                                Spacing="4">
+                        <TextBlock Classes="small"
+                                   Text="{x:Static strings:Strings.Item_Version}" />
+                        <ComboBox MinWidth="240"
+                                  ItemsSource="{Binding VersionOptions}"
+                                  SelectedItem="{Binding SelectedVersion}" />
+                    </StackPanel>
+                    <StackPanel IsVisible="{Binding HasAudioChoice}"
+                                Spacing="4">
+                        <TextBlock Classes="small"
+                                   Text="{x:Static strings:Strings.Item_AudioTrack}" />
+                        <ComboBox MinWidth="240"
+                                  MaxWidth="420"
+                                  ItemsSource="{Binding AudioOptions}"
+                                  SelectedItem="{Binding SelectedAudio}" />
+                    </StackPanel>
+                    <StackPanel IsVisible="{Binding HasSubtitleChoice}"
+                                Spacing="4">
+                        <TextBlock Classes="small"
+                                   Text="{x:Static strings:Strings.Item_SubtitleTrack}" />
+                        <ComboBox MinWidth="240"
+                                  MaxWidth="420"
+                                  ItemsSource="{Binding SubtitleOptions}"
+                                  SelectedItem="{Binding SelectedSubtitle}" />
+                    </StackPanel>
+                </WrapPanel>
+
+                <!--  Album and playlist tracks  -->
+                <StackPanel Margin="48,16,48,0"
+                            IsVisible="{Binding HasTracks}"
+                            Spacing="4">
+                    <TextBlock Classes="h3"
+                               Text="{x:Static strings:Strings.Item_Tracks}" />
+                    <ItemsControl ItemsSource="{Binding Tracks}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="models:ItemCardModel">
+                                <Button Classes="list"
+                                        Command="{Binding #Page.((vm:ItemDetailsViewModel)DataContext).PlayTrackCommand}"
+                                        CommandParameter="{Binding}">
+                                    <Grid ColumnDefinitions="48,*,Auto">
+                                        <TextBlock Grid.Column="0"
+                                                   VerticalAlignment="Center"
+                                                   Classes="caption"
+                                                   Text="{Binding Item.IndexNumber}" />
+                                        <StackPanel Grid.Column="1"
+                                                    VerticalAlignment="Center">
+                                            <TextBlock FontSize="{DynamicResource FontSizeMd}"
+                                                       Text="{Binding Title}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="2"
+                                                   VerticalAlignment="Center"
+                                                   Classes="caption"
+                                                   Text="{Binding Item.RunTimeTicks, Converter={x:Static conv:JellyfinConverters.Runtime}}" />
+                                    </Grid>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <!--  Related rows  -->
+                <ItemsControl Margin="0,16,0,0"
+                              ItemTemplate="{StaticResource CardRowTemplate}"
+                              ItemsSource="{Binding Rows}" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <ProgressBar Width="240"
+                     VerticalAlignment="Top"
+                     IsIndeterminate="True"
+                     IsVisible="{Binding Loading}" />
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsVisible="{Binding HasError}"
+                    Spacing="16">
+            <TextBlock Classes="error"
+                       Text="{Binding ErrorMessage}"
+                       TextAlignment="Center" />
+            <Button HorizontalAlignment="Center"
+                    Command="{Binding RetryCommand}"
+                    Content="{x:Static strings:Strings.Retry}" />
+        </StackPanel>
+    </Grid>
+</controls:PageView>

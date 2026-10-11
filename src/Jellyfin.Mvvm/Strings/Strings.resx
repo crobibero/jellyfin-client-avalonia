@@ -1,110 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
@@ -117,8 +12,59 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AppName" xml:space="preserve">
+    <value>Jellyfin</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Retry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading…</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Libraries" xml:space="preserve">
+    <value>Libraries</value>
+  </data>
+  <data name="Library" xml:space="preserve">
+    <value>Library</value>
+  </data>
+  <data name="SwitchUser" xml:space="preserve">
+    <value>Switch user</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
   <data name="Login_ServerUrl" xml:space="preserve">
-    <value>Server URL</value>
+    <value>Server address</value>
+  </data>
+  <data name="Login_ServerUrlHint" xml:space="preserve">
+    <value>e.g. jellyfin.example.com or 192.168.1.10:8096</value>
   </data>
   <data name="Login_Username" xml:space="preserve">
     <value>Username</value>
@@ -127,54 +73,657 @@
     <value>Password</value>
   </data>
   <data name="Login_LoginButton" xml:space="preserve">
-    <value>Login</value>
-  </data>
-  <data name="Add" xml:space="preserve">
-    <value>Add</value>
-  </data>
-  <data name="Library" xml:space="preserve">
-    <value>Library</value>
-  </data>
-  <data name="Episodes" xml:space="preserve">
-    <value>Episodes</value>
+    <value>Sign in</value>
   </data>
   <data name="Login_RememberMe" xml:space="preserve">
-    <value>Remember Me</value>
+    <value>Remember me</value>
   </data>
   <data name="Login_QuickConnectButton" xml:space="preserve">
-    <value>Login with QuickConnect</value>
+    <value>Use Quick Connect</value>
   </data>
   <data name="Login_QuickConnectCode" xml:space="preserve">
-    <value>QuickConnect Code:</value>
+    <value>Quick Connect code</value>
+  </data>
+  <data name="Login_QuickConnectInstructions" xml:space="preserve">
+    <value>Enter this code in the Jellyfin dashboard or another signed in client to sign in.</value>
   </data>
   <data name="Login_AddUser" xml:space="preserve">
-    <value>Add User</value>
+    <value>Add user</value>
   </data>
-  <data name="Login_ExistingUsers" xml:space="preserve">
-    <value>Existing Users</value>
+  <data name="Login_ManualLogin" xml:space="preserve">
+    <value>Enter manually</value>
   </data>
-  <data name="Login_AddServer" xml:space="preserve">
-    <value>Add Server</value>
+  <data name="Login_SelectUser" xml:space="preserve">
+    <value>Who's watching?</value>
   </data>
   <data name="Login_ExistingServers" xml:space="preserve">
-    <value>Existing Servers</value>
+    <value>Servers</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="Login_AddServer" xml:space="preserve">
+    <value>Add server</value>
   </data>
-  <data name="NextUp" xml:space="preserve">
+  <data name="Login_ConnectButton" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+  <data name="Login_DiscoveredServers" xml:space="preserve">
+    <value>Servers on your network</value>
+  </data>
+  <data name="Login_SavedServers" xml:space="preserve">
+    <value>Saved servers</value>
+  </data>
+  <data name="Login_NoServers" xml:space="preserve">
+    <value>No servers yet. Add one to get started.</value>
+  </data>
+  <data name="Login_UsernameRequired" xml:space="preserve">
+    <value>Username is required</value>
+  </data>
+  <data name="Login_ServerUrlRequired" xml:space="preserve">
+    <value>Enter a server address</value>
+  </data>
+  <data name="Login_UnableToConnect" xml:space="preserve">
+    <value>Unable to connect to server</value>
+  </data>
+  <data name="Login_InvalidCredentials" xml:space="preserve">
+    <value>Invalid username or password</value>
+  </data>
+  <data name="Login_QuickConnectUnavailable" xml:space="preserve">
+    <value>Unable to start Quick Connect</value>
+  </data>
+  <data name="Login_UnknownError" xml:space="preserve">
+    <value>An unknown error occurred: {0}</value>
+  </data>
+  <data name="Login_SignInTo" xml:space="preserve">
+    <value>Sign in to {0}</value>
+  </data>
+  <data name="Login_ServerVersion" xml:space="preserve">
+    <value>Jellyfin {0}</value>
+  </data>
+  <data name="Home_ContinueWatching" xml:space="preserve">
+    <value>Continue Watching</value>
+  </data>
+  <data name="Home_NextUp" xml:space="preserve">
     <value>Next Up</value>
-  </data>
-  <data name="Seasons" xml:space="preserve">
-    <value>Seasons</value>
   </data>
   <data name="Home_Latest" xml:space="preserve">
     <value>Latest {0}</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+  <data name="Home_MyMedia" xml:space="preserve">
+    <value>My Media</value>
   </data>
-  <data name="SwitchUser" xml:space="preserve">
-    <value>Switch user</value>
+  <data name="Home_Empty" xml:space="preserve">
+    <value>Nothing to show yet</value>
+  </data>
+  <data name="Item_Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="Item_Resume" xml:space="preserve">
+    <value>Resume</value>
+  </data>
+  <data name="Item_ResumeFrom" xml:space="preserve">
+    <value>Resume from {0}</value>
+  </data>
+  <data name="Item_Restart" xml:space="preserve">
+    <value>Start over</value>
+  </data>
+  <data name="Item_Shuffle" xml:space="preserve">
+    <value>Shuffle</value>
+  </data>
+  <data name="Item_Trailer" xml:space="preserve">
+    <value>Trailer</value>
+  </data>
+  <data name="Item_Favorite" xml:space="preserve">
+    <value>Favorite</value>
+  </data>
+  <data name="Item_Watched" xml:space="preserve">
+    <value>Watched</value>
+  </data>
+  <data name="Item_GoToSeries" xml:space="preserve">
+    <value>Go to series</value>
+  </data>
+  <data name="Item_Seasons" xml:space="preserve">
+    <value>Seasons</value>
+  </data>
+  <data name="Item_Episodes" xml:space="preserve">
+    <value>Episodes</value>
+  </data>
+  <data name="Item_NextUp" xml:space="preserve">
+    <value>Next Up</value>
+  </data>
+  <data name="Item_CastAndCrew" xml:space="preserve">
+    <value>Cast &amp; Crew</value>
+  </data>
+  <data name="Item_MoreLikeThis" xml:space="preserve">
+    <value>More Like This</value>
+  </data>
+  <data name="Item_Chapters" xml:space="preserve">
+    <value>Chapters</value>
+  </data>
+  <data name="Item_Extras" xml:space="preserve">
+    <value>Extras</value>
+  </data>
+  <data name="Item_Tracks" xml:space="preserve">
+    <value>Tracks</value>
+  </data>
+  <data name="Item_Albums" xml:space="preserve">
+    <value>Albums</value>
+  </data>
+  <data name="Item_Filmography" xml:space="preserve">
+    <value>Filmography</value>
+  </data>
+  <data name="Item_Movies" xml:space="preserve">
+    <value>Movies</value>
+  </data>
+  <data name="Item_Series" xml:space="preserve">
+    <value>Series</value>
+  </data>
+  <data name="Item_Director" xml:space="preserve">
+    <value>Director</value>
+  </data>
+  <data name="Item_Writers" xml:space="preserve">
+    <value>Writers</value>
+  </data>
+  <data name="Item_Studios" xml:space="preserve">
+    <value>Studios</value>
+  </data>
+  <data name="Item_Genres" xml:space="preserve">
+    <value>Genres</value>
+  </data>
+  <data name="Item_AudioTrack" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="Item_SubtitleTrack" xml:space="preserve">
+    <value>Subtitles</value>
+  </data>
+  <data name="Item_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="Item_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Item_Born" xml:space="preserve">
+    <value>Born {0}</value>
+  </data>
+  <data name="Item_EndsAt" xml:space="preserve">
+    <value>Ends at {0}</value>
+  </data>
+  <data name="Info_Continuing" xml:space="preserve">
+    <value>Continuing</value>
+  </data>
+  <data name="Info_Ended" xml:space="preserve">
+    <value>Ended</value>
+  </data>
+  <data name="Info_Unreleased" xml:space="preserve">
+    <value>Unreleased</value>
+  </data>
+  <data name="Info_Present" xml:space="preserve">
+    <value>Present</value>
+  </data>
+  <data name="Info_Subtitles" xml:space="preserve">
+    <value>CC</value>
+  </data>
+  <data name="Info_SubtitlesHearingImpaired" xml:space="preserve">
+    <value>SDH</value>
+  </data>
+  <data name="Info_DolbyVision" xml:space="preserve">
+    <value>Dolby Vision</value>
+  </data>
+  <data name="Info_DolbyVisionEl" xml:space="preserve">
+    <value>Dolby Vision EL</value>
+  </data>
+  <data name="Info_Hdr10" xml:space="preserve">
+    <value>HDR10</value>
+  </data>
+  <data name="Info_Hdr10Plus" xml:space="preserve">
+    <value>HDR10+</value>
+  </data>
+  <data name="Info_Hlg" xml:space="preserve">
+    <value>HLG</value>
+  </data>
+  <data name="Info_Sdr" xml:space="preserve">
+    <value>SDR</value>
+  </data>
+  <data name="Info_EpisodeCount" xml:space="preserve">
+    <value>{0} episodes</value>
+  </data>
+  <data name="Info_ItemCount" xml:space="preserve">
+    <value>{0} items</value>
+  </data>
+  <data name="Library_SortBy" xml:space="preserve">
+    <value>Sort by</value>
+  </data>
+  <data name="Library_Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Library_SortName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Library_SortDateAdded" xml:space="preserve">
+    <value>Date added</value>
+  </data>
+  <data name="Library_SortPremiereDate" xml:space="preserve">
+    <value>Release date</value>
+  </data>
+  <data name="Library_SortRating" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="Library_SortCriticRating" xml:space="preserve">
+    <value>Critic rating</value>
+  </data>
+  <data name="Library_SortRuntime" xml:space="preserve">
+    <value>Runtime</value>
+  </data>
+  <data name="Library_SortRandom" xml:space="preserve">
+    <value>Random</value>
+  </data>
+  <data name="Library_Ascending" xml:space="preserve">
+    <value>Ascending</value>
+  </data>
+  <data name="Library_Descending" xml:space="preserve">
+    <value>Descending</value>
+  </data>
+  <data name="Library_FilterAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Library_FilterUnplayed" xml:space="preserve">
+    <value>Unplayed</value>
+  </data>
+  <data name="Library_FilterPlayed" xml:space="preserve">
+    <value>Played</value>
+  </data>
+  <data name="Library_FilterFavorites" xml:space="preserve">
+    <value>Favorites</value>
+  </data>
+  <data name="Library_ItemCount" xml:space="preserve">
+    <value>{0} items</value>
+  </data>
+  <data name="Library_Empty" xml:space="preserve">
+    <value>This library is empty</value>
+  </data>
+  <data name="Search_Hint" xml:space="preserve">
+    <value>Search movies, shows, music…</value>
+  </data>
+  <data name="Search_NoResults" xml:space="preserve">
+    <value>No results for "{0}"</value>
+  </data>
+  <data name="Search_Movies" xml:space="preserve">
+    <value>Movies</value>
+  </data>
+  <data name="Search_Series" xml:space="preserve">
+    <value>Shows</value>
+  </data>
+  <data name="Search_Episodes" xml:space="preserve">
+    <value>Episodes</value>
+  </data>
+  <data name="Search_People" xml:space="preserve">
+    <value>People</value>
+  </data>
+  <data name="Search_Albums" xml:space="preserve">
+    <value>Albums</value>
+  </data>
+  <data name="Search_Songs" xml:space="preserve">
+    <value>Songs</value>
+  </data>
+  <data name="Search_Artists" xml:space="preserve">
+    <value>Artists</value>
+  </data>
+  <data name="Search_Collections" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="Player_Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="Player_Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="Player_SkipBack" xml:space="preserve">
+    <value>Rewind</value>
+  </data>
+  <data name="Player_SkipForward" xml:space="preserve">
+    <value>Fast forward</value>
+  </data>
+  <data name="Player_Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Player_Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Player_Audio" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="Player_Subtitles" xml:space="preserve">
+    <value>Subtitles</value>
+  </data>
+  <data name="Player_Quality" xml:space="preserve">
+    <value>Quality</value>
+  </data>
+  <data name="Player_Speed" xml:space="preserve">
+    <value>Speed</value>
+  </data>
+  <data name="Player_Zoom" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="Player_Close" xml:space="preserve">
+    <value>Close player</value>
+  </data>
+  <data name="Player_SkipIntro" xml:space="preserve">
+    <value>Skip intro</value>
+  </data>
+  <data name="Player_SkipOutro" xml:space="preserve">
+    <value>Skip credits</value>
+  </data>
+  <data name="Player_SkipRecap" xml:space="preserve">
+    <value>Skip recap</value>
+  </data>
+  <data name="Player_SkipPreview" xml:space="preserve">
+    <value>Skip preview</value>
+  </data>
+  <data name="Player_SkipCommercial" xml:space="preserve">
+    <value>Skip commercial</value>
+  </data>
+  <data name="Player_SkipSegment" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="Player_UpNext" xml:space="preserve">
+    <value>Up next</value>
+  </data>
+  <data name="Player_PlayNow" xml:space="preserve">
+    <value>Play now</value>
+  </data>
+  <data name="Player_StartingIn" xml:space="preserve">
+    <value>Starting in {0}</value>
+  </data>
+  <data name="Player_Auto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="Player_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Player_PlayMethodDirectPlay" xml:space="preserve">
+    <value>Direct play</value>
+  </data>
+  <data name="Player_PlayMethodDirectStream" xml:space="preserve">
+    <value>Direct stream</value>
+  </data>
+  <data name="Player_PlayMethodTranscode" xml:space="preserve">
+    <value>Transcoding</value>
+  </data>
+  <data name="Player_Error" xml:space="preserve">
+    <value>Playback failed: {0}</value>
+  </data>
+  <data name="Player_NoCompatibleStream" xml:space="preserve">
+    <value>No compatible stream is available for this device.</value>
+  </data>
+  <data name="Player_PlaybackInfo" xml:space="preserve">
+    <value>Playback info</value>
+  </data>
+  <data name="Player_Unsupported" xml:space="preserve">
+    <value>Video playback isn't available on this platform.</value>
+  </data>
+  <data name="Settings_Playback" xml:space="preserve">
+    <value>Playback</value>
+  </data>
+  <data name="Settings_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="Settings_Audio" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="Settings_Subtitles" xml:space="preserve">
+    <value>Subtitles</value>
+  </data>
+  <data name="Settings_Advanced" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="Settings_Customization" xml:space="preserve">
+    <value>Customization</value>
+  </data>
+  <data name="Settings_About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Settings_MaxBitrate" xml:space="preserve">
+    <value>Maximum streaming bitrate</value>
+  </data>
+  <data name="Settings_MaxBitrateValue" xml:space="preserve">
+    <value>{0} Mbps</value>
+  </data>
+  <data name="Settings_MaxBitrateAuto" xml:space="preserve">
+    <value>Auto ({0} Mbps)</value>
+  </data>
+  <data name="Settings_AudioBehavior" xml:space="preserve">
+    <value>Audio output</value>
+  </data>
+  <data name="Settings_AudioDirect" xml:space="preserve">
+    <value>Direct stream</value>
+  </data>
+  <data name="Settings_AudioDownmix" xml:space="preserve">
+    <value>Downmix to stereo</value>
+  </data>
+  <data name="Settings_AudioPassthrough" xml:space="preserve">
+    <value>Audio passthrough (HDMI/S/PDIF)</value>
+  </data>
+  <data name="Settings_BitstreamAc3" xml:space="preserve">
+    <value>Dolby Digital (AC-3)</value>
+  </data>
+  <data name="Settings_BitstreamEac3" xml:space="preserve">
+    <value>Dolby Digital Plus (E-AC-3)</value>
+  </data>
+  <data name="Settings_BitstreamDts" xml:space="preserve">
+    <value>DTS</value>
+  </data>
+  <data name="Settings_BitstreamTrueHd" xml:space="preserve">
+    <value>Dolby TrueHD</value>
+  </data>
+  <data name="Settings_Auto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="Settings_Enable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="Settings_Disable" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="Settings_AssDirectPlay" xml:space="preserve">
+    <value>Render ASS/SSA subtitles on device</value>
+  </data>
+  <data name="Settings_PgsDirectPlay" xml:space="preserve">
+    <value>Render PGS subtitles on device</value>
+  </data>
+  <data name="Settings_AvcLevel" xml:space="preserve">
+    <value>H.264 level override</value>
+  </data>
+  <data name="Settings_HevcLevel" xml:space="preserve">
+    <value>HEVC level override</value>
+  </data>
+  <data name="Settings_Hdr10" xml:space="preserve">
+    <value>HDR10</value>
+  </data>
+  <data name="Settings_Hdr10Plus" xml:space="preserve">
+    <value>HDR10+</value>
+  </data>
+  <data name="Settings_Hlg" xml:space="preserve">
+    <value>HLG</value>
+  </data>
+  <data name="Settings_DoviProfile5" xml:space="preserve">
+    <value>Dolby Vision profile 5</value>
+  </data>
+  <data name="Settings_DoviProfile7" xml:space="preserve">
+    <value>Dolby Vision profile 7</value>
+  </data>
+  <data name="Settings_DoviProfile8" xml:space="preserve">
+    <value>Dolby Vision profile 8</value>
+  </data>
+  <data name="Settings_HdrDescription" xml:space="preserve">
+    <value>Override HDR formats reported by this device. Disabled formats are tone mapped by the server.</value>
+  </data>
+  <data name="Settings_SoftwareDecoding" xml:space="preserve">
+    <value>Allow software decoders</value>
+  </data>
+  <data name="Settings_HardwareDecoding" xml:space="preserve">
+    <value>Hardware accelerated decoding</value>
+  </data>
+  <data name="Settings_ResumeRewind" xml:space="preserve">
+    <value>Rewind on resume</value>
+  </data>
+  <data name="Settings_SkipBack" xml:space="preserve">
+    <value>Skip back length</value>
+  </data>
+  <data name="Settings_SkipForward" xml:space="preserve">
+    <value>Skip forward length</value>
+  </data>
+  <data name="Settings_Seconds" xml:space="preserve">
+    <value>{0} seconds</value>
+  </data>
+  <data name="Settings_NextUp" xml:space="preserve">
+    <value>Next up</value>
+  </data>
+  <data name="Settings_NextUpExtended" xml:space="preserve">
+    <value>Extended</value>
+  </data>
+  <data name="Settings_NextUpMinimal" xml:space="preserve">
+    <value>Minimal</value>
+  </data>
+  <data name="Settings_NextUpDisabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="Settings_NextUpTimeout" xml:space="preserve">
+    <value>Next up countdown</value>
+  </data>
+  <data name="Settings_SegmentIntro" xml:space="preserve">
+    <value>Intros</value>
+  </data>
+  <data name="Settings_SegmentOutro" xml:space="preserve">
+    <value>Credits</value>
+  </data>
+  <data name="Settings_SegmentRecap" xml:space="preserve">
+    <value>Recaps</value>
+  </data>
+  <data name="Settings_SegmentPreview" xml:space="preserve">
+    <value>Previews</value>
+  </data>
+  <data name="Settings_SegmentCommercial" xml:space="preserve">
+    <value>Commercials</value>
+  </data>
+  <data name="Settings_SegmentNothing" xml:space="preserve">
+    <value>Do nothing</value>
+  </data>
+  <data name="Settings_SegmentSkip" xml:space="preserve">
+    <value>Skip automatically</value>
+  </data>
+  <data name="Settings_SegmentAsk" xml:space="preserve">
+    <value>Ask to skip</value>
+  </data>
+  <data name="Settings_MediaSegments" xml:space="preserve">
+    <value>Media segments</value>
+  </data>
+  <data name="Settings_Backdrop" xml:space="preserve">
+    <value>Show backdrops</value>
+  </data>
+  <data name="Settings_Clock" xml:space="preserve">
+    <value>Show clock</value>
+  </data>
+  <data name="Settings_WatchedIndicator" xml:space="preserve">
+    <value>Watched indicators</value>
+  </data>
+  <data name="Settings_WatchedAlways" xml:space="preserve">
+    <value>Always</value>
+  </data>
+  <data name="Settings_WatchedHideUnwatched" xml:space="preserve">
+    <value>Hide unwatched count</value>
+  </data>
+  <data name="Settings_WatchedEpisodesOnly" xml:space="preserve">
+    <value>Episodes only</value>
+  </data>
+  <data name="Settings_WatchedNever" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="Settings_SeriesThumbnails" xml:space="preserve">
+    <value>Use series thumbnails for episodes</value>
+  </data>
+  <data name="Settings_DeviceProfile" xml:space="preserve">
+    <value>Device profile</value>
+  </data>
+  <data name="Settings_DeviceProfileDescription" xml:space="preserve">
+    <value>The capabilities detected on this device and the profile sent to the server.</value>
+  </data>
+  <data name="Settings_Version" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="Settings_Backend" xml:space="preserve">
+    <value>Player: {0}</value>
+  </data>
+  <data name="Settings_Server" xml:space="preserve">
+    <value>Server: {0} ({1})</value>
+  </data>
+  <data name="Settings_User" xml:space="preserve">
+    <value>Signed in as {0}</value>
+  </data>
+  <data name="Settings_Capabilities" xml:space="preserve">
+    <value>Capabilities</value>
+  </data>
+  <data name="Settings_Supported" xml:space="preserve">
+    <value>Supported</value>
+  </data>
+  <data name="Settings_Unsupported" xml:space="preserve">
+    <value>Unsupported</value>
+  </data>
+  <data name="Home_ContinueListening" xml:space="preserve">
+    <value>Continue Listening</value>
+  </data>
+  <data name="Home_ContinueReading" xml:space="preserve">
+    <value>Continue Reading</value>
+  </data>
+  <data name="Settings_ZoomFit" xml:space="preserve">
+    <value>Fit</value>
+  </data>
+  <data name="Settings_ZoomCrop" xml:space="preserve">
+    <value>Crop</value>
+  </data>
+  <data name="Settings_ZoomStretch" xml:space="preserve">
+    <value>Stretch</value>
+  </data>
+  <data name="Settings_PlayerZoom" xml:space="preserve">
+    <value>Video scaling</value>
+  </data>
+  <data name="Settings_DirectPlayContainers" xml:space="preserve">
+    <value>Direct play containers</value>
+  </data>
+  <data name="Settings_DirectPlayVideoCodecs" xml:space="preserve">
+    <value>Direct play video codecs</value>
+  </data>
+  <data name="Settings_AudioCodecs" xml:space="preserve">
+    <value>Audio codecs</value>
+  </data>
+  <data name="Settings_PassthroughCodecs" xml:space="preserve">
+    <value>Passthrough codecs</value>
+  </data>
+  <data name="Settings_GeneratedProfile" xml:space="preserve">
+    <value>Generated device profile</value>
+  </data>
+  <data name="Settings_MaxResolution" xml:space="preserve">
+    <value>Max resolution</value>
+  </data>
+  <data name="Settings_Level" xml:space="preserve">
+    <value>Level {0}</value>
+  </data>
+  <data name="Player_Backend" xml:space="preserve">
+    <value>Player</value>
+  </data>
+  <data name="Player_Container" xml:space="preserve">
+    <value>Container</value>
+  </data>
+  <data name="Player_Bitrate" xml:space="preserve">
+    <value>Bitrate</value>
+  </data>
+  <data name="Player_Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="Player_TranscodeReasons" xml:space="preserve">
+    <value>Transcode reasons</value>
+  </data>
+  <data name="Login_Discover" xml:space="preserve">
+    <value>Search network</value>
+  </data>
+  <data name="Login_ChangeServer" xml:space="preserve">
+    <value>Change server</value>
   </data>
 </root>

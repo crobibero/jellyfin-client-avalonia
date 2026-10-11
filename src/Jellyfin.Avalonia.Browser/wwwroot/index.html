@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Jellyfin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#101319">
+    <link rel="icon" href="./favicon.ico" sizes="32x32">
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <link rel="apple-touch-icon" href="./touchicon.png">
+    <link rel="stylesheet" href="./app.css">
+</head>
+<body>
+    <!-- Video renders behind the Avalonia canvas, which is transparent while the player is shown -->
+    <video id="jellyfin-video" playsinline></video>
+    <div id="out">
+        <div class="avalonia-splash">
+            <img src="./logo.svg" alt="Jellyfin">
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <script type="module" src="./main.js"></script>
+</body>
+</html>

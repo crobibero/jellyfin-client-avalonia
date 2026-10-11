@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- The brand background of the jellyfin-ux splash screens (design token blue 950) -->
+  <color name="splash_background">#000B25</color>
+  <!-- The app background (design token blue gray 950) -->
+  <color name="system_bar_background">#101319</color>
+</resources>

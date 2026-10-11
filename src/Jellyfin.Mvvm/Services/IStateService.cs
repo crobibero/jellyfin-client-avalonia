@@ -8,6 +8,16 @@ namespace Jellyfin.Mvvm.Services;
 public interface IStateService
 {
     /// <summary>
+    /// Raised when the signed in user changes.
+    /// </summary>
+    event EventHandler? UserChanged;
+
+    /// <summary>
+    /// Gets the current user, or <c>null</c> when nobody is signed in.
+    /// </summary>
+    UserDto? CurrentUser { get; }
+
+    /// <summary>
     /// Initialization.
     /// </summary>
     /// <returns>A <see cref="ValueTask"/> representing the asyncronous operation.</returns>
@@ -54,7 +64,7 @@ public interface IStateService
     /// Sets the current user state.
     /// </summary>
     /// <param name="userStateModel">The user state model.</param>
-    void SetUserState(UserStateModel userStateModel);
+    void SetUserState(UserStateModel? userStateModel);
 
     /// <summary>
     /// Gets the current host.
@@ -75,7 +85,7 @@ public interface IStateService
     string? GetToken();
 
     /// <summary>
-    /// Clears the current state.
+    /// Clears the signed in user.
     /// </summary>
     void ClearState();
 }

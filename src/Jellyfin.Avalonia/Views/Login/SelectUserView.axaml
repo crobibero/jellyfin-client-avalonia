@@ -1,33 +1,116 @@
-<UserControl x:Class="Jellyfin.Avalonia.Views.Login.SelectUserView"
-             xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:login="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
-             xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
-             x:DataType="login:SelectUserViewModel">
-    <Grid ColumnDefinitions="*,*"
-          RowDefinitions="Auto,*">
+<controls:PageView x:Class="Jellyfin.Avalonia.Views.Login.SelectUserView"
+                   xmlns="https://github.com/avaloniaui"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+                   xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
+                   xmlns:conv="clr-namespace:Jellyfin.Avalonia.Converters"
+                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+                   xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
+                   x:Name="Page"
+                   x:DataType="vm:SelectUserViewModel"
+                   Background="{DynamicResource StartupBackgroundBrush}">
+    <ScrollViewer>
+        <StackPanel Margin="24,48"
+                    VerticalAlignment="Center"
+                    Spacing="32">
+            <Image Height="56"
+                   HorizontalAlignment="Center"
+                   Source="{StaticResource JellyfinLogoImage}" />
+            <StackPanel HorizontalAlignment="Center"
+                        Spacing="4">
+                <TextBlock HorizontalAlignment="Center"
+                           Classes="h1"
+                           Text="{x:Static strings:Strings.Login_SelectUser}" />
+                <TextBlock HorizontalAlignment="Center"
+                           Classes="caption"
+                           Text="{Binding ServerName}" />
+            </StackPanel>
 
-        <TextBlock Grid.Row="0"
-                   Grid.Column="0"
-                   HorizontalAlignment="Left"
-                   Text="{x:Static strings:Strings.Login_ExistingUsers}" />
+            <ItemsControl HorizontalAlignment="Center"
+                          ItemsSource="{Binding Users}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Margin="0,8"
+                                   HorizontalAlignment="Center"
+                                   ItemSpacing="32"
+                                   LineSpacing="24"
+                                   Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:UserCardModel">
+                        <Button Width="150"
+                                controls:PageView.IsInitialFocus="True"
+                                Classes="card"
+                                Command="{Binding #Page.((vm:SelectUserViewModel)DataContext).SelectUserCommand}"
+                                CommandParameter="{Binding}">
+                            <Button.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Command="{Binding #Page.((vm:SelectUserViewModel)DataContext).DeleteUserCommand}"
+                                              CommandParameter="{Binding}"
+                                              Header="{x:Static strings:Strings.Delete}" />
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                            <StackPanel Spacing="8">
+                                <Panel Width="128"
+                                       Height="128">
+                                    <Border Classes="avatar-frame"
+                                            Classes.has-image="{Binding HasImage}">
+                                        <Panel>
+                                            <TextBlock HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="{DynamicResource FontSizeDisplay}"
+                                                       FontWeight="Bold"
+                                                       Foreground="{DynamicResource OnImageBrush}"
+                                                       Text="{Binding Initial}" />
+                                            <Border Background="{Binding ImageBlurHash, Converter={x:Static conv:JellyfinConverters.BlurHashBrush}}"
+                                                    IsVisible="{Binding HasImage}"
+                                                    RenderOptions.BitmapInterpolationMode="HighQuality" />
+                                            <Image asyncImageLoader:ImageLoader.Source="{Binding ImageUrl}"
+                                                   IsVisible="{Binding HasImage}"
+                                                   Stretch="UniformToFill" />
+                                        </Panel>
+                                    </Border>
+                                    <Border Classes="avatar-focus" />
+                                </Panel>
+                                <TextBlock HorizontalAlignment="Center"
+                                           FontSize="{DynamicResource FontSizeLg}"
+                                           FontWeight="SemiBold"
+                                           Text="{Binding Name}"
+                                           TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
-        <Button Grid.Row="0"
-                Grid.Column="1"
-                HorizontalAlignment="Right"
-                Command="{Binding AddUserCommand}"
-                Content="{x:Static strings:Strings.Login_AddUser}" />
+            <ProgressBar Width="200"
+                         IsIndeterminate="True"
+                         IsVisible="{Binding Loading}" />
+            <TextBlock HorizontalAlignment="Center"
+                       Classes="error"
+                       IsVisible="{Binding HasError}"
+                       Text="{Binding ErrorMessage}" />
 
-        <ScrollViewer Grid.Row="1"
-                      Grid.Column="0"
-                      Grid.ColumnSpan="2"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch">
-            <WrapPanel Orientation="Horizontal">
-                <ItemsRepeater ItemTemplate="{StaticResource UserSelectTemplate}"
-                               ItemsSource="{Binding Users, Mode=OneWay}" />
-            </WrapPanel>
-        </ScrollViewer>
-
-    </Grid>
-</UserControl>
+            <StackPanel HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="16">
+                <Button Command="{Binding AddUserCommand}">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="8">
+                        <mi:MaterialIcon Kind="AccountPlus" />
+                        <TextBlock Text="{x:Static strings:Strings.Login_ManualLogin}" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding ChangeServerCommand}">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="8">
+                        <mi:MaterialIcon Kind="ServerNetwork" />
+                        <TextBlock Text="{x:Static strings:Strings.Login_ChangeServer}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</controls:PageView>

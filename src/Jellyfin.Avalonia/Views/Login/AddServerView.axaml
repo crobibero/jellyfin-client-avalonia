@@ -1,30 +1,58 @@
-<UserControl x:Class="Jellyfin.Avalonia.Views.Login.AddServerView"
-             xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:login="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
-             xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
-             x:DataType="login:AddServerViewModel">
-
+<controls:PageView x:Class="Jellyfin.Avalonia.Views.Login.AddServerView"
+                   xmlns="https://github.com/avaloniaui"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
+                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+                   xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
+                   x:DataType="vm:AddServerViewModel"
+                   Background="{DynamicResource StartupBackgroundBrush}">
     <ScrollViewer>
-        <StackPanel Orientation="Vertical">
-            <Grid ColumnDefinitions="Auto,*"
-                  RowDefinitions="Auto,*">
-                <TextBlock Grid.Row="0"
-                           Grid.Column="0"
-                           Grid.ColumnSpan="2"
-                           Text="{x:Static strings:Strings.Login_ServerUrl}" />
-                <icons:MaterialIcon Grid.Row="1"
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Kind="Link" />
-                <TextBox Grid.Row="1"
-                         Grid.Column="1"
-                         Text="{Binding ServerUrl}" />
-            </Grid>
+        <StackPanel MaxWidth="520"
+                    Margin="24,48"
+                    VerticalAlignment="Center"
+                    Spacing="24">
+            <Image Height="56"
+                   HorizontalAlignment="Center"
+                   Source="{StaticResource JellyfinLogoImage}" />
+            <TextBlock HorizontalAlignment="Center"
+                       Classes="h1"
+                       Text="{x:Static strings:Strings.Login_AddServer}" />
 
-            <Button Command="{Binding AddServerCommand}"
-                    Content="{x:Static strings:Strings.Add}" />
+            <TextBlock Classes="caption"
+                       Text="{x:Static strings:Strings.Login_ServerUrl}" />
+            <TextBox Name="AddressBox"
+                     controls:PageView.IsInitialFocus="True"
+                     Text="{Binding ServerUrl}"
+                     PlaceholderText="{x:Static strings:Strings.Login_ServerUrlHint}">
+                <TextBox.InnerLeftContent>
+                    <mi:MaterialIcon Width="22"
+                                     Height="22"
+                                     Margin="16,0,0,0"
+                                     Kind="Link" />
+                </TextBox.InnerLeftContent>
+                <TextBox.KeyBindings>
+                    <KeyBinding Command="{Binding ConnectCommand}"
+                                Gesture="Enter" />
+                </TextBox.KeyBindings>
+            </TextBox>
+
+            <TextBlock Classes="error"
+                       IsVisible="{Binding HasError}"
+                       Text="{Binding ErrorMessage}" />
+
+            <ProgressBar IsIndeterminate="True"
+                         IsVisible="{Binding ConnectCommand.IsRunning}" />
+
+            <StackPanel HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="16">
+                <Button Command="{Binding GoBackCommand}"
+                        Content="{x:Static strings:Strings.Back}" />
+                <Button Classes="accent"
+                        Command="{Binding ConnectCommand}"
+                        Content="{x:Static strings:Strings.Login_ConnectButton}" />
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
-</UserControl>
+</controls:PageView>

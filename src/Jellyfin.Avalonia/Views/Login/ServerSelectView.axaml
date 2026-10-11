@@ -1,27 +1,129 @@
-<UserControl x:Class="Jellyfin.Avalonia.Views.Login.ServerSelectView"
-             xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
-             xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
-             x:DataType="vm:ServerSelectViewModel">
-    <Grid ColumnDefinitions="*,*"
-          RowDefinitions="Auto,*">
-        <TextBlock Grid.Row="0"
-                   Grid.Column="0"
-                   HorizontalAlignment="Left"
-                   Text="{x:Static strings:Strings.Login_ExistingServers}" />
+<controls:PageView x:Class="Jellyfin.Avalonia.Views.Login.ServerSelectView"
+                   xmlns="https://github.com/avaloniaui"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
+                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:models="clr-namespace:Jellyfin.Mvvm.Models;assembly=Jellyfin.Mvvm"
+                   xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+                   xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
+                   x:Name="Page"
+                   x:DataType="vm:ServerSelectViewModel"
+                   Background="{DynamicResource StartupBackgroundBrush}">
+    <ScrollViewer>
+        <StackPanel MaxWidth="640"
+                    Margin="24,48"
+                    Spacing="24">
+            <Image Height="56"
+                   HorizontalAlignment="Center"
+                   Source="{StaticResource JellyfinLogoImage}" />
+            <TextBlock HorizontalAlignment="Center"
+                       Classes="h1"
+                       Text="{x:Static strings:Strings.Login_ExistingServers}" />
 
-        <Button Grid.Row="0"
-                Grid.Column="1"
-                HorizontalAlignment="Right"
-                Command="{Binding AddServerCommand}"
-                Content="{x:Static strings:Strings.Login_AddServer}" />
+            <TextBlock HorizontalAlignment="Center"
+                       Classes="caption"
+                       IsVisible="{Binding !HasServers}"
+                       Text="{x:Static strings:Strings.Login_NoServers}" />
 
-        <ScrollViewer Grid.Row="1"
-                      Grid.Column="0"
-                      Grid.ColumnSpan="2">
-            <ItemsRepeater ItemTemplate="{StaticResource ServerSelectTemplate}"
-                           ItemsSource="{Binding Servers, Mode=OneWay}" />
-        </ScrollViewer>
-    </Grid>
-</UserControl>
+            <!--  Saved servers  -->
+            <ItemsControl ItemsSource="{Binding Servers}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="models:ServerStateModel">
+                        <Grid Margin="0,4"
+                              ColumnDefinitions="*,Auto">
+                            <Button Grid.Column="0"
+                                    controls:PageView.IsInitialFocus="True"
+                                    Classes="list"
+                                    Command="{Binding #Page.((vm:ServerSelectViewModel)DataContext).SelectServerCommand}"
+                                    CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal"
+                                            Spacing="16">
+                                    <mi:MaterialIcon Width="32"
+                                                     Height="32"
+                                                     Kind="ServerNetwork" />
+                                    <StackPanel>
+                                        <TextBlock FontSize="{DynamicResource FontSizeLg}"
+                                                   FontWeight="SemiBold"
+                                                   Text="{Binding Name}" />
+                                        <TextBlock Classes="caption"
+                                                   Text="{Binding Url}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="1"
+                                    Margin="8,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Classes="icon flat"
+                                    Command="{Binding #Page.((vm:ServerSelectViewModel)DataContext).DeleteServerCommand}"
+                                    CommandParameter="{Binding}"
+                                    ToolTip.Tip="{x:Static strings:Strings.Delete}">
+                                <mi:MaterialIcon Width="22"
+                                                 Height="22"
+                                                 Kind="DeleteOutline" />
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!--  Discovered servers  -->
+            <StackPanel IsVisible="{Binding HasDiscoveredServers}"
+                        Spacing="8">
+                <TextBlock Classes="h3"
+                           Text="{x:Static strings:Strings.Login_DiscoveredServers}" />
+                <ItemsControl ItemsSource="{Binding DiscoveredServers}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="models:ServerDiscoveryResponse">
+                            <Button Margin="0,4"
+                                    Classes="list"
+                                    Command="{Binding #Page.((vm:ServerSelectViewModel)DataContext).ConnectDiscoveredCommand}"
+                                    CommandParameter="{Binding}">
+                                <StackPanel Orientation="Horizontal"
+                                            Spacing="16">
+                                    <mi:MaterialIcon Width="32"
+                                                     Height="32"
+                                                     Kind="Lan" />
+                                    <StackPanel>
+                                        <TextBlock FontSize="{DynamicResource FontSizeLg}"
+                                                   FontWeight="SemiBold"
+                                                   Text="{Binding Name}" />
+                                        <TextBlock Classes="caption"
+                                                   Text="{Binding Address}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <TextBlock HorizontalAlignment="Center"
+                       Classes="error"
+                       IsVisible="{Binding HasError}"
+                       Text="{Binding ErrorMessage}" />
+
+            <StackPanel HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="16">
+                <Button Classes="accent"
+                        controls:PageView.IsInitialFocus="True"
+                        Command="{Binding AddServerCommand}">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="8">
+                        <mi:MaterialIcon Kind="Plus" />
+                        <TextBlock Text="{x:Static strings:Strings.Login_AddServer}" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding DiscoverCommand}"
+                        IsEnabled="{Binding !IsDiscovering}"
+                        IsVisible="{Binding CanDiscover}">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="8">
+                        <mi:MaterialIcon Kind="Refresh" />
+                        <TextBlock Text="{x:Static strings:Strings.Login_Discover}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</controls:PageView>

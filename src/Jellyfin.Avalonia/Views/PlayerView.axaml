@@ -1,0 +1,367 @@
+<controls:PageView x:Class="Jellyfin.Avalonia.Views.PlayerView"
+                   xmlns="https://github.com/avaloniaui"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+                   xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
+                   xmlns:conv="clr-namespace:Jellyfin.Avalonia.Converters"
+                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+                   xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
+                   x:Name="Page"
+                   x:DataType="vm:PlayerViewModel"
+                   Background="Black">
+    <controls:PageView.Styles>
+        <Style Selector="Panel#Overlay">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="0:0:0.2" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Button.player">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource OnImageBrush}" />
+        </Style>
+        <Style Selector="Button.player:pointerover, Button.player:focus-visible">
+            <Setter Property="Background" Value="{DynamicResource ButtonFocusedBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource OnButtonFocusedBrush}" />
+        </Style>
+        <Style Selector="Button.player:disabled">
+            <Setter Property="Foreground" Value="{DynamicResource OnImageDisabledBrush}" />
+        </Style>
+        <Style Selector="Button.player mi|MaterialIcon">
+            <Setter Property="Width" Value="28" />
+            <Setter Property="Height" Value="28" />
+        </Style>
+        <Style Selector="Button.player.large mi|MaterialIcon">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+        </Style>
+    </controls:PageView.Styles>
+
+    <Grid>
+        <!--  Audio: artwork over a blurred backdrop  -->
+        <Panel IsVisible="{Binding !IsVideo}">
+            <controls:BackdropImage Source="{Binding BackdropUrl}" />
+            <Rectangle Fill="{DynamicResource ScrimBrush}" />
+            <Border Width="360"
+                    Height="360"
+                    Margin="0,0,0,120"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BoxShadow="0 12 48 0 #A0000000"
+                    ClipToBounds="True"
+                    CornerRadius="{DynamicResource RadiusDefault}">
+                <Panel Background="{DynamicResource SurfaceBrush}">
+                    <mi:MaterialIcon Width="120"
+                                     Height="120"
+                                     Foreground="{DynamicResource OnBackgroundMutedBrush}"
+                                     Kind="Music" />
+                    <Border Background="{Binding ArtworkBlurHash, Converter={x:Static conv:JellyfinConverters.BlurHashBrush}}"
+                            RenderOptions.BitmapInterpolationMode="HighQuality" />
+                    <Image asyncImageLoader:ImageLoader.Source="{Binding ArtworkUrl}"
+                           Stretch="UniformToFill" />
+                </Panel>
+            </Border>
+        </Panel>
+
+        <!--  Video surface provided by the platform player  -->
+        <ContentControl Name="VideoHost"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"
+                        IsHitTestVisible="False"
+                        IsVisible="{Binding IsVideo}" />
+
+        <!--  Input layer: tap toggles controls, double tap toggles full screen  -->
+        <Border Name="InputLayer"
+                Background="Transparent" />
+
+        <ProgressBar Width="200"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     IsIndeterminate="True"
+                     IsVisible="{Binding IsBuffering}" />
+
+        <!--  Controls overlay  -->
+        <Panel Name="Overlay"
+               IsHitTestVisible="{Binding IsOverlayVisible}"
+               Opacity="{Binding IsOverlayVisible, Converter={x:Static conv:JellyfinConverters.SelectedOpacity}}">
+            <Rectangle Fill="{DynamicResource PlayerScrimBrush}"
+                       IsHitTestVisible="False" />
+
+            <!--  Title  -->
+            <Grid Margin="48,32,48,0"
+                  VerticalAlignment="Top"
+                  ColumnDefinitions="Auto,*">
+                <Button Grid.Column="0"
+                        Margin="0,0,16,0"
+                        VerticalAlignment="Top"
+                        Classes="icon player"
+                        Command="{Binding CloseCommand}"
+                        ToolTip.Tip="{x:Static strings:Strings.Player_Close}">
+                    <mi:MaterialIcon Kind="ArrowLeft" />
+                </Button>
+                <StackPanel Grid.Column="1"
+                            Spacing="4">
+                    <Panel HorizontalAlignment="Left">
+                        <Image MaxWidth="360"
+                               MaxHeight="72"
+                               HorizontalAlignment="Left"
+                               asyncImageLoader:ImageLoader.Source="{Binding LogoUrl}"
+                               IsVisible="{Binding LogoUrl, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                               Stretch="Uniform" />
+                        <TextBlock Classes="h1"
+                                   IsVisible="{Binding LogoUrl, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                   Text="{Binding Title}"
+                                   TextTrimming="CharacterEllipsis" />
+                    </Panel>
+                    <TextBlock Classes="h3"
+                               Text="{Binding Subtitle}"
+                               TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+            </Grid>
+
+            <!--  Transport  -->
+            <StackPanel Margin="48,0,48,32"
+                        VerticalAlignment="Bottom"
+                        Spacing="8">
+                <Slider Name="SeekSlider"
+                        Maximum="{Binding DurationSeconds}"
+                        Minimum="0"
+                        Value="{Binding PositionSeconds}" />
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <TextBlock Grid.Column="0"
+                               FontWeight="SemiBold"
+                               Text="{Binding PositionText}" />
+                    <TextBlock Grid.Column="1"
+                               HorizontalAlignment="Center"
+                               Classes="caption"
+                               Text="{Binding EndsAtText}" />
+                    <TextBlock Grid.Column="2"
+                               FontWeight="SemiBold"
+                               Text="{Binding DurationText}" />
+                </Grid>
+                <Grid Margin="0,8,0,0"
+                      ColumnDefinitions="*,Auto,*">
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                Spacing="16">
+                        <Button Classes="icon player"
+                                Command="{Binding PreviousCommand}"
+                                ToolTip.Tip="{x:Static strings:Strings.Player_Previous}">
+                            <mi:MaterialIcon Kind="SkipPrevious" />
+                        </Button>
+                        <Button Classes="icon player"
+                                Command="{Binding SkipBackCommand}"
+                                ToolTip.Tip="{x:Static strings:Strings.Player_SkipBack}">
+                            <mi:MaterialIcon Kind="Rewind10" />
+                        </Button>
+                        <Button Name="PlayPauseButton"
+                                controls:PageView.IsInitialFocus="True"
+                                Classes="icon player large"
+                                Command="{Binding TogglePlayPauseCommand}"
+                                ToolTip.Tip="{x:Static strings:Strings.Player_Play}">
+                            <mi:MaterialIcon Kind="{Binding IsPlaying, Converter={x:Static conv:JellyfinConverters.PlayPauseIcon}}" />
+                        </Button>
+                        <Button Classes="icon player"
+                                Command="{Binding SkipForwardCommand}"
+                                ToolTip.Tip="{x:Static strings:Strings.Player_SkipForward}">
+                            <mi:MaterialIcon Kind="FastForward30" />
+                        </Button>
+                        <Button Classes="icon player"
+                                Command="{Binding NextCommand}"
+                                IsEnabled="{Binding Manager.HasNext}"
+                                ToolTip.Tip="{x:Static strings:Strings.Player_Next}">
+                            <mi:MaterialIcon Kind="SkipNext" />
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2"
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal"
+                                Spacing="4">
+                        <Button Classes="icon player"
+                                Command="{Binding ShowMenuCommand}"
+                                CommandParameter="{x:Static vm:PlayerViewModel+PlayerMenu.Audio}"
+                                IsVisible="{Binding HasAudioOptions}"
+                                ToolTip.Tip="{x:Static strings:Strings.Player_Audio}">
+                            <mi:MaterialIcon Kind="Translate" />
+                        </Button>
+                        <Button Classes="icon player"
+                                Command="{Binding ShowMenuCommand}"
+                                CommandParameter="{x:Static vm:PlayerViewModel+PlayerMenu.Subtitles}"
+                                IsVisible="{Binding HasSubtitles}"
+                                ToolTip.Tip="{x:Static strings:Strings.Player_Subtitles}">
+                            <mi:MaterialIcon Kind="ClosedCaptionOutline" />
+                        </Button>
+                        <Button Classes="icon player"
+                                Command="{Binding ShowMenuCommand}"
+                                CommandParameter="{x:Static vm:PlayerViewModel+PlayerMenu.Quality}"
+                                IsVisible="{Binding IsVideo}"
+                                ToolTip.Tip="{x:Static strings:Strings.Player_Quality}">
+                            <mi:MaterialIcon Kind="HighDefinition" />
+                        </Button>
+                        <Button Classes="icon player"
+                                Command="{Binding ShowMenuCommand}"
+                                CommandParameter="{x:Static vm:PlayerViewModel+PlayerMenu.Speed}"
+                                ToolTip.Tip="{x:Static strings:Strings.Player_Speed}">
+                            <mi:MaterialIcon Kind="PlaySpeed" />
+                        </Button>
+                        <Button Classes="icon player"
+                                Command="{Binding CycleZoomCommand}"
+                                IsVisible="{Binding IsVideo}"
+                                ToolTip.Tip="{x:Static strings:Strings.Player_Zoom}">
+                            <mi:MaterialIcon Kind="AspectRatio" />
+                        </Button>
+                        <Button Classes="icon player"
+                                Command="{Binding ShowMenuCommand}"
+                                CommandParameter="{x:Static vm:PlayerViewModel+PlayerMenu.Info}"
+                                ToolTip.Tip="{x:Static strings:Strings.Player_PlaybackInfo}">
+                            <mi:MaterialIcon Kind="InformationOutline" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Panel>
+
+        <!--  Seek preview while the controls are hidden  -->
+        <StackPanel Margin="48,0,48,40"
+                    VerticalAlignment="Bottom"
+                    IsHitTestVisible="False"
+                    IsVisible="{Binding IsSeekPreviewVisible}"
+                    Spacing="8">
+            <ProgressBar Height="6"
+                         Classes="seek"
+                         Maximum="{Binding DurationSeconds}"
+                         Minimum="0"
+                         Value="{Binding PositionSeconds}" />
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <TextBlock Grid.Column="0"
+                           FontWeight="SemiBold"
+                           Text="{Binding PositionText}" />
+                <TextBlock Grid.Column="2"
+                           FontWeight="SemiBold"
+                           Text="{Binding DurationText}" />
+            </Grid>
+        </StackPanel>
+
+        <!--  Skip intro / credits  -->
+        <Button Name="SkipSegmentButton"
+                Margin="48,0,48,180"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Classes="accent"
+                Command="{Binding SkipSegmentCommand}"
+                IsVisible="{Binding IsSkipSegmentVisible}">
+            <StackPanel Orientation="Horizontal"
+                        Spacing="8">
+                <mi:MaterialIcon Kind="SkipNext" />
+                <TextBlock Text="{Binding SkipSegmentText}" />
+            </StackPanel>
+        </Button>
+
+        <!--  Menus  -->
+        <Border Width="380"
+                Margin="0,24,24,24"
+                HorizontalAlignment="Right"
+                Classes="panel"
+                IsVisible="{Binding IsMenuOpen}">
+            <DockPanel>
+                <TextBlock Margin="0,0,0,16"
+                           Classes="h2"
+                           DockPanel.Dock="Top"
+                           Text="{Binding MenuTitle}" />
+                <SelectableTextBlock Classes="mono"
+                                     FontSize="{DynamicResource FontSizeSm}"
+                                     IsVisible="{Binding IsInfoOpen}"
+                                     Text="{Binding PlaybackInfoText}"
+                                     TextWrapping="Wrap" />
+                <ScrollViewer IsVisible="{Binding !IsInfoOpen}">
+                    <ItemsControl Name="MenuItems"
+                                  ItemsSource="{Binding MenuOptions}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:TrackOption">
+                                <Button Classes="list"
+                                        Command="{Binding #Page.((vm:PlayerViewModel)DataContext).SelectOptionCommand}"
+                                        CommandParameter="{Binding}">
+                                    <Grid ColumnDefinitions="32,*">
+                                        <mi:MaterialIcon Grid.Column="0"
+                                                         Width="20"
+                                                         Height="20"
+                                                         HorizontalAlignment="Left"
+                                                         Kind="Check"
+                                                         Opacity="{Binding IsSelected, Converter={x:Static conv:JellyfinConverters.SelectedOpacity}}" />
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding Label}"
+                                                   TextWrapping="Wrap" />
+                                    </Grid>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <!--  Next up  -->
+        <Border Width="420"
+                Margin="48"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Classes="panel"
+                IsVisible="{Binding IsNextUpVisible}">
+            <StackPanel Spacing="16">
+                <TextBlock Classes="caption"
+                           Text="{x:Static strings:Strings.Player_UpNext}" />
+                <Border Height="200"
+                        ClipToBounds="True"
+                        CornerRadius="{DynamicResource RadiusDefault}"
+                        IsVisible="{Binding NextUpShowsImage}">
+                    <Panel Background="{Binding NextUpImageBlurHash, Converter={x:Static conv:JellyfinConverters.BlurHashBrush}}"
+                           RenderOptions.BitmapInterpolationMode="HighQuality">
+                        <Image asyncImageLoader:ImageLoader.Source="{Binding NextUpImageUrl}"
+                               Stretch="UniformToFill" />
+                    </Panel>
+                </Border>
+                <TextBlock Classes="h3"
+                           Text="{Binding NextUpTitle}"
+                           TextTrimming="CharacterEllipsis" />
+                <TextBlock Classes="caption"
+                           Text="{Binding NextUpSubtitle}"
+                           TextTrimming="CharacterEllipsis" />
+                <TextBlock FontWeight="SemiBold"
+                           Text="{Binding NextUpCountdownText}" />
+                <StackPanel Orientation="Horizontal"
+                            Spacing="16">
+                    <Button Name="PlayNextButton"
+                            Classes="accent"
+                            Command="{Binding PlayNextNowCommand}"
+                            Content="{x:Static strings:Strings.Player_PlayNow}" />
+                    <Button Command="{Binding CancelNextUpCommand}"
+                            Content="{x:Static strings:Strings.Cancel}" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!--  Errors  -->
+        <Border MaxWidth="560"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Classes="panel"
+                IsVisible="{Binding HasPlaybackError}">
+            <StackPanel Spacing="16">
+                <mi:MaterialIcon Width="48"
+                                 Height="48"
+                                 Foreground="{DynamicResource ErrorBrush}"
+                                 Kind="AlertCircleOutline" />
+                <TextBlock Text="{Binding PlaybackError}"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap" />
+                <Button Name="ErrorCloseButton"
+                        HorizontalAlignment="Center"
+                        Command="{Binding CloseCommand}"
+                        Content="{x:Static strings:Strings.Close}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</controls:PageView>

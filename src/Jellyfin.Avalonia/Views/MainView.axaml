@@ -1,31 +1,127 @@
-﻿<UserControl x:Class="Jellyfin.Avalonia.Views.MainView"
+<UserControl x:Class="Jellyfin.Avalonia.Views.MainView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:login="clr-namespace:Jellyfin.Avalonia.Views.Login"
-             xmlns:views="clr-namespace:Jellyfin.Avalonia.Views">
-    <ShellView HorizontalAlignment="Stretch"
-               VerticalAlignment="Stretch"
-               DefaultRoute="/loading">
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
+             xmlns:conv="clr-namespace:Jellyfin.Avalonia.Converters"
+             xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:services="clr-namespace:Jellyfin.Avalonia.Services"
+             xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
+             xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
+             x:DataType="vm:MainViewModel"
+             Background="{DynamicResource BackgroundBrush}"
+             XYFocus.NavigationModes="Enabled">
+    <!--  Scales the whole interface on small viewports such as TVs (960x540 dp) and phones  -->
+    <LayoutTransformControl Name="ScaleHost">
+    <Grid>
+        <!--  Backdrop with a readability scrim  -->
+        <Panel IsHitTestVisible="False"
+               IsVisible="{Binding ShowBackdrop}">
+            <controls:BackdropImage Source="{Binding BackdropUrl}" />
+            <Rectangle Fill="{DynamicResource BackdropFilterBrush}" />
+        </Panel>
 
-        <!--  Loading  -->
-        <Route Page="views:LoadingView"
-               Path="loading" />
+        <DockPanel>
+            <!--  Main toolbar  -->
+            <Grid Name="Toolbar"
+                  Height="72"
+                  Margin="32,8,32,0"
+                  ColumnDefinitions="*,Auto,*"
+                  DockPanel.Dock="Top"
+                  IsVisible="{Binding ShowToolbar}">
+                <StackPanel Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                    <Button Classes="icon flat"
+                            Command="{Binding GoBackCommand}"
+                            IsVisible="{Binding CanGoBack}"
+                            ToolTip.Tip="{x:Static strings:Strings.Back}">
+                        <mi:MaterialIcon Width="24"
+                                         Height="24"
+                                         Kind="ArrowLeft" />
+                    </Button>
+                    <Button Padding="4"
+                            Classes="icon flat"
+                            Command="{Binding SwitchUserCommand}"
+                            ToolTip.Tip="{x:Static strings:Strings.SwitchUser}">
+                        <Border Width="40"
+                                Height="40"
+                                Classes="avatar-frame">
+                            <Panel>
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Bold"
+                                           Foreground="{DynamicResource OnImageBrush}"
+                                           Text="{Binding UserName, Converter={x:Static conv:JellyfinConverters.Initial}}" />
+                                <Image asyncImageLoader:ImageLoader.Source="{Binding UserImageUrl}"
+                                       Stretch="UniformToFill" />
+                            </Panel>
+                        </Border>
+                    </Button>
+                </StackPanel>
 
-        <!--  Login  -->
-        <Route Page="login:AddServerView"
-               Path="login-server-add" />
-        <Route Page="login:LoginView"
-               Path="login-user-add" />
-        <Route Page="login:SelectUserView"
-               Path="login-user" />
-        <Route Page="login:ServerSelectView"
-               Path="login-server" />
+                <StackPanel Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                    <Button Classes.active="{Binding ActiveToolbarItem, Converter={x:Static conv:JellyfinConverters.EnumEquals}, ConverterParameter=Home}"
+                            Command="{Binding GoHomeCommand}"
+                            Content="{x:Static strings:Strings.Home}" />
+                    <Button Classes.active="{Binding ActiveToolbarItem, Converter={x:Static conv:JellyfinConverters.EnumEquals}, ConverterParameter=Search}"
+                            Command="{Binding GoSearchCommand}"
+                            Content="{x:Static strings:Strings.Search}" />
+                </StackPanel>
 
-        <!--  Main content  -->
-        <Route Page="views:HomeView"
-               Path="main" />
-        <Route Page="views:ItemView"
-               Path="item" />
-    </ShellView>
+                <StackPanel Grid.Column="2"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="16">
+                    <Button Classes="icon flat"
+                            Classes.active="{Binding ActiveToolbarItem, Converter={x:Static conv:JellyfinConverters.EnumEquals}, ConverterParameter=Settings}"
+                            Command="{Binding GoSettingsCommand}"
+                            ToolTip.Tip="{x:Static strings:Strings.Settings}">
+                        <mi:MaterialIcon Width="24"
+                                         Height="24"
+                                         Kind="CogOutline" />
+                    </Button>
+                    <TextBlock VerticalAlignment="Center"
+                               FontSize="{DynamicResource FontSizeXl}"
+                               FontWeight="SemiBold"
+                               IsVisible="{Binding IsClockVisible}"
+                               Text="{Binding ClockText}" />
+                </StackPanel>
+            </Grid>
+
+            <!--  Current page  -->
+            <ContentControl Name="PageHost"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch"
+                            Content="{Binding CurrentPage}" />
+        </DockPanel>
+
+        <!--  Toasts  -->
+        <ItemsControl Name="ToastHost"
+                      Margin="24"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Bottom"
+                      IsHitTestVisible="False">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="services:ToastModel">
+                    <Border Margin="0,8,0,0"
+                            Padding="24,16"
+                            Background="{DynamicResource ToastBrush}"
+                            BorderBrush="{DynamicResource ErrorBrush}"
+                            BorderThickness="{Binding IsError, Converter={x:Static conv:JellyfinConverters.ErrorBorder}}"
+                            CornerRadius="{DynamicResource RadiusDefault}">
+                        <TextBlock MaxWidth="560"
+                                   Text="{Binding Message}"
+                                   TextWrapping="Wrap" />
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+    </LayoutTransformControl>
 </UserControl>
-

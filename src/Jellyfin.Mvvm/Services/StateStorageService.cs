@@ -35,7 +35,8 @@ public class StateStorageService : IStateStorageService
 
             if (string.IsNullOrEmpty(storedState))
             {
-                return new StateContainerModel();
+                _stateCache = new StateContainerModel();
+                return _stateCache;
             }
 
             _stateCache = JsonSerializer.Deserialize(storedState, JsonOptions.Context.StateContainerModel);
@@ -89,6 +90,8 @@ public class StateStorageService : IStateStorageService
             // Update stored server.
             existing.Name = serverStateModel.Name;
             existing.Url = serverStateModel.Url;
+            existing.Version = serverStateModel.Version ?? existing.Version;
+            existing.LastUsed = serverStateModel.LastUsed ?? existing.LastUsed;
         }
 
         state.SelectedServerId = serverStateModel.Id;
@@ -114,6 +117,15 @@ public class StateStorageService : IStateStorageService
             // Update stored user.
             existing.Name = userStateModel.Name;
             existing.Token = userStateModel.Token;
+            if (userStateModel.ImageTag is not null && userStateModel.ImageTag != existing.ImageTag)
+            {
+                // The blurhash belongs to the old image.
+                existing.ImageTag = userStateModel.ImageTag;
+                existing.ImageBlurHash = null;
+            }
+
+            existing.ImageBlurHash = userStateModel.ImageBlurHash ?? existing.ImageBlurHash;
+            existing.LastUsed = userStateModel.LastUsed ?? existing.LastUsed;
         }
 
         state.SelectedUserId = userStateModel.Id;
@@ -161,6 +173,21 @@ public class StateStorageService : IStateStorageService
 
         state.SelectedUserId = null;
 
+        await SetStoredStateAsync(state).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public async ValueTask SignOutUserAsync(Guid userId, Guid serverId)
+    {
+        var state = await GetStoredStateAsync().ConfigureAwait(false);
+        var user = state.Users.FirstOrDefault(x => x.Id == userId && x.ServerId == serverId);
+        if (user is null)
+        {
+            return;
+        }
+
+        user.Token = null;
+        state.SelectedUserId = null;
         await SetStoredStateAsync(state).ConfigureAwait(false);
     }
 

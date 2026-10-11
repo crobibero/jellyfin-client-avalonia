@@ -1,0 +1,84 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        description: Target name. Used for the output directory and the jellyfin-avalonia-{name} artifact.
+        type: string
+        required: true
+      runs-on:
+        description: Runner label.
+        type: string
+        required: true
+      project:
+        description: Project directory under src.
+        type: string
+        required: true
+      command:
+        description: dotnet command to run, publish or build.
+        type: string
+        default: publish
+      framework:
+        description: Target framework passed as -f. Empty uses the project default.
+        type: string
+        default: ''
+      rid:
+        description: Runtime identifier passed as -r. Empty uses the project default.
+        type: string
+        default: ''
+      workloads:
+        description: Space-separated .NET workloads to install.
+        type: string
+        default: ''
+      java-version:
+        description: Java version to install. Empty skips Java.
+        type: string
+        default: ''
+      args:
+        description: Extra arguments appended to the dotnet command.
+        type: string
+        default: ''
+      artifact:
+        description: Glob of files to upload, relative to the publish output. Empty skips the upload.
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ inputs.command }}
+    runs-on: ${{ inputs.runs-on }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup
+        with:
+          workloads: ${{ inputs.workloads }}
+          java-version: ${{ inputs.java-version }}
+
+      - name: dotnet ${{ inputs.command }}
+        working-directory: ./src
+        shell: bash
+        env:
+          COMMAND: ${{ inputs.command }}
+          PROJECT: ${{ inputs.project }}
+          FRAMEWORK: ${{ inputs.framework }}
+          RID: ${{ inputs.rid }}
+          EXTRA_ARGS: ${{ inputs.args }}
+          OUTPUT: artifacts/${{ inputs.name }}
+        run: |
+          args=(-c Release -p:Version="0.1.$GITHUB_RUN_NUMBER")
+          if [[ -n "$FRAMEWORK" ]]; then args+=(-f "$FRAMEWORK"); fi
+          if [[ -n "$RID" ]]; then args+=(-r "$RID"); fi
+          if [[ "$COMMAND" == publish ]]; then args+=(--output "$OUTPUT"); fi
+          # EXTRA_ARGS is left unquoted so it splits into separate arguments.
+          dotnet "$COMMAND" "$PROJECT" "${args[@]}" $EXTRA_ARGS
+
+      - if: inputs.artifact != ''
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: jellyfin-avalonia-${{ inputs.name }}
+          path: src/artifacts/${{ inputs.name }}/${{ inputs.artifact }}

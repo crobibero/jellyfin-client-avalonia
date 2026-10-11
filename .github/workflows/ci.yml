@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-26.04
+    env:
+      # XamlStyler targets an older runtime than the installed SDK.
+      DOTNET_ROLL_FORWARD: Major
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup
+
+      - name: Lint XAML
+        working-directory: ./src
+        run: |
+          dotnet tool restore
+          dotnet xstyler --recursive --directory . --passive
+
+  test:
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup
+
+      - name: Test
+        working-directory: ./src
+        run: dotnet test --project Jellyfin.Mvvm.Tests
+
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-26.04
+            rid: linux-x64
+          - os: ubuntu-26.04
+            rid: linux-arm64
+          - os: windows-2025
+            rid: win-x64
+          - os: windows-2025
+            rid: win-arm64
+          - os: macos-26
+            rid: osx-arm64
+          - os: macos-26
+            rid: osx-x64
+    uses: ./.github/workflows/build.yml
+    with:
+      name: ${{ matrix.rid }}
+      runs-on: ${{ matrix.os }}
+      project: Jellyfin.Avalonia.Desktop
+      rid: ${{ matrix.rid }}
+      artifact: '*'
+
+  android:
+    uses: ./.github/workflows/build.yml
+    with:
+      name: android
+      runs-on: ubuntu-26.04
+      project: Jellyfin.Avalonia.Android
+      framework: net10.0-android
+      workloads: android
+      java-version: '21'
+      args: -p:ApplicationVersion=${{ github.run_number }} -p:AcceptAndroidSdkLicenses=True
+      artifact: '*.apk'
+
+  browser:
+    uses: ./.github/workflows/build.yml
+    with:
+      name: browser
+      runs-on: ubuntu-26.04
+      project: Jellyfin.Avalonia.Browser
+      workloads: wasm-tools
+      artifact: wwwroot
+
+  # Signed device builds need certificates, CI verifies the simulator build.
+  ios:
+    uses: ./.github/workflows/build.yml
+    with:
+      name: ios
+      runs-on: xcode-27
+      project: Jellyfin.Avalonia.iOS
+      command: build
+      framework: net10.0-ios
+      rid: iossimulator-arm64
+      workloads: ios

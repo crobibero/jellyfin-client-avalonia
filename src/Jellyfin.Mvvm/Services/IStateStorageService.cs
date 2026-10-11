@@ -54,4 +54,12 @@ public interface IStateStorageService
     /// <param name="serverId">The server id.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     ValueTask RemoveUserAsync(Guid userId, Guid serverId);
+
+    /// <summary>
+    /// Clear the stored token of a user, keeping the user in the list.
+    /// </summary>
+    /// <param name="userId">The user id.</param>
+    /// <param name="serverId">The server id.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    ValueTask SignOutUserAsync(Guid userId, Guid serverId);
 }

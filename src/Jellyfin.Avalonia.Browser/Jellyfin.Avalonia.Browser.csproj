@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
+  <PropertyGroup>
+    <TargetFramework>$(JellyfinBrowserTargetFramework)</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <WasmEnableThreads>false</WasmEnableThreads>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <RootNamespace>Jellyfin.Avalonia.Browser</RootNamespace>
+    <!-- Browser apps don't have a public API surface -->
+    <NoWarn>$(NoWarn);CA1515</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jellyfin.Avalonia\Jellyfin.Avalonia.csproj" />
+  </ItemGroup>
+</Project>
