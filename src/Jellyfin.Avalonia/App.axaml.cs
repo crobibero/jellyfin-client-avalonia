@@ -7,6 +7,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Jellyfin.Avalonia.Behaviors;
 using Jellyfin.Avalonia.Services;
 using Jellyfin.Avalonia.Views;
 using Jellyfin.Mvvm.Services;
@@ -49,6 +50,7 @@ public partial class App : Application
         _services = services.BuildServiceProvider();
 
         ConfigureImageLoader();
+        ComboBoxFocusBehavior.Register();
 
         switch (ApplicationLifetime)
         {

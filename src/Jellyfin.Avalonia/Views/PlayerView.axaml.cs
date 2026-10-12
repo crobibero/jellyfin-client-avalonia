@@ -20,6 +20,7 @@ namespace Jellyfin.Avalonia.Views;
 /// </summary>
 public partial class PlayerView : PageView
 {
+    private static Cursor? _hiddenCursor;
     private readonly IVideoViewFactory _videoViewFactory;
     private PlayerViewModel? _viewModel;
     private IMediaPlayer? _attachedPlayer;
@@ -63,6 +64,8 @@ public partial class PlayerView : PageView
             _viewModel.PropertyChanged += OnViewModelPropertyChanged;
         }
 
+        UpdateCursor();
+
         if (this.IsAttachedToVisualTree())
         {
             SubscribeManager();
@@ -98,7 +101,8 @@ public partial class PlayerView : PageView
         _sleepInhibition = null;
         RestoreShellBackground();
 
-        if (TopLevel.GetTopLevel(this) is MainWindow { WindowState: WindowState.FullScreen } window)
+        // The visual parent is already cleared here, so find the window from the detached tree's root.
+        if (TopLevel.GetTopLevel(e.RootVisual) is MainWindow { WindowState: WindowState.FullScreen } window)
         {
             window.ToggleFullScreen();
         }
@@ -143,6 +147,12 @@ public partial class PlayerView : PageView
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+        if (e.PropertyName is nameof(PlayerViewModel.IsVideo) or nameof(PlayerViewModel.IsOverlayVisible) or nameof(PlayerViewModel.IsMenuOpen)
+            or nameof(PlayerViewModel.IsNextUpVisible) or nameof(PlayerViewModel.HasPlaybackError))
+        {
+            UpdateCursor();
+        }
+
         switch (e.PropertyName)
         {
             case nameof(PlayerViewModel.ZoomMode):
@@ -224,6 +234,15 @@ public partial class PlayerView : PageView
             _transparentShell.Background = _shellBackground;
             _transparentShell = null;
         }
+    }
+
+    /// <summary>
+    /// Hides the pointer over the video while the controls are hidden, moving the pointer shows both again.
+    /// </summary>
+    private void UpdateCursor()
+    {
+        var hide = _viewModel is { IsVideo: true, IsOverlayVisible: false, IsMenuOpen: false, IsNextUpVisible: false, HasPlaybackError: false };
+        Cursor = hide ? _hiddenCursor ??= new Cursor(StandardCursorType.None) : null;
     }
 
     private void FocusMenu()
