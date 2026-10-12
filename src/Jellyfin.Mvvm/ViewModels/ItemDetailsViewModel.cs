@@ -11,7 +11,7 @@ namespace Jellyfin.Mvvm.ViewModels;
 /// <summary>
 /// Item details view model.
 /// </summary>
-public partial class ItemDetailsViewModel : BaseViewModel
+public sealed partial class ItemDetailsViewModel : BaseViewModel, IDisposable
 {
     private static readonly BaseItemDto_Type[] _folderPlayableTypes =
     [
@@ -27,6 +27,7 @@ public partial class ItemDetailsViewModel : BaseViewModel
     private readonly IBackdropService _backdropService;
     private readonly CardFactory _cardFactory;
     private readonly INotificationService _notificationService;
+    private readonly IServerEventService _serverEventService;
     private readonly ILogger<ItemDetailsViewModel> _logger;
 
     [ObservableProperty]
@@ -130,6 +131,7 @@ public partial class ItemDetailsViewModel : BaseViewModel
     /// <param name="backdropService">The backdrop service.</param>
     /// <param name="cardFactory">The card factory.</param>
     /// <param name="notificationService">The notification service.</param>
+    /// <param name="serverEventService">The server event service.</param>
     /// <param name="logger">The logger.</param>
     public ItemDetailsViewModel(
         ILibraryService libraryService,
@@ -138,6 +140,7 @@ public partial class ItemDetailsViewModel : BaseViewModel
         IBackdropService backdropService,
         CardFactory cardFactory,
         INotificationService notificationService,
+        IServerEventService serverEventService,
         ILogger<ItemDetailsViewModel> logger)
         : base(navigationService, applicationService)
     {
@@ -145,7 +148,10 @@ public partial class ItemDetailsViewModel : BaseViewModel
         _backdropService = backdropService;
         _cardFactory = cardFactory;
         _notificationService = notificationService;
+        _serverEventService = serverEventService;
         _logger = logger;
+
+        _serverEventService.UserDataChanged += OnUserDataChanged;
     }
 
     /// <inheritdoc />
@@ -187,6 +193,9 @@ public partial class ItemDetailsViewModel : BaseViewModel
     public bool ShowPlay => CanPlay && !CanResume;
 
     private Guid ItemId { get; set; }
+
+    /// <inheritdoc />
+    public void Dispose() => _serverEventService.UserDataChanged -= OnUserDataChanged;
 
     /// <inheritdoc />
     protected override async ValueTask InitializeAsync(object? parameter)
@@ -339,6 +348,18 @@ public partial class ItemDetailsViewModel : BaseViewModel
         ResumeText = CanResume
             ? string.Format(CultureInfo.CurrentCulture, Strings.Strings.Item_ResumeFrom, Formatting.FormatDuration(TimeSpan.FromTicks(resumeTicks)))
             : null;
+    }
+
+    private void OnUserDataChanged(object? sender, UserDataChangeInfo e)
+    {
+        var userDataByItem = CardFactory.GetUserDataByItem(e);
+        if (Item is { } item && userDataByItem.TryGetValue(ItemId, out var userData))
+        {
+            item.UserData = userData;
+            UpdateUserData(item);
+        }
+
+        _cardFactory.UpdateUserData(Rows.SelectMany(r => r.Items).Concat(Tracks), userDataByItem);
     }
 
     private void UpdateStreamOptions(MediaSourceInfo mediaSource)

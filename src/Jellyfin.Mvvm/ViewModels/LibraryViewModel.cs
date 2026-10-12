@@ -14,6 +14,7 @@ public sealed partial class LibraryViewModel : BrowseViewModel, IDisposable
     private const int PageSize = 100;
 
     private readonly ILibraryService _libraryService;
+    private readonly IServerEventService _serverEventService;
     private CancellationTokenSource? _loadCancellation;
     private bool _isLoadingMore;
     private Guid[]? _randomOrder;
@@ -52,15 +53,19 @@ public sealed partial class LibraryViewModel : BrowseViewModel, IDisposable
     /// <param name="applicationService">Instance of the <see cref="IApplicationService"/> interface.</param>
     /// <param name="backdropService">The backdrop service.</param>
     /// <param name="cardFactory">The card factory.</param>
+    /// <param name="serverEventService">The server event service.</param>
     public LibraryViewModel(
         ILibraryService libraryService,
         INavigationService navigationService,
         IApplicationService applicationService,
         IBackdropService backdropService,
-        CardFactory cardFactory)
+        CardFactory cardFactory,
+        IServerEventService serverEventService)
         : base(navigationService, applicationService, backdropService, cardFactory)
     {
         _libraryService = libraryService;
+        _serverEventService = serverEventService;
+        _serverEventService.UserDataChanged += OnUserDataChanged;
 
         SortOptions =
         [
@@ -152,6 +157,7 @@ public sealed partial class LibraryViewModel : BrowseViewModel, IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
+        _serverEventService.UserDataChanged -= OnUserDataChanged;
         _loadCancellation?.Cancel();
         _loadCancellation?.Dispose();
     }
@@ -229,6 +235,8 @@ public sealed partial class LibraryViewModel : BrowseViewModel, IDisposable
             Limit = PageSize,
         };
     }
+
+    private void OnUserDataChanged(object? sender, UserDataChangeInfo e) => CardFactory.UpdateUserData(Items, e);
 
     private async Task ReloadAsync()
     {

@@ -48,6 +48,8 @@ public sealed partial class PlaybackManager : ObservableObject, IDisposable
     private IMediaPlayer? _player;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasNext))]
+    [NotifyPropertyChangedFor(nameof(NextItem))]
     private IReadOnlyList<BaseItemDto> _queue = [];
 
     [ObservableProperty]
@@ -190,13 +192,8 @@ public sealed partial class PlaybackManager : ObservableObject, IDisposable
                     new ClientCapabilitiesDto
                     {
                         PlayableMediaTypes = [MediaType.Audio, MediaType.Video],
-                        SupportedCommands =
-                        [
-                            GeneralCommandType.SetAudioStreamIndex,
-                            GeneralCommandType.SetSubtitleStreamIndex,
-                            GeneralCommandType.SetMaxStreamingBitrate,
-                        ],
-                        SupportsMediaControl = false,
+                        SupportedCommands = [.. RemoteControlService.SupportedCommands],
+                        SupportsMediaControl = true,
                         SupportsPersistentIdentifier = true,
                         DeviceProfile = CreateDeviceProfile(),
                     },
@@ -224,6 +221,7 @@ public sealed partial class PlaybackManager : ObservableObject, IDisposable
         _sessionCancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         cancellationToken = _sessionCancellation.Token;
         ErrorMessage = null;
+        MaxBitrateOverride = null;
 
         try
         {
@@ -275,6 +273,35 @@ public sealed partial class PlaybackManager : ObservableObject, IDisposable
         Queue = queue;
         _initialSelection = request;
         await PlayIndexAsync(Math.Clamp(startIndex, 0, queue.Count - 1), startPosition).ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// Add items to the queue, after the current item or at the end.
+    /// </summary>
+    /// <param name="items">The items, folders are expanded to their playable items.</param>
+    /// <param name="playNext">Whether to add the items after the current item instead of at the end.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    public async Task EnqueueAsync(IReadOnlyList<BaseItemDto> items, bool playNext, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(items);
+
+        var session = _sessionCancellation.Token;
+        var playable = new List<BaseItemDto>();
+        foreach (var item in items)
+        {
+            playable.AddRange(await _libraryService.GetPlayableItemsAsync(item, cancellationToken).ConfigureAwait(true));
+        }
+
+        // A new session started while the items loaded, the queue is no longer the one they were added to.
+        if (session.IsCancellationRequested || playable.Count == 0 || CurrentIndex < 0)
+        {
+            return;
+        }
+
+        var queue = Queue.ToList();
+        queue.InsertRange(playNext ? CurrentIndex + 1 : queue.Count, playable);
+        Queue = queue;
     }
 
     /// <summary>
@@ -377,6 +404,36 @@ public sealed partial class PlaybackManager : ObservableObject, IDisposable
         {
             Player.Play();
         }
+    }
+
+    /// <summary>
+    /// Set the volume.
+    /// </summary>
+    /// <param name="volume">The volume, from 0 to 100.</param>
+    public void SetVolume(int volume)
+    {
+        if (Player is null)
+        {
+            return;
+        }
+
+        Player.Volume = Math.Clamp(volume, 0, 100);
+        ReportProgressAsync().SafeFireAndForget();
+    }
+
+    /// <summary>
+    /// Mute or unmute.
+    /// </summary>
+    /// <param name="isMuted">Whether to mute.</param>
+    public void SetMuted(bool isMuted)
+    {
+        if (Player is null)
+        {
+            return;
+        }
+
+        Player.IsMuted = isMuted;
+        ReportProgressAsync().SafeFireAndForget();
     }
 
     /// <summary>
