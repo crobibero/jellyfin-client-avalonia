@@ -95,4 +95,65 @@ public class CardFactory
         ArgumentNullException.ThrowIfNull(card);
         card.UpdateUserData(userData, _preferencesService.UserInterface);
     }
+
+    /// <summary>
+    /// Refresh the user data indicators of the item cards a change applies to.
+    /// </summary>
+    /// <param name="cards">The cards.</param>
+    /// <param name="change">The user data change sent by the server.</param>
+    public void UpdateUserData(IEnumerable<ItemCardModel> cards, UserDataChangeInfo change)
+        => UpdateUserData(cards, GetUserDataByItem(change));
+
+    /// <summary>
+    /// Refresh the user data indicators of the item cards with changed user data.
+    /// </summary>
+    /// <param name="cards">The cards.</param>
+    /// <param name="userData">The changed user data by item id, from <see cref="GetUserDataByItem"/>.</param>
+    public void UpdateUserData(IEnumerable<ItemCardModel> cards, IReadOnlyDictionary<Guid, UserItemDataDto> userData)
+    {
+        ArgumentNullException.ThrowIfNull(cards);
+        ArgumentNullException.ThrowIfNull(userData);
+
+        if (userData.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var card in cards)
+        {
+            // Chapter cards share the item id but have no user data indicators.
+            if (card.Kind != CardKind.Item || !userData.TryGetValue(card.Id, out var data))
+            {
+                continue;
+            }
+
+            if (card.Item is { } item)
+            {
+                item.UserData = data;
+            }
+
+            UpdateUserData(card, data);
+        }
+    }
+
+    /// <summary>
+    /// Index the user data of a change by item id.
+    /// </summary>
+    /// <param name="change">The user data change sent by the server.</param>
+    /// <returns>The user data by item id.</returns>
+    public static Dictionary<Guid, UserItemDataDto> GetUserDataByItem(UserDataChangeInfo change)
+    {
+        ArgumentNullException.ThrowIfNull(change);
+
+        var userData = new Dictionary<Guid, UserItemDataDto>();
+        foreach (var data in change.UserDataList ?? [])
+        {
+            if (data.ItemId is { } itemId)
+            {
+                userData[itemId] = data;
+            }
+        }
+
+        return userData;
+    }
 }

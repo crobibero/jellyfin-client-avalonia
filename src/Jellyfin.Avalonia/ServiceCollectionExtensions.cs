@@ -6,6 +6,7 @@ using Jellyfin.Mvvm.Playback;
 using Jellyfin.Mvvm.Services;
 using Jellyfin.Mvvm.ViewModels;
 using Jellyfin.Sdk;
+using Jellyfin.Sdk.WebSockets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Kiota.Abstractions;
@@ -48,8 +49,10 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IBackdropService, BackdropService>();
         services.AddSingleton<CardFactory>();
         services.AddSingleton<PlaybackManager>();
+        services.AddSingleton<IServerEventService, ServerEventService>();
+        services.AddSingleton<RemoteControlService>();
 
-        /* View models. Page view models are not registered: NavigationService creates and disposes them. */
+        // Page view models are not registered: NavigationService creates and disposes them.
         services.AddSingleton<MainViewModel>();
 
         return services;
@@ -74,6 +77,11 @@ public static class ServiceCollectionExtensions
             s.GetRequiredService<JellyfinSdkSettings>(),
             s.GetRequiredService<IHttpClientFactory>().CreateClient(HttpClientNames.Default)));
         services.AddSingleton<JellyfinApiClient>();
+
+        // Subscriptions only exist while a user is signed in, close the connection as soon as they are gone.
+        services.AddSingleton(s => new JellyfinWebSocketClient(
+            s.GetRequiredService<JellyfinSdkSettings>(),
+            new JellyfinWebSocketOptions { IdleTimeout = TimeSpan.Zero }));
     }
 
     private static void ConfigureClient(HttpClient client)
