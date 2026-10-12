@@ -38,6 +38,9 @@ internal static partial class BrowserInterop
     [JSImport("supportsNativeHls", PlayerModule)]
     public static partial bool SupportsNativeHls();
 
+    [JSImport("supportsAssRenderer", PlayerModule)]
+    public static partial bool SupportsAssRenderer();
+
     [JSImport("load", PlayerModule)]
     public static partial Task Load(string url, bool isHls, double startSeconds);
 
@@ -68,8 +71,8 @@ internal static partial class BrowserInterop
     [JSImport("setObjectFit", PlayerModule)]
     public static partial void SetObjectFit(string fit);
 
-    [JSImport("addTextTrack", PlayerModule)]
-    public static partial void AddTextTrack(string url, string? language);
+    [JSImport("loadSubtitle", PlayerModule)]
+    public static partial Task LoadSubtitle(string url, string format, string? language, [JSMarshalAs<JSType.Array<JSType.String>>] string[] fonts);
 
     [JSImport("selectTextTrack", PlayerModule)]
     public static partial void SelectTextTrack(int index);

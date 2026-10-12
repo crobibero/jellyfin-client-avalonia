@@ -285,6 +285,9 @@ FakesAssemblies/
 .ntvs_analysis.dat
 node_modules/
 
+# Browser script dependencies staged from npm by the build
+src/Jellyfin.Avalonia.Browser/wwwroot/lib/
+
 # Visual Studio 6 build log
 *.plg
 

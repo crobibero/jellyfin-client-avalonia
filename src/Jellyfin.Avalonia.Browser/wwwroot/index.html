@@ -13,6 +13,8 @@
 <body>
     <!-- Video renders behind the Avalonia canvas, which is transparent while the player is shown -->
     <video id="jellyfin-video" playsinline></video>
+    <!-- ASS and PGS subtitles render here, keeping them above the video and below the Avalonia canvas -->
+    <div id="jellyfin-subtitles"></div>
     <div id="out">
         <div class="avalonia-splash">
             <img src="./logo.svg" alt="Jellyfin">

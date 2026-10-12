@@ -226,6 +226,36 @@ public class DeviceProfileFactoryTests
     }
 
     [Fact]
+    public void Create_BrowserLikeCapabilities_LoadAssAndPgsExternally()
+    {
+        var capabilities = TestCapabilities.SdrOnlyH264 with
+        {
+            SupportsEmbeddedSubtitles = false,
+            SupportsAssSubtitles = true,
+            SupportsPgsSubtitles = true,
+            SupportsExternalPgsSubtitles = true,
+            ExternalTextSubtitleFormats = [Codec.Subtitle.Vtt],
+        };
+
+        var profile = DeviceProfileFactory.Create(capabilities, _defaults);
+        var external = profile.SubtitleProfiles!.Where(p => p.Method == SubtitleProfile_Method.External).Select(p => p.Format).Order(StringComparer.Ordinal);
+        Assert.Equal(["ass", "pgs", "pgssub", "ssa", "vtt"], external);
+
+        profile = DeviceProfileFactory.Create(capabilities, _defaults with { PgsDirectPlay = false });
+        Assert.DoesNotContain(profile.SubtitleProfiles!, p => p.Format == "pgssub" && p.Method == SubtitleProfile_Method.External);
+        Assert.Contains(profile.SubtitleProfiles!, p => p.Format == "pgssub" && p.Method == SubtitleProfile_Method.Encode);
+    }
+
+    [Fact]
+    public void Create_EmbeddedPgsOnly_DoesNotLoadPgsExternally()
+    {
+        var profile = DeviceProfileFactory.Create(TestCapabilities.Full, _defaults);
+
+        Assert.Contains(profile.SubtitleProfiles!, p => p.Format == "pgssub" && p.Method == SubtitleProfile_Method.Embed);
+        Assert.DoesNotContain(profile.SubtitleProfiles!, p => p.Format == "pgssub" && p.Method == SubtitleProfile_Method.External);
+    }
+
+    [Fact]
     public void Create_TranscodingProfiles_FollowHlsContainers()
     {
         var profile = DeviceProfileFactory.Create(TestCapabilities.Full with { HlsContainers = [Codec.Container.Mp4] }, _defaults);
