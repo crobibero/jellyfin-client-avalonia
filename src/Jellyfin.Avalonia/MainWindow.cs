@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 
@@ -11,6 +12,8 @@ namespace Jellyfin.Avalonia;
 /// </summary>
 public class MainWindow : Window
 {
+    private WindowState _windowedState = WindowState.Normal;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="MainWindow"/> class.
     /// </summary>
@@ -26,13 +29,25 @@ public class MainWindow : Window
 
         using var icon = AssetLoader.Open(new Uri("avares://Jellyfin.Avalonia/Resources/Assets/jellyfin-icon.png"));
         Icon = new WindowIcon(new Bitmap(icon));
+
+        AddHandler(KeyDownEvent, OnPreviewKeyDown, RoutingStrategies.Tunnel);
     }
 
     /// <summary>
-    /// Toggle full screen mode.
+    /// Toggle full screen mode, returning to the windowed or maximized state it was entered from.
     /// </summary>
     public void ToggleFullScreen()
-        => WindowState = WindowState == WindowState.FullScreen ? WindowState.Normal : WindowState.FullScreen;
+    {
+        if (WindowState == WindowState.FullScreen)
+        {
+            WindowState = _windowedState;
+        }
+        else
+        {
+            _windowedState = WindowState == WindowState.Maximized ? WindowState.Maximized : WindowState.Normal;
+            WindowState = WindowState.FullScreen;
+        }
+    }
 
     /// <inheritdoc />
     protected override void OnKeyDown(KeyEventArgs e)
@@ -47,5 +62,17 @@ public class MainWindow : Window
         }
 
         base.OnKeyDown(e);
+    }
+
+    private void OnPreviewKeyDown(object? sender, KeyEventArgs e)
+    {
+        // Escape leaves full screen before the shell treats it as back, unless it is closing a popup.
+        if (e.Key == Key.Escape
+            && WindowState == WindowState.FullScreen
+            && !e.Source.IsInPopup())
+        {
+            ToggleFullScreen();
+            e.Handled = true;
+        }
     }
 }

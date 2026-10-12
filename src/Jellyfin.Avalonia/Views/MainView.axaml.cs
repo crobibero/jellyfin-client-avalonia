@@ -88,6 +88,12 @@ public partial class MainView : UserControl
 
     private void OnPreviewKeyDown(object? sender, KeyEventArgs e)
     {
+        // Keys in an open drop-down or flyout route through its owner, let the popup close itself.
+        if (e.Source.IsInPopup())
+        {
+            return;
+        }
+
         var isTextInput = TopLevel.GetTopLevel(this)?.FocusManager?.GetFocusedElement() is TextBox;
         var isBack = e.Key is Key.Escape or Key.BrowserBack
             || (e.Key == Key.Back && !isTextInput);
