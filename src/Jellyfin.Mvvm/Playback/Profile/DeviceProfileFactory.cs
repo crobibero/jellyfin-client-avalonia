@@ -72,7 +72,6 @@ public static class DeviceProfileFactory
 
         AddTranscodingProfiles(profile, capabilities, allowedAudioCodecs);
 
-        // Direct play profiles
         profile.DirectPlayProfiles.Add(new DirectPlayProfile
         {
             Type = DirectPlayProfile_Type.Video,
@@ -88,7 +87,6 @@ public static class DeviceProfileFactory
             AudioCodec = Join(allowedAudioCodecs),
         });
 
-        // H264 profile
         profile.CodecProfiles.Add(VideoCodecProfile(
             Codec.Video.H264,
             [
@@ -113,7 +111,6 @@ public static class DeviceProfileFactory
                 [Condition(ProfileCondition_Property.VideoProfile, ProfileCondition_Condition.Equals, "high 10")]));
         }
 
-        // H264 ref frames profiles
         profile.CodecProfiles.Add(VideoCodecProfile(
             Codec.Video.H264,
             [Condition(ProfileCondition_Property.RefFrames, ProfileCondition_Condition.LessThanEqual, 12)],
@@ -124,7 +121,6 @@ public static class DeviceProfileFactory
             [Condition(ProfileCondition_Property.RefFrames, ProfileCondition_Condition.LessThanEqual, 4)],
             [Condition(ProfileCondition_Property.Width, ProfileCondition_Condition.GreaterThanEqual, 1900)]));
 
-        // HEVC profiles
         profile.CodecProfiles.Add(VideoCodecProfile(
             Codec.Video.Hevc,
             [
@@ -149,7 +145,6 @@ public static class DeviceProfileFactory
                 [Condition(ProfileCondition_Property.VideoProfile, ProfileCondition_Condition.Equals, "main 10")]));
         }
 
-        // AV1 profile
         profile.CodecProfiles.Add(VideoCodecProfile(
             Codec.Video.Av1,
             [
@@ -160,7 +155,6 @@ public static class DeviceProfileFactory
                         : Condition(ProfileCondition_Property.VideoProfile, ProfileCondition_Condition.NotEquals, "none")
             ]));
 
-        // VC1 profile
         profile.CodecProfiles.Add(VideoCodecProfile(
             Codec.Video.Vc1,
             [
@@ -169,18 +163,15 @@ public static class DeviceProfileFactory
                     : Condition(ProfileCondition_Property.VideoProfile, ProfileCondition_Condition.Equals, "none")
             ]));
 
-        // Max resolutions for common codecs
         profile.CodecProfiles.Add(ResolutionProfile(Codec.Video.H264, capabilities.AvcMaxResolution));
         profile.CodecProfiles.Add(ResolutionProfile(Codec.Video.Hevc, capabilities.HevcMaxResolution));
         profile.CodecProfiles.Add(ResolutionProfile(Codec.Video.Av1, capabilities.Av1MaxResolution));
         profile.CodecProfiles.Add(ResolutionProfile(Codec.Video.Vc1, capabilities.Vc1MaxResolution));
 
-        // HDR exclude list
         var (forceEnabledHdr, forceDisabledHdr) = GetHdrOverrides(preferences);
         AddRangeTypeProfile(profile, Codec.Video.Av1, ApplyOverrides(GetUnsupportedAv1RangeTypes(capabilities), forceEnabledHdr, forceDisabledHdr));
         AddRangeTypeProfile(profile, Codec.Video.Hevc, ApplyOverrides(GetUnsupportedHevcRangeTypes(capabilities), forceEnabledHdr, forceDisabledHdr));
 
-        // Audio channel profile
         profile.CodecProfiles.Add(new CodecProfile
         {
             Type = CodecProfile_Type.VideoAudio,
@@ -195,13 +186,6 @@ public static class DeviceProfileFactory
         return profile;
     }
 
-    /// <summary>
-    /// Gets the audio codecs that may be direct played.
-    /// </summary>
-    /// <param name="capabilities">The device capabilities.</param>
-    /// <param name="preferences">The playback preferences.</param>
-    /// <param name="downMixAudio">Whether audio is downmixed to stereo.</param>
-    /// <returns>The allowed audio codecs.</returns>
     internal static IReadOnlyList<string> GetAllowedAudioCodecs(MediaCapabilities capabilities, PlaybackPreferences preferences, bool downMixAudio)
     {
         var candidates = new List<string>();
@@ -228,11 +212,6 @@ public static class DeviceProfileFactory
             .ToList();
     }
 
-    /// <summary>
-    /// Gets the video range types that are unsupported for AV1.
-    /// </summary>
-    /// <param name="capabilities">The device capabilities.</param>
-    /// <returns>The unsupported range types.</returns>
     internal static HashSet<string> GetUnsupportedAv1RangeTypes(MediaCapabilities capabilities)
     {
         var set = new HashSet<string>(StringComparer.Ordinal) { VideoRangeTypes.DoviInvalid };
@@ -264,11 +243,6 @@ public static class DeviceProfileFactory
         return set;
     }
 
-    /// <summary>
-    /// Gets the video range types that are unsupported for HEVC.
-    /// </summary>
-    /// <param name="capabilities">The device capabilities.</param>
-    /// <returns>The unsupported range types.</returns>
     internal static HashSet<string> GetUnsupportedHevcRangeTypes(MediaCapabilities capabilities)
     {
         var set = new HashSet<string>(StringComparer.Ordinal) { VideoRangeTypes.DoviInvalid };
@@ -459,10 +433,8 @@ public static class DeviceProfileFactory
         return unsupported;
     }
 
-    // Note: The codec profiles use a workaround to create correct behavior.
-    // The NotEquals condition will always fail the ConditionProcessor test in the server so we use applyConditions to only have the codec
-    // profile be active when the media in question uses one of the unsupported range types. The server will then use the value of the
-    // NotEquals in the StreamBuilder to create a correct transcode pipeline.
+    // Applies only to media in an unsupported range type, where the server's ConditionProcessor always fails NotEquals.
+    // StreamBuilder then turns the NotEquals values into the range types allowed in the transcode.
     private static void AddRangeTypeProfile(DeviceProfile profile, string codec, HashSet<string> unsupportedRangeTypes)
     {
         if (unsupportedRangeTypes.Count == 0)

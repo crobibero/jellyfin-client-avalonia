@@ -14,13 +14,6 @@ namespace Jellyfin.Avalonia.Desktop;
 /// </summary>
 internal static class Program
 {
-    /// <summary>
-    /// Initialization code. Don't use any Avalonia, third-party APIs or any
-    /// SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    /// yet and stuff might break.
-    /// </summary>
-    /// <param name="args">The program arguments.</param>
-    /// <returns>The exit code.</returns>
     [STAThread]
     public static int Main(string[] args)
     {

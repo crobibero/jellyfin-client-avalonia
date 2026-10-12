@@ -82,8 +82,8 @@ public static class CardBehavior
         Focus(sender);
     }
 
-    // PointerEntered also fires when a scrolling row moves a card under a resting pointer, which made the
-    // header follow the pointer instead of keyboard focus. PointerMoved only fires when the pointer moves.
+    // PointerEntered also fires when a scrolling row moves a card under a resting pointer, pulling the header
+    // away from keyboard focus. PointerMoved only fires when the pointer moves.
     private static void OnPointerMoved(object? sender, PointerEventArgs e) => Focus(sender);
 
     private static void Focus(object? sender)

@@ -15,9 +15,8 @@ namespace Jellyfin.Avalonia.Controls;
 /// Shows a blurred, dimmed backdrop and cross fades between images.
 /// </summary>
 /// <remarks>
-/// Backdrops bypass the shared image loader cache. That cache is bounded by item count, and a decoded
-/// backdrop is more than ten times the size of a poster, so caching them there grew memory by about 9 MB
-/// for every focused card. Here they are decoded to a capped width and only the last few are kept.
+/// Backdrops bypass the shared image loader cache, which is bounded by item count while a decoded backdrop is far
+/// larger than a poster. Here they are decoded to a capped width and only the last few are kept.
 /// </remarks>
 [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Controls are not disposable; the pending load is cancelled and disposed when the control is detached.")]
 public class BackdropImage : Panel

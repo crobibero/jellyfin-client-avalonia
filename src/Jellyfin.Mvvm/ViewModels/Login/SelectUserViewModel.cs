@@ -229,12 +229,6 @@ public partial class SelectUserViewModel : BaseViewModel
     }
 }
 
-/// <summary>
-/// A stored user's image.
-/// </summary>
-/// <param name="User">The stored user.</param>
-/// <param name="Tag">The image tag.</param>
-/// <param name="Url">The image url.</param>
 internal sealed record UserImage(UserStateModel User, string Tag, string Url);
 
 /// <summary>
