@@ -35,6 +35,10 @@ on:
         description: Java version to install. Empty skips Java.
         type: string
         default: ''
+      node-version-file:
+        description: File holding the Node.js version to install, such as an .nvmrc. Empty skips Node.js.
+        type: string
+        default: ''
       args:
         description: Extra arguments appended to the dotnet command.
         type: string
@@ -43,6 +47,24 @@ on:
         description: Glob of files to upload, relative to the publish output. Empty skips the upload.
         type: string
         default: ''
+      version:
+        description: Version passed as -p:Version. Empty uses 0.1.{run number}.
+        type: string
+        default: ''
+      archive:
+        description: Pack the files matched by artifact into one tar.gz or zip archive and upload that instead. Empty skips it.
+        type: string
+        default: ''
+    secrets:
+      ANDROID_KEYSTORE:
+        description: Base64 encoded Android keystore. Android builds are signed with it when set.
+        required: false
+      ANDROID_KEYSTORE_PASSWORD:
+        required: false
+      ANDROID_KEY_ALIAS:
+        required: false
+      ANDROID_KEY_PASSWORD:
+        required: false
 
 permissions:
   contents: read
@@ -58,6 +80,20 @@ jobs:
         with:
           workloads: ${{ inputs.workloads }}
           java-version: ${{ inputs.java-version }}
+          node-version-file: ${{ inputs.node-version-file }}
+          cache-key: ${{ inputs.name }}
+
+      - name: Configure Android signing
+        shell: bash
+        env:
+          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          if [[ -z "$ANDROID_KEYSTORE" ]]; then exit 0; fi
+          keystore="$RUNNER_TEMP/release.keystore"
+          base64 --decode <<< "$ANDROID_KEYSTORE" > "$keystore"
+          # The env: prefix makes the build read the passwords from the environment, off the command line.
+          echo "SIGNING_ARGS=-p:AndroidKeyStore=true -p:AndroidSigningKeyStore=$keystore -p:AndroidSigningKeyAlias=$ANDROID_KEY_ALIAS -p:AndroidSigningStorePass=env:ANDROID_KEYSTORE_PASSWORD -p:AndroidSigningKeyPass=env:ANDROID_KEY_PASSWORD" >> "$GITHUB_ENV"
 
       - name: dotnet ${{ inputs.command }}
         working-directory: ./src
@@ -68,16 +104,43 @@ jobs:
           FRAMEWORK: ${{ inputs.framework }}
           RID: ${{ inputs.rid }}
           EXTRA_ARGS: ${{ inputs.args }}
+          VERSION: ${{ inputs.version }}
           OUTPUT: artifacts/${{ inputs.name }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
-          args=(-c Release -p:Version="0.1.$GITHUB_RUN_NUMBER")
+          args=(-c Release -p:Version="${VERSION:-0.1.$GITHUB_RUN_NUMBER}")
           if [[ -n "$FRAMEWORK" ]]; then args+=(-f "$FRAMEWORK"); fi
           if [[ -n "$RID" ]]; then args+=(-r "$RID"); fi
           if [[ "$COMMAND" == publish ]]; then args+=(--output "$OUTPUT"); fi
-          # EXTRA_ARGS is left unquoted so it splits into separate arguments.
-          dotnet "$COMMAND" "$PROJECT" "${args[@]}" $EXTRA_ARGS
+          # EXTRA_ARGS and SIGNING_ARGS are left unquoted so they split into separate arguments.
+          dotnet "$COMMAND" "$PROJECT" "${args[@]}" $EXTRA_ARGS $SIGNING_ARGS
 
-      - if: inputs.artifact != ''
+      # Archiving here rather than in the upload keeps the executable bit on Linux and macOS.
+      - name: Archive
+        if: inputs.archive != ''
+        working-directory: ./src/artifacts/${{ inputs.name }}
+        shell: bash
+        env:
+          ARCHIVE: ../jellyfin-avalonia-${{ inputs.name }}.${{ inputs.archive }}
+          FORMAT: ${{ inputs.archive }}
+          FILES: ${{ inputs.artifact }}
+        run: |
+          # FILES is left unquoted so the glob expands.
+          case "$FORMAT" in
+            tar.gz) tar -czf "$ARCHIVE" $FILES ;;
+            zip) if [[ "$RUNNER_OS" == Windows ]]; then 7z a -tzip "$ARCHIVE" $FILES; else zip -qr "$ARCHIVE" $FILES; fi ;;
+            *) echo "::error::Unsupported archive format $FORMAT"; exit 1 ;;
+          esac
+
+      - if: inputs.archive != ''
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: jellyfin-avalonia-${{ inputs.name }}
+          path: src/artifacts/jellyfin-avalonia-${{ inputs.name }}.${{ inputs.archive }}
+          compression-level: 0
+
+      - if: inputs.archive == '' && inputs.artifact != ''
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: jellyfin-avalonia-${{ inputs.name }}
