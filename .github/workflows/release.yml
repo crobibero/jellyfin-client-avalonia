@@ -1,0 +1,166 @@
+name: Release
+
+on:
+  push:
+    tags: [ 'v*' ]
+
+permissions:
+  contents: read
+
+jobs:
+  version:
+    runs-on: ubuntu-26.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      version-code: ${{ steps.version.outputs.version-code }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+    steps:
+      - name: Read version from tag
+        id: version
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          if [[ ! "$version" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Tag $GITHUB_REF_NAME is not v{major}.{minor}.{patch}[-{suffix}]"
+            exit 1
+          fi
+          # Android needs an integer version code that grows with each release.
+          version_code=$(( BASH_REMATCH[1] * 1000000 + BASH_REMATCH[2] * 1000 + BASH_REMATCH[3] ))
+          prerelease=false
+          if [[ -n "${BASH_REMATCH[4]}" ]]; then prerelease=true; fi
+          {
+            echo "version=$version"
+            echo "version-code=$version_code"
+            echo "prerelease=$prerelease"
+          } >> "$GITHUB_OUTPUT"
+
+  lint:
+    runs-on: ubuntu-26.04
+    env:
+      # XamlStyler targets an older runtime than the installed SDK.
+      DOTNET_ROLL_FORWARD: Major
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup
+        with:
+          cache-key: lint
+
+      - name: Lint XAML
+        working-directory: ./src
+        run: |
+          dotnet tool restore
+          dotnet xstyler --recursive --directory . --passive
+
+  test:
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup
+        with:
+          cache-key: test
+
+      - name: Test
+        working-directory: ./src
+        run: dotnet test --project Jellyfin.Mvvm.Tests
+
+  desktop:
+    needs: version
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - os: ubuntu-26.04
+            rid: linux-x64
+            archive: tar.gz
+          - os: ubuntu-26.04
+            rid: linux-arm64
+            archive: tar.gz
+          - os: windows-2025
+            rid: win-x64
+            archive: zip
+          - os: windows-2025
+            rid: win-arm64
+            archive: zip
+          - os: macos-26
+            rid: osx-arm64
+            archive: tar.gz
+          - os: macos-26
+            rid: osx-x64
+            archive: tar.gz
+    uses: ./.github/workflows/build.yml
+    with:
+      name: ${{ matrix.rid }}
+      runs-on: ${{ matrix.os }}
+      project: Jellyfin.Avalonia.Desktop
+      rid: ${{ matrix.rid }}
+      version: ${{ needs.version.outputs.version }}
+      artifact: '*'
+      archive: ${{ matrix.archive }}
+
+  android:
+    needs: version
+    uses: ./.github/workflows/build.yml
+    with:
+      name: android
+      runs-on: ubuntu-26.04
+      project: Jellyfin.Avalonia.Android
+      framework: net10.0-android
+      workloads: android
+      java-version: '21'
+      version: ${{ needs.version.outputs.version }}
+      args: -p:ApplicationVersion=${{ needs.version.outputs.version-code }} -p:AcceptAndroidSdkLicenses=True
+      artifact: '*-Signed.apk'
+    secrets: inherit
+
+  browser:
+    needs: version
+    uses: ./.github/workflows/build.yml
+    with:
+      name: browser
+      runs-on: ubuntu-26.04
+      project: Jellyfin.Avalonia.Browser
+      workloads: wasm-tools
+      node-version-file: src/Jellyfin.Avalonia.Browser/.nvmrc
+      version: ${{ needs.version.outputs.version }}
+      artifact: wwwroot
+      archive: zip
+
+  release:
+    needs: [ version, lint, test, desktop, android, browser ]
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: jellyfin-avalonia-*
+          path: dist
+          merge-multiple: true
+
+      - name: Name release files
+        working-directory: dist
+        shell: bash
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          for file in jellyfin-avalonia-*; do
+            mv "$file" "jellyfin-avalonia-$VERSION-${file#jellyfin-avalonia-}"
+          done
+          mv ./*-Signed.apk "jellyfin-avalonia-$VERSION-android.apk"
+          sha256sum -- * > SHA256SUMS.txt
+          ls -l
+
+      # Created as a draft so the notes and files can be checked before publishing.
+      - name: Create draft release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.version.outputs.version }}
+          PRERELEASE: ${{ needs.version.outputs.prerelease }}
+        run: |
+          args=(--draft --verify-tag --generate-notes --title "$VERSION")
+          if [[ "$PRERELEASE" == true ]]; then args+=(--prerelease); fi
+          gh release create "$GITHUB_REF_NAME" "${args[@]}" dist/*

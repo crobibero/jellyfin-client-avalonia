@@ -32,6 +32,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: ./.github/actions/setup
+        with:
+          cache-key: lint
 
       - name: Lint XAML
         working-directory: ./src
@@ -45,6 +47,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: ./.github/actions/setup
+        with:
+          cache-key: test
 
       - name: Test
         working-directory: ./src
@@ -94,7 +98,35 @@ jobs:
       runs-on: ubuntu-26.04
       project: Jellyfin.Avalonia.Browser
       workloads: wasm-tools
+      node-version-file: src/Jellyfin.Avalonia.Browser/.nvmrc
       artifact: wwwroot
+
+  pages:
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    needs: [ test, browser ]
+    runs-on: ubuntu-26.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: jellyfin-avalonia-browser
+          path: site
+
+      # Pages compresses responses itself and never serves the precompressed copies.
+      - name: Remove precompressed files
+        run: find site -type f \( -name '*.br' -o -name '*.gz' \) -delete
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site
+
+      - id: deploy
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
 
   # Signed device builds need certificates, CI verifies the simulator build.
   ios:
