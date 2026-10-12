@@ -359,9 +359,10 @@ public static class DeviceProfileFactory
         AddSubtitleProfile(profile, Codec.Subtitle.DvdSub, embedded: bitmapEmbedded, encode: true);
         AddSubtitleProfile(profile, Codec.Subtitle.Idx, embedded: bitmapEmbedded, encode: true);
 
-        var pgsDirectPlay = embedded && capabilities.SupportsPgsSubtitles && preferences.PgsDirectPlay;
-        AddSubtitleProfile(profile, Codec.Subtitle.Pgs, embedded: pgsDirectPlay, encode: true);
-        AddSubtitleProfile(profile, Codec.Subtitle.PgsSub, embedded: pgsDirectPlay, encode: true);
+        var pgsDirectPlay = capabilities.SupportsPgsSubtitles && preferences.PgsDirectPlay;
+        var pgsExternal = pgsDirectPlay && external && capabilities.SupportsExternalPgsSubtitles;
+        AddSubtitleProfile(profile, Codec.Subtitle.Pgs, embedded: pgsDirectPlay && embedded, external: pgsExternal, encode: true);
+        AddSubtitleProfile(profile, Codec.Subtitle.PgsSub, embedded: pgsDirectPlay && embedded, external: pgsExternal, encode: true);
 
         // ASS/SSA is supported when the player has a libass renderer
         var assDirectPlay = capabilities.SupportsAssSubtitles && preferences.AssDirectPlay;

@@ -1,14 +1,24 @@
 // HTML5 video playback for the Jellyfin Avalonia browser client.
-const HLS_URL = 'https://cdn.jsdelivr.net/npm/hls.js@1.7.3/dist/hls.mjs';
+// Restored from npm by the project build, so the app loads no scripts from external hosts.
+const HLS_URL = './lib/hls.js/hls.min.mjs';
+const JASSUB_URL = './lib/jassub/jassub.js';
+const LIBBITSUB_URL = './lib/libbitsub/libbitsub.js';
 
 let Hls = null;
 let hls = null;
+let disposeSubtitleRenderer = null;
+let subtitleId = 0;
+let objectFit = 'contain';
 let lastError = '';
 let buffering = false;
 let loadId = 0;
 
 function video() {
     return document.getElementById('jellyfin-video');
+}
+
+function subtitles() {
+    return document.getElementById('jellyfin-subtitles');
 }
 
 async function loadHls() {
@@ -24,6 +34,8 @@ function attachEvents(element) {
         return;
     }
     element.dataset.attached = 'true';
+    element.addEventListener('resize', fitSubtitles);
+    new ResizeObserver(fitSubtitles).observe(element);
     element.addEventListener('waiting', () => { buffering = true; });
     element.addEventListener('playing', () => { buffering = false; });
     element.addEventListener('canplay', () => { buffering = false; });
@@ -50,6 +62,19 @@ export function supportsNativeHls() {
     return canPlayType('application/vnd.apple.mpegurl') !== '';
 }
 
+// Chromium 141+ also reports native HLS, but its player can't switch audio tracks or HDR/SDR playlists, so only
+// WebKit plays HLS natively. Chromium is the only engine that exposes navigator.userAgentData.
+function preferNativeHls() {
+    return supportsNativeHls() && !navigator.userAgentData;
+}
+
+// jassub renders on an OffscreenCanvas from a module worker.
+export function supportsAssRenderer() {
+    return typeof OffscreenCanvas !== 'undefined'
+        && typeof WebAssembly === 'object'
+        && 'transferControlToOffscreen' in HTMLCanvasElement.prototype;
+}
+
 export function getScreenHeight() {
     return Math.round((globalThis.screen?.height || 1080) * (globalThis.devicePixelRatio || 1));
 }
@@ -70,7 +95,7 @@ export async function load(url, isHls, startSeconds) {
     buffering = true;
     element.classList.add('visible');
 
-    if (isHls && !supportsNativeHls()) {
+    if (isHls && !preferNativeHls()) {
         const HlsClass = await loadHls();
         if (id !== loadId) {
             return;
@@ -116,9 +141,7 @@ export function stop() {
         hls.destroy();
         hls = null;
     }
-    for (const track of Array.from(element.querySelectorAll('track'))) {
-        track.remove();
-    }
+    clearSubtitles();
     element.pause();
     element.removeAttribute('src');
     element.load();
@@ -155,14 +178,98 @@ export function setRate(rate) {
 }
 
 export function setObjectFit(fit) {
+    objectFit = fit;
     video().style.objectFit = fit;
+    fitSubtitles();
 }
 
-export function addTextTrack(url, language) {
-    const element = video();
-    for (const track of Array.from(element.querySelectorAll('track'))) {
+// jassub and libbitsub size their canvas to the video's contain box, centred in the element. Scale the subtitles from
+// the centre onto the box that cover or fill draws the video in.
+function fitSubtitles() {
+    const { clientWidth: width, clientHeight: height, videoWidth, videoHeight } = video();
+    let scaleX = 1;
+    let scaleY = 1;
+    if (width > 0 && height > 0 && videoWidth > 0 && videoHeight > 0) {
+        const contain = Math.min(width / videoWidth, height / videoHeight);
+        if (objectFit === 'cover') {
+            scaleX = scaleY = Math.max(width / videoWidth, height / videoHeight) / contain;
+        } else if (objectFit === 'fill') {
+            scaleX = width / (videoWidth * contain);
+            scaleY = height / (videoHeight * contain);
+        }
+    }
+
+    subtitles().style.transform = scaleX === 1 && scaleY === 1 ? '' : `scale(${scaleX}, ${scaleY})`;
+}
+
+function stopSubtitleRenderer() {
+    subtitleId++;
+    disposeSubtitleRenderer?.();
+    disposeSubtitleRenderer = null;
+}
+
+function clearSubtitles() {
+    stopSubtitleRenderer();
+    for (const track of Array.from(video().querySelectorAll('track'))) {
         track.remove();
     }
+}
+
+export async function loadSubtitle(url, format, language, fonts) {
+    clearSubtitles();
+    const id = subtitleId;
+    try {
+        switch (format.toLowerCase()) {
+            case 'ass':
+            case 'ssa':
+                await renderAss(id, url, fonts);
+                break;
+            case 'pgs':
+            case 'pgssub':
+            case 'sup':
+                await renderPgs(id, url);
+                break;
+            default:
+                addTextTrack(url, language);
+                break;
+        }
+    } catch (error) {
+        console.error('Failed to load subtitles', error);
+    }
+}
+
+async function renderAss(id, url, fonts) {
+    const { default: JASSUB } = await import(JASSUB_URL);
+    if (id !== subtitleId) {
+        return;
+    }
+
+    const canvas = document.createElement('canvas');
+    canvas.style.position = 'absolute';
+    subtitles().appendChild(canvas);
+
+    // The worker, wasm and default font resolve next to the bundled module.
+    const renderer = new JASSUB({ video: video(), canvas, subUrl: url, fonts });
+    disposeSubtitleRenderer = () => renderer.destroy().catch(() => {});
+}
+
+async function renderPgs(id, url) {
+    const { PgsRenderer } = await import(LIBBITSUB_URL);
+    if (id !== subtitleId) {
+        return;
+    }
+
+    const renderer = new PgsRenderer({
+        video: video(),
+        container: subtitles(),
+        subUrl: url,
+        onError: (error) => console.error('Failed to render PGS subtitles', error),
+    });
+    disposeSubtitleRenderer = () => renderer.dispose();
+}
+
+function addTextTrack(url, language) {
+    const element = video();
     const track = document.createElement('track');
     track.kind = 'subtitles';
     track.src = url;
@@ -174,6 +281,7 @@ export function addTextTrack(url, language) {
 }
 
 export function selectTextTrack(index) {
+    stopSubtitleRenderer();
     const tracks = video().textTracks;
     for (let i = 0; i < tracks.length; i++) {
         tracks[i].mode = i === index ? 'showing' : 'disabled';

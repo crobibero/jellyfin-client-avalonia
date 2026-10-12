@@ -135,8 +135,9 @@ internal sealed class BrowserPlayerBackend : IPlayerBackend
             SupportsEmbeddedSubtitles = false,
             SupportsExternalSubtitles = true,
             ExternalTextSubtitleFormats = [Codec.Subtitle.Vtt],
-            SupportsAssSubtitles = false,
-            SupportsPgsSubtitles = false,
+            SupportsAssSubtitles = BrowserInterop.SupportsAssRenderer(),
+            SupportsPgsSubtitles = true,
+            SupportsExternalPgsSubtitles = true,
             SupportsBitmapSubtitles = false,
         };
     }

@@ -1,12 +1,13 @@
 using System.Globalization;
 using System.Runtime.Versioning;
+using AsyncAwaitBestPractices;
 using Avalonia.Threading;
 using Jellyfin.Mvvm.Playback;
 
 namespace Jellyfin.Avalonia.Browser;
 
 /// <summary>
-/// Plays media in the page's video element. The element state is polled, keeping the interop simple.
+/// Plays media in the page's video element, polling the element state.
 /// </summary>
 [SupportedOSPlatform("browser")]
 internal sealed class BrowserMediaPlayer : IMediaPlayer
@@ -145,7 +146,8 @@ internal sealed class BrowserMediaPlayer : IMediaPlayer
     public void LoadExternalSubtitle(ExternalSubtitle subtitle)
     {
         ArgumentNullException.ThrowIfNull(subtitle);
-        BrowserInterop.AddTextTrack(subtitle.Url.AbsoluteUri, subtitle.Language);
+        var fonts = subtitle.Fonts.Select(f => f.AbsoluteUri).ToArray();
+        BrowserInterop.LoadSubtitle(subtitle.Url.AbsoluteUri, subtitle.Format, subtitle.Language, fonts).SafeFireAndForget();
     }
 
     /// <inheritdoc />

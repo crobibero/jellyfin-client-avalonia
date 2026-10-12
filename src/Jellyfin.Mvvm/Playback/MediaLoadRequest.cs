@@ -57,4 +57,10 @@ public sealed record MediaLoadRequest
 /// <param name="Url">The subtitle url.</param>
 /// <param name="Format">The subtitle format.</param>
 /// <param name="Language">The subtitle language.</param>
-public sealed record ExternalSubtitle(Uri Url, string Format, string? Language);
+public sealed record ExternalSubtitle(Uri Url, string Format, string? Language)
+{
+    /// <summary>
+    /// Gets the fonts attached to the media, which ASS/SSA subtitles reference by name.
+    /// </summary>
+    public IReadOnlyList<Uri> Fonts { get; init; } = [];
+}

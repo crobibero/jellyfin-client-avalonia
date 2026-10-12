@@ -204,6 +204,11 @@ public sealed record MediaCapabilities
     public bool SupportsPgsSubtitles { get; init; }
 
     /// <summary>
+    /// Gets a value indicating whether PGS subtitles can be loaded as external files.
+    /// </summary>
+    public bool SupportsExternalPgsSubtitles { get; init; }
+
+    /// <summary>
     /// Gets a value indicating whether DVD/DVB bitmap subtitles can be rendered natively when embedded.
     /// </summary>
     public bool SupportsBitmapSubtitles { get; init; } = true;
