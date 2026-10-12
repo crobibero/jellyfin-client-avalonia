@@ -8,9 +8,8 @@ namespace Jellyfin.Avalonia.Services;
 /// Decodes downloaded images through a pooled buffer.
 /// </summary>
 /// <remarks>
-/// The default decoder copies each response into a <see cref="MemoryStream"/> that starts empty and doubles as it
-/// grows, which allocated about three times the image size per card and was the largest allocation source while
-/// scrolling. <see cref="Bitmap"/> decodes eagerly and copies the encoded bytes, so the buffer can be returned afterwards.
+/// The default decoder copies each response into a <see cref="MemoryStream"/> that starts empty and reallocates each
+/// time it doubles. <see cref="Bitmap"/> decodes eagerly and copies the encoded bytes, so the buffer can be returned afterwards.
 /// </remarks>
 public sealed class PooledBitmapDecoder : IBitmapDecoder
 {

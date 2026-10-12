@@ -20,13 +20,11 @@ public static class InfoRowBuilder
 
         var chips = new List<InfoChip>();
 
-        // Community rating
         if (item.CommunityRating is { } communityRating and > 0)
         {
             chips.Add(new InfoChip(communityRating.ToString("0.0", CultureInfo.CurrentCulture), InfoChipStyle.Transparent, InfoChipIcon.Star));
         }
 
-        // Critic rating
         if (item.CriticRating is { } criticRating and > 0)
         {
             chips.Add(new InfoChip(
@@ -35,14 +33,12 @@ public static class InfoRowBuilder
                 criticRating >= 60 ? InfoChipIcon.CriticFresh : InfoChipIcon.CriticRotten));
         }
 
-        // Date
         var date = GetDate(item);
         if (date is not null)
         {
             chips.Add(new InfoChip(date));
         }
 
-        // Season / episode
         if (item.Type == BaseItemDto_Type.Episode)
         {
             var number = Formatting.FormatEpisodeNumber(item);
@@ -52,13 +48,11 @@ public static class InfoRowBuilder
             }
         }
 
-        // Runtime
         if (item.Type is not BaseItemDto_Type.Series and not BaseItemDto_Type.Season && Formatting.FormatRuntime(item.RunTimeTicks) is { } runtime)
         {
             chips.Add(new InfoChip(runtime, InfoChipStyle.Transparent, InfoChipIcon.Time));
         }
 
-        // Series status
         if (item.Type == BaseItemDto_Type.Series && item.Status is not null)
         {
             if (string.Equals(item.Status, "Continuing", StringComparison.OrdinalIgnoreCase))
@@ -75,7 +69,6 @@ public static class InfoRowBuilder
             }
         }
 
-        // Official rating
         if (!string.IsNullOrEmpty(item.OfficialRating))
         {
             chips.Add(new InfoChip(item.OfficialRating, InfoChipStyle.Default));
@@ -91,7 +84,6 @@ public static class InfoRowBuilder
             }
         }
 
-        // Ends at
         if (item.MediaType == BaseItemDto_MediaType.Video && item.RunTimeTicks is { } ticks and > 0)
         {
             var remaining = ticks - (item.UserData?.PlaybackPositionTicks ?? 0);
