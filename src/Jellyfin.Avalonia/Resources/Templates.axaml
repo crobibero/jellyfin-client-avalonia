@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
                     xmlns:behaviors="clr-namespace:Jellyfin.Avalonia.Behaviors"
@@ -57,8 +57,8 @@
                                              Foreground="{DynamicResource OnBadgeBrush}"
                                              Kind="Check" />
                         </Border>
-                        <Border MinWidth="24"
-                                Height="24"
+                        <Border Height="24"
+                                MinWidth="24"
                                 Margin="8"
                                 Padding="8,0"
                                 HorizontalAlignment="Right"

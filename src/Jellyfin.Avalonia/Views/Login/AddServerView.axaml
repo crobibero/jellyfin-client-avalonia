@@ -1,4 +1,4 @@
-<controls:PageView x:Class="Jellyfin.Avalonia.Views.Login.AddServerView"
+﻿<controls:PageView x:Class="Jellyfin.Avalonia.Views.Login.AddServerView"
                    xmlns="https://github.com/avaloniaui"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
@@ -23,8 +23,8 @@
                        Text="{x:Static strings:Strings.Login_ServerUrl}" />
             <TextBox Name="AddressBox"
                      controls:PageView.IsInitialFocus="True"
-                     Text="{Binding ServerUrl}"
-                     PlaceholderText="{x:Static strings:Strings.Login_ServerUrlHint}">
+                     PlaceholderText="{x:Static strings:Strings.Login_ServerUrlHint}"
+                     Text="{Binding ServerUrl}">
                 <TextBox.InnerLeftContent>
                     <mi:MaterialIcon Width="22"
                                      Height="22"
