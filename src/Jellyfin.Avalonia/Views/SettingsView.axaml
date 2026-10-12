@@ -1,4 +1,4 @@
-<controls:PageView x:Class="Jellyfin.Avalonia.Views.SettingsView"
+﻿<controls:PageView x:Class="Jellyfin.Avalonia.Views.SettingsView"
                    xmlns="https://github.com/avaloniaui"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
@@ -28,7 +28,8 @@
                            Text="{x:Static strings:Strings.Settings_MaxBitrate}"
                            TextWrapping="Wrap" />
                 <ComboBox Grid.Column="1"
-                          MinWidth="260" controls:PageView.IsInitialFocus="True"
+                          MinWidth="260"
+                          controls:PageView.IsInitialFocus="True"
                           ItemsSource="{Binding BitrateOptions}"
                           SelectedItem="{Binding MaxBitrate}" />
             </Grid>
