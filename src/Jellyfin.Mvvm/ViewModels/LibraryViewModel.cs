@@ -136,11 +136,7 @@ public sealed partial class LibraryViewModel : BrowseViewModel, IDisposable
     /// </summary>
     public bool HasMoreItems => Items.Count < TotalCount;
 
-    /// <summary>
-    /// Gets the item types shown for a library collection type.
-    /// </summary>
-    /// <param name="collectionType">The collection type.</param>
-    /// <returns>The item types, or <c>null</c> to browse folders.</returns>
+    // Null browses the library by folder.
     internal static BaseItemKind[]? GetItemTypes(BaseItemDto_CollectionType? collectionType) => collectionType switch
     {
         BaseItemDto_CollectionType.Movies => [BaseItemKind.Movie],

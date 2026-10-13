@@ -10,7 +10,6 @@ namespace Jellyfin.Avalonia.Services;
 /// Keeps scaled down user images on disk so the user picker and toolbar avatar show without a download.
 /// </summary>
 /// <remarks>
-/// Only user images are cached. A pipeline byte cache would also buffer every poster in memory before decoding.
 /// The url holds the image tag, so a changed image gets a new entry.
 /// </remarks>
 public sealed class UserImageCacheTransport : IImageTransport

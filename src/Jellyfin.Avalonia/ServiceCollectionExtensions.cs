@@ -28,7 +28,6 @@ public static class ServiceCollectionExtensions
     {
         services.AddSdkClients();
 
-        /* Platform services with defaults */
         services.TryAddSingleton<IApplicationService, ApplicationService>();
         services.TryAddSingleton<ISettingsService, FileSettingsService>();
         services.TryAddSingleton<IDeviceInfo, DefaultDeviceInfo>();
@@ -39,7 +38,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<NotificationService>();
         services.AddSingleton<INotificationService>(s => s.GetRequiredService<NotificationService>());
 
-        /* Common services */
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IAuthenticationService, AuthenticationService>();
         services.AddSingleton<ILibraryService, LibraryService>();

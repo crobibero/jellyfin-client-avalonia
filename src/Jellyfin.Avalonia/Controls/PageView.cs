@@ -8,8 +8,7 @@ using Avalonia.VisualTree;
 namespace Jellyfin.Avalonia.Controls;
 
 /// <summary>
-/// Base class for pages. Handles initial focus and restores focus when navigating back,
-/// which keeps remote and keyboard navigation predictable.
+/// Base class for pages. Handles initial focus and restores focus when navigating back.
 /// </summary>
 public class PageView : UserControl
 {

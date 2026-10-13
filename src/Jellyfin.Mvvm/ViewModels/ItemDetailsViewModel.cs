@@ -455,7 +455,6 @@ public sealed partial class ItemDetailsViewModel : BaseViewModel, IDisposable
                 break;
         }
 
-        // Cast & crew
         if (item.People is { Count: > 0 } people && item.Type != BaseItemDto_Type.Person)
         {
             var row = new HomeRowModel(Strings.Strings.Item_CastAndCrew, CardShape.Poster)
@@ -465,7 +464,6 @@ public sealed partial class ItemDetailsViewModel : BaseViewModel, IDisposable
             Rows.Add(row);
         }
 
-        // Chapters
         if (item.Chapters is { Count: > 1 } chapters && item.MediaType == BaseItemDto_MediaType.Video)
         {
             Rows.Add(new HomeRowModel(Strings.Strings.Item_Chapters, CardShape.Thumb)

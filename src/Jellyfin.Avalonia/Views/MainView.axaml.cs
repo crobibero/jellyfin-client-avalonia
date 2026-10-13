@@ -33,11 +33,6 @@ public partial class MainView : UserControl
 
     private MainViewModel? ViewModel => DataContext as MainViewModel;
 
-    /// <summary>
-    /// Gets the interface scale for a viewport. The layout is designed for 1280x720 or larger.
-    /// </summary>
-    /// <param name="size">The viewport size.</param>
-    /// <returns>The scale.</returns>
     internal static double GetScale(Size size)
         => size.Width <= 0 || size.Height <= 0
             ? 1
@@ -88,6 +83,12 @@ public partial class MainView : UserControl
 
     private void OnPreviewKeyDown(object? sender, KeyEventArgs e)
     {
+        // Keys in an open drop-down or flyout route through its owner, let the popup close itself.
+        if (e.Source.IsInPopup())
+        {
+            return;
+        }
+
         var isTextInput = TopLevel.GetTopLevel(this)?.FocusManager?.GetFocusedElement() is TextBox;
         var isBack = e.Key is Key.Escape or Key.BrowserBack
             || (e.Key == Key.Back && !isTextInput);

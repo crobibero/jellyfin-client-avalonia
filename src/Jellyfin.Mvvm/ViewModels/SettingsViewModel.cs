@@ -24,7 +24,6 @@ public partial class SettingsViewModel : BaseViewModel
     private readonly Playback.PlaybackManager _playbackManager;
     private bool _isLoading;
 
-    // Playback
     [ObservableProperty]
     private OptionItem<double>? _maxBitrate;
 
@@ -58,7 +57,6 @@ public partial class SettingsViewModel : BaseViewModel
     [ObservableProperty]
     private OptionItem<MediaSegmentAction>? _commercialAction;
 
-    // Audio
     [ObservableProperty]
     private OptionItem<AudioBehavior>? _audioBehavior;
 
@@ -77,7 +75,6 @@ public partial class SettingsViewModel : BaseViewModel
     [ObservableProperty]
     private OptionItem<BitstreamAudioMode>? _bitstreamTrueHd;
 
-    // Video
     [ObservableProperty]
     private bool _hardwareDecoding;
 
@@ -111,14 +108,12 @@ public partial class SettingsViewModel : BaseViewModel
     [ObservableProperty]
     private OptionItem<ZoomMode>? _zoomMode;
 
-    // Subtitles
     [ObservableProperty]
     private bool _assDirectPlay;
 
     [ObservableProperty]
     private bool _pgsDirectPlay;
 
-    // Customization
     [ObservableProperty]
     private bool _backdropEnabled;
 
@@ -131,7 +126,6 @@ public partial class SettingsViewModel : BaseViewModel
     [ObservableProperty]
     private OptionItem<WatchedIndicatorBehavior>? _watchedIndicator;
 
-    // About
     [ObservableProperty]
     private string? _versionText;
 
