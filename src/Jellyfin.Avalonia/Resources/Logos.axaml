@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!--  Generated from https://github.com/jellyfin/jellyfin-ux logos/SVG at 69a2b7b, do not edit by hand.  -->
@@ -7,7 +7,8 @@
     <!--  The Jellyfin icon in color, for dark backgrounds.  -->
     <DrawingImage x:Key="JellyfinIconImage">
         <DrawingGroup>
-            <GeometryDrawing Brush="Transparent" Geometry="M0,0 H72 V72 H0 Z" />
+            <GeometryDrawing Brush="Transparent"
+                             Geometry="M0,0 H72 V72 H0 Z" />
             <GeometryDrawing>
                 <GeometryDrawing.Brush>
                     <LinearGradientBrush StartPoint="11.9999,30.0006" EndPoint="71.9989,63.0024">
@@ -40,7 +41,8 @@
     <!--  The horizontal Jellyfin logo in color, for dark backgrounds.  -->
     <DrawingImage x:Key="JellyfinLogoImage">
         <DrawingGroup>
-            <GeometryDrawing Brush="Transparent" Geometry="M0,0 H251 V72 H0 Z" />
+            <GeometryDrawing Brush="Transparent"
+                             Geometry="M0,0 H251 V72 H0 Z" />
             <GeometryDrawing>
                 <GeometryDrawing.Brush>
                     <LinearGradientBrush StartPoint="11.9999,30.0006" EndPoint="71.9989,63.0024">

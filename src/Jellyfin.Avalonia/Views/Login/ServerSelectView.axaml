@@ -1,4 +1,4 @@
-<controls:PageView x:Class="Jellyfin.Avalonia.Views.Login.ServerSelectView"
+﻿<controls:PageView x:Class="Jellyfin.Avalonia.Views.Login.ServerSelectView"
                    xmlns="https://github.com/avaloniaui"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
@@ -105,8 +105,8 @@
             <StackPanel HorizontalAlignment="Center"
                         Orientation="Horizontal"
                         Spacing="16">
-                <Button Classes="accent"
-                        controls:PageView.IsInitialFocus="True"
+                <Button controls:PageView.IsInitialFocus="True"
+                        Classes="accent"
                         Command="{Binding AddServerCommand}">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="8">
