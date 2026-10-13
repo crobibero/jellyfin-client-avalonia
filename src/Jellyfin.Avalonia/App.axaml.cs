@@ -10,6 +10,7 @@ using Avalonia.Markup.Xaml;
 using Jellyfin.Avalonia.Behaviors;
 using Jellyfin.Avalonia.Services;
 using Jellyfin.Avalonia.Views;
+using Jellyfin.Mvvm.Playback;
 using Jellyfin.Mvvm.Services;
 using Jellyfin.Mvvm.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,6 +51,8 @@ public partial class App : Application
         _services = services.BuildServiceProvider();
 
         ConfigureImageLoader();
+        Services.GetRequiredService<RemoteControlService>().Start();
+        Services.GetRequiredService<IServerEventService>().Start();
         ComboBoxFocusBehavior.Register();
 
         switch (ApplicationLifetime)

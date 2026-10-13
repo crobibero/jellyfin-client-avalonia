@@ -10,7 +10,7 @@ namespace Jellyfin.Mvvm.ViewModels;
 /// <summary>
 /// Home view model.
 /// </summary>
-public partial class HomeViewModel : BrowseViewModel
+public sealed partial class HomeViewModel : BrowseViewModel, IDisposable
 {
     private static readonly TimeSpan _refreshInterval = TimeSpan.FromSeconds(30);
 
@@ -23,6 +23,7 @@ public partial class HomeViewModel : BrowseViewModel
 
     private readonly ILibraryService _libraryService;
     private readonly IStateService _stateService;
+    private readonly IServerEventService _serverEventService;
     private readonly ILogger<HomeViewModel> _logger;
     private readonly List<(HomeRowModel Row, Func<Task<IReadOnlyList<ItemCardModel>>> Loader, bool Refresh)> _rowLoaders = [];
     private DateTime _lastRefresh;
@@ -36,6 +37,7 @@ public partial class HomeViewModel : BrowseViewModel
     /// <param name="stateService">Instance of the <see cref="IStateService"/> interface.</param>
     /// <param name="backdropService">The backdrop service.</param>
     /// <param name="cardFactory">The card factory.</param>
+    /// <param name="serverEventService">The server event service.</param>
     /// <param name="logger">The logger.</param>
     public HomeViewModel(
         ILibraryService libraryService,
@@ -44,12 +46,17 @@ public partial class HomeViewModel : BrowseViewModel
         IStateService stateService,
         IBackdropService backdropService,
         CardFactory cardFactory,
+        IServerEventService serverEventService,
         ILogger<HomeViewModel> logger)
         : base(navigationService, applicationService, backdropService, cardFactory)
     {
         _libraryService = libraryService;
         _stateService = stateService;
+        _serverEventService = serverEventService;
         _logger = logger;
+
+        _serverEventService.UserDataChanged += OnUserDataChanged;
+        _serverEventService.LibraryChanged += OnLibraryChanged;
     }
 
     /// <inheritdoc />
@@ -59,6 +66,13 @@ public partial class HomeViewModel : BrowseViewModel
     /// Gets the home rows.
     /// </summary>
     public ObservableRangeCollection<HomeRowModel> Rows { get; } = new();
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _serverEventService.UserDataChanged -= OnUserDataChanged;
+        _serverEventService.LibraryChanged -= OnLibraryChanged;
+    }
 
     /// <inheritdoc />
     protected override async ValueTask InitializeAsync(object? parameter)
@@ -127,6 +141,16 @@ public partial class HomeViewModel : BrowseViewModel
             await LoadRowsAsync(refreshOnly: true).ConfigureAwait(true);
         }
     }
+
+    private void OnUserDataChanged(object? sender, UserDataChangeInfo e)
+    {
+        CardFactory.UpdateUserData(Rows.SelectMany(r => r.Items), e);
+
+        // Resume and next up depend on played state, reload them when the user comes back.
+        _lastRefresh = DateTime.MinValue;
+    }
+
+    private void OnLibraryChanged(object? sender, LibraryUpdateInfo e) => _lastRefresh = DateTime.MinValue;
 
     private static IEnumerable<BaseItemDto> OrderLibraries(IReadOnlyList<BaseItemDto> libraries, List<Guid?>? orderedViews)
     {

@@ -726,4 +726,10 @@
   <data name="Login_ChangeServer" xml:space="preserve">
     <value>Change server</value>
   </data>
+  <data name="Server_Restarting" xml:space="preserve">
+    <value>The server is restarting</value>
+  </data>
+  <data name="Server_ShuttingDown" xml:space="preserve">
+    <value>The server is shutting down</value>
+  </data>
 </root>
