@@ -1,5 +1,5 @@
 name: Setup
-description: Install the .NET SDK pinned by src/global.json, plus optional workloads and Java.
+description: Install the .NET SDK pinned by src/global.json, plus optional workloads, Java, Node.js and a NuGet cache.
 
 inputs:
   workloads:
@@ -8,6 +8,14 @@ inputs:
     default: ''
   java-version:
     description: Microsoft Build of OpenJDK version to install. Empty skips Java.
+    required: false
+    default: ''
+  node-version-file:
+    description: File holding the Node.js version to install, such as an .nvmrc. Empty skips Node.js.
+    required: false
+    default: ''
+  cache-key:
+    description: Name that keeps this job's NuGet cache apart from jobs restoring other packages. Empty skips the cache.
     required: false
     default: ''
 
@@ -25,12 +33,37 @@ runs:
       with:
         global-json-file: src/global.json
 
+    - name: Cache NuGet packages
+      if: inputs.cache-key != ''
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ~/.nuget/packages
+        key: nuget-${{ runner.os }}-${{ inputs.cache-key }}-${{ hashFiles('src/global.json', 'src/Directory.Packages.props', 'src/**/*.csproj', 'src/.config/dotnet-tools.json') }}
+        restore-keys: nuget-${{ runner.os }}-${{ inputs.cache-key }}-
+
     - name: Setup Java
       if: inputs.java-version != ''
       uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
       with:
         distribution: microsoft
         java-version: ${{ inputs.java-version }}
+
+    # The npm cache is keyed on the package-lock.json next to the version file.
+    - name: Find package-lock.json
+      id: node
+      if: inputs.node-version-file != ''
+      shell: bash
+      env:
+        NODE_VERSION_FILE: ${{ inputs.node-version-file }}
+      run: echo "lockfile=$(dirname "$NODE_VERSION_FILE")/package-lock.json" >> "$GITHUB_OUTPUT"
+
+    - name: Setup Node.js
+      if: inputs.node-version-file != ''
+      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-version-file: ${{ inputs.node-version-file }}
+        cache: npm
+        cache-dependency-path: ${{ steps.node.outputs.lockfile }}
 
     - name: Install workloads
       if: inputs.workloads != ''
