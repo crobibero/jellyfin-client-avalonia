@@ -256,11 +256,6 @@ public partial class AuthenticationService : IAuthenticationService
         }
     }
 
-    /// <summary>
-    /// Gets the urls to try for a user entered address, in order of preference.
-    /// </summary>
-    /// <param name="address">The address.</param>
-    /// <returns>The candidate urls.</returns>
     internal static IReadOnlyList<string> GetAddressCandidates(string? address)
     {
         address = address?.Trim().TrimEnd('/');

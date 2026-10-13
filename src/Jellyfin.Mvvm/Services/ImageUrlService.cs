@@ -140,12 +140,6 @@ public class ImageUrlService : IImageUrlService
         return builder.ToString();
     }
 
-    /// <summary>
-    /// Gets the image tag for the image type.
-    /// </summary>
-    /// <param name="item">The item.</param>
-    /// <param name="imageType">The image type.</param>
-    /// <returns>The image tag, or <c>null</c>.</returns>
     internal static string? GetTag(BaseItemDto item, ImageType imageType)
     {
         var tags = item.ImageTags?.AdditionalData;
@@ -166,16 +160,7 @@ public class ImageUrlService : IImageUrlService
         return null;
     }
 
-    /// <summary>
-    /// Gets the blurhash of an item image.
-    /// </summary>
-    /// <remarks>
-    /// The server also adds the blurhashes of inherited images, such as the series poster, to the item.
-    /// </remarks>
-    /// <param name="blurHashes">The item blurhashes.</param>
-    /// <param name="imageType">The image type.</param>
-    /// <param name="tag">The image tag.</param>
-    /// <returns>The blurhash, or <c>null</c>.</returns>
+    // The server also adds the blurhashes of inherited images, such as the series poster, to the item.
     internal static string? GetBlurHash(BaseItemDto_ImageBlurHashes? blurHashes, ImageType imageType, string tag)
     {
         var hashes = imageType switch

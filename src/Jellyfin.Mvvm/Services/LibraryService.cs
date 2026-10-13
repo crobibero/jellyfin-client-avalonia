@@ -5,9 +5,6 @@ namespace Jellyfin.Mvvm.Services;
 /// <inheritdoc />
 public class LibraryService : ILibraryService
 {
-    /// <summary>
-    /// The fields requested for cards.
-    /// </summary>
     internal static readonly ItemFields[] CardFields =
     [
         ItemFields.PrimaryImageAspectRatio,
