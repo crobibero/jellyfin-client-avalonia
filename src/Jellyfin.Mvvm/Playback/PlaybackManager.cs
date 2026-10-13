@@ -20,6 +20,17 @@ public sealed partial class PlaybackManager : ObservableObject, IDisposable
     private static readonly TimeSpan _progressInterval = TimeSpan.FromSeconds(10);
     private static readonly TimeSpan _endTolerance = TimeSpan.FromSeconds(30);
 
+    // Matches supportedFonts in jellyfin-web's htmlVideoPlayer plugin.
+    private static readonly HashSet<string> _fontMimeTypes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "application/vnd.ms-opentype",
+        "application/x-truetype-font",
+        "font/otf",
+        "font/ttf",
+        "font/woff",
+        "font/woff2",
+    };
+
     private readonly JellyfinApiClient _apiClient;
     private readonly JellyfinSdkSettings _sdkSettings;
     private readonly IStateService _stateService;
@@ -752,7 +763,7 @@ public sealed partial class PlaybackManager : ObservableObject, IDisposable
         switch (subtitle?.DeliveryMethod)
         {
             case MediaStream_DeliveryMethod.External when GetDeliveryUri(subtitle) is { } uri:
-                request = request with { ExternalSubtitle = new ExternalSubtitle(uri, GetSubtitleFormat(subtitle), subtitle.Language) };
+                request = request with { ExternalSubtitle = CreateExternalSubtitle(uri, subtitle, mediaSource) };
                 break;
             case MediaStream_DeliveryMethod.Embed when isDirect:
                 request = request with { SubtitleTrackPosition = GetEmbeddedSubtitlePosition(subtitle) };
@@ -765,7 +776,6 @@ public sealed partial class PlaybackManager : ObservableObject, IDisposable
                 break;
         }
 
-        _ = mediaSource;
         return request;
     }
 
@@ -782,7 +792,7 @@ public sealed partial class PlaybackManager : ObservableObject, IDisposable
                 Player.SelectSubtitleTrack(null);
                 break;
             case MediaStream_DeliveryMethod.External when GetDeliveryUri(stream) is { } uri:
-                Player.LoadExternalSubtitle(new ExternalSubtitle(uri, GetSubtitleFormat(stream), stream.Language));
+                Player.LoadExternalSubtitle(CreateExternalSubtitle(uri, stream, CurrentMediaSource));
                 break;
             case MediaStream_DeliveryMethod.Embed:
                 Player.SelectSubtitleTrack(GetEmbeddedSubtitlePosition(stream));
@@ -808,8 +818,32 @@ public sealed partial class PlaybackManager : ObservableObject, IDisposable
             return absolute;
         }
 
+        return GetServerUri(stream.DeliveryUrl);
+    }
+
+    private Uri? GetServerUri(string? relativeUrl)
+    {
         var serverUrl = _sdkSettings.ServerUrl?.TrimEnd('/');
-        return serverUrl is null ? null : new Uri(serverUrl + stream.DeliveryUrl);
+        return serverUrl is null ? null : new Uri(serverUrl + relativeUrl);
+    }
+
+    private ExternalSubtitle CreateExternalSubtitle(Uri uri, MediaStream stream, MediaSourceInfo? mediaSource)
+    {
+        var format = GetSubtitleFormat(stream);
+        var subtitle = new ExternalSubtitle(uri, format, stream.Language);
+        var isAss = string.Equals(format, Codec.Subtitle.Ass, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(format, Codec.Subtitle.Ssa, StringComparison.OrdinalIgnoreCase);
+        if (!isAss || mediaSource?.MediaAttachments is not { } attachments)
+        {
+            return subtitle;
+        }
+
+        var fonts = attachments
+            .Where(a => a.MimeType is not null && _fontMimeTypes.Contains(a.MimeType) && !string.IsNullOrEmpty(a.DeliveryUrl))
+            .Select(a => GetServerUri(a.DeliveryUrl))
+            .OfType<Uri>()
+            .ToList();
+        return subtitle with { Fonts = fonts };
     }
 
     private static string GetSubtitleFormat(MediaStream stream)

@@ -17,4 +17,30 @@
   <ItemGroup>
     <ProjectReference Include="..\Jellyfin.Avalonia\Jellyfin.Avalonia.csproj" />
   </ItemGroup>
+
+  <!-- The Web SDK copies every root json file to the output, these are build inputs only -->
+  <ItemGroup>
+    <Content Update="package.json;package-lock.json;runtimeconfig.template.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" />
+  </ItemGroup>
+
+  <!-- Script dependencies come from npm (package.json) and are staged into wwwroot/lib, which is not committed.
+       The default wwwroot glob runs before staging, so it would miss new files on a clean build and keep deleted ones
+       after a dependency change. The files are added once staged instead. -->
+  <ItemGroup>
+    <Content Remove="wwwroot/lib/**" />
+  </ItemGroup>
+
+  <Target Name="NpmInstall" BeforeTargets="BeforeBuild" Inputs="package.json;package-lock.json" Outputs="node_modules/.package-lock.json">
+    <Exec Command="npm ci --ignore-scripts --no-audit --no-fund" />
+  </Target>
+
+  <Target Name="NpmBuildLib" AfterTargets="NpmInstall" BeforeTargets="BeforeBuild" Inputs="build-lib.mjs;node_modules/.package-lock.json" Outputs="wwwroot/lib/jassub/jassub.js">
+    <Exec Command="node build-lib.mjs wwwroot/lib" />
+  </Target>
+
+  <Target Name="IncludeNpmLib" AfterTargets="NpmBuildLib" BeforeTargets="BeforeBuild">
+    <ItemGroup>
+      <Content Include="wwwroot/lib/**" />
+    </ItemGroup>
+  </Target>
 </Project>
