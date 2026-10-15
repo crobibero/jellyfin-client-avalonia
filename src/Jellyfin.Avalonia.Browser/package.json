@@ -3,7 +3,7 @@
   "private": true,
   "dependencies": {
     "hls.js": "1.7.3",
-    "jassub": "2.5.20",
+    "jassub": "2.5.21",
     "libbitsub": "1.12.1"
   },
   "devDependencies": {
