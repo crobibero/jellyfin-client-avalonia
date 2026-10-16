@@ -4,14 +4,18 @@ using AsyncImageLoader.Core.Pipeline;
 using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Jellyfin.Mvvm.Imaging;
+using BlurHashSharp;
 using Jellyfin.Mvvm.Services;
+using PixelFormat = Avalonia.Platform.PixelFormat;
 
 namespace Jellyfin.Avalonia.Services;
 
 /// <summary>
 /// Computes blurhashes from images loaded through the shared image loader.
 /// </summary>
+/// <remarks>
+/// BlurHashSharp is the encoder the server uses, so these match the hashes the server sends for other images.
+/// </remarks>
 public sealed class ImageBlurHashService : IImageBlurHashService
 {
     // Blurhashes only hold a few low frequency components, so a small sample loses nothing.
@@ -39,6 +43,6 @@ public sealed class ImageBlurHashService : IImageBlurHashService
             Marshal.Copy(buffer.Address + (row * buffer.RowBytes), pixels, row * RowLength, RowLength);
         }
 
-        return BlurHashEncoder.Encode(pixels, SampleSize, SampleSize);
+        return CoreBlurHashEncoder.Encode(4, 4, SampleSize, SampleSize, pixels, RowLength, BlurHashSharp.PixelFormat.BGR888x);
     }
 }

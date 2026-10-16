@@ -1,15 +1,19 @@
+using BlurHashSharp;
 using Jellyfin.Mvvm.Imaging;
 
 namespace Jellyfin.Mvvm.Tests;
 
-public class BlurHashEncoderTests
+/// <summary>
+/// Hashes made by BlurHashSharp, the encoder the server and the client use, decode back to the source.
+/// </summary>
+public class BlurHashRoundTripTests
 {
     [Theory]
     [InlineData(0xFF, 0x00, 0x00)]
     [InlineData(0x33, 0x66, 0x99)]
     [InlineData(0x00, 0x00, 0x00)]
     [InlineData(0xFF, 0xFF, 0xFF)]
-    public void Encode_SolidColor_RoundTrips(byte r, byte g, byte b)
+    public void Decode_SolidColor_RoundTrips(byte r, byte g, byte b)
     {
         var source = new byte[8 * 8 * 4];
         for (var i = 0; i < source.Length; i += 4)
@@ -21,7 +25,7 @@ public class BlurHashEncoderTests
         }
 
         // One component, so the hash only holds the average color.
-        var blurHash = BlurHashEncoder.Encode(source, 8, 8, 1, 1);
+        var blurHash = CoreBlurHashEncoder.Encode(1, 1, 8, 8, source, 8 * 4, PixelFormat.BGR888x);
         var pixels = new byte[4 * 4 * 4];
 
         Assert.Equal(6, blurHash.Length);
@@ -33,7 +37,7 @@ public class BlurHashEncoderTests
     }
 
     [Fact]
-    public void Encode_Gradient_KeepsDirection()
+    public void Decode_Gradient_KeepsDirection()
     {
         // Dark on the left, light on the right.
         const int Size = 16;
@@ -47,25 +51,12 @@ public class BlurHashEncoderTests
             }
         }
 
-        var blurHash = BlurHashEncoder.Encode(source, Size, Size, 4, 3);
+        var blurHash = CoreBlurHashEncoder.Encode(4, 3, Size, Size, source, Size * 4, PixelFormat.BGR888x);
         var pixels = new byte[Size * Size * 4];
 
         Assert.True(BlurHashDecoder.TryDecode(blurHash, Size, Size, pixels));
         var row = (Size / 2) * Size * 4;
         Assert.True(pixels[row] < 64);
         Assert.True(pixels[row + ((Size - 1) * 4)] > 192);
-    }
-
-    [Fact]
-    public void Encode_ReferenceImage_MatchesReferenceEncoder()
-    {
-        // The expected hash comes from BlurHashSharp, the encoder the server uses.
-        byte[] source =
-        [
-            62, 23, 186, 255, 174, 4, 205, 255,
-            153, 134, 158, 255, 240, 173, 191, 255,
-        ];
-
-        Assert.Equal("A~LUtZ^7|$,t", BlurHashEncoder.Encode(source, 2, 2, 2, 2));
     }
 }

@@ -9,6 +9,7 @@
     <PackageReference Include="Avalonia" />
     <PackageReference Include="Avalonia.Controls.ItemsRepeater" />
     <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="BlurHashSharp" />
     <PackageReference Include="ONEO.FluentUIIconsLike" />
     <PackageReference Include="ONEO.FluentUIIconsLike.Generator" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
