@@ -34,6 +34,7 @@ public static class ServiceCollectionExtensions
         services.TryAddSingleton<IPlatformDefaults, DefaultPlatformDefaults>();
         services.TryAddSingleton<IPlayerBackend, UnsupportedPlayerBackend>();
         services.TryAddSingleton<IVideoViewFactory, NullVideoViewFactory>();
+        services.TryAddSingleton<IFullScreenService, WindowFullScreenService>();
         services.TryAddSingleton<IServerDiscoveryService, ServerDiscoveryService>();
         services.AddSingleton<NotificationService>();
         services.AddSingleton<INotificationService>(s => s.GetRequiredService<NotificationService>());

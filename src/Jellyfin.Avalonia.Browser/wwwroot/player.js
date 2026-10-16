@@ -75,6 +75,24 @@ export function supportsAssRenderer() {
         && 'transferControlToOffscreen' in HTMLCanvasElement.prototype;
 }
 
+// The whole page goes full screen, since the video element sits behind the Avalonia canvas.
+export function supportsFullscreen() {
+    return document.fullscreenEnabled === true;
+}
+
+export function isFullscreen() {
+    return document.fullscreenElement != null;
+}
+
+export function setFullscreen(fullscreen) {
+    if (fullscreen === isFullscreen()) {
+        return;
+    }
+
+    const request = fullscreen ? document.documentElement.requestFullscreen() : document.exitFullscreen();
+    request.catch((error) => console.warn('Failed to change full screen', error));
+}
+
 export function getScreenHeight() {
     return Math.round((globalThis.screen?.height || 1080) * (globalThis.devicePixelRatio || 1));
 }

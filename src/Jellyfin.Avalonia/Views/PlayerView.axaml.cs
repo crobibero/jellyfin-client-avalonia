@@ -10,7 +10,9 @@ using Jellyfin.Avalonia.Controls;
 using Jellyfin.Avalonia.Services;
 using Jellyfin.Mvvm.Playback;
 using Jellyfin.Mvvm.Preferences;
+using Jellyfin.Mvvm.Strings;
 using Jellyfin.Mvvm.ViewModels;
+using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Jellyfin.Avalonia.Views;
@@ -22,12 +24,14 @@ public partial class PlayerView : PageView
 {
     private static Cursor? _hiddenCursor;
     private readonly IVideoViewFactory _videoViewFactory;
+    private readonly IFullScreenService _fullScreenService;
     private PlayerViewModel? _viewModel;
     private IMediaPlayer? _attachedPlayer;
     private PlaybackManager? _subscribedManager;
     private IDisposable? _sleepInhibition;
     private MainView? _transparentShell;
     private IBrush? _shellBackground;
+    private bool? _pausedBeforeClick;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PlayerView"/> class.
@@ -36,11 +40,16 @@ public partial class PlayerView : PageView
     {
         InitializeComponent();
         _videoViewFactory = App.Services.GetRequiredService<IVideoViewFactory>();
+        _fullScreenService = App.Services.GetRequiredService<IFullScreenService>();
 
         AddHandler(KeyDownEvent, OnPreviewKeyDown, RoutingStrategies.Tunnel);
         AddHandler(PointerMovedEvent, (_, _) => _viewModel?.ReportActivity(), RoutingStrategies.Tunnel, handledEventsToo: true);
         InputLayer.Tapped += OnInputTapped;
-        InputLayer.DoubleTapped += (_, _) => ToggleFullScreen();
+        InputLayer.DoubleTapped += OnInputDoubleTapped;
+        FullScreenButton.Click += (_, _) => ToggleFullScreen();
+
+        // Entering or leaving full screen resizes the page, also when the browser leaves it on Escape.
+        SizeChanged += (_, _) => UpdateFullScreenButton();
 
         SeekSlider.AddHandler(PointerPressedEvent, (_, _) => _viewModel?.BeginSeek(), RoutingStrategies.Tunnel, handledEventsToo: true);
         SeekSlider.AddHandler(PointerReleasedEvent, (_, _) => _viewModel?.EndSeek(), RoutingStrategies.Tunnel, handledEventsToo: true);
@@ -78,6 +87,8 @@ public partial class PlayerView : PageView
         base.OnAttachedToVisualTree(e);
         SubscribeManager();
         UpdateTransparency();
+        FullScreenButton.IsVisible = TopLevel.GetTopLevel(this) is { } root && _fullScreenService.IsSupported(root);
+        UpdateFullScreenButton();
 
         try
         {
@@ -101,10 +112,10 @@ public partial class PlayerView : PageView
         _sleepInhibition = null;
         RestoreShellBackground();
 
-        // The visual parent is already cleared here, so find the window from the detached tree's root.
-        if (TopLevel.GetTopLevel(e.RootVisual) is MainWindow { WindowState: WindowState.FullScreen } window)
+        // The visual parent is already cleared here, so find the top level from the detached tree's root.
+        if (TopLevel.GetTopLevel(e.RootVisual) is { } topLevel)
         {
-            window.ToggleFullScreen();
+            _fullScreenService.SetFullScreen(topLevel, false);
         }
 
         base.OnDetachedFromVisualTree(e);
@@ -267,11 +278,17 @@ public partial class PlayerView : PageView
             return;
         }
 
+        _pausedBeforeClick = null;
         if (_viewModel.IsMenuOpen)
         {
             _viewModel.CloseMenuCommand.Execute(null);
         }
-        else if (_viewModel.IsOverlayVisible && e.Pointer.Type != PointerType.Mouse)
+        else if (e.Pointer.Type == PointerType.Mouse)
+        {
+            _pausedBeforeClick = _viewModel.Manager.Player?.State == PlayerState.Paused;
+            _viewModel.TogglePlayPauseCommand.Execute(null);
+        }
+        else if (_viewModel.IsOverlayVisible)
         {
             _viewModel.IsOverlayVisible = false;
         }
@@ -281,13 +298,43 @@ public partial class PlayerView : PageView
         }
     }
 
+    private void OnInputDoubleTapped(object? sender, TappedEventArgs e)
+    {
+        // The first click of a double click toggled playback, so put it back.
+        if (_pausedBeforeClick is { } paused && _viewModel?.Manager.Player is { } player)
+        {
+            if (paused)
+            {
+                player.Pause();
+            }
+            else
+            {
+                player.Play();
+            }
+        }
+
+        _pausedBeforeClick = null;
+        ToggleFullScreen();
+    }
+
     private void ToggleFullScreen()
     {
-        if (TopLevel.GetTopLevel(this) is MainWindow window)
+        if (TopLevel.GetTopLevel(this) is { } topLevel && _fullScreenService.IsSupported(topLevel))
         {
-            window.ToggleFullScreen();
+            _fullScreenService.SetFullScreen(topLevel, !_fullScreenService.IsFullScreen(topLevel));
+            UpdateFullScreenButton();
         }
     }
+
+    private void UpdateFullScreenButton()
+    {
+        var fullScreen = TopLevel.GetTopLevel(this) is { } topLevel && _fullScreenService.IsFullScreen(topLevel);
+        FullScreenIcon.Kind = fullScreen ? MaterialIconKind.FullscreenExit : MaterialIconKind.Fullscreen;
+        ToolTip.SetTip(FullScreenButton, fullScreen ? Strings.Player_ExitFullScreen : Strings.Player_FullScreen);
+    }
+
+    private static bool IsKeyboardFocusedButton(object? source)
+        => source is Button button && button.Classes.Contains(":focus-visible");
 
     private void OnPreviewKeyDown(object? sender, KeyEventArgs e)
     {
@@ -350,7 +397,8 @@ public partial class PlayerView : PageView
             }
         }
 
-        if (e.Key == Key.Space && e.Source is not Button)
+        // A clicked button keeps focus, Space only activates a button the keyboard moved focus to.
+        if (e.Key == Key.Space && !IsKeyboardFocusedButton(e.Source))
         {
             vm.TogglePlayPauseCommand.Execute(null);
             e.Handled = true;

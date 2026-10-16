@@ -23,6 +23,7 @@ App.ConfigurePlatformServices = services =>
     services.AddSingleton<IDeviceInfo, BrowserDeviceInfo>();
     services.AddSingleton<IPlayerBackend, BrowserPlayerBackend>();
     services.AddSingleton<IVideoViewFactory, BrowserVideoViewFactory>();
+    services.AddSingleton<IFullScreenService, BrowserFullScreenService>();
 };
 
 await AppBuilder.Configure<App>()

@@ -418,7 +418,7 @@ public sealed partial class PlaybackManager : ObservableObject, IDisposable
     }
 
     /// <summary>
-    /// Set the volume.
+    /// Set the player volume and report it to the server.
     /// </summary>
     /// <param name="volume">The volume, from 0 to 100.</param>
     public void SetVolume(int volume)
@@ -433,7 +433,7 @@ public sealed partial class PlaybackManager : ObservableObject, IDisposable
     }
 
     /// <summary>
-    /// Mute or unmute.
+    /// Mute or unmute the player and report it to the server.
     /// </summary>
     /// <param name="isMuted">Whether to mute.</param>
     public void SetMuted(bool isMuted)

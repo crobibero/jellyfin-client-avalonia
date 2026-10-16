@@ -1,8 +1,4 @@
-// Stages the npm script dependencies into the directory given as the first argument, which is served as wwwroot/lib.
-// jassub imports bare package names, which a module worker can't resolve since import maps don't apply to workers,
-// so it is bundled. The output keeps jassub's dist layout, so the paths it resolves against import.meta.url still find
-// the wasm and default font. libbitsub uses extensionless imports, so it is bundled too, apart from its wasm glue,
-// which its worker imports by URL.
+// jassub and libbitsub are bundled because workers ignore import maps, so their bare and extensionless imports can't resolve.
 import { cpSync, readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { build } from 'esbuild';
@@ -48,6 +44,7 @@ const libbitsubPaths = {
 };
 
 await build({
+    // jassub resolves its wasm and default font against import.meta.url, so the entries keep its dist layout.
     entryPoints: {
         'jassub/jassub': 'node_modules/jassub/dist/jassub.js',
         'jassub/worker/worker': 'node_modules/jassub/dist/worker/worker.js',

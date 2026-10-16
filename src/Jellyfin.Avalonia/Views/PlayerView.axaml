@@ -73,13 +73,14 @@
                         IsHitTestVisible="False"
                         IsVisible="{Binding IsVideo}" />
 
-        <!--  Input layer: tap toggles controls, double tap toggles full screen  -->
+        <!--  Input layer: tap toggles controls, click toggles playback, double tap toggles full screen  -->
         <Border Name="InputLayer"
                 Background="Transparent" />
 
         <ProgressBar Width="200"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"
+                     IsHitTestVisible="False"
                      IsIndeterminate="True"
                      IsVisible="{Binding IsBuffering}" />
 
@@ -218,6 +219,13 @@
                                 CommandParameter="{x:Static vm:PlayerViewModel+PlayerMenu.Info}"
                                 ToolTip.Tip="{x:Static strings:Strings.Player_PlaybackInfo}">
                             <mi:MaterialIcon Kind="InformationOutline" />
+                        </Button>
+                        <Button Name="FullScreenButton"
+                                Classes="icon player"
+                                IsVisible="False"
+                                ToolTip.Tip="{x:Static strings:Strings.Player_FullScreen}">
+                            <mi:MaterialIcon Name="FullScreenIcon"
+                                             Kind="Fullscreen" />
                         </Button>
                     </StackPanel>
                 </Grid>

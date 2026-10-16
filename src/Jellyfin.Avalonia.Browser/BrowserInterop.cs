@@ -41,6 +41,15 @@ internal static partial class BrowserInterop
     [JSImport("supportsAssRenderer", PlayerModule)]
     public static partial bool SupportsAssRenderer();
 
+    [JSImport("supportsFullscreen", PlayerModule)]
+    public static partial bool SupportsFullscreen();
+
+    [JSImport("isFullscreen", PlayerModule)]
+    public static partial bool IsFullscreen();
+
+    [JSImport("setFullscreen", PlayerModule)]
+    public static partial void SetFullscreen(bool fullscreen);
+
     [JSImport("load", PlayerModule)]
     public static partial Task Load(string url, bool isHls, double startSeconds);
 

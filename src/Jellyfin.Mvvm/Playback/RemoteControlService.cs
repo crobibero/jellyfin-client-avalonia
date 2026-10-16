@@ -68,7 +68,7 @@ public sealed class RemoteControlService : IDisposable
     public static IReadOnlyList<GeneralCommandType> SupportedCommands { get; } = [.. _commands.Select(c => c.Type)];
 
     /// <summary>
-    /// Start handling remote commands.
+    /// Start handling remote commands from the server events. Calling it again has no effect.
     /// </summary>
     public void Start()
     {

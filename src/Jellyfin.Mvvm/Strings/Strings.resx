@@ -402,6 +402,12 @@
   <data name="Player_Zoom" xml:space="preserve">
     <value>Zoom</value>
   </data>
+  <data name="Player_FullScreen" xml:space="preserve">
+    <value>Full screen</value>
+  </data>
+  <data name="Player_ExitFullScreen" xml:space="preserve">
+    <value>Exit full screen</value>
+  </data>
   <data name="Player_Close" xml:space="preserve">
     <value>Close player</value>
   </data>
