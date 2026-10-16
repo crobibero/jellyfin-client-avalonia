@@ -39,8 +39,10 @@ Android needs the `android` workload and a JDK 21. The `InstallAndroidDependenci
 ```sh
 dotnet workload install android
 dotnet build Jellyfin.Avalonia.Android -t:InstallAndroidDependencies -p:AcceptAndroidSdkLicenses=True
-dotnet publish Jellyfin.Avalonia.Android -c Release -f net10.0-android
+dotnet publish Jellyfin.Avalonia.Android -c Release -f net10.0-android -r android-arm64
 ```
+
+`-r` picks one of `android-arm64`, `android-arm` or `android-x64`. Without it the APK holds all three and is three times the size.
 
 iOS needs macOS, Xcode, and the `ios` workload:
 

@@ -103,12 +103,17 @@ jobs:
 
   android:
     needs: version
+    strategy:
+      fail-fast: true
+      matrix:
+        rid: [ android-arm64, android-arm, android-x64 ]
     uses: ./.github/workflows/build.yml
     with:
-      name: android
+      name: ${{ matrix.rid }}
       runs-on: ubuntu-26.04
       project: Jellyfin.Avalonia.Android
       framework: net10.0-android
+      rid: ${{ matrix.rid }}
       workloads: android
       java-version: '21'
       version: ${{ needs.version.outputs.version }}
@@ -135,22 +140,28 @@ jobs:
     permissions:
       contents: write
     steps:
+      # Each artifact downloads into its own folder, since every Android APK has the same file name.
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           pattern: jellyfin-avalonia-*
-          path: dist
-          merge-multiple: true
+          path: artifacts
 
       - name: Name release files
-        working-directory: dist
         shell: bash
         env:
           VERSION: ${{ needs.version.outputs.version }}
         run: |
-          for file in jellyfin-avalonia-*; do
-            mv "$file" "jellyfin-avalonia-$VERSION-${file#jellyfin-avalonia-}"
+          mkdir dist
+          for dir in artifacts/jellyfin-avalonia-*; do
+            name="${dir#artifacts/jellyfin-avalonia-}"
+            for file in "$dir"/*; do
+              case "$file" in
+                *.apk) mv "$file" "dist/jellyfin-avalonia-$VERSION-$name.apk" ;;
+                *) mv "$file" "dist/jellyfin-avalonia-$VERSION-${file##*/jellyfin-avalonia-}" ;;
+              esac
+            done
           done
-          mv ./*-Signed.apk "jellyfin-avalonia-$VERSION-android.apk"
+          cd dist
           sha256sum -- * > SHA256SUMS.txt
           ls -l
 

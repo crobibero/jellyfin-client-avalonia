@@ -84,12 +84,17 @@ jobs:
       artifact: '*'
 
   android:
+    strategy:
+      fail-fast: false
+      matrix:
+        rid: [ android-arm64, android-arm, android-x64 ]
     uses: ./.github/workflows/build.yml
     with:
-      name: android
+      name: ${{ matrix.rid }}
       runs-on: ubuntu-26.04
       project: Jellyfin.Avalonia.Android
       framework: net10.0-android
+      rid: ${{ matrix.rid }}
       workloads: android
       java-version: '21'
       args: -p:ApplicationVersion=${{ github.run_number }} -p:AcceptAndroidSdkLicenses=True
