@@ -11,9 +11,23 @@ namespace Jellyfin.Mvvm.Models;
 public partial class ItemCardModel : ObservableObject
 {
     /// <summary>
-    /// The card image height used for image requests.
+    /// The poster card image height used for image requests.
     /// </summary>
-    public const int ImageRequestHeight = 360;
+    /// <remarks>
+    /// Card images are requested at 1.6 times the card height in JellyfinConverters. The image cache is bounded by
+    /// count, so a larger request for one shape costs memory for every cached image of that shape.
+    /// </remarks>
+    public const int PosterRequestHeight = 360;
+
+    /// <summary>
+    /// The thumb card image height used for image requests.
+    /// </summary>
+    public const int ThumbRequestHeight = 240;
+
+    /// <summary>
+    /// The square card image height used for image requests.
+    /// </summary>
+    public const int SquareRequestHeight = 288;
 
     [ObservableProperty]
     private bool _isPlayed;
@@ -118,7 +132,7 @@ public partial class ItemCardModel : ObservableObject
         ArgumentNullException.ThrowIfNull(preferences);
 
         var (title, subtitle) = GetTitles(item, titleStyle);
-        var image = imageUrlService.GetCardImage(item, shape, ImageRequestHeight, preferences.UseSeriesThumbnails);
+        var image = imageUrlService.GetCardImage(item, shape, GetImageRequestHeight(shape), preferences.UseSeriesThumbnails);
         var card = new ItemCardModel
         {
             Id = item.Id ?? Guid.Empty,
@@ -147,7 +161,7 @@ public partial class ItemCardModel : ObservableObject
         ArgumentNullException.ThrowIfNull(person);
         ArgumentNullException.ThrowIfNull(imageUrlService);
 
-        var image = imageUrlService.GetPersonImage(person, ImageRequestHeight);
+        var image = imageUrlService.GetPersonImage(person, PosterRequestHeight);
         return new ItemCardModel
         {
             Id = person.Id ?? Guid.Empty,
@@ -184,11 +198,23 @@ public partial class ItemCardModel : ObservableObject
             Title = chapter.Name,
             Subtitle = Formatting.FormatDuration(start),
             Shape = CardShape.Thumb,
-            ImageUrl = imageUrlService.GetChapterImageUrl(item.Id ?? Guid.Empty, index, chapter.ImageTag, 480),
+            ImageUrl = imageUrlService.GetChapterImageUrl(item.Id ?? Guid.Empty, index, chapter.ImageTag, ThumbRequestHeight * 16 / 9),
             PlaceholderText = chapter.Name,
             StartPositionTicks = chapter.StartPositionTicks,
         };
     }
+
+    /// <summary>
+    /// Gets the image request height for a card shape.
+    /// </summary>
+    /// <param name="shape">The card shape.</param>
+    /// <returns>The height in pixels.</returns>
+    public static int GetImageRequestHeight(CardShape shape) => shape switch
+    {
+        CardShape.Thumb => ThumbRequestHeight,
+        CardShape.Square => SquareRequestHeight,
+        _ => PosterRequestHeight
+    };
 
     /// <summary>
     /// Update the user data indicators.
