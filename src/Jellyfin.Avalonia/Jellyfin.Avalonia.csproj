@@ -1,9 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(JellyfinTargetFramework)</TargetFramework>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <IsAotCompatible>true</IsAotCompatible>
-    <RootNamespace>Jellyfin.Avalonia</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

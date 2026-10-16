@@ -1,8 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(JellyfinTargetFramework)</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <RootNamespace>Jellyfin.Avalonia.LibVlc</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

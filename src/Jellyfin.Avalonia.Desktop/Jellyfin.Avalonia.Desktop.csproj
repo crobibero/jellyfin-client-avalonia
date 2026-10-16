@@ -1,14 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>$(JellyfinTargetFramework)</TargetFramework>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AssemblyName>jellyfin-avalonia</AssemblyName>
-    <RootNamespace>Jellyfin.Avalonia.Desktop</RootNamespace>
     <RuntimeIdentifiers>win-x64;win-arm64;osx-x64;osx-arm64;linux-x64;linux-arm64</RuntimeIdentifiers>
     <ApplicationIcon Condition="Exists('icon.ico')">icon.ico</ApplicationIcon>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <InvariantGlobalization>false</InvariantGlobalization>
   </PropertyGroup>
 
   <!-- Publishing: self contained by default, native AOT with -p:PublishAot=true -->

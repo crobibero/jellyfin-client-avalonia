@@ -1,9 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>$(JellyfinTargetFramework)</TargetFramework>
     <IsAotCompatible>true</IsAotCompatible>
-    <RootNamespace>Jellyfin.Mvvm</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,5 +25,4 @@
       <PublicClass>true</PublicClass>
     </EmbeddedResource>
   </ItemGroup>
-
 </Project>

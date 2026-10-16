@@ -1,11 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>$(JellyfinTargetFramework)</TargetFramework>
     <OutputType>Exe</OutputType>
-    <IsPackable>false</IsPackable>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CA1707;CA1515;CA2007;SA0001;SA1600</NoWarn>
+    <NoWarn>$(NoWarn);CA1707;CA2007;SA0001;SA1600</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,5 +19,4 @@
     <Using Include="Xunit" />
     <Using Include="Jellyfin.Sdk.Generated.Models" />
   </ItemGroup>
-
 </Project>

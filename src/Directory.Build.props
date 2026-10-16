@@ -3,29 +3,25 @@
     <PropertyGroup>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <Nullable>enable</Nullable>
-        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)/jellyfin.ruleset</CodeAnalysisRuleSet>
+        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)jellyfin.ruleset</CodeAnalysisRuleSet>
         <AnalysisMode>AllEnabledByDefault</AnalysisMode>
         <WarningsAsErrors>nullable</WarningsAsErrors>
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <NeutralLanguage>en</NeutralLanguage>
-        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
-    <!-- Shared version and target information -->
+    <!-- Shared version and target information. Platform heads override the target framework. -->
     <PropertyGroup>
-        <JellyfinTargetFramework>net10.0</JellyfinTargetFramework>
-        <JellyfinAndroidTargetFramework>net10.0-android</JellyfinAndroidTargetFramework>
-        <JellyfinIOSTargetFramework>net10.0-ios</JellyfinIOSTargetFramework>
-        <JellyfinTvOSTargetFramework>net10.0-tvos</JellyfinTvOSTargetFramework>
-        <JellyfinBrowserTargetFramework>net10.0-browser</JellyfinBrowserTargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Version Condition="'$(Version)' == ''">0.1.0</Version>
         <Authors>Jellyfin Contributors</Authors>
         <Product>Jellyfin Avalonia</Product>
     </PropertyGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="$(MSBuildThisFileDirectory)/stylecop.json" />
+        <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" />
     </ItemGroup>
 
     <!-- Analyzers -->
