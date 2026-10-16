@@ -23,10 +23,11 @@
       ]
     },
     {
-      "description": "Avalonia",
+      "description": "Avalonia, with the StaticLink build of the SkiaSharp version it uses",
       "groupName": "Avalonia",
-      "matchPackagePrefixes": [
-        "Avalonia"
+      "matchPackageNames": [
+        "Avalonia*",
+        "StaticLink.Avalonia"
       ]
     }
   ]

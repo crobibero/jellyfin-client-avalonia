@@ -5,15 +5,27 @@
     <AssemblyName>jellyfin-avalonia</AssemblyName>
     <RuntimeIdentifiers>win-x64;win-arm64;osx-x64;osx-arm64;linux-x64;linux-arm64</RuntimeIdentifiers>
     <ApplicationIcon Condition="Exists('icon.ico')">icon.ico</ApplicationIcon>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
   </PropertyGroup>
 
-  <!-- Publishing: self contained by default, native AOT with -p:PublishAot=true -->
+  <!--
+    dotnet publish compiles with native AOT, which only targets the system it runs on. -p:PublishAot=false publishes a
+    trimmed JIT build in one compressed file instead, which any system can build. Either way symbols and XML docs stay
+    out of the publish folder.
+  -->
   <PropertyGroup>
+    <PublishAot Condition="'$(PublishAot)' == ''">true</PublishAot>
     <SelfContained Condition="'$(RuntimeIdentifier)' != ''">true</SelfContained>
-    <PublishAot Condition="'$(PublishAot)' == ''">false</PublishAot>
-    <TrimMode>partial</TrimMode>
     <StripSymbols>true</StripSymbols>
+    <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+    <PublishDocumentationFile>false</PublishDocumentationFile>
+    <PublishReferencesDocumentationFiles>false</PublishReferencesDocumentationFiles>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(PublishAot)' != 'true'">
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,13 +36,54 @@
     <PackageReference Include="Serilog.Sinks.File" />
   </ItemGroup>
 
+  <!--
+    Native AOT on Windows and Linux links Skia and HarfBuzz, and on Windows the ANGLE renderer, into the executable.
+    Each StaticLink.Avalonia version is built for one SkiaSharp version, which has to be the one Avalonia uses.
+  -->
+  <ItemGroup Condition="'$(PublishAot)' == 'true' And ($(RuntimeIdentifier.StartsWith('win-')) Or $(RuntimeIdentifier.StartsWith('linux-')))">
+    <PackageReference Include="StaticLink.Avalonia" />
+  </ItemGroup>
+
   <!-- Native libVLC: bundled on Windows and macOS, provided by the system on Linux -->
-  <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('win')) Or ('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('Windows')))">
+  <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('win-')) Or ('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('Windows')))">
     <PackageReference Include="VideoLAN.LibVLC.Windows" />
   </ItemGroup>
-  <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('osx')) Or ('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('OSX')))">
+  <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('osx-')) Or ('$(RuntimeIdentifier)' == '' And $([MSBuild]::IsOSPlatform('OSX')))">
     <PackageReference Include="VideoLAN.LibVLC.Mac" />
   </ItemGroup>
+
+  <!--
+    The libVLC package copies every architecture unless $(Platform) names one, and dotnet publish -r leaves it AnyCPU.
+    A RID build copies only its own.
+  -->
+  <PropertyGroup Condition="$(RuntimeIdentifier.StartsWith('win-'))">
+    <VlcWindowsX64Enabled>$(RuntimeIdentifier.Equals('win-x64'))</VlcWindowsX64Enabled>
+    <VlcWindowsX86Enabled>$(RuntimeIdentifier.Equals('win-x86'))</VlcWindowsX86Enabled>
+    <VlcWindowsArm64Enabled>$(RuntimeIdentifier.Equals('win-arm64'))</VlcWindowsArm64Enabled>
+  </PropertyGroup>
+
+  <!--
+    libVLC plugins the player never loads: streaming and transcoding output, playlist scripts, visualizations,
+    media discovery and tag readers.
+  -->
+  <ItemGroup>
+    <VlcWindowsExcludes Include="libvlc.lib;libvlccore.lib;lua\%2A%2A;plugins\lua\%2A%2A;plugins\access_output\%2A%2A;plugins\stream_out\%2A%2A;plugins\mux\%2A%2A;plugins\visualization\%2A%2A;plugins\services_discovery\%2A%2A;plugins\meta_engine\%2A%2A;plugins\video_splitter\%2A%2A;plugins\keystore\%2A%2A" />
+    <VlcWindowsX64ExcludeFiles Include="@(VlcWindowsExcludes)" />
+    <VlcWindowsX86ExcludeFiles Include="@(VlcWindowsExcludes)" />
+    <VlcWindowsArm64ExcludeFiles Include="@(VlcWindowsExcludes)" />
+  </ItemGroup>
+
+  <!--
+    libVLC loads its plugins from the folder next to libvlc, so a single-file JIT publish leaves it beside the
+    executable rather than bundling it with the other native libraries.
+  -->
+  <Target Name="KeepLibVlcOutOfSingleFile" AfterTargets="CollectVlcFilesToCopyWindows" BeforeTargets="AssignTargetPaths">
+    <ItemGroup>
+      <Content Condition="$([System.String]::Copy('%(Content.Link)').StartsWith('libvlc')) Or '%(Filename)%(Extension)' == 'libvlc.dylib'">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </Content>
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <ProjectReference Include="..\Jellyfin.Avalonia\Jellyfin.Avalonia.csproj" />
@@ -41,4 +94,11 @@
     <TrimmerRootAssembly Include="Jellyfin.Avalonia" />
     <TrimmerRootAssembly Include="Jellyfin.Mvvm" />
   </ItemGroup>
+
+  <!-- Project references bring their .pdb files along, which CopyOutputSymbolsToPublishDirectory does not cover. -->
+  <Target Name="RemoveReferenceSymbolsFromPublish" AfterTargets="ComputeResolvedFilesToPublishList">
+    <ItemGroup>
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.pdb'" />
+    </ItemGroup>
+  </Target>
 </Project>

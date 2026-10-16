@@ -59,9 +59,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-26.04
+          # Native AOT links against the runner's glibc, so building on an older Ubuntu lets the binary run on older
+          # distributions. It cannot cross-compile on Linux, so linux-arm64 builds on an arm64 runner.
+          - os: ubuntu-24.04
             rid: linux-x64
-          - os: ubuntu-26.04
+          - os: ubuntu-24.04-arm
             rid: linux-arm64
           - os: windows-2025
             rid: win-x64
@@ -77,6 +79,8 @@ jobs:
       runs-on: ${{ matrix.os }}
       project: Jellyfin.Avalonia.Desktop
       rid: ${{ matrix.rid }}
+      # Native AOT links with clang and lld; StaticLink.Avalonia links fontconfig.
+      apt-packages: clang lld zlib1g-dev libfontconfig-dev
       artifact: '*'
 
   android:

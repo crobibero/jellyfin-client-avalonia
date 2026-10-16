@@ -71,10 +71,11 @@ jobs:
       fail-fast: true
       matrix:
         include:
-          - os: ubuntu-26.04
+          # See ci.yml for the Linux runners.
+          - os: ubuntu-24.04
             rid: linux-x64
             archive: tar.gz
-          - os: ubuntu-26.04
+          - os: ubuntu-24.04-arm
             rid: linux-arm64
             archive: tar.gz
           - os: windows-2025
@@ -96,6 +97,7 @@ jobs:
       project: Jellyfin.Avalonia.Desktop
       rid: ${{ matrix.rid }}
       version: ${{ needs.version.outputs.version }}
+      apt-packages: clang lld zlib1g-dev libfontconfig-dev
       artifact: '*'
       archive: ${{ matrix.archive }}
 
