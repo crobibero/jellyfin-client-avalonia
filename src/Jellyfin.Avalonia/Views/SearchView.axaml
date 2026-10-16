@@ -2,7 +2,7 @@
                    xmlns="https://github.com/avaloniaui"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
-                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:icons="https://github.com/oneo-me/fluentui-icons-like"
                    xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
                    xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
                    x:DataType="vm:SearchViewModel">
@@ -14,10 +14,10 @@
                  PlaceholderText="{x:Static strings:Strings.Search_Hint}"
                  Text="{Binding SearchText}">
             <TextBox.InnerLeftContent>
-                <mi:MaterialIcon Width="24"
-                                 Height="24"
-                                 Margin="16,0,0,0"
-                                 Kind="Magnify" />
+                <icons:FluentIcon Width="24"
+                                  Height="24"
+                                  Margin="16,0,0,0"
+                                  Symbol="Search" />
             </TextBox.InnerLeftContent>
         </TextBox>
 

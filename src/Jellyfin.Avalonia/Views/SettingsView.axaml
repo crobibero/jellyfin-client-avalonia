@@ -2,7 +2,7 @@
                    xmlns="https://github.com/avaloniaui"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
-                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:icons="https://github.com/oneo-me/fluentui-icons-like"
                    xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
                    xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
                    x:DataType="vm:SettingsViewModel">
@@ -456,7 +456,8 @@
                     Command="{Binding OpenDeviceProfileCommand}">
                 <StackPanel Orientation="Horizontal"
                             Spacing="8">
-                    <mi:MaterialIcon Kind="Information" />
+                    <icons:FluentIcon Style="Filled"
+                                      Symbol="Info" />
                     <TextBlock Text="{x:Static strings:Strings.Settings_DeviceProfile}" />
                 </StackPanel>
             </Button>

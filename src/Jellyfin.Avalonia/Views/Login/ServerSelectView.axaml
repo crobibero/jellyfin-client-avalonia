@@ -2,7 +2,7 @@
                    xmlns="https://github.com/avaloniaui"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
-                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:icons="https://github.com/oneo-me/fluentui-icons-like"
                    xmlns:models="clr-namespace:Jellyfin.Mvvm.Models;assembly=Jellyfin.Mvvm"
                    xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
                    xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
@@ -38,9 +38,9 @@
                                     CommandParameter="{Binding}">
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="16">
-                                    <mi:MaterialIcon Width="32"
-                                                     Height="32"
-                                                     Kind="ServerNetwork" />
+                                    <icons:FluentIcon Width="32"
+                                                      Height="32"
+                                                      Symbol="Server" />
                                     <StackPanel>
                                         <TextBlock FontSize="{DynamicResource FontSizeLg}"
                                                    FontWeight="SemiBold"
@@ -57,9 +57,10 @@
                                     Command="{Binding #Page.((vm:ServerSelectViewModel)DataContext).DeleteServerCommand}"
                                     CommandParameter="{Binding}"
                                     ToolTip.Tip="{x:Static strings:Strings.Delete}">
-                                <mi:MaterialIcon Width="22"
-                                                 Height="22"
-                                                 Kind="DeleteOutline" />
+                                <icons:FluentIcon Width="22"
+                                                  Height="22"
+                                                  Size="Size20"
+                                                  Symbol="Delete" />
                             </Button>
                         </Grid>
                     </DataTemplate>
@@ -80,9 +81,9 @@
                                     CommandParameter="{Binding}">
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="16">
-                                    <mi:MaterialIcon Width="32"
-                                                     Height="32"
-                                                     Kind="Lan" />
+                                    <icons:FluentIcon Width="32"
+                                                      Height="32"
+                                                      Symbol="Router" />
                                     <StackPanel>
                                         <TextBlock FontSize="{DynamicResource FontSizeLg}"
                                                    FontWeight="SemiBold"
@@ -110,7 +111,7 @@
                         Command="{Binding AddServerCommand}">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="8">
-                        <mi:MaterialIcon Kind="Plus" />
+                        <icons:FluentIcon Symbol="Add" />
                         <TextBlock Text="{x:Static strings:Strings.Login_AddServer}" />
                     </StackPanel>
                 </Button>
@@ -119,7 +120,7 @@
                         IsVisible="{Binding CanDiscover}">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="8">
-                        <mi:MaterialIcon Kind="Refresh" />
+                        <icons:FluentIcon Symbol="ArrowClockwise" />
                         <TextBlock Text="{x:Static strings:Strings.Login_Discover}" />
                     </StackPanel>
                 </Button>

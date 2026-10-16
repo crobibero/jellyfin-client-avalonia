@@ -39,7 +39,8 @@
         <PackageVersion Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
         <PackageVersion Include="Avalonia.Controls.ItemsRepeater" Version="12.0.0" />
         <PackageVersion Include="AsyncImageLoader.Avalonia" Version="4.0.0" />
-        <PackageVersion Include="Material.Icons.Avalonia" Version="3.0.2" />
+        <PackageVersion Include="ONEO.FluentUIIconsLike" Version="2.1.1" />
+        <PackageVersion Include="ONEO.FluentUIIconsLike.Generator" Version="2.1.1" />
     </ItemGroup>
 
     <!-- Playback -->

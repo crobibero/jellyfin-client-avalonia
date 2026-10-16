@@ -6,13 +6,13 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using FluentUIIconsLike;
 using Jellyfin.Avalonia.Controls;
 using Jellyfin.Avalonia.Services;
 using Jellyfin.Mvvm.Playback;
 using Jellyfin.Mvvm.Preferences;
 using Jellyfin.Mvvm.Strings;
 using Jellyfin.Mvvm.ViewModels;
-using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Jellyfin.Avalonia.Views;
@@ -329,7 +329,7 @@ public partial class PlayerView : PageView
     private void UpdateFullScreenButton()
     {
         var fullScreen = TopLevel.GetTopLevel(this) is { } topLevel && _fullScreenService.IsFullScreen(topLevel);
-        FullScreenIcon.Kind = fullScreen ? MaterialIconKind.FullscreenExit : MaterialIconKind.Fullscreen;
+        FullScreenIcon.Symbol = fullScreen ? FluentIconSymbol.FullScreenMinimize : FluentIconSymbol.FullScreenMaximize;
         ToolTip.SetTip(FullScreenButton, fullScreen ? Strings.Player_ExitFullScreen : Strings.Player_FullScreen);
     }
 

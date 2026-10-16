@@ -4,7 +4,7 @@
                    xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
                    xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
                    xmlns:conv="clr-namespace:Jellyfin.Avalonia.Converters"
-                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:icons="https://github.com/oneo-me/fluentui-icons-like"
                    xmlns:models="clr-namespace:Jellyfin.Mvvm.Models;assembly=Jellyfin.Mvvm"
                    xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
                    xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
@@ -129,9 +129,11 @@
                             IsVisible="{Binding CanResume}">
                         <StackPanel Orientation="Horizontal"
                                     Spacing="8">
-                            <mi:MaterialIcon Width="22"
-                                             Height="22"
-                                             Kind="Play" />
+                            <icons:FluentIcon Width="22"
+                                              Height="22"
+                                              Size="Size20"
+                                              Style="Filled"
+                                              Symbol="Play" />
                             <TextBlock Text="{Binding ResumeText}" />
                         </StackPanel>
                     </Button>
@@ -141,9 +143,11 @@
                             IsVisible="{Binding ShowPlay}">
                         <StackPanel Orientation="Horizontal"
                                     Spacing="8">
-                            <mi:MaterialIcon Width="22"
-                                             Height="22"
-                                             Kind="Play" />
+                            <icons:FluentIcon Width="22"
+                                              Height="22"
+                                              Size="Size20"
+                                              Style="Filled"
+                                              Symbol="Play" />
                             <TextBlock Text="{x:Static strings:Strings.Item_Play}" />
                         </StackPanel>
                     </Button>
@@ -151,9 +155,10 @@
                             IsVisible="{Binding CanResume}">
                         <StackPanel Orientation="Horizontal"
                                     Spacing="8">
-                            <mi:MaterialIcon Width="22"
-                                             Height="22"
-                                             Kind="Restart" />
+                            <icons:FluentIcon Width="22"
+                                              Height="22"
+                                              Size="Size20"
+                                              Symbol="ArrowCounterclockwise" />
                             <TextBlock Text="{x:Static strings:Strings.Item_Restart}" />
                         </StackPanel>
                     </Button>
@@ -161,9 +166,10 @@
                             IsVisible="{Binding CanShuffle}">
                         <StackPanel Orientation="Horizontal"
                                     Spacing="8">
-                            <mi:MaterialIcon Width="22"
-                                             Height="22"
-                                             Kind="Shuffle" />
+                            <icons:FluentIcon Width="22"
+                                              Height="22"
+                                              Size="Size20"
+                                              Symbol="ArrowShuffle" />
                             <TextBlock Text="{x:Static strings:Strings.Item_Shuffle}" />
                         </StackPanel>
                     </Button>
@@ -171,9 +177,10 @@
                             IsVisible="{Binding HasTrailer}">
                         <StackPanel Orientation="Horizontal"
                                     Spacing="8">
-                            <mi:MaterialIcon Width="22"
-                                             Height="22"
-                                             Kind="MovieOpenOutline" />
+                            <icons:FluentIcon Width="22"
+                                              Height="22"
+                                              Size="Size20"
+                                              Symbol="FilmstripPlay" />
                             <TextBlock Text="{x:Static strings:Strings.Item_Trailer}" />
                         </StackPanel>
                     </Button>
@@ -181,24 +188,27 @@
                             Command="{Binding TogglePlayedCommand}"
                             IsVisible="{Binding CanMarkPlayed}"
                             ToolTip.Tip="{x:Static strings:Strings.Item_Watched}">
-                        <mi:MaterialIcon Width="24"
-                                         Height="24"
-                                         Kind="{Binding IsPlayed, Converter={x:Static conv:JellyfinConverters.WatchedIcon}}" />
+                        <icons:FluentIcon Width="24"
+                                          Height="24"
+                                          Style="{Binding IsPlayed, Converter={x:Static conv:JellyfinConverters.FilledIcon}}"
+                                          Symbol="CheckmarkCircle" />
                     </Button>
                     <Button Classes="icon"
                             Command="{Binding ToggleFavoriteCommand}"
                             ToolTip.Tip="{x:Static strings:Strings.Item_Favorite}">
-                        <mi:MaterialIcon Width="24"
-                                         Height="24"
-                                         Kind="{Binding IsFavorite, Converter={x:Static conv:JellyfinConverters.FavoriteIcon}}" />
+                        <icons:FluentIcon Width="24"
+                                          Height="24"
+                                          Style="{Binding IsFavorite, Converter={x:Static conv:JellyfinConverters.FilledIcon}}"
+                                          Symbol="Heart" />
                     </Button>
                     <Button Command="{Binding GoToSeriesCommand}"
                             IsVisible="{Binding CanGoToSeries}">
                         <StackPanel Orientation="Horizontal"
                                     Spacing="8">
-                            <mi:MaterialIcon Width="22"
-                                             Height="22"
-                                             Kind="Television" />
+                            <icons:FluentIcon Width="22"
+                                              Height="22"
+                                              Size="Size20"
+                                              Symbol="TV" />
                             <TextBlock Text="{x:Static strings:Strings.Item_GoToSeries}" />
                         </StackPanel>
                     </Button>

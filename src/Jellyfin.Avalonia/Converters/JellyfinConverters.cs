@@ -5,9 +5,9 @@ using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using FluentUIIconsLike;
 using Jellyfin.Mvvm.Imaging;
 using Jellyfin.Mvvm.Models;
-using Material.Icons;
 
 namespace Jellyfin.Avalonia.Converters;
 
@@ -78,13 +78,13 @@ public static class JellyfinConverters
     /// <summary>
     /// Gets the converter from <see cref="InfoChipIcon"/> to an icon.
     /// </summary>
-    public static IValueConverter ChipIcon { get; } = new FuncValueConverter<InfoChipIcon, MaterialIconKind>(icon => icon switch
+    public static IValueConverter ChipIcon { get; } = new FuncValueConverter<InfoChipIcon, FluentIconSymbol>(icon => icon switch
     {
-        InfoChipIcon.Star => MaterialIconKind.Star,
-        InfoChipIcon.CriticFresh => MaterialIconKind.FruitCherries,
-        InfoChipIcon.CriticRotten => MaterialIconKind.Biohazard,
-        InfoChipIcon.Time => MaterialIconKind.ClockOutline,
-        _ => MaterialIconKind.Circle
+        InfoChipIcon.Star => FluentIconSymbol.Star,
+        InfoChipIcon.CriticFresh => FluentIconSymbol.ThumbLike,
+        InfoChipIcon.CriticRotten => FluentIconSymbol.ThumbDislike,
+        InfoChipIcon.Time => FluentIconSymbol.Clock,
+        _ => FluentIconSymbol.Circle
     });
 
     /// <summary>
@@ -111,17 +111,12 @@ public static class JellyfinConverters
     /// <summary>
     /// Gets the converter returning the play/pause icon.
     /// </summary>
-    public static IValueConverter PlayPauseIcon { get; } = new FuncValueConverter<bool, MaterialIconKind>(isPlaying => isPlaying ? MaterialIconKind.Pause : MaterialIconKind.Play);
+    public static IValueConverter PlayPauseIcon { get; } = new FuncValueConverter<bool, FluentIconSymbol>(isPlaying => isPlaying ? FluentIconSymbol.Pause : FluentIconSymbol.Play);
 
     /// <summary>
-    /// Gets the converter returning the favorite icon.
+    /// Gets the converter returning the filled icon style when true and the regular style otherwise.
     /// </summary>
-    public static IValueConverter FavoriteIcon { get; } = new FuncValueConverter<bool, MaterialIconKind>(isFavorite => isFavorite ? MaterialIconKind.Heart : MaterialIconKind.HeartOutline);
-
-    /// <summary>
-    /// Gets the converter returning the watched icon.
-    /// </summary>
-    public static IValueConverter WatchedIcon { get; } = new FuncValueConverter<bool, MaterialIconKind>(isPlayed => isPlayed ? MaterialIconKind.CheckCircle : MaterialIconKind.CheckCircleOutline);
+    public static IValueConverter FilledIcon { get; } = new FuncValueConverter<bool, FluentIconStyle>(filled => filled ? FluentIconStyle.Filled : FluentIconStyle.Regular);
 
     /// <summary>
     /// Gets the converter returning the selection check opacity.

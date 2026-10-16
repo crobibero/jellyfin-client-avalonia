@@ -4,7 +4,7 @@
                    xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
                    xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
                    xmlns:conv="clr-namespace:Jellyfin.Avalonia.Converters"
-                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:icons="https://github.com/oneo-me/fluentui-icons-like"
                    xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
                    xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels.Login;assembly=Jellyfin.Mvvm"
                    x:Name="Page"
@@ -99,14 +99,14 @@
                 <Button Command="{Binding AddUserCommand}">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="8">
-                        <mi:MaterialIcon Kind="AccountPlus" />
+                        <icons:FluentIcon Symbol="PersonAdd" />
                         <TextBlock Text="{x:Static strings:Strings.Login_ManualLogin}" />
                     </StackPanel>
                 </Button>
                 <Button Command="{Binding ChangeServerCommand}">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="8">
-                        <mi:MaterialIcon Kind="ServerNetwork" />
+                        <icons:FluentIcon Symbol="Server" />
                         <TextBlock Text="{x:Static strings:Strings.Login_ChangeServer}" />
                     </StackPanel>
                 </Button>

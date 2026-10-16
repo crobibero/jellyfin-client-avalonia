@@ -4,7 +4,7 @@
                     xmlns:behaviors="clr-namespace:Jellyfin.Avalonia.Behaviors"
                     xmlns:conv="clr-namespace:Jellyfin.Avalonia.Converters"
                     xmlns:facades="clr-namespace:Jellyfin.Mvvm.ViewModels.Facades;assembly=Jellyfin.Mvvm"
-                    xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                    xmlns:icons="https://github.com/oneo-me/fluentui-icons-like"
                     xmlns:models="clr-namespace:Jellyfin.Mvvm.Models;assembly=Jellyfin.Mvvm">
 
     <!--  An item card: artwork with state overlays and titles below  -->
@@ -36,14 +36,16 @@
                                Stretch="UniformToFill" />
 
                         <!--  State indicators  -->
-                        <mi:MaterialIcon Width="22"
-                                         Height="22"
-                                         Margin="8"
-                                         HorizontalAlignment="Left"
-                                         VerticalAlignment="Top"
-                                         Foreground="{DynamicResource FavoriteBrush}"
-                                         IsVisible="{Binding IsFavorite}"
-                                         Kind="Heart" />
+                        <icons:FluentIcon Width="22"
+                                          Height="22"
+                                          Margin="8"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Top"
+                                          Foreground="{DynamicResource FavoriteBrush}"
+                                          IsVisible="{Binding IsFavorite}"
+                                          Size="Size20"
+                                          Style="Filled"
+                                          Symbol="Heart" />
                         <Border Width="24"
                                 Height="24"
                                 Margin="8"
@@ -52,10 +54,12 @@
                                 Background="{DynamicResource BadgeBrush}"
                                 CornerRadius="{DynamicResource RadiusCircle}"
                                 IsVisible="{Binding IsPlayed}">
-                            <mi:MaterialIcon Width="14"
-                                             Height="14"
-                                             Foreground="{DynamicResource OnBadgeBrush}"
-                                             Kind="Check" />
+                            <icons:FluentIcon Width="14"
+                                              Height="14"
+                                              Foreground="{DynamicResource OnBadgeBrush}"
+                                              Size="Size16"
+                                              Style="Filled"
+                                              Symbol="Checkmark" />
                         </Border>
                         <Border Height="24"
                                 MinWidth="24"
@@ -123,11 +127,12 @@
                 Classes="chip">
             <StackPanel Orientation="Horizontal"
                         Spacing="4">
-                <mi:MaterialIcon Width="16"
-                                 Height="16"
-                                 Foreground="{Binding Icon, Converter={x:Static conv:JellyfinConverters.ChipIconBrush}}"
-                                 IsVisible="{Binding Icon, Converter={x:Static conv:JellyfinConverters.HasChipIcon}}"
-                                 Kind="{Binding Icon, Converter={x:Static conv:JellyfinConverters.ChipIcon}}" />
+                <icons:FluentIcon Width="16"
+                                  Height="16"
+                                  Foreground="{Binding Icon, Converter={x:Static conv:JellyfinConverters.ChipIconBrush}}"
+                                  IsVisible="{Binding Icon, Converter={x:Static conv:JellyfinConverters.HasChipIcon}}"
+                                  Style="Filled"
+                                  Symbol="{Binding Icon, Converter={x:Static conv:JellyfinConverters.ChipIcon}}" />
                 <TextBlock Foreground="{Binding Style, Converter={x:Static conv:JellyfinConverters.ChipForeground}}"
                            Text="{Binding Text}" />
             </StackPanel>

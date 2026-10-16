@@ -4,7 +4,7 @@
                    xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
                    xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
                    xmlns:conv="clr-namespace:Jellyfin.Avalonia.Converters"
-                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:icons="https://github.com/oneo-me/fluentui-icons-like"
                    xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
                    xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
                    x:Name="Page"
@@ -30,11 +30,11 @@
         <Style Selector="Button.player:disabled">
             <Setter Property="Foreground" Value="{DynamicResource OnImageDisabledBrush}" />
         </Style>
-        <Style Selector="Button.player mi|MaterialIcon">
+        <Style Selector="Button.player icons|FluentIcon">
             <Setter Property="Width" Value="28" />
             <Setter Property="Height" Value="28" />
         </Style>
-        <Style Selector="Button.player.large mi|MaterialIcon">
+        <Style Selector="Button.player.large icons|FluentIcon">
             <Setter Property="Width" Value="40" />
             <Setter Property="Height" Value="40" />
         </Style>
@@ -54,10 +54,11 @@
                     ClipToBounds="True"
                     CornerRadius="{DynamicResource RadiusDefault}">
                 <Panel Background="{DynamicResource SurfaceBrush}">
-                    <mi:MaterialIcon Width="120"
-                                     Height="120"
-                                     Foreground="{DynamicResource OnBackgroundMutedBrush}"
-                                     Kind="Music" />
+                    <icons:FluentIcon Width="120"
+                                      Height="120"
+                                      Foreground="{DynamicResource OnBackgroundMutedBrush}"
+                                      Style="Filled"
+                                      Symbol="MusicNote2" />
                     <Border Background="{Binding ArtworkBlurHash, Converter={x:Static conv:JellyfinConverters.BlurHashBrush}}"
                             RenderOptions.BitmapInterpolationMode="HighQuality" />
                     <Image asyncImageLoader:ImageLoader.Source="{Binding ArtworkUrl}"
@@ -101,7 +102,7 @@
                         Classes="icon player"
                         Command="{Binding CloseCommand}"
                         ToolTip.Tip="{x:Static strings:Strings.Player_Close}">
-                    <mi:MaterialIcon Kind="ArrowLeft" />
+                    <icons:FluentIcon Symbol="ArrowLeft" />
                 </Button>
                 <StackPanel Grid.Column="1"
                             Spacing="4">
@@ -151,30 +152,33 @@
                         <Button Classes="icon player"
                                 Command="{Binding PreviousCommand}"
                                 ToolTip.Tip="{x:Static strings:Strings.Player_Previous}">
-                            <mi:MaterialIcon Kind="SkipPrevious" />
+                            <icons:FluentIcon Style="Filled"
+                                              Symbol="Previous" />
                         </Button>
                         <Button Classes="icon player"
                                 Command="{Binding SkipBackCommand}"
                                 ToolTip.Tip="{x:Static strings:Strings.Player_SkipBack}">
-                            <mi:MaterialIcon Kind="Rewind10" />
+                            <icons:FluentIcon Symbol="SkipBack10" />
                         </Button>
                         <Button Name="PlayPauseButton"
                                 controls:PageView.IsInitialFocus="True"
                                 Classes="icon player large"
                                 Command="{Binding TogglePlayPauseCommand}"
                                 ToolTip.Tip="{x:Static strings:Strings.Player_Play}">
-                            <mi:MaterialIcon Kind="{Binding IsPlaying, Converter={x:Static conv:JellyfinConverters.PlayPauseIcon}}" />
+                            <icons:FluentIcon Style="Filled"
+                                              Symbol="{Binding IsPlaying, Converter={x:Static conv:JellyfinConverters.PlayPauseIcon}}" />
                         </Button>
                         <Button Classes="icon player"
                                 Command="{Binding SkipForwardCommand}"
                                 ToolTip.Tip="{x:Static strings:Strings.Player_SkipForward}">
-                            <mi:MaterialIcon Kind="FastForward30" />
+                            <icons:FluentIcon Symbol="SkipForward30" />
                         </Button>
                         <Button Classes="icon player"
                                 Command="{Binding NextCommand}"
                                 IsEnabled="{Binding Manager.HasNext}"
                                 ToolTip.Tip="{x:Static strings:Strings.Player_Next}">
-                            <mi:MaterialIcon Kind="SkipNext" />
+                            <icons:FluentIcon Style="Filled"
+                                              Symbol="Next" />
                         </Button>
                     </StackPanel>
                     <StackPanel Grid.Column="2"
@@ -186,46 +190,46 @@
                                 CommandParameter="{x:Static vm:PlayerViewModel+PlayerMenu.Audio}"
                                 IsVisible="{Binding HasAudioOptions}"
                                 ToolTip.Tip="{x:Static strings:Strings.Player_Audio}">
-                            <mi:MaterialIcon Kind="Translate" />
+                            <icons:FluentIcon Symbol="Translate" />
                         </Button>
                         <Button Classes="icon player"
                                 Command="{Binding ShowMenuCommand}"
                                 CommandParameter="{x:Static vm:PlayerViewModel+PlayerMenu.Subtitles}"
                                 IsVisible="{Binding HasSubtitles}"
                                 ToolTip.Tip="{x:Static strings:Strings.Player_Subtitles}">
-                            <mi:MaterialIcon Kind="ClosedCaptionOutline" />
+                            <icons:FluentIcon Symbol="ClosedCaption" />
                         </Button>
                         <Button Classes="icon player"
                                 Command="{Binding ShowMenuCommand}"
                                 CommandParameter="{x:Static vm:PlayerViewModel+PlayerMenu.Quality}"
                                 IsVisible="{Binding IsVideo}"
                                 ToolTip.Tip="{x:Static strings:Strings.Player_Quality}">
-                            <mi:MaterialIcon Kind="HighDefinition" />
+                            <icons:FluentIcon Symbol="HD" />
                         </Button>
                         <Button Classes="icon player"
                                 Command="{Binding ShowMenuCommand}"
                                 CommandParameter="{x:Static vm:PlayerViewModel+PlayerMenu.Speed}"
                                 ToolTip.Tip="{x:Static strings:Strings.Player_Speed}">
-                            <mi:MaterialIcon Kind="PlaySpeed" />
+                            <icons:FluentIcon Symbol="TopSpeed" />
                         </Button>
                         <Button Classes="icon player"
                                 Command="{Binding CycleZoomCommand}"
                                 IsVisible="{Binding IsVideo}"
                                 ToolTip.Tip="{x:Static strings:Strings.Player_Zoom}">
-                            <mi:MaterialIcon Kind="AspectRatio" />
+                            <icons:FluentIcon Symbol="ZoomFit" />
                         </Button>
                         <Button Classes="icon player"
                                 Command="{Binding ShowMenuCommand}"
                                 CommandParameter="{x:Static vm:PlayerViewModel+PlayerMenu.Info}"
                                 ToolTip.Tip="{x:Static strings:Strings.Player_PlaybackInfo}">
-                            <mi:MaterialIcon Kind="InformationOutline" />
+                            <icons:FluentIcon Symbol="Info" />
                         </Button>
                         <Button Name="FullScreenButton"
                                 Classes="icon player"
                                 IsVisible="False"
                                 ToolTip.Tip="{x:Static strings:Strings.Player_FullScreen}">
-                            <mi:MaterialIcon Name="FullScreenIcon"
-                                             Kind="Fullscreen" />
+                            <icons:FluentIcon Name="FullScreenIcon"
+                                              Symbol="FullScreenMaximize" />
                         </Button>
                     </StackPanel>
                 </Grid>
@@ -263,7 +267,8 @@
                 IsVisible="{Binding IsSkipSegmentVisible}">
             <StackPanel Orientation="Horizontal"
                         Spacing="8">
-                <mi:MaterialIcon Kind="SkipNext" />
+                <icons:FluentIcon Style="Filled"
+                                  Symbol="Next" />
                 <TextBlock Text="{Binding SkipSegmentText}" />
             </StackPanel>
         </Button>
@@ -293,12 +298,14 @@
                                         Command="{Binding #Page.((vm:PlayerViewModel)DataContext).SelectOptionCommand}"
                                         CommandParameter="{Binding}">
                                     <Grid ColumnDefinitions="32,*">
-                                        <mi:MaterialIcon Grid.Column="0"
-                                                         Width="20"
-                                                         Height="20"
-                                                         HorizontalAlignment="Left"
-                                                         Kind="Check"
-                                                         Opacity="{Binding IsSelected, Converter={x:Static conv:JellyfinConverters.SelectedOpacity}}" />
+                                        <icons:FluentIcon Grid.Column="0"
+                                                          Width="20"
+                                                          Height="20"
+                                                          HorizontalAlignment="Left"
+                                                          Opacity="{Binding IsSelected, Converter={x:Static conv:JellyfinConverters.SelectedOpacity}}"
+                                                          Size="Size20"
+                                                          Style="Filled"
+                                                          Symbol="Checkmark" />
                                         <TextBlock Grid.Column="1"
                                                    Text="{Binding Label}"
                                                    TextWrapping="Wrap" />
@@ -358,10 +365,10 @@
                 Classes="panel"
                 IsVisible="{Binding HasPlaybackError}">
             <StackPanel Spacing="16">
-                <mi:MaterialIcon Width="48"
-                                 Height="48"
-                                 Foreground="{DynamicResource ErrorBrush}"
-                                 Kind="AlertCircleOutline" />
+                <icons:FluentIcon Width="48"
+                                  Height="48"
+                                  Foreground="{DynamicResource ErrorBrush}"
+                                  Symbol="ErrorCircle" />
                 <TextBlock Text="{Binding PlaybackError}"
                            TextAlignment="Center"
                            TextWrapping="Wrap" />

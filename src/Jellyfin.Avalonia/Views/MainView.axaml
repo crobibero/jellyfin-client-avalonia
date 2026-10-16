@@ -4,7 +4,7 @@
              xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
              xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
              xmlns:conv="clr-namespace:Jellyfin.Avalonia.Converters"
-             xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:icons="https://github.com/oneo-me/fluentui-icons-like"
              xmlns:services="clr-namespace:Jellyfin.Avalonia.Services"
              xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
              xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
@@ -37,9 +37,9 @@
                                 Command="{Binding GoBackCommand}"
                                 IsVisible="{Binding CanGoBack}"
                                 ToolTip.Tip="{x:Static strings:Strings.Back}">
-                            <mi:MaterialIcon Width="24"
-                                             Height="24"
-                                             Kind="ArrowLeft" />
+                            <icons:FluentIcon Width="24"
+                                              Height="24"
+                                              Symbol="ArrowLeft" />
                         </Button>
                         <Button Padding="4"
                                 Classes="icon flat"
@@ -82,9 +82,9 @@
                                 Classes.active="{Binding ActiveToolbarItem, Converter={x:Static conv:JellyfinConverters.EnumEquals}, ConverterParameter=Settings}"
                                 Command="{Binding GoSettingsCommand}"
                                 ToolTip.Tip="{x:Static strings:Strings.Settings}">
-                            <mi:MaterialIcon Width="24"
-                                             Height="24"
-                                             Kind="CogOutline" />
+                            <icons:FluentIcon Width="24"
+                                              Height="24"
+                                              Symbol="Settings" />
                         </Button>
                         <TextBlock VerticalAlignment="Center"
                                    FontSize="{DynamicResource FontSizeXl}"

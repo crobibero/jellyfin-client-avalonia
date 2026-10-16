@@ -1,8 +1,8 @@
 <Application x:Class="Jellyfin.Avalonia.App"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:icons="https://github.com/oneo-me/fluentui-icons-like"
              xmlns:local="clr-namespace:Jellyfin.Avalonia"
-             xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              Name="Jellyfin"
              RequestedThemeVariant="Dark">
     <Application.Resources>
@@ -28,7 +28,10 @@
                                        RegionColor="#101319" />
             </FluentTheme.Palettes>
         </FluentTheme>
-        <mi:MaterialIconStyles />
+        <!--  Icons draw with their own brush, so they take the inherited text color like other content  -->
+        <Style Selector="icons|FluentIcon">
+            <Setter Property="Foreground" Value="{Binding $self.(TextElement.Foreground)}" />
+        </Style>
         <StyleInclude Source="/Resources/Styles/Styles.axaml" />
     </Application.Styles>
 </Application>

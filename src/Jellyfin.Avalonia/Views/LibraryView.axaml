@@ -2,7 +2,7 @@
                    xmlns="https://github.com/avaloniaui"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
-                   xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                   xmlns:icons="https://github.com/oneo-me/fluentui-icons-like"
                    xmlns:strings="clr-namespace:Jellyfin.Mvvm.Strings;assembly=Jellyfin.Mvvm"
                    xmlns:vm="clr-namespace:Jellyfin.Mvvm.ViewModels;assembly=Jellyfin.Mvvm"
                    x:DataType="vm:LibraryViewModel">
@@ -41,14 +41,16 @@
                         Command="{Binding ToggleSortOrderCommand}"
                         ToolTip.Tip="{x:Static strings:Strings.Library_Descending}">
                     <Panel>
-                        <mi:MaterialIcon Width="22"
-                                         Height="22"
-                                         IsVisible="{Binding !SortDescending}"
-                                         Kind="SortAscending" />
-                        <mi:MaterialIcon Width="22"
-                                         Height="22"
-                                         IsVisible="{Binding SortDescending}"
-                                         Kind="SortDescending" />
+                        <icons:FluentIcon Width="22"
+                                          Height="22"
+                                          IsVisible="{Binding !SortDescending}"
+                                          Size="Size20"
+                                          Symbol="TextSortAscending" />
+                        <icons:FluentIcon Width="22"
+                                          Height="22"
+                                          IsVisible="{Binding SortDescending}"
+                                          Size="Size20"
+                                          Symbol="TextSortDescending" />
                     </Panel>
                 </Button>
             </StackPanel>
