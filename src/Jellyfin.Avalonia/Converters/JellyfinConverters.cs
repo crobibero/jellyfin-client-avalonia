@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using Avalonia;
@@ -234,20 +235,27 @@ public static class JellyfinConverters
     private static ImageBrush? CreateBlurHashBrush(string blurHash)
     {
         const int RowLength = BlurHashSize * 4;
-        var pixels = new byte[BlurHashSize * RowLength];
-        if (!BlurHashDecoder.TryDecode(blurHash, BlurHashSize, BlurHashSize, pixels))
+        var pixels = ArrayPool<byte>.Shared.Rent(BlurHashSize * RowLength);
+        try
         {
-            return null;
-        }
+            if (!BlurHashDecoder.TryDecode(blurHash, BlurHashSize, BlurHashSize, pixels))
+            {
+                return null;
+            }
 
-        var bitmap = new WriteableBitmap(new PixelSize(BlurHashSize, BlurHashSize), new Vector(96, 96), PixelFormat.Bgra8888, AlphaFormat.Opaque);
-        using var buffer = bitmap.Lock();
-        for (var row = 0; row < BlurHashSize; row++)
+            var bitmap = new WriteableBitmap(new PixelSize(BlurHashSize, BlurHashSize), new Vector(96, 96), PixelFormat.Bgra8888, AlphaFormat.Opaque);
+            using var buffer = bitmap.Lock();
+            for (var row = 0; row < BlurHashSize; row++)
+            {
+                Marshal.Copy(pixels, row * RowLength, buffer.Address + (row * buffer.RowBytes), RowLength);
+            }
+
+            return new ImageBrush(bitmap) { Stretch = Stretch.UniformToFill };
+        }
+        finally
         {
-            Marshal.Copy(pixels, row * RowLength, buffer.Address + (row * buffer.RowBytes), RowLength);
+            ArrayPool<byte>.Shared.Return(pixels);
         }
-
-        return new ImageBrush(bitmap) { Stretch = Stretch.UniformToFill };
     }
 
     private sealed class EnumEqualsConverter : IValueConverter
