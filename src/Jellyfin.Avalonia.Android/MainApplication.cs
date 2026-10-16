@@ -29,6 +29,10 @@ public class MainApplication : AvaloniaAndroidApplication<App>
     /// <inheritdoc />
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
+        // Loading the local time zone reads tzdata and ICU, which would otherwise block the first frame when the
+        // main view model shows the clock.
+        _ = Task.Run(static () => TimeZoneInfo.Local);
+
         App.ConfigurePlatformServices = services =>
         {
             services.AddSingleton<IDeviceInfo, AndroidDeviceInfo>();
