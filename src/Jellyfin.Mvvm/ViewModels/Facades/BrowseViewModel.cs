@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Jellyfin.Mvvm.Models;
@@ -26,9 +27,6 @@ public abstract partial class BrowseViewModel : BaseViewModel
     [ObservableProperty]
     private string? _focusedLogoUrl;
 
-    [ObservableProperty]
-    private IReadOnlyList<InfoChip> _focusedInfo = [];
-
     /// <summary>
     /// Initializes a new instance of the <see cref="BrowseViewModel"/> class.
     /// </summary>
@@ -49,6 +47,11 @@ public abstract partial class BrowseViewModel : BaseViewModel
 
     /// <inheritdoc />
     public override bool UsesBackdrop => true;
+
+    /// <summary>
+    /// Gets the info chips of the focused card. They change with every focus move, so they are updated in place.
+    /// </summary>
+    public ObservableCollection<InfoChip> FocusedInfo { get; } = [];
 
     /// <summary>
     /// Gets a value indicating whether a card is focused.
@@ -87,7 +90,7 @@ public abstract partial class BrowseViewModel : BaseViewModel
             FocusedTitle = card.Title;
             FocusedSubtitle = card.Subtitle;
             FocusedOverview = null;
-            FocusedInfo = [];
+            FocusedInfo.Clear();
             FocusedLogoUrl = null;
         }
         else
@@ -100,7 +103,7 @@ public abstract partial class BrowseViewModel : BaseViewModel
                 _ => null
             };
             FocusedOverview = item.Overview;
-            FocusedInfo = InfoRowBuilder.Build(item, DateTime.Now, includeMediaDetails: false);
+            InfoChip.UpdateInPlace(FocusedInfo, InfoRowBuilder.Build(item, DateTime.Now, includeMediaDetails: false));
             FocusedLogoUrl = CardFactory.ImageUrls.GetLogoUrl(item);
         }
 
