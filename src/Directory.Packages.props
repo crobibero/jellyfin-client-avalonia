@@ -42,7 +42,7 @@
         <PackageVersion Include="AsyncImageLoader.Avalonia" Version="4.0.0" />
         <PackageVersion Include="ONEO.FluentUIIconsLike" Version="2.1.1" />
         <PackageVersion Include="ONEO.FluentUIIconsLike.Generator" Version="2.1.1" />
-        <PackageVersion Include="StaticLink.Avalonia" Version="3.119.4-7922.1" />
+        <PackageVersion Include="StaticLink.Avalonia" Version="3.119.4.1" />
     </ItemGroup>
 
     <!-- Playback -->
