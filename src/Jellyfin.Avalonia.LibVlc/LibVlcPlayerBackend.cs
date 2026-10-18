@@ -147,7 +147,7 @@ public class LibVlcPlayerBackend : IPlayerBackend, IDisposable
     public IMediaPlayer CreatePlayer(PlaybackPreferences preferences)
     {
         ArgumentNullException.ThrowIfNull(preferences);
-        return new LibVlcMediaPlayer(GetLibVlc(preferences), _loggerFactory.CreateLogger<LibVlcMediaPlayer>());
+        return new LibVlcMediaPlayer(GetLibVlc(preferences), _loggerFactory.CreateLogger<LibVlcMediaPlayer>(), preferences.HardwareDecodingEnabled);
     }
 
     /// <inheritdoc />
