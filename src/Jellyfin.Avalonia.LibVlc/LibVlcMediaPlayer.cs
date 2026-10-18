@@ -43,13 +43,13 @@ public sealed class LibVlcMediaPlayer : IMediaPlayer
     /// </summary>
     /// <param name="libVlc">The libVLC instance.</param>
     /// <param name="logger">The logger.</param>
-    public LibVlcMediaPlayer(LibVLC libVlc, ILogger logger)
+    public LibVlcMediaPlayer(LibVLC libVlc, ILogger logger, bool hardwareDecoding)
     {
         _libVlc = libVlc;
         _logger = logger;
         _player = new VlcMediaPlayer(libVlc)
         {
-            EnableHardwareDecoding = true,
+            EnableHardwareDecoding = hardwareDecoding,
             EnableKeyInput = false,
             EnableMouseInput = false,
         };
