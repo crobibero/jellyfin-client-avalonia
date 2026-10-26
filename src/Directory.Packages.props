@@ -3,7 +3,7 @@
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
         <AvaloniaVersion>12.1.4</AvaloniaVersion>
         <MicrosoftExtensionsVersion>10.0.12</MicrosoftExtensionsVersion>
-        <LibVlcSharpVersion>3.10.1</LibVlcSharpVersion>
+        <LibVlcSharpVersion>3.10.2</LibVlcSharpVersion>
     </PropertyGroup>
 
     <!-- Analyzers -->
