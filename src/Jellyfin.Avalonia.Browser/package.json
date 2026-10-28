@@ -4,7 +4,7 @@
   "dependencies": {
     "hls.js": "1.7.3",
     "jassub": "2.5.20",
-    "libbitsub": "1.12.1"
+    "libbitsub": "1.13.1"
   },
   "devDependencies": {
     "esbuild": "0.28.2"
