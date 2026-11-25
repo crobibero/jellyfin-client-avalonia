@@ -8,8 +8,8 @@ namespace Jellyfin.Avalonia.LibVlc;
 public sealed unsafe class VideoFrameBuffer : IDisposable
 {
     private readonly Lock _sync = new();
-    private IntPtr _front;
-    private IntPtr _back;
+    private nint _front;
+    private nint _back;
     private bool _disposed;
 
     /// <summary>
@@ -51,8 +51,8 @@ public sealed unsafe class VideoFrameBuffer : IDisposable
             Height = height;
             Stride = width * 4;
             var size = (nuint)(Stride * height);
-            _front = (IntPtr)NativeMemory.AllocZeroed(size);
-            _back = (IntPtr)NativeMemory.AllocZeroed(size);
+            _front = (nint)NativeMemory.AllocZeroed(size);
+            _back = (nint)NativeMemory.AllocZeroed(size);
         }
     }
 
@@ -60,7 +60,7 @@ public sealed unsafe class VideoFrameBuffer : IDisposable
     /// Gets the buffer the decoder writes the next frame into.
     /// </summary>
     /// <returns>The buffer pointer.</returns>
-    public IntPtr GetBackBuffer() => _back;
+    public nint GetBackBuffer() => _back;
 
     /// <summary>
     /// Publish the back buffer as the newest frame.
@@ -84,11 +84,11 @@ public sealed unsafe class VideoFrameBuffer : IDisposable
     /// <param name="width">The expected width.</param>
     /// <param name="height">The expected height.</param>
     /// <returns><c>true</c> when the frame was copied.</returns>
-    public bool CopyTo(IntPtr destination, int destinationStride, int width, int height)
+    public bool CopyTo(nint destination, int destinationStride, int width, int height)
     {
         lock (_sync)
         {
-            if (_front == IntPtr.Zero || width != Width || height != Height)
+            if (_front == nint.Zero || width != Width || height != Height)
             {
                 return false;
             }
@@ -129,16 +129,16 @@ public sealed unsafe class VideoFrameBuffer : IDisposable
 
     private void Free()
     {
-        if (_front != IntPtr.Zero)
+        if (_front != nint.Zero)
         {
             NativeMemory.Free((void*)_front);
-            _front = IntPtr.Zero;
+            _front = nint.Zero;
         }
 
-        if (_back != IntPtr.Zero)
+        if (_back != nint.Zero)
         {
             NativeMemory.Free((void*)_back);
-            _back = IntPtr.Zero;
+            _back = nint.Zero;
         }
 
         Width = 0;

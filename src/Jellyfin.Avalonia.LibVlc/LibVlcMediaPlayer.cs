@@ -411,7 +411,7 @@ public sealed class LibVlcMediaPlayer : IMediaPlayer
         ErrorOccurred?.Invoke(this, "libVLC was unable to play the stream");
     }
 
-    private uint OnVideoFormat(ref IntPtr opaque, IntPtr chroma, ref uint width, ref uint height, ref uint pitches, ref uint lines)
+    private uint OnVideoFormat(ref nint opaque, nint chroma, ref uint width, ref uint height, ref uint pitches, ref uint lines)
     {
         // Downscale very large video to limit memory bandwidth, keeping the aspect ratio.
         if (width > MaxWidth || height > MaxHeight)
@@ -429,15 +429,15 @@ public sealed class LibVlcMediaPlayer : IMediaPlayer
         return 1;
     }
 
-    private void OnVideoCleanup(ref IntPtr opaque)
+    private void OnVideoCleanup(ref nint opaque)
     {
     }
 
-    private IntPtr OnVideoLock(IntPtr opaque, IntPtr planes)
+    private nint OnVideoLock(nint opaque, nint planes)
     {
         Marshal.WriteIntPtr(planes, Frames.GetBackBuffer());
-        return IntPtr.Zero;
+        return nint.Zero;
     }
 
-    private void OnVideoDisplay(IntPtr opaque, IntPtr picture) => Frames.Present();
+    private void OnVideoDisplay(nint opaque, nint picture) => Frames.Present();
 }

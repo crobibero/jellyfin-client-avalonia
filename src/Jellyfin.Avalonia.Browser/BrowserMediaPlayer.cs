@@ -187,10 +187,10 @@ internal sealed class BrowserMediaPlayer : IMediaPlayer
             return;
         }
 
-        var state = ended ? PlayerState.Ended
-            : buffering ? PlayerState.Buffering
-            : paused ? PlayerState.Paused
-            : PlayerState.Playing;
+        var state = ended ? PlayerState.Ended :
+                    buffering ? PlayerState.Buffering :
+                    paused ? PlayerState.Paused :
+                    PlayerState.Playing;
         SetState(state);
     }
 

@@ -4,6 +4,15 @@
         "layoutRules": {
             "newlineAtEndOfFile": "require",
             "allowDoWhileOnClosingBrace": true
+        },
+        "maintainabilityRules": {
+            "topLevelTypes": [
+                "class",
+                "interface",
+                "struct",
+                "enum",
+                "delegate"
+            ]
         }
     }
 }

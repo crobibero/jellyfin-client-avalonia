@@ -41,6 +41,8 @@
     <Rule Id="SA1402" Action="None" />
     <!-- disable warning SA1601: Partial elements should be documented -->
     <Rule Id="SA1601" Action="None" />
+    <!-- disable warning SA1504: All accessors should be single-line or multi-line, an expression-bodied getter can sit next to a block setter -->
+    <Rule Id="SA1504" Action="None" />
   </Rules>
 
   <Rules AnalyzerId="Microsoft.CodeAnalysis.NetAnalyzers" RuleNamespace="Microsoft.Design">

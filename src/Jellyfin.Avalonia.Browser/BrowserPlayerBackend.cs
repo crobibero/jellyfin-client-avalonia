@@ -30,9 +30,9 @@ internal sealed class BrowserPlayerBackend : IPlayerBackend
     private static MediaCapabilities Probe()
     {
         var avc = CanPlayOrMse("video/mp4; codecs=\"avc1.42E01E\"");
-        var avcLevel = CanPlayOrMse("video/mp4; codecs=\"avc1.640033\"") ? 51
-            : CanPlayOrMse("video/mp4; codecs=\"avc1.640029\"") ? 41
-            : 40;
+        var avcLevel = CanPlayOrMse("video/mp4; codecs=\"avc1.640033\"") ? 51 :
+                       CanPlayOrMse("video/mp4; codecs=\"avc1.640029\"") ? 41 :
+                       40;
         var hevc = CanPlayOrMse("video/mp4; codecs=\"hvc1.1.4.L123\"") || CanPlayOrMse("video/mp4; codecs=\"hev1.1.4.L123\"");
         var hevcMain10 = hevc && (CanPlayOrMse("video/mp4; codecs=\"hvc1.2.4.L153\"") || CanPlayOrMse("video/mp4; codecs=\"hev1.2.4.L153\""));
         var av1 = CanPlayOrMse("video/mp4; codecs=\"av01.0.15M.08\"");
