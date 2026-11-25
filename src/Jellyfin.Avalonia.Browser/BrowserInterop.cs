@@ -15,7 +15,7 @@ internal static partial class BrowserInterop
     public const string PlayerModule = "jellyfin-player";
 
     /// <summary>
-    /// The image decoder module name.
+    /// The module name image-decoder.js is imported under.
     /// </summary>
     public const string ImageDecoderModule = "jellyfin-image-decoder";
 

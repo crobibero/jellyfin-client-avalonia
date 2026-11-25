@@ -27,9 +27,9 @@ public static class AppBuilderExtensions
     /// Raise the GPU texture cache from Avalonia's 28 MB default.
     /// </summary>
     /// <remarks>
-    /// A screen of posters with their mipmaps takes about 20 MB, and the blurred backdrop and its layers take more.
-    /// Past the limit Skia evicts textures that are still on screen and uploads them again on every frame.
-    /// The limit is a ceiling, so devices only use what the screen needs.
+    /// A window of posters with their mipmaps can exceed the default. Past the limit Skia evicts textures that are
+    /// still on screen and uploads them again on every frame. Skia only frees a texture when the cache is over the
+    /// limit or its image is freed, so the textures of off-screen images the image loader still caches stay too.
     /// </remarks>
     /// <param name="builder">The app builder.</param>
     /// <returns>The app builder, for chaining.</returns>

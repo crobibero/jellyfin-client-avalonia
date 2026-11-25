@@ -47,7 +47,7 @@ public sealed class BlurHashImage : Control
     }
 
     /// <summary>
-    /// Gets or sets the blurhash.
+    /// Gets or sets the blurhash to draw. An empty or invalid hash draws nothing.
     /// </summary>
     public string? Hash
     {
@@ -63,7 +63,7 @@ public sealed class BlurHashImage : Control
             return;
         }
 
-        // The hash is decoded to a square, so stretching it to the control restores the image's own proportions.
+        // A blurhash covers the whole image, so the stretched square matches it when the control has its aspect.
         using (context.PushRenderOptions(_renderOptions))
         {
             context.DrawImage(bitmap, new Rect(bitmap.Size), new Rect(Bounds.Size));
@@ -124,7 +124,6 @@ public sealed class BlurHashImage : Control
                 return null;
             }
 
-            // An immutable bitmap is uploaded to the GPU once. A writeable one is snapshotted on every draw.
             return new Bitmap(PixelFormat.Bgra8888, AlphaFormat.Opaque, handle.AddrOfPinnedObject(), new PixelSize(Size, Size), new Vector(96, 96), RowLength);
         }
         finally

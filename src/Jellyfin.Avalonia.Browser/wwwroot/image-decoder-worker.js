@@ -1,4 +1,4 @@
-// Decodes images for the Jellyfin Avalonia browser client, off the main thread that runs the app and renders.
+// Decodes images off the main thread, which runs the app and renders it.
 // Replies with premultiplied RGBA pixels, which the app copies straight into a bitmap.
 
 self.onmessage = async ({ data: { id, bytes, width, blur } }) => {
@@ -11,7 +11,7 @@ self.onmessage = async ({ data: { id, bytes, width, blur } }) => {
             targetWidth = width;
         }
 
-        // A canvas that is read back stays in memory, so getImageData doesn't wait on the GPU.
+        // willReadFrequently keeps the canvas in CPU memory, so getImageData doesn't read back from the GPU.
         const canvas = new OffscreenCanvas(targetWidth, targetHeight);
         const context = canvas.getContext('2d', { willReadFrequently: true });
         context.imageSmoothingQuality = 'medium';

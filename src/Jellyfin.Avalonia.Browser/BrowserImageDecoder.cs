@@ -68,7 +68,7 @@ internal sealed class BrowserImageDecoder : IImageDecoder
         var stride = size.Width * 4;
         var length = stride * size.Height;
 
-        // The bitmap copies the pixels, so they only pass through native memory instead of a large managed array.
+        // Bitmap copies the pixels, so the buffer is freed straight after and never reaches the large object heap.
         var pixels = NativeMemory.Alloc((nuint)length);
         try
         {

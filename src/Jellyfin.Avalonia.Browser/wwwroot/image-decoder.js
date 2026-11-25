@@ -1,4 +1,3 @@
-// Image decoding for the Jellyfin Avalonia browser client.
 // WebAssembly runs the app on the main thread, so decoding in Skia there stalls scrolling. Workers decode instead.
 
 const WORKER_URL = new URL('./image-decoder-worker.js', import.meta.url);

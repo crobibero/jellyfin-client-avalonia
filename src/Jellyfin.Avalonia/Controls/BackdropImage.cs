@@ -37,7 +37,7 @@ public class BackdropImage : Panel
     // Blurring removes the detail a wider image would hold.
     private const int DecodeWidth = 640;
 
-    // The blur effect this replaced had a sigma of about 4 pixels in a 1920 pixel wide window.
+    // About 4 pixels on screen when the backdrop fills a 1920 pixel wide window; it scales with the window width.
     private const float BlurSigma = 4f * DecodeWidth / 1920;
     private const int CacheSize = 4;
 
