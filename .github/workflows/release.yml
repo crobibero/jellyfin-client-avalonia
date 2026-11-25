@@ -97,7 +97,7 @@ jobs:
       project: Jellyfin.Avalonia.Desktop
       rid: ${{ matrix.rid }}
       version: ${{ needs.version.outputs.version }}
-      apt-packages: clang lld zlib1g-dev libfontconfig-dev
+      apt-packages: clang lld zlib1g-dev libfontconfig-dev libx11-dev libxext-dev libxcb1-dev libwayland-dev libffi-dev
       artifact: '*'
       archive: ${{ matrix.archive }}
 
@@ -114,6 +114,7 @@ jobs:
       project: Jellyfin.Avalonia.Android
       framework: net10.0-android
       rid: ${{ matrix.rid }}
+      restore-without-rid: true
       workloads: android
       java-version: '21'
       version: ${{ needs.version.outputs.version }}

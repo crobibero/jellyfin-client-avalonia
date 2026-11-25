@@ -27,6 +27,13 @@ on:
         description: Runtime identifier passed as -r. Empty uses the project default.
         type: string
         default: ''
+      restore-without-rid:
+        description: >-
+          Restore without -r, then run the command with --no-restore. The project's RuntimeIdentifiers must include rid.
+          Android needs it: -r reaches the class libraries during restore, and .NET has no linux-bionic-arm runtime pack
+          for their android-arm restore.
+        type: boolean
+        default: false
       workloads:
         description: Space-separated .NET workloads to install.
         type: string
@@ -125,6 +132,7 @@ jobs:
           PROJECT: ${{ inputs.project }}
           FRAMEWORK: ${{ inputs.framework }}
           RID: ${{ inputs.rid }}
+          RESTORE_WITHOUT_RID: ${{ inputs.restore-without-rid }}
           EXTRA_ARGS: ${{ inputs.args }}
           VERSION: ${{ inputs.version }}
           OUTPUT: artifacts/${{ inputs.name }}
@@ -135,6 +143,10 @@ jobs:
           if [[ -n "$FRAMEWORK" ]]; then args+=(-f "$FRAMEWORK"); fi
           if [[ -n "$RID" ]]; then args+=(-r "$RID"); fi
           if [[ "$COMMAND" == publish ]]; then args+=(--output "$OUTPUT"); fi
+          if [[ "$RESTORE_WITHOUT_RID" == true ]]; then
+            dotnet restore "$PROJECT"
+            args+=(--no-restore)
+          fi
           # EXTRA_ARGS and SIGNING_ARGS are left unquoted so they split into separate arguments.
           dotnet "$COMMAND" "$PROJECT" "${args[@]}" $EXTRA_ARGS $SIGNING_ARGS
 
