@@ -50,7 +50,7 @@ dotnet workload install ios
 dotnet build Jellyfin.Avalonia.iOS -f net10.0-ios -r iossimulator-arm64
 ```
 
-The browser build needs the `wasm-tools` workload and the Node.js version in `Jellyfin.Avalonia.Browser/.nvmrc`. Serve the published `wwwroot` folder from any static web server:
+The browser build needs the `wasm-tools` workload and the Node.js version in `Jellyfin.Avalonia.Browser/.nvmrc`. Publishing compiles the app ahead of time to WebAssembly, which takes several minutes; `dotnet run` and `dotnet build` skip that step. Serve the published `wwwroot` folder from any static web server:
 
 ```sh
 dotnet workload install wasm-tools
