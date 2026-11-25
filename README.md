@@ -1,13 +1,12 @@
 ## Jellyfin Avalonia
 
-[![Build Desktop](https://github.com/crobibero/jellyfin-client-avalonia/actions/workflows/build-desktop.yml/badge.svg)](https://github.com/crobibero/jellyfin-client-avalonia/actions/workflows/build-desktop.yml)
-[![Build Android](https://github.com/crobibero/jellyfin-client-avalonia/actions/workflows/build-android.yml/badge.svg)](https://github.com/crobibero/jellyfin-client-avalonia/actions/workflows/build-android.yml)
-[![Build iOS](https://github.com/crobibero/jellyfin-client-avalonia/actions/workflows/build-ios.yml/badge.svg)](https://github.com/crobibero/jellyfin-client-avalonia/actions/workflows/build-ios.yml)
-[![Build Browser](https://github.com/crobibero/jellyfin-client-avalonia/actions/workflows/build-browser.yml/badge.svg)](https://github.com/crobibero/jellyfin-client-avalonia/actions/workflows/build-browser.yml)
+[![CI](https://github.com/crobibero/jellyfin-client-avalonia/actions/workflows/ci.yml/badge.svg)](https://github.com/crobibero/jellyfin-client-avalonia/actions/workflows/ci.yml)
 
 ![GitHub](https://img.shields.io/github/license/crobibero/jellyfin-client-avalonia)
 
 An experimental Jellyfin client written in C# with [Avalonia](https://avaloniaui.net/) 12 and .NET 10. One code base targets Windows, macOS, Linux, Android (phones, tablets, Android TV and Fire TV), iOS, and web browsers.
+
+Try the browser build of `master` at <https://crobibero.github.io/jellyfin-client-avalonia/>.
 
 ## Platforms
 
@@ -51,7 +50,7 @@ dotnet workload install ios
 dotnet build Jellyfin.Avalonia.iOS -f net10.0-ios -r iossimulator-arm64
 ```
 
-The browser build needs the `wasm-tools` workload. Serve the published `wwwroot` folder from any static web server:
+The browser build needs the `wasm-tools` workload and the Node.js version in `Jellyfin.Avalonia.Browser/.nvmrc`. Serve the published `wwwroot` folder from any static web server:
 
 ```sh
 dotnet workload install wasm-tools
@@ -59,4 +58,4 @@ dotnet publish Jellyfin.Avalonia.Browser -c Release -o artifacts/browser
 python3 -m http.server -d artifacts/browser/wwwroot 8080
 ```
 
-The browser client calls the Jellyfin API across origins. Jellyfin allows this by default (`Access-Control-Allow-Origin: *`). hls.js 1.7.3 is loaded from jsDelivr when a transcoded stream needs it.
+The browser client calls the Jellyfin API across origins. Jellyfin allows this by default (`Access-Control-Allow-Origin: *`). The build installs hls.js, jassub (ASS subtitles) and libbitsub (PGS subtitles) from npm and bundles them into `wwwroot/lib`, so the client loads no scripts from a CDN.
