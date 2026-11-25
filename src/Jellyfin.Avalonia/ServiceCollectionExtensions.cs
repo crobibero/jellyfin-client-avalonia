@@ -36,6 +36,7 @@ public static class ServiceCollectionExtensions
         services.TryAddSingleton<IVideoViewFactory, NullVideoViewFactory>();
         services.TryAddSingleton<IFullScreenService, WindowFullScreenService>();
         services.TryAddSingleton<IServerDiscoveryService, ServerDiscoveryService>();
+        services.TryAddSingleton<IImageDecoder, SkiaImageDecoder>();
         services.AddSingleton<NotificationService>();
         services.AddSingleton<INotificationService>(s => s.GetRequiredService<NotificationService>());
 

@@ -4,6 +4,9 @@
     <OutputType>Exe</OutputType>
     <!-- The JSImport generator emits unsafe code -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- Publish compiles the managed code to WebAssembly. Under the IL interpreter, scrolling a library grid
+         drops to 25-45 fps on a fast laptop. AOT roughly doubles UI throughput for about 8 MB more gzip download. -->
+    <RunAOTCompilation>true</RunAOTCompilation>
   </PropertyGroup>
 
   <ItemGroup>

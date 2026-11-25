@@ -88,7 +88,7 @@ public partial class App : Application
                 SlidingExpiration = TimeSpan.FromMinutes(5),
             })
             .UseTransport(new UserImageCacheTransport(new HttpImageTransport(httpClient), UserImageCacheDirectory))
-            .UseDecoder(new PooledBitmapDecoder())
+            .UseDecoder(new PooledBitmapDecoder(Services.GetRequiredService<IImageDecoder>()))
             .Build();
     }
 

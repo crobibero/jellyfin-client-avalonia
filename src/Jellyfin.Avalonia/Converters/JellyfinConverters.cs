@@ -1,13 +1,8 @@
-using System.Buffers;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using FluentUIIconsLike;
-using Jellyfin.Mvvm.Imaging;
 using Jellyfin.Mvvm.Models;
 
 namespace Jellyfin.Avalonia.Converters;
@@ -31,15 +26,6 @@ public static class JellyfinConverters
     /// The card image height for the square shape.
     /// </summary>
     public const double SquareHeight = 180;
-
-    // Blurhashes only hold a few low frequency components, so a small bitmap scales up without visible loss.
-    private const int BlurHashSize = 32;
-
-    // Recycled cards rebind constantly while scrolling, so decoded placeholders are reused by hash.
-    private const int BlurHashCacheSize = 512;
-
-    private static readonly Dictionary<string, LinkedListNode<(string Hash, ImageBrush Brush)>> _blurHashCache = new(StringComparer.Ordinal);
-    private static readonly LinkedList<(string Hash, ImageBrush Brush)> _blurHashLru = new();
 
     /// <summary>
     /// Gets the converter from <see cref="CardShape"/> to the card width.
@@ -155,15 +141,6 @@ public static class JellyfinConverters
     });
 
     /// <summary>
-    /// Gets the converter from a blurhash to a placeholder brush.
-    /// </summary>
-    /// <remarks>
-    /// A brush is used rather than an image source because changing it never invalidates measure.
-    /// Item repeaters rebind recycled cards during layout, and an image source change there causes a layout loop.
-    /// </remarks>
-    public static IValueConverter BlurHashBrush { get; } = new FuncValueConverter<string?, IBrush?>(GetBlurHashBrush);
-
-    /// <summary>
     /// Gets the converter returning the first character of a string.
     /// </summary>
     public static IValueConverter Initial { get; } = new FuncValueConverter<string?, string>(text => string.IsNullOrEmpty(text) ? string.Empty : text[..1].ToUpper(CultureInfo.CurrentCulture));
@@ -198,64 +175,6 @@ public static class JellyfinConverters
         return app is not null && app.TryGetResource(key, app.ActualThemeVariant, out var value) && value is IBrush brush
             ? brush
             : Brushes.Transparent;
-    }
-
-    private static ImageBrush? GetBlurHashBrush(string? blurHash)
-    {
-        if (string.IsNullOrEmpty(blurHash))
-        {
-            return null;
-        }
-
-        // Converters run on the UI thread, so the cache needs no locking.
-        if (_blurHashCache.TryGetValue(blurHash, out var node))
-        {
-            _blurHashLru.Remove(node);
-            _blurHashLru.AddFirst(node);
-            return node.Value.Brush;
-        }
-
-        var brush = CreateBlurHashBrush(blurHash);
-        if (brush is null)
-        {
-            return null;
-        }
-
-        _blurHashCache[blurHash] = _blurHashLru.AddFirst((blurHash, brush));
-        if (_blurHashLru.Count > BlurHashCacheSize)
-        {
-            // Evicted brushes may still be shown by a card, so they are left to the garbage collector.
-            _blurHashCache.Remove(_blurHashLru.Last!.Value.Hash);
-            _blurHashLru.RemoveLast();
-        }
-
-        return brush;
-    }
-
-    private static ImageBrush? CreateBlurHashBrush(string blurHash)
-    {
-        const int RowLength = BlurHashSize * 4;
-        var pixels = ArrayPool<byte>.Shared.Rent(BlurHashSize * RowLength);
-        try
-        {
-            if (!BlurHashDecoder.TryDecode(blurHash, BlurHashSize, BlurHashSize, pixels))
-            {
-                return null;
-            }
-
-            var bitmap = new WriteableBitmap(new PixelSize(BlurHashSize, BlurHashSize), new Vector(96, 96), PixelFormat.Bgra8888, AlphaFormat.Opaque);
-            using var buffer = bitmap.Lock();
-            for (var row = 0; row < BlurHashSize; row++)
-            {
-                Marshal.Copy(pixels, row * RowLength, buffer.Address + (row * buffer.RowBytes), RowLength);
-            }
-
-            return new ImageBrush(bitmap) { Stretch = Stretch.UniformToFill };
-        }
-        finally
-        {
-            ArrayPool<byte>.Shared.Return(pixels);
-        }
     }
 
     private sealed class EnumEqualsConverter : IValueConverter

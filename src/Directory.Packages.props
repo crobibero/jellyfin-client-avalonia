@@ -37,6 +37,7 @@
         <PackageVersion Include="Avalonia.Browser" Version="$(AvaloniaVersion)" />
         <PackageVersion Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
         <PackageVersion Include="Avalonia.iOS" Version="$(AvaloniaVersion)" />
+        <PackageVersion Include="Avalonia.Skia" Version="$(AvaloniaVersion)" />
         <PackageVersion Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
         <PackageVersion Include="Avalonia.Controls.ItemsRepeater" Version="12.0.0" />
         <PackageVersion Include="AsyncImageLoader.Avalonia" Version="4.0.0" />

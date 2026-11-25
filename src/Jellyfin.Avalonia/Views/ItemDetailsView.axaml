@@ -111,8 +111,8 @@
                             ClipToBounds="True"
                             CornerRadius="{DynamicResource RadiusDefault}"
                             IsVisible="{Binding PosterUrl, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-                        <Panel Background="{Binding PosterBlurHash, Converter={x:Static conv:JellyfinConverters.BlurHashBrush}}"
-                               RenderOptions.BitmapInterpolationMode="HighQuality">
+                        <Panel>
+                            <controls:BlurHashImage Hash="{Binding PosterBlurHash}" />
                             <Image asyncImageLoader:ImageLoader.Source="{Binding PosterUrl}"
                                    Stretch="UniformToFill" />
                         </Panel>

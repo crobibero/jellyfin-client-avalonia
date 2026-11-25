@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
                     xmlns:behaviors="clr-namespace:Jellyfin.Avalonia.Behaviors"
+                    xmlns:controls="clr-namespace:Jellyfin.Avalonia.Controls"
                     xmlns:conv="clr-namespace:Jellyfin.Avalonia.Converters"
                     xmlns:facades="clr-namespace:Jellyfin.Mvvm.ViewModels.Facades;assembly=Jellyfin.Mvvm"
                     xmlns:icons="https://github.com/oneo-me/fluentui-icons-like"
@@ -28,9 +29,8 @@
                                    TextAlignment="Center"
                                    TextTrimming="CharacterEllipsis"
                                    TextWrapping="Wrap" />
-                        <Border Background="{Binding ImageBlurHash, Converter={x:Static conv:JellyfinConverters.BlurHashBrush}}"
-                                IsVisible="{Binding HasImage}"
-                                RenderOptions.BitmapInterpolationMode="HighQuality" />
+                        <controls:BlurHashImage Hash="{Binding ImageBlurHash}"
+                                                IsVisible="{Binding HasImage}" />
                         <Image asyncImageLoader:ImageLoader.Source="{Binding ImageUrl}"
                                IsVisible="{Binding HasImage}"
                                Stretch="UniformToFill" />

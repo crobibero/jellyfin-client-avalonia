@@ -51,6 +51,7 @@ internal static class Program
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithFigtreeFont()
+            .WithGpuResourceCache()
             .LogToTrace();
 
     private static void ConfigureLogging()

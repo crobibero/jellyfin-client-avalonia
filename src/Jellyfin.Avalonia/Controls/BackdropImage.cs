@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
+using Jellyfin.Avalonia.Services;
 using Jellyfin.Mvvm.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,8 +16,14 @@ namespace Jellyfin.Avalonia.Controls;
 /// Shows a blurred, dimmed backdrop and cross fades between images.
 /// </summary>
 /// <remarks>
+/// <para>
 /// Backdrops bypass the shared image loader cache, which is bounded by item count while a decoded backdrop is far
 /// larger than a poster. Here they are decoded to a capped width and only the last few are kept.
+/// </para>
+/// <para>
+/// The blur is applied once while decoding. A blur effect would blur the whole window again on every frame that
+/// redraws anything in front of the backdrop, such as a scrolling grid.
+/// </para>
 /// </remarks>
 [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Controls are not disposable; the pending load is cancelled and disposed when the control is detached.")]
 public class BackdropImage : Panel
@@ -27,8 +34,11 @@ public class BackdropImage : Panel
     public static readonly StyledProperty<string?> SourceProperty =
         AvaloniaProperty.Register<BackdropImage, string?>(nameof(Source));
 
-    // The image is blurred, so decoding wider than this only costs memory.
-    private const int DecodeWidth = 1280;
+    // Blurring removes the detail a wider image would hold.
+    private const int DecodeWidth = 640;
+
+    // The blur effect this replaced had a sigma of about 4 pixels in a 1920 pixel wide window.
+    private const float BlurSigma = 4f * DecodeWidth / 1920;
     private const int CacheSize = 4;
 
     private static readonly TimeSpan _fadeDuration = TimeSpan.FromMilliseconds(400);
@@ -40,6 +50,7 @@ public class BackdropImage : Panel
     private static readonly Dictionary<Bitmap, int> _shown = new(ReferenceEqualityComparer.Instance);
 
     private static HttpClient? _httpClient;
+    private static IImageDecoder? _decoder;
 
     private readonly Image _front;
     private readonly Image _back;
@@ -70,6 +81,8 @@ public class BackdropImage : Panel
     private static HttpClient HttpClient
         => _httpClient ??= App.Services.GetRequiredService<IHttpClientFactory>().CreateClient(HttpClientNames.Default);
 
+    private static IImageDecoder Decoder => _decoder ??= App.Services.GetRequiredService<IImageDecoder>();
+
     /// <inheritdoc />
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -98,7 +111,6 @@ public class BackdropImage : Panel
         {
             Stretch = Stretch.UniformToFill,
             Opacity = 0,
-            Effect = new BlurEffect { Radius = 12 },
             Transitions =
             [
                 new DoubleTransition { Property = OpacityProperty, Duration = _fadeDuration },
@@ -123,14 +135,7 @@ public class BackdropImage : Panel
     private static async Task<Bitmap> DecodeAsync(string url, CancellationToken cancellationToken)
     {
         var bytes = await HttpClient.GetByteArrayAsync(new Uri(url), cancellationToken).ConfigureAwait(false);
-        return await Task.Run(
-                () =>
-                {
-                    using var stream = new MemoryStream(bytes, writable: false);
-                    return Bitmap.DecodeToWidth(stream, DecodeWidth, BitmapInterpolationMode.MediumQuality);
-                },
-                cancellationToken)
-            .ConfigureAwait(false);
+        return await Task.Run(() => Decoder.DecodeBlurredAsync(bytes, DecodeWidth, BlurSigma, cancellationToken), cancellationToken).ConfigureAwait(false);
     }
 
     private async Task LoadAsync(string? url)

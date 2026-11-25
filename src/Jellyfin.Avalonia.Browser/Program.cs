@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 [assembly: SupportedOSPlatform("browser")]
 
 await JSHost.ImportAsync(BrowserInterop.PlayerModule, "../player.js");
+await JSHost.ImportAsync(BrowserInterop.ImageDecoderModule, "../image-decoder.js");
 
 App.ConfigurePlatformServices = services =>
 {
@@ -24,10 +25,12 @@ App.ConfigurePlatformServices = services =>
     services.AddSingleton<IPlayerBackend, BrowserPlayerBackend>();
     services.AddSingleton<IVideoViewFactory, BrowserVideoViewFactory>();
     services.AddSingleton<IFullScreenService, BrowserFullScreenService>();
+    services.AddSingleton<IImageDecoder, BrowserImageDecoder>();
 };
 
 await AppBuilder.Configure<App>()
     .WithFigtreeFont()
+    .WithGpuResourceCache()
     .StartBrowserAppAsync("out");
 
 // The canvas must be able to show the video element behind it.

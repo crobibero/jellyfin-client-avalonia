@@ -14,6 +14,11 @@ internal static partial class BrowserInterop
     /// </summary>
     public const string PlayerModule = "jellyfin-player";
 
+    /// <summary>
+    /// The image decoder module name.
+    /// </summary>
+    public const string ImageDecoderModule = "jellyfin-image-decoder";
+
     [JSImport("globalThis.localStorage.getItem")]
     public static partial string? GetItem(string key);
 
@@ -88,6 +93,15 @@ internal static partial class BrowserInterop
 
     [JSImport("selectAudioTrack", PlayerModule)]
     public static partial void SelectAudioTrack(int index);
+
+    [JSImport("isSupported", ImageDecoderModule)]
+    public static partial bool IsImageDecoderSupported();
+
+    [JSImport("decode", ImageDecoderModule)]
+    public static partial Task<JSObject> DecodeImage([JSMarshalAs<JSType.MemoryView>] ArraySegment<byte> encoded, int width, float blur);
+
+    [JSImport("copyPixels", ImageDecoderModule)]
+    public static partial void CopyImagePixels(JSObject image, [JSMarshalAs<JSType.MemoryView>] Span<byte> destination);
 
     [JSImport("globalThis.matchMedia")]
     private static partial JSObject MatchMedia(string query);

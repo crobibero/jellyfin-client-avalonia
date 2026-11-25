@@ -40,6 +40,6 @@ public class MainApplication : AvaloniaAndroidApplication<App>
             services.AddSingleton<IVideoViewFactory, LibVlcVideoViewFactory>();
         };
 
-        return base.CustomizeAppBuilder(builder).WithFigtreeFont();
+        return base.CustomizeAppBuilder(builder).WithFigtreeFont().WithGpuResourceCache();
     }
 }

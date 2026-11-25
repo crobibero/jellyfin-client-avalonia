@@ -25,6 +25,6 @@ public partial class AppDelegate : AvaloniaAppDelegate<App>
             services.AddSingleton<IVideoViewFactory, LibVlcVideoViewFactory>();
         };
 
-        return base.CustomizeAppBuilder(builder).WithFigtreeFont();
+        return base.CustomizeAppBuilder(builder).WithFigtreeFont().WithGpuResourceCache();
     }
 }
