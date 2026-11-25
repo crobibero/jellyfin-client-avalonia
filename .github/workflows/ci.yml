@@ -111,16 +111,10 @@ jobs:
       node-version-file: src/Jellyfin.Avalonia.Browser/.nvmrc
       artifact: wwwroot
 
-  pages:
+  pages-artifact:
     if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
     needs: [ test, browser ]
     runs-on: ubuntu-26.04
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
@@ -135,6 +129,18 @@ jobs:
         with:
           path: site
 
+  # Deploying in its own job gives the artifact time to show up in the run's artifact list. In the upload job,
+  # deploy-pages can list the artifacts before the new one appears (actions/deploy-pages#451).
+  pages:
+    needs: pages-artifact
+    runs-on: ubuntu-26.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
       - id: deploy
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
 
