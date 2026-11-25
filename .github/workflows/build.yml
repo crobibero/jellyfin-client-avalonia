@@ -59,6 +59,10 @@ on:
         description: Space-separated apt packages to install on Linux runners. Empty skips the install.
         type: string
         default: ''
+      xcode-version:
+        description: Xcode version to select on macOS runners, such as 27.2. Empty keeps the image default.
+        type: string
+        default: ''
     secrets:
       ANDROID_KEYSTORE:
         description: Base64 encoded Android keystore. Android builds are signed with it when set.
@@ -86,6 +90,13 @@ jobs:
           java-version: ${{ inputs.java-version }}
           node-version-file: ${{ inputs.node-version-file }}
           cache-key: ${{ inputs.name }}
+
+      - name: Select Xcode
+        if: inputs.xcode-version != '' && runner.os == 'macOS'
+        shell: bash
+        env:
+          XCODE_VERSION: ${{ inputs.xcode-version }}
+        run: sudo xcode-select -s "/Applications/Xcode_$XCODE_VERSION.app"
 
       - name: Install apt packages
         if: inputs.apt-packages != '' && runner.os == 'Linux'

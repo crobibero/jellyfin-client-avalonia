@@ -65,9 +65,12 @@ runs:
         cache: npm
         cache-dependency-path: ${{ steps.node.outputs.lockfile }}
 
+    # Run from src so global.json selects the SDK. From the repository root the runner's newest SDK would install
+    # workloads for its own feature band, which the pinned SDK can't use.
     - name: Install workloads
       if: inputs.workloads != ''
       shell: bash
+      working-directory: src
       env:
         WORKLOADS: ${{ inputs.workloads }}
       run: dotnet workload install $WORKLOADS

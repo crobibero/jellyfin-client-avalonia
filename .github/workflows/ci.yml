@@ -148,3 +148,5 @@ jobs:
       framework: net10.0-ios
       rid: iossimulator-arm64
       workloads: ios
+      # The ios workload needs a newer Xcode than the image default.
+      xcode-version: '27.2'
