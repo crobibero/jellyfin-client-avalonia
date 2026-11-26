@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
         <AvaloniaVersion>12.2.0</AvaloniaVersion>
-        <MicrosoftExtensionsVersion>10.0.15</MicrosoftExtensionsVersion>
+        <MicrosoftExtensionsVersion>11.0.0</MicrosoftExtensionsVersion>
         <LibVlcSharpVersion>3.10.2</LibVlcSharpVersion>
     </PropertyGroup>
 
